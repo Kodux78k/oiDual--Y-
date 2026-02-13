@@ -67,6 +67,9 @@ html, body {
   overflow: hidden; /* Ajustado para 100vh fixo, conteineres internos devem rolar */
   transition: background 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+   display: flex;
+      flex-direction: column;
+      align-items: center;
 }
 
 /* Permite seleção de texto apenas onde necessário */
