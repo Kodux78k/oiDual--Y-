@@ -115,7 +115,7 @@ body.mode-day .glass-input:focus { background: white; }
 .sky-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 .sun-background { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fffde7 0%, #fff176 40%, #ffb300 100%); filter: blur(60px); opacity: 0; transition: opacity 2s; animation: sun-orbit 60s linear infinite; }
 #particles-js { position: fixed; inset: 0; z-index: 0; opacity: 0.8; pointer-events: none; } /* KxT unificado com Splash */
-#bg-fake-custom { position: fixed; inset: 0; z-index: 2; opacity: 0.12; background-size: cover; background-position: center; pointer-events: none; }
+#bg-fake-custom { position: fixed; inset: 0; z-index: 2;mix-blend-mode:lighten; opacity: 0.12; background-size: cover; background-position: center; pointer-events: none; }
 
 .ambient-light { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.14; animation: float 25s infinite alternate ease-in-out; }
