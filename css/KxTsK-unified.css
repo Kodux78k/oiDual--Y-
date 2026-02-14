@@ -263,7 +263,7 @@ body.field-closed #field-toggle-handle { pointer-events: auto; }
 .orb-menu-trigger { position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-size: 12px; pointer-events: auto; backdrop-filter: blur(4px); }
 .fusion-card.orb:hover .orb-menu-trigger { display: flex; }
 
-.fusion-card.hud { position: fixed !important; top: 0 !important; left: 50% !important; transform: translateX(-50%) !important; width: 96% !important; max-width: 600px !important; height: 64px !important; padding: 0 16px !important; border-radius: 0 0 24px 24px !important; flex-direction: row; align-items: center; justify-content: space-between; box-shadow: 0 10px 40px rgba(0,0,0,0.7); z-index: 9999; overflow: visible; border-top: none; opacity: 0.78; touch-action: none; }
+.fusion-card.hud { position: fixed !important; top: 0 !important; left: 50% !important; transform: translateX(-50%) !important; width: 96% !important; max-width: 600px !important; height: 64px !important; padding: 0 16px !important; border-radius: 0 0 24px 24px !important; flex-direction: row; align-items: center; justify-content: space-between; box-shadow: 0 10px 40px rgba(0,0,0,0.7); z-index: 1; overflow: visible; border-top: none; opacity: 0.78; touch-action: none; }
 .fusion-card.hud .card-body, .fusion-card.hud .small-preview { display: none !important; }
 .fusion-card.hud .card-header { margin: 0; width: 100%; justify-content: space-between; }
 .fusion-card.hud .avatar-slot { width: 40px; height: 40px; }
@@ -353,6 +353,7 @@ select.btn { width: 100%; padding: 8px; background: rgba(0,0,0,0.4); color: #fff
 .logo-container { position: relative; z-index: 1; width: 300px; max-width: 80%; animation: glow 3s ease-in-out infinite alternate; padding: 20px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 1.2s ease, opacity 1.2s ease; }
 .logo-container object { width: 100%; height: auto; display: block; }
 .logo-container.distort { filter: url(#distort); }
+.logo-container {margin-top: 18vh;}
 
 .infodose { margin-top: 25px; font-size: 2em; color: #ccc; opacity: 0; animation: fadeInX 2s forwards 2s, pulse 4s infinite ease-in-out 4s; z-index: 1; position: relative; }
 .infodose strong { font-weight: 700; color: #ffffff; }
