@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head>
+<html lang="pt-BR">
+  <head>
   <meta charset="utf-8">
   <title>Fusion Card // Core Controller</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -295,7 +296,7 @@
     background: rgba(0,0,0,0);
     width: 100%;
     height: 100%;
-  min-height:100dvh;
+  min-height:100vh;
     z-index: 0;
     border: 0;
     border-radius: 39px;
@@ -321,7 +322,100 @@ width:100%;
 
 </section>
 
+
 <div class="frase"><strong>Sempre</strong> único<strong>. Sempre</strong> seu<strong>.</strong></div>
+
+<body data-theme="nebula" data-mood="manha">
+<div class="app">
+
+  <!-- HERO -->
+  <section class="hero-card">
+    <div class="hero-greeting" id="heroGreeting">Bom dia, Dual</div>
+    <div class="hero-subtitle" id="heroSubtitle">Sua dose de hoje já está organizada</div>
+
+    <div class="hero-slider-row">
+        <span>06h</span>
+        <span id="moodLabel" class="label-mood">Manhã focada</span>
+        <span id="endLabel">17h</span>
+    </div>
+
+    <div class="range-wrap">
+      <div id="rangeFill" class="range-fill"></div>
+    </div>
+
+    <input id="timeRange" type="range" min="6" max="23" value="9" class="hero-range">
+  </section>
+
+  <!-- STACKS EXACT MOCKUP STYLE -->
+  <details class="stack">
+    <summary class="stack-summary">
+      <div>
+        <div class="stack-title">Ativações de hoje</div>
+        <div class="stack-sub">Agora, janela de foco, recarregar</div>
+      </div>
+      <div><span class="stack-pill">⚡</span></div>
+    </summary>
+    <div class="stack-body">
+      <ul class="panel-list">
+        <li class="panel-row"><strong>Agora — 25min</strong></li>
+        <li class="panel-row"><strong>Janela de foco</strong></li>
+        <li class="panel-row"><strong>Recarregar</strong></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="stack">
+    <summary class="stack-summary">
+      <div>
+        <div class="stack-title">Organizar meu dia</div>
+        <div class="stack-sub">Manhã, Tarde, Noite</div>
+      </div>
+      <span class="stack-icon">›</span>
+    </summary>
+    <div class="stack-body">
+      <ul class="panel-list">
+        <li class="panel-row"><strong>Manhã</strong></li>
+        <li class="panel-row"><strong>Tarde</strong></li>
+        <li class="panel-row"><strong>Noite</strong></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="stack">
+    <summary class="stack-summary">
+      <div>
+        <div class="stack-title">Arquétipo do dia</div>
+        <div class="stack-sub">Resumo, ouvir, aplicar 1%</div>
+      </div>
+      <span class="stack-icon">★</span>
+    </summary>
+    <div class="stack-body">
+      <ul class="panel-list">
+        <li class="panel-row"><strong>Resumo</strong></li>
+        <li class="panel-row"><strong>Ouvir</strong></li>
+        <li class="panel-row"><strong>Aplicar 1%</strong></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="stack">
+    <summary class="stack-summary">
+      <div>
+        <div class="stack-title">Meus documentos</div>
+        <div class="stack-sub">Estudo · Trabalho · Pessoal</div>
+      </div>
+      <span class="stack-icon">›</span>
+    </summary>
+    <div class="stack-body">
+      <ul class="panel-list">
+        <li class="panel-row"><strong>Estudo</strong></li>
+        <li class="panel-row"><strong>Trabalho</strong></li>
+        <li class="panel-row"><strong>Pessoal</strong></li>
+      </ul>
+    </div>
+  </details>
+
+</div>
 
 <script  src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
 
@@ -345,11 +439,10 @@ width:100%;
 
 <!--
 <script type="module" src="https://kodux78k.github.io/oi-Dual/js/main.js"></script>
+-->
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+<script src="https://kodux78k.github.io/oiDual--Y-/js/oiDoDia2.js"></script>
 
-
-<script src="https://kodux78k.github.io/oi-Dual/kxt-insertg.js"></script> —->
 
 </body>
-
-
 </html>
