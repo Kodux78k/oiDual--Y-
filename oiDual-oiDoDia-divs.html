@@ -1,0 +1,161 @@
+<body data-mood="manha">
+  <div class="app">
+    <!-- HERO -->
+    <section class="hero-card">
+      <div class="hero-top">
+        <span class="hero-hour-label">06h</span>
+        <div class="hero-main">
+          <div class="hero-greeting" id="heroGreeting">Bom dia, Dual</div>
+          <div class="hero-subtitle" id="heroSubtitle">
+            Sua dose de hoje já está organizada
+          </div>
+        </div>
+        <span class="hero-hour-label">23h</span>
+      </div>
+
+      <div class="hero-meta-row">
+        <span class="time-chip" id="timeNow">--:--</span>
+      </div>
+
+      <div class="hero-slider">
+        <div class="hero-slider-row">
+          <span>06h</span>
+          <span id="moodLabel" class="label-mood">Manhã focada</span>
+          <span>23h</span>
+        </div>
+        <div class="range-wrap">
+          <div id="rangeFill" class="range-fill"></div>
+        </div>
+        <input id="timeRange" type="range" min="6" max="23" value="9" class="hero-range">
+      </div>
+    </section>
+
+    <!-- MENU PRINCIPAL -->
+    <nav class="menu-list">
+      <button class="menu-item primary" data-target="ativacoes">
+        <span class="menu-text">Ativações de hoje</span>
+        <span class="menu-icon">⚡</span>
+      </button>
+
+      <button class="menu-item" data-target="organizar">
+        <span class="menu-text">Organizar meu dia</span>
+        <span class="menu-chevron">›</span>
+      </button>
+
+      <button class="menu-item" data-target="arquetipo">
+        <span class="menu-text">Arquétipo do dia</span>
+        <span class="menu-chevron">›</span>
+      </button>
+
+      <button class="menu-item documents" data-target="docs">
+        <span class="menu-text">
+          Meus <span class="menu-text-accent">apps/docs</span>
+        </span>
+        <span class="menu-chevron">›</span>
+      </button>
+    </nav>
+
+    <!-- STACKS MINI -->
+    <details class="stack" id="stack-ativacoes">
+      <summary class="stack-summary">
+        <div class="stack-main">
+          <span class="stack-title">Ativações de hoje</span>
+          <span class="stack-sub">Escolha como quer começar</span>
+        </div>
+        <div class="stack-meta">
+          <span class="stack-pill">1% agora</span>
+          <span class="stack-icon">⚡</span>
+        </div>
+      </summary>
+      <div class="stack-body">
+        <ul class="panel-list">
+          <li class="panel-row"><strong>Agora · 25min</strong></li>
+          <li class="panel-row"><strong>Janela de foco</strong></li>
+          <li class="panel-row"><strong>Recarregar</strong></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="stack" id="stack-organizar">
+      <summary class="stack-summary">
+        <div class="stack-main">
+          <span class="stack-title">Organizar meu dia</span>
+          <span class="stack-sub">Blocos prontos · manhã, tarde, noite</span>
+        </div>
+        <div class="stack-meta">
+          <span class="stack-pill">Rotina</span>
+          <span class="stack-icon">🗓</span>
+        </div>
+      </summary>
+      <div class="stack-body">
+        <ul class="panel-list">
+          <li class="panel-row"><strong>Manhã</strong></li>
+          <li class="panel-row"><strong>Tarde</strong></li>
+          <li class="panel-row"><strong>Noite</strong></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="stack" id="stack-arquetipo">
+      <summary class="stack-summary">
+        <div class="stack-main">
+          <span class="stack-title">Arquétipo do dia</span>
+          <span class="stack-sub">Resumo, áudio e aplicar 1%</span>
+        </div>
+        <div class="stack-meta">
+          <span class="stack-pill">Infodose</span>
+          <span class="stack-icon">★</span>
+        </div>
+      </summary>
+      <div class="stack-body">
+        <ul class="panel-list">
+          <li class="panel-row"><strong>Resumo ★</strong></li>
+          <li class="panel-row"><strong>Ouvir ⏱</strong></li>
+          <li class="panel-row"><strong>Aplicar 1%</strong></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- STACK: APPS/DOCS PLAY STORE -->
+    <details class="stack" id="stack-docs">
+      <summary class="stack-summary">
+        <div class="stack-main">
+          <span class="stack-title">Meus apps/docs</span>
+          <span class="stack-sub">Play Store local · abrir aqui ou fora</span>
+        </div>
+        <div class="stack-meta">
+          <span class="stack-pill">Apps</span>
+          <span class="stack-icon">📂</span>
+        </div>
+      </summary>
+      <div class="stack-body">
+        <div class="docs-filters">
+          <button class="docs-filter-pill active" data-filter="todos">Todos</button>
+          <button class="docs-filter-pill" data-filter="estudo">Estudo</button>
+          <button class="docs-filter-pill" data-filter="trabalho">Trabalho</button>
+          <button class="docs-filter-pill" data-filter="pessoal">Pessoal</button>
+        </div>
+        <div id="docsList" class="docs-list">
+          <!-- itens são montados via JS com base no array base + localStorage -->
+        </div>
+      </div>
+    </details>
+
+    <!-- VIEWER DESTACÁVEL -->
+    <section class="viewer-card" id="appViewer" hidden="">
+      <div class="viewer-header">
+        <div class="viewer-title" id="viewerTitle">Nenhum app aberto</div>
+        <div class="viewer-actions">
+          <button class="viewer-btn primary" id="viewerOpenOutside">Abrir fora</button>
+          <button class="viewer-btn" id="viewerClose">Fechar</button>
+        </div>
+      </div>
+      <div class="viewer-body">
+        <iframe id="viewerFrame" src="about:blank" loading="lazy"></iframe>
+      </div>
+    </section>
+  </div>
+
+  
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/oiDoDia2.js"></script>
