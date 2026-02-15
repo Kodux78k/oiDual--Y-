@@ -299,6 +299,5 @@
       renderDocs('todos');
     });
 
-                                 }
-    }
+                                 
   
