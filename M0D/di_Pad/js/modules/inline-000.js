@@ -1,7 +1,7 @@
 const ROWS = 3;
 const COLS = 3;
 
-const DEFAULT_SESSION_URL = "https://kodux78k.github.io/oiDual-H0/DH0-10.html";
+const DEFAULT_SESSION_URL = "https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/";
 const STORE_KEY = "kx_section_store_v2";
 
 const grid = document.getElementById("grid");
@@ -21,7 +21,29 @@ const screensData = [
       url: DEFAULT_SESSION_URL
     },
     {
-      html: `<div class="inner"><div class="wrap stack"><div class="blank-slot">Seção 2 · cole seu HTML aqui</div></div></div>`,
+      html: `<div id="stackWrap">
+      <div class="session-window collapsed" id="session-iframe">
+        <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
+          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+
+          <div class="win-controls" onclick="event.stopPropagation()">
+            <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
+            <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
+            <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
+            <button onclick="closeWindow('session-iframe')" title="Fechar">✕</button>
+          </div>
+        </div>
+
+        <iframe
+          class="win-frame"
+          src="https://kodux78k.github.io/oiDual-H0/DH0-10.html"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+          allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>`,
       url: DEFAULT_SESSION_URL
     },
     {
