@@ -1,7 +1,7 @@
 const ROWS = 3;
 const COLS = 3;
 
-const DEFAULT_SESSION_URL = "https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/";
+const DEFAULT_SESSION_URL = "https://kodux78k.github.io/oiDual--Y-/";
 const STORE_KEY = "kx_section_store_v2";
 
 const grid = document.getElementById("grid");
