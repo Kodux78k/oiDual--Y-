@@ -350,4 +350,25 @@ background:
       .nav-matrix{ gap:8px; padding:9px 12px; }
       .dot{ width:9px; height:9px; }
     }
-  
+  .matrix-dot.active {
+
+      transform: scale(1.87);
+
+    }
+    .matrix-dot:hover { background:
+        radial-gradient(circle at 30% 30%, var(--kob-voice-secondary), transparent 60%),
+        radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
+
+      }
+
+    /* ─── TELA ESCURA CORRETA ─── */
+    .screen-dark  { background: var(--brand-dark); }
+    .screen-black { background: #000; }
+    .screen-white { background: #fff; }
+
+    /* ─── MEDIA QUERIES MOBILE ─── */
+    @media (max-width: 700px) {
+      .nav-matrix { gap: 8px; padding: 8px 14px; }
+      .matrix-dot { width: 8px; height: 8px; }
+      .btn-lux, .btn-line { padding: 0.7rem 1.3rem; font-size: 0.7rem; }
+    }
