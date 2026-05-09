@@ -279,8 +279,11 @@
       cursor: pointer;
     }
     .dot.active {
-      background: var(--accent);
-      transform: scale(1.5);
+background:
+        radial-gradient(circle at 30% 30%, var(--kob-voice-secondary), transparent 60%),
+        radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
+     
+      transform: scale(1.78);
       box-shadow: 0 0 12px rgba(194,138,61,.45);
     }
 
@@ -349,6 +352,46 @@
       border: 1px solid #ece4d7;
       background: #fff;
     }
+
+/* ─── DOTS NAVIGATION 3×3 ─── */
+    .nav-matrix {
+      position: fixed;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(0,0,0,0.178);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 12px 12px 39px ;
+      border-radius: 78px;
+      z-index: 1000;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .matrix-dot {
+      width: 7px; height: 7px;
+      background: rgba(255,255,255,0.078);
+      border-radius: 50%;
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+    .matrix-dot.active {
+
+      background:
+        radial-gradient(circle at 30% 30%, var(--kob-voice-secondary), transparent 60%),
+        radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
+     
+    
+
+      transform: scale(1.87);
+      box-shadow: 0 0 10px var(--brand-gold);
+    }
+    .matrix-dot:hover { background: rgba(255,255,255,0.7); }
+
+
+
 
     @media (max-width: 720px) {
       .inner { padding: 22px 14px 116px; }
