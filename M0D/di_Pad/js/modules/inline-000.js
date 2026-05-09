@@ -21,18 +21,7 @@ const screensData = [
       url: DEFAULT_SESSION_URL
     },
     {
-      html: `<div id="stackWrap">
-      <div class="session-window collapsed" id="session-iframe">
-        <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
-          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
-
-          <div class="win-controls" onclick="event.stopPropagation()">
-            <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
-            <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
-            <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
-            <button onclick="closeWindow('session-iframe')" title="Fechar">✕</button>
-          </div>
-        </div>
+      html: `
 
         <iframe
           class="win-frame"
@@ -41,9 +30,7 @@ const screensData = [
           allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
           loading="lazy">
         </iframe>
-      </div>
-    </div>
-  </div>`,
+     `,
       url: DEFAULT_SESSION_URL
     },
     {
