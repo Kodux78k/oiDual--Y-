@@ -2,7 +2,15 @@
    THEME ENGINE + INTENSITY
    ========================================= */
 
-:root {
+:root{
+  --ui-intensity: .72;
+  --glow-size: 24px;
+  --user-primary: #f97316;
+  --user-secondary: #c2410c;
+  --user-accent: #ffffff;
+  --user-glow: rgba(249,115,22,.35);
+  --user-overlay: rgba(249,115,22,.12);
+
   --theme-mode: light;
   --ui-intensity: 0.72;
 
@@ -546,4 +554,39 @@ select {
   background: radial-gradient(circle at 30% 30%, #fff, var(--kob-voice-primary) 40%, var(--kob-voice-secondary) 80%);
   box-shadow: 0 0 var(--glow-size) color-mix(in srgb, var(--kob-voice-primary) 45%, transparent);
   transition: all .4s ease;
+}
+
+
+body[data-theme="dark"]{
+  --bg: #02040a;
+  --text: #f0f3f9;
+  --panel-bg: rgba(10,14,23,.72);
+  --border: rgba(255,255,255,.08);
+}
+
+body[data-theme="light"]{
+  --bg: #f8fafc;
+  --text: #111827;
+  --panel-bg: rgba(255,255,255,.82);
+  --border: rgba(0,0,0,.08);
+}
+
+.user-orb{
+  position: relative;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--user-accent), var(--user-primary), var(--user-secondary));
+  box-shadow: 0 0 var(--glow-size) var(--user-glow);
+}
+
+.orbital{
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--user-primary) 40%, transparent);
+  animation: orbitSpin linear infinite;
+}
+
+@keyframes orbitSpin{
+  to { transform: rotate(360deg); }
 }
