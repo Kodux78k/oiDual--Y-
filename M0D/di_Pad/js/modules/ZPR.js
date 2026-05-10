@@ -638,3 +638,227 @@
   updateView();
   ensureEditor();
 })();
+
+
+// di_zpr_engine.js
+(() => {
+  "use strict";
+
+  const ENGINE = {
+    themeKey: "DI_THEME",
+    userKey: "DI_USERNAME",
+    archKey: "DI_ARCH",
+    intensityKey: "DI_INTENSITY",
+    zprKey: "DI_ZPR",
+    orbitalsKey: "DI_ORBITALS",
+    defaultTheme: "dark",
+    defaultIntensity: 0.72,
+    defaultArch: "kodux",
+    defaultZpr: 9,
+    defaultOrbitals: 3
+  };
+
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+  const state = {
+    theme: localStorage.getItem(ENGINE.themeKey) || ENGINE.defaultTheme,
+    user:
+      localStorage.getItem(ENGINE.userKey) ||
+      localStorage.getItem("di_userName") ||
+      "Convidado",
+    arch: localStorage.getItem(ENGINE.archKey) || ENGINE.defaultArch,
+    intensity: Number(localStorage.getItem(ENGINE.intensityKey) || ENGINE.defaultIntensity),
+    zpr: Number(localStorage.getItem(ENGINE.zprKey) || ENGINE.defaultZpr),
+    orbitals: Number(localStorage.getItem(ENGINE.orbitalsKey) || ENGINE.defaultOrbitals)
+  };
+
+  function setData(key, value, persistKey) {
+    document.body.dataset[key] = String(value);
+    if (persistKey) localStorage.setItem(persistKey, String(value));
+  }
+
+  function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      hash |= 0;
+    }
+    return Math.abs(hash);
+  }
+
+  function makeSpectrum(username) {
+    const seed = hashString(String(username || "Convidado"));
+    const h1 = seed % 360;
+    const h2 = (h1 + 120 + (seed % 90)) % 360;
+    const h3 = (h2 + 120 + (seed % 45)) % 360;
+
+    return {
+      primary: `hsl(${h1} 92% 60%)`,
+      secondary: `hsl(${h2} 88% 48%)`,
+      accent: `hsl(${h3} 90% 72%)`,
+      glow: `hsla(${h1} 100% 70% / .35)`,
+      overlay: `hsla(${h2} 100% 60% / .12)`
+    };
+  }
+
+  function applyUserSpectrum(username) {
+    const spectrum = makeSpectrum(username);
+    const root = document.documentElement;
+
+    root.style.setProperty("--user-primary", spectrum.primary);
+    root.style.setProperty("--user-secondary", spectrum.secondary);
+    root.style.setProperty("--user-accent", spectrum.accent);
+    root.style.setProperty("--user-glow", spectrum.glow);
+    root.style.setProperty("--user-overlay", spectrum.overlay);
+
+    setData("user", username, ENGINE.userKey);
+  }
+
+  function applyTheme(mode) {
+    const theme = mode === "light" ? "light" : "dark";
+    state.theme = theme;
+    setData("theme", theme, ENGINE.themeKey);
+    document.body.classList.toggle("light-mode", theme === "light");
+    document.body.classList.toggle("dark-mode", theme === "dark");
+  }
+
+  function toggleTheme() {
+    applyTheme(state.theme === "dark" ? "light" : "dark");
+  }
+
+  function applyIntensity(value) {
+    const intensity = clamp(Number(value) || ENGINE.defaultIntensity, 0.4, 1.2);
+    state.intensity = intensity;
+
+    setData("intensity", intensity.toFixed(2), ENGINE.intensityKey);
+
+    const root = document.documentElement;
+    root.style.setProperty("--ui-intensity", intensity.toFixed(2));
+    root.style.setProperty("--glow-size", `${Math.round(18 + intensity * 14)}px`);
+    root.style.setProperty("--panel-blur-boost", `${Math.round(12 + intensity * 10)}px`);
+  }
+
+  function setArch(arch) {
+    const safe = String(arch || ENGINE.defaultArch).trim().toLowerCase();
+    state.arch = safe;
+    setData("arch", safe, ENGINE.archKey);
+    document.body.dataset.arch = safe;
+  }
+
+  function setZpr(zpr) {
+    const value = clamp(Number(zpr) || ENGINE.defaultZpr, 1, 9);
+    state.zpr = value;
+    setData("zpr", value, ENGINE.zprKey);
+  }
+
+  function setOrbitals(count) {
+    const value = clamp(Number(count) || ENGINE.defaultOrbitals, 0, 12);
+    state.orbitals = value;
+    setData("orbitals", value, ENGINE.orbitalsKey);
+  }
+
+  function buildOrbitals(target, count) {
+    if (!target) return;
+    target.innerHTML = "";
+
+    for (let i = 0; i < count; i++) {
+      const layer = document.createElement("span");
+      layer.className = "orbital";
+      layer.style.inset = `${-12 - i * 9}px`;
+      layer.style.animationDuration = `${8 + i * 2.5}s`;
+      layer.style.opacity = String(Math.max(0.18, 1 - i * 0.08));
+      target.appendChild(layer);
+    }
+  }
+
+  function refreshUserUI() {
+    const name = state.user;
+
+    if (window.updateInterface) {
+      window.updateInterface(name);
+    }
+
+    const userOrb = document.querySelector(".user-orb");
+    if (userOrb) buildOrbitals(userOrb, state.orbitals);
+  }
+
+  function bindThemeSwitch() {
+    const btn = document.getElementById("themeSwitch");
+    if (!btn) return;
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleTheme();
+    });
+  }
+
+  function bindNavMatrixIntensity() {
+    const nav = document.getElementById("navMatrix");
+    if (!nav) return;
+
+    let dragging = false;
+    let startX = 0;
+    let startIntensity = state.intensity;
+    let moved = false;
+
+    nav.addEventListener("pointerdown", (e) => {
+      if (e.target.closest(".dot, .matrix-dot")) return;
+      dragging = true;
+      moved = false;
+      startX = e.clientX;
+      startIntensity = state.intensity;
+      nav.setPointerCapture?.(e.pointerId);
+    });
+
+    nav.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 8) moved = true;
+
+      const next = startIntensity + (dx / 180) * 0.5;
+      applyIntensity(next);
+    });
+
+    nav.addEventListener("pointerup", () => {
+      if (!dragging) return;
+      dragging = false;
+
+      if (!moved) toggleTheme();
+    });
+
+    nav.addEventListener("pointercancel", () => {
+      dragging = false;
+    });
+  }
+
+  function syncBodyDataset() {
+    applyTheme(state.theme);
+    applyIntensity(state.intensity);
+    setArch(state.arch);
+    setZpr(state.zpr);
+    setOrbitals(state.orbitals);
+    applyUserSpectrum(state.user);
+  }
+
+  function init() {
+    syncBodyDataset();
+    bindThemeSwitch();
+    bindNavMatrixIntensity();
+    refreshUserUI();
+  }
+
+  window.DIEngine = {
+    state,
+    applyTheme,
+    toggleTheme,
+    applyIntensity,
+    setArch,
+    setZpr,
+    setOrbitals,
+    applyUserSpectrum,
+    refreshUserUI,
+    init
+  };
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
