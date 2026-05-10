@@ -9,8 +9,9 @@
   const ROWS = 3;
   const COLS = 3;
 
-  const DEFAULT_SESSION_URL = "https://kodux78k.github.io/oiDual--Y-/";
-  const STORE_KEY = "kx_section_store_v2";
+  const DEFAULT_SESSION_URL =
+   "https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/";
+  const STORE_KEY = "di_navSesh";
 
   const grid = document.getElementById("ZPR");
   const nav = document.getElementById("navMatrix");
@@ -348,7 +349,7 @@
     let moved = false;
 
     const MOVE_LIMIT = 12;
-    const LONG_PRESS_MS = 550;
+    const LONG_PRESS_MS = 3550;
 
     const clearPress = () => {
       if (pressTimer) {
@@ -413,7 +414,7 @@
     let moved = false;
 
     const MOVE_LIMIT = 10;
-    const LONG_PRESS_MS = 550;
+    const LONG_PRESS_MS = 3550;
 
     const clearPress = () => {
       if (pressTimer) {
@@ -482,11 +483,11 @@
   }
 
   function updateView() {
-    if (!grid) return;
+    if (!ZPR) return;
 
     const tx = -currentCol * (100 / 3);
     const ty = -currentRow * (100 / 3);
-    grid.style.transform = `translate(${tx}%, ${ty}%)`;
+    ZPR.style.transform = `translate(${tx}%, ${ty}%)`;
 
     document.querySelectorAll(".dot").forEach((dot, i) => {
       dot.classList.toggle(
