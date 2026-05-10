@@ -348,7 +348,7 @@
     let moved = false;
 
     const MOVE_LIMIT = 12;
-    const LONG_PRESS_MS = 550;
+    const LONG_PRESS_MS = 3550;
 
     const clearPress = () => {
       if (pressTimer) {
