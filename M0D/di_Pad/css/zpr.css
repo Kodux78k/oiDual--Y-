@@ -15,12 +15,12 @@
   --ui-intensity: 0.72;
 
   --bg-dark: #02040a;
-  --bg-light: #ffffff;
+  --bg-light: #444;
 
   --text: #151515;
   --text-muted: #6b6b6b;
 
-  --panel-bg: rgba(255,255,255,.82);
+  --panel-bg: rgba(255,255,255,.782);
   --panel-blur: blur(calc(12px + 10px * var(--ui-intensity))) saturate(calc(120% + 40% * var(--ui-intensity)));
   --border: rgba(0,0,0,.08);
   --border-active: rgba(120, 227, 255, 0.45);
@@ -63,8 +63,8 @@ body[data-theme="dark"] {
 
 body[data-theme="light"] {
   --theme-mode: light;
-  --bg-dark: #ffffff;
-  --bg-light: #ffffff;
+  --bg-dark: #444;
+  --bg-light: #444;
 
   --text: #151515;
   --text-muted: #6b6b6b;
