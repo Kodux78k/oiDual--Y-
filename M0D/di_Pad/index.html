@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/ZPR_ORB.css">
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFSw/css/iFSw-fix.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/css/zpr.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/main-0-1.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/main.css">
@@ -33,7 +33,7 @@
   data-zpr="9"
   data-intensity="0.72"
 >
-  <div id="bg-fake-custom"></div>
+  <div id="bg-fake-custom" style="opacity:0.144;"></div>
 
   <div id="root">
     <div class="theme-switch" id="themeSwitch" title="Alternar tema"></div>
@@ -44,31 +44,22 @@
 
       <div id="arch-overlay"></div>
 
+   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css">
 
-    <div id="dock"></div>
 
-    <div id="stackWrap">
-      <div class="session-window" id="session-iframe">
-        <div class="win-hdr" onclick="handleHeaderClick(event,'session-iframe')">
-          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css">
 
-          <div class="win-controls" onclick="event.stopPropagation()">
-            <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
-            <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
-            <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
-          </div>
-        </div>
-
-        <iframe
-          class="win-frame"
-          src="https://kodux78k.github.io/oiDual-H0/DH0-10.html"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
-          allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-          loading="lazy"
-        ></iframe>
+    <div class="os-topbar">
+    
+      <div class="top-actions">
+        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+        <button class="soft-btn" id="openLogsBtn">Logs</button>
       </div>
     </div>
-  </div>
+
+          <div id="dock"></div>
+ 
+  
 
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/js/modules/navTheme.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/js/modules/screensData.js"></script>
@@ -97,6 +88,6 @@
   <script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/js/dikob0000.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
 </body>
 </html>
