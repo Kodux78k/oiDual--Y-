@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  
+                <!-- PWA METADATA & VIEWPORT FIX -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#05070a">
+  <title>KOBLLUX Monolith - Shell Integrado</title>
+<!-- iOS Support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+<!-- Manifest -->
+<link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css">
+
+ 
+</head>
+
+<body class="ui-safe-vertical">
+  <div id="kxtsk-shell">
+    <div class="os-topbar">
+      <div class="os-brand">
+        KxTsK
+        <small>Unified Patch Loader</small>
+      </div>
+
+      <div class="top-actions">
+        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+        <button class="soft-btn" id="openLogsBtn">Logs</button>
+      </div>
+    </div>
+
+    <div id="dock"></div>
+
+    <div id="stackWrap">
+      <div class="session-window" id="session-iframe">
+        <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
+          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+
+          <div class="win-controls" onclick="event.stopPropagation()">
+            <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
+            <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
+            <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
+            <button onclick="closeWindow('session-iframe')" title="Fechar">✕</button>
+          </div>
+        </div>
+
+        <iframe
+          class="win-frame"
+          src="https://kodux78k.github.io/oiDual-H0/DH0-10.html"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+          allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/css/zpr.css">
+<body data-theme="dark" data-arch="KOBLLUX" data-user="Convidado" data-zpr="9" data-intensity="0.72">
+  <div class="theme-switch" id="themeSwitch" title="Alternar tema"></div>
+
+<div class="grid" style="z-index:0 mix-blend-mode:soft-light" id="ZPR"></div>
+  <div class="nav-matrix" id="navMatrix"></div>
+
+
+
+  
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/js/modules/screensData.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/js/modules/ZPR.js"></script>
+  
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/0RB-0S17.js"></script>
+ 
+</body>
+</html>

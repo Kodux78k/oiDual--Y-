@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>KobOS - KODUX V8.0</title>
+  <style>
+    /* =========================================================
+       1. ENGINE VISUAL & ARQUÉTIPOS
+       ========================================================= */
+    :root {
+      --bg-base: #050507;
+      --text: #f0f3f9;
+      --muted: rgba(255, 255, 255, 0.5);
+      --ink: #ffffff;
+      
+      /* Variáveis que serão sobrescritas pelos arquétipos */
+      --kob-voice-primary: #6CCFF6;
+      --kob-voice-secondary: #1B4965;
+    }
+
+    body[data-voice-arch="atlas"] {
+      --kob-voice-primary: #6CCFF6;
+      --kob-voice-secondary: #1B4965;
+    }
+    body[data-voice-arch="nova"] {
+      --kob-voice-primary: #F72585;
+      --kob-voice-secondary: #7209B7;
+    }
+    body[data-voice-arch="pulse"] {
+      --kob-voice-primary: #FF9E00;
+      --kob-voice-secondary: #E85D04;
+    }
+    body[data-voice-arch="matrix"] {
+      --kob-voice-primary: #00FF41;
+      --kob-voice-secondary: #008F11;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--kob-voice-secondary) 15%, transparent) 0%, transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+      color: var(--text);
+      font-family: "Inter", -apple-system, sans-serif;
+      transition: background 0.6s ease;
+    }
+
+    /* =========================================================
+       2. SYMBOL BAR (DOCK)
+       ========================================================= */
+    .symbol-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      padding: 12px 20px;
+      border-radius: 24px;
+      background: rgba(10, 12, 18, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 30%, transparent);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 0 12px rgba(255,255,255,0.02);
+      z-index: 9999;
+      transition: border-color 0.5s;
+    }
+
+    .symbol-button {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: none;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--kob-voice-primary) 20%, transparent), transparent);
+      border: 1px solid rgba(255,255,255,0.05);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .symbol-button:hover {
+      transform: translateY(-8px);
+      background: linear-gradient(180deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      color: #000;
+      box-shadow: 0 8px 20px color-mix(in srgb, var(--kob-voice-primary) 40%, transparent);
+    }
+
+    /* =========================================================
+       3. WIDGET SYSTEM (KODUX V8.0)
+       ========================================================= */
+    .di-widget {
+      position: fixed;
+      min-width: 320px;
+      width: 360px;
+      max-width: 92vw;
+      min-height: 120px;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--kob-voice-primary) 8%, transparent), rgba(10,12,16,0.85));
+      border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 25%, transparent);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.6), 0 0 20px color-mix(in srgb, var(--kob-voice-primary) 10%, transparent);
+      border-radius: 14px;
+      backdrop-filter: blur(15px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      resize: both;
+      animation: spawnIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      transition: border-color 0.5s;
+    }
+
+    @keyframes spawnIn {
+      0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .di-widget.active-window {
+      border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 60%, transparent);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px color-mix(in srgb, var(--kob-voice-primary) 20%, transparent);
+    }
+
+    .di-widget .di-header {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 14px;
+      cursor: grab;
+      user-select: none;
+      background: linear-gradient(0deg, rgba(255,255,255,0.02), transparent);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    
+    .di-widget .di-header:active {
+      cursor: grabbing;
+    }
+
+    .di-widget .di-title { 
+      font-weight: 600; 
+      font-size: 13px; 
+      letter-spacing: .05em; 
+      flex: 1; 
+      color: var(--kob-voice-primary);
+      text-transform: uppercase;
+    }
+
+    .di-widget .di-controls button {
+      border: none; 
+      background: rgba(255,255,255,0.05); 
+      color: var(--muted); 
+      width: 26px;
+      height: 26px;
+      border-radius: 6px; 
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+    .di-widget .di-controls button:hover {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    .di-widget .di-controls button[data-action="close"]:hover {
+      background: #ff4757;
+    }
+
+    .di-widget .di-body { 
+      padding: 14px; 
+      font-size: 14px; 
+      flex: 1; 
+      overflow: auto; 
+    }
+
+    .di-widget .di-footer { 
+      padding: 8px 14px; 
+      font-size: 11px; 
+      color: var(--muted); 
+      border-top: 1px solid rgba(255,255,255,0.02); 
+      background: rgba(0,0,0,0.2);
+    }
+
+    /* Elementos Internos KODUX */
+    .di-widget input, .di-widget textarea, .di-widget select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.3);
+      color: var(--text);
+      box-sizing: border-box;
+      font-family: inherit;
+      outline: none;
+    }
+    .di-widget input:focus, .di-widget textarea:focus {
+      border-color: var(--kob-voice-primary);
+    }
+    
+    .di-widget button.kodux-btn { 
+      padding: 10px 14px; 
+      border-radius: 8px; 
+      border: 1px solid rgba(255,255,255,0.05); 
+      cursor: pointer; 
+      background: linear-gradient(180deg, color-mix(in srgb, var(--kob-voice-primary) 80%, transparent), color-mix(in srgb, var(--kob-voice-secondary) 60%, transparent)); 
+      color: #fff; 
+      font-weight: 600; 
+      transition: 0.2s;
+    }
+    .di-widget button.kodux-btn:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 0 10px color-mix(in srgb, var(--kob-voice-primary) 50%, transparent);
+    }
+
+    .di-calc-display { 
+      font-family: 'Courier New', Courier, monospace; 
+      font-size: 24px; 
+      padding: 12px; 
+      background: rgba(0,0,0,0.4); 
+      border-radius: 8px; 
+      margin-bottom: 10px; 
+      text-align: right;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .di-todo-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    .di-todo-item { display: flex; gap: 10px; align-items: center; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.02); }
+    .di-todo-item.complete span { text-decoration: line-through; opacity: .5; }
+
+    .term-window {
+      background: #050505;
+      color: var(--kob-voice-primary);
+      font-family: monospace;
+      padding: 10px;
+      height: 180px;
+      overflow-y: auto;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 8px;
+    }
+    .term-input {
+      background: #000;
+      color: var(--kob-voice-primary);
+      border: none;
+      font-family: monospace;
+      width: 100%;
+    }
+
+    @media (max-width:720px){ 
+      .di-widget{ width: 92vw !important; left: 4vw !important; right: auto !important;} 
+    }
+  </style>
+</head>
+<body data-voice-arch="atlas">
+
+  <!-- DOCK PRINCIPAL -->
+  <div class="symbol-bar" id="main-dock">
+    <button class="symbol-button" data-kodux="calc">CALC</button>
+    <button class="symbol-button" data-kodux="notes">TXT</button>
+    <button class="symbol-button" data-kodux="binaural">WAVE</button>
+    <button class="symbol-button" data-kodux="synth">SYNTH</button>
+    <button class="symbol-button" data-kodux="term">TERM</button>
+    <button class="symbol-button" data-kodux="todo">TODO</button>
+    
+    <div style="width: 1px; background: rgba(255,255,255,0.1); margin: 0 4px;"></div>
+    
+    <!-- Theme Switcher -->
+    <button class="symbol-button" onclick="cycleTheme()" style="border-radius: 50%; width: 48px;">🔮</button>
+  </div>
+
+<script>
+/* =========================================================
+   SISTEMA DE TEMAS (ARQUÉTIPOS)
+   ========================================================= */
+const archs = ['atlas', 'nova', 'pulse', 'matrix'];
+let currentArchIndex = 0;
+
+function cycleTheme() {
+    currentArchIndex = (currentArchIndex + 1) % archs.length;
+    document.body.setAttribute('data-voice-arch', archs[currentArchIndex]);
+}
+
+/* =========================================================
+   KODUX V8.0 - WIDGET ENGINE (SPAWN, DRAG, Z-INDEX)
+   ========================================================= */
+(function(){
+  const STORAGE_KEY = 'kobos_widgets_v8';
+  const widgets = {};
+  let globalZIndex = 6000;
+
+  function saveAll() {
+    try {
+      const state = {};
+      for(const id in widgets){
+        const el = widgets[id].el;
+        const rect = el.getBoundingClientRect();
+        state[id] = {
+          left: Math.round(parseFloat(el.style.left || rect.left)),
+          top: Math.round(parseFloat(el.style.top || rect.top)),
+          w: Math.round(rect.width),
+          h: Math.round(rect.height),
+          minimized: el.dataset.minimized === 'true'
+        };
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch(e){}
+  }
+
+  function bringToFront(wrap) {
+    globalZIndex++;
+    wrap.style.zIndex = globalZIndex;
+    
+    // Atualiza classes visuais
+    document.querySelectorAll('.di-widget').forEach(w => w.classList.remove('active-window'));
+    wrap.classList.add('active-window');
+  }
+
+  function spawn(id, title, html){
+    if(document.getElementById(id)) {
+      bringToFront(document.getElementById(id));
+      return document.getElementById(id);
+    }
+
+    const wrap = document.createElement('div');
+    wrap.className = 'di-widget active-window';
+    wrap.id = id;
+    
+    // Cascata de spawn
+    const offset = (Object.keys(widgets).length * 30) % 200;
+    wrap.style.left = (window.innerWidth/2 - 180 + offset) + 'px';
+    wrap.style.top = (window.innerHeight/2 - 150 + offset) + 'px';
+    
+    globalZIndex++;
+    wrap.style.zIndex = globalZIndex;
+
+    wrap.innerHTML = `
+      <div class="di-header">
+        <div class="di-title">${title}</div>
+        <div class="di-controls">
+          <button data-action="minimize">_</button>
+          <button data-action="close">✕</button>
+        </div>
+      </div>
+      <div class="di-body">${html}</div>
+      <div class="di-footer">KobOS App · ${title}</div>
+    `;
+    document.body.appendChild(wrap);
+
+    // Foco ao clicar em qualquer lugar
+    wrap.addEventListener('pointerdown', () => bringToFront(wrap));
+
+    // Lógica de Arraste (Drag)
+    const header = wrap.querySelector('.di-header');
+    header.addEventListener('pointerdown', (ev) => {
+      if(ev.button === 2 || ev.target.closest('button')) return;
+      bringToFront(wrap);
+      header.setPointerCapture(ev.pointerId);
+      
+      const startX = ev.clientX, startY = ev.clientY;
+      const rect = wrap.getBoundingClientRect();
+      const startLeft = rect.left, startTop = rect.top;
+
+      function moveHandler(e){
+        let newLeft = Math.round(startLeft + (e.clientX - startX));
+        let newTop = Math.round(startTop + (e.clientY - startY));
+        // Clamp
+        newLeft = Math.max(0, Math.min(window.innerWidth - wrap.offsetWidth, newLeft));
+        newTop = Math.max(0, Math.min(window.innerHeight - wrap.offsetHeight, newTop));
+        
+        wrap.style.left = newLeft + 'px';
+        wrap.style.top = newTop + 'px';
+      }
+
+      function upHandler(e){
+        header.removeEventListener('pointermove', moveHandler);
+        document.removeEventListener('pointerup', upHandler);
+        try { header.releasePointerCapture(ev.pointerId); } catch(err){}
+        saveAll();
+      }
+
+      header.addEventListener('pointermove', moveHandler);
+      document.addEventListener('pointerup', upHandler);
+    });
+
+    // Controles (Fechar/Minimizar)
+    wrap.querySelector('[data-action="close"]').addEventListener('click', ()=>{
+      // Limpar intervalos/áudio se houver cleanup registrado
+      if(wrap.kobosCleanup) wrap.kobosCleanup();
+      wrap.remove();
+      delete widgets[id];
+      saveAll();
+    });
+
+    wrap.querySelector('[data-action="minimize"]').addEventListener('click', ()=>{
+      const body = wrap.querySelector('.di-body');
+      const footer = wrap.querySelector('.di-footer');
+      const isMin = wrap.dataset.minimized === 'true';
+      if(isMin){
+        body.style.display = '';
+        footer.style.display = '';
+        wrap.dataset.minimized = 'false';
+      } else {
+        body.style.display = 'none';
+        footer.style.display = 'none';
+        wrap.dataset.minimized = 'true';
+      }
+      saveAll();
+    });
+
+    widgets[id] = { el: wrap, id };
+    saveAll();
+    return wrap;
+  }
+
+  window.KOBOS = { spawn };
+})();
+
+/* =========================================================
+   KODUX EXTRA PACK & EXPANSIONS (APPS)
+   ========================================================= */
+(function(){
+  const templates = {
+    calc: `
+      <div class="di-calc-display" id="calc_display">0</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <button class="kodux-btn" data-key="7">7</button><button class="kodux-btn" data-key="8">8</button><button class="kodux-btn" data-key="9">9</button><button class="kodux-btn" data-key="/">÷</button>
+        <button class="kodux-btn" data-key="4">4</button><button class="kodux-btn" data-key="5">5</button><button class="kodux-btn" data-key="6">6</button><button class="kodux-btn" data-key="*">×</button>
+        <button class="kodux-btn" data-key="1">1</button><button class="kodux-btn" data-key="2">2</button><button class="kodux-btn" data-key="3">3</button><button class="kodux-btn" data-key="-">−</button>
+        <button class="kodux-btn" data-key="0">0</button><button class="kodux-btn" data-key=".">.</button><button class="kodux-btn" data-key="(">(</button><button class="kodux-btn" data-key=")">)</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button id="calc_clear" class="kodux-btn">C</button>
+        <button id="calc_eval" class="kodux-btn" style="flex:1;">=</button>
+      </div>
+    `,
+    notes: `
+      <textarea id="notes_area" rows="8" placeholder="Digite seus pensamentos... Estado salvo localmente."></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button id="notes_clear" class="kodux-btn" style="flex:1;">Limpar Memória</button>
+      </div>
+    `,
+    todo: `
+      <div style="display:flex;gap:8px;">
+        <input id="todo_in" type="text" placeholder="Nova diretriz...">
+        <button id="todo_add" class="kodux-btn">Add</button>
+      </div>
+      <ul id="todo_list" class="di-todo-list" style="margin-top:12px; max-height: 150px; overflow-y:auto;"></ul>
+    `,
+    binaural: `
+      <div style="display:flex;gap:10px;flex-direction:column;">
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+          <label>Base Carrier (Hz)</label>
+          <input id="bin_base" type="number" value="432" style="width:80px">
+        </div>
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+          <label>Beat Delta (Hz)</label>
+          <input id="bin_beat" type="number" value="8" style="width:80px">
+        </div>
+        <div style="display:flex;gap:8px; margin-top: 10px;">
+          <button id="bin_play" class="kodux-btn" style="flex:1;">Iniciar Sincronia</button>
+        </div>
+        <div id="bin_status" style="margin-top:4px;color:var(--kob-voice-primary);font-size:12px; text-align:center;">Aguardando...</div>
+      </div>
+    `,
+    /* EXPANSION 1: SYNTH WEB AUDIO */
+    synth: `
+      <div style="display:flex;gap:10px;flex-direction:column;">
+        <label style="font-size: 12px; color: var(--muted);">Oscillator Type</label>
+        <select id="synth_wave">
+          <option value="sine">Sine (Puro)</option>
+          <option value="square">Square (8-bit)</option>
+          <option value="sawtooth">Sawtooth (Agressivo)</option>
+          <option value="triangle">Triangle (Suave)</option>
+        </select>
+        
+        <label style="font-size: 12px; color: var(--muted); margin-top: 8px;">Frequency: <span id="synth_freq_val">440</span> Hz</label>
+        <input type="range" id="synth_freq" min="50" max="1500" value="440" style="width:100%">
+        
+        <div style="display:flex;gap:8px; margin-top: 10px;">
+          <button id="synth_play" class="kodux-btn" style="flex:1;">PLAY</button>
+          <button id="synth_stop" class="kodux-btn" style="flex:1; background: #222;">STOP</button>
+        </div>
+      </div>
+    `,
+    /* EXPANSION 2: HACKER TERMINAL */
+    term: `
+      <div class="term-window" id="term_out">
+        KODUX OS v8.0<br>
+        Inicializando subsistemas... OK.<br>
+        Digite 'help' para comandos.<br>
+      </div>
+      <div style="display:flex; gap: 8px;">
+        <span style="color:var(--kob-voice-primary); font-family:monospace; padding-top:10px;">></span>
+        <input type="text" id="term_in" class="term-input" placeholder="_" autocomplete="off">
+      </div>
+    `
+  };
+
+  function initCalc(el){
+    const display = el.querySelector('#calc_display');
+    let expr = '';
+    el.querySelectorAll('[data-key]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ expr += btn.dataset.key; display.textContent = expr || '0'; });
+    });
+    el.querySelector('#calc_clear').addEventListener('click', ()=>{ expr=''; display.textContent='0'; });
+    el.querySelector('#calc_eval').addEventListener('click', ()=>{
+      try {
+        const safe = expr.replace(/×/g,'*').replace(/÷/g,'/');
+        if(!/^[0-9+\-*/().%\s]+$/.test(safe)) throw new Error('invalid');
+        const result = Function('"use strict";return ('+safe+')')();
+        expr = String(result);
+        display.textContent = expr;
+      } catch(e){ display.textContent = 'ERRO'; expr = ''; }
+    });
+  }
+
+  function initNotes(el, id){
+    const area = el.querySelector('#notes_area');
+    const key = 'kob_note_' + id;
+    area.value = localStorage.getItem(key) || '';
+    area.addEventListener('input', () => localStorage.setItem(key, area.value));
+    el.querySelector('#notes_clear').addEventListener('click', () => { area.value = ''; localStorage.removeItem(key); });
+  }
+
+  function initTodo(el, id){
+    const input = el.querySelector('#todo_in');
+    const add = el.querySelector('#todo_add');
+    const list = el.querySelector('#todo_list');
+    const key = 'kob_todo_' + id;
+    
+    let items = JSON.parse(localStorage.getItem(key) || '[]');
+    
+    function render(){
+      list.innerHTML = '';
+      localStorage.setItem(key, JSON.stringify(items));
+      items.forEach((it, idx) => {
+        const li = document.createElement('li'); 
+        li.className = 'di-todo-item' + (it.done ? ' complete' : '');
+        li.innerHTML = `
+          <input type="checkbox" ${it.done ? 'checked' : ''}>
+          <span style="flex:1">${it.text}</span>
+          <button style="background:transparent; border:none; color:var(--muted); cursor:pointer;">✕</button>
+        `;
+        li.querySelector('input').addEventListener('change', (e) => { items[idx].done = e.target.checked; render(); });
+        li.querySelector('button').addEventListener('click', () => { items.splice(idx,1); render(); });
+        list.appendChild(li);
+      });
+    }
+    
+    render();
+    add.addEventListener('click', ()=>{
+      if(input.value.trim()){ items.push({text:input.value, done:false}); input.value=''; render(); }
+    });
+    input.addEventListener('keypress', (e)=>{ if(e.key==='Enter') add.click(); });
+  }
+
+  function initBinaural(el){
+    const btn = el.querySelector('#bin_play');
+    const st = el.querySelector('#bin_status');
+    let ctx, oL, oR, playing = false;
+
+    el.kobosCleanup = () => { if(playing) btn.click(); }; // cleanup na hora de fechar a janela
+
+    btn.addEventListener('click', ()=>{
+      if(playing){
+        oL.stop(); oR.stop(); ctx.close();
+        playing = false; btn.textContent = "Iniciar Sincronia"; st.textContent="Parado";
+        btn.style.background = "";
+      } else {
+        const base = parseFloat(el.querySelector('#bin_base').value) || 432;
+        const beat = parseFloat(el.querySelector('#bin_beat').value) || 8;
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        oL = ctx.createOscillator(); oR = ctx.createOscillator();
+        const pL = ctx.createStereoPanner(); pL.pan.value = -1;
+        const pR = ctx.createStereoPanner(); pR.pan.value = 1;
+        
+        oL.frequency.value = base; oR.frequency.value = base + beat;
+        oL.connect(pL).connect(ctx.destination);
+        oR.connect(pR).connect(ctx.destination);
+        
+        oL.start(); oR.start();
+        playing = true; btn.textContent = "Parar Áudio"; st.textContent=`ON: L=${base}Hz / R=${base+beat}Hz`;
+        btn.style.background = "#ff4757";
+      }
+    });
+  }
+
+  function initSynth(el){
+    const wave = el.querySelector('#synth_wave');
+    const freq = el.querySelector('#synth_freq');
+    const freqVal = el.querySelector('#synth_freq_val');
+    const btnPlay = el.querySelector('#synth_play');
+    const btnStop = el.querySelector('#synth_stop');
+    
+    let ctx, osc, gainNode, isPlaying = false;
+
+    el.kobosCleanup = () => { if(isPlaying) btnStop.click(); };
+
+    freq.addEventListener('input', () => {
+      freqVal.textContent = freq.value;
+      if(isPlaying && osc) osc.frequency.value = freq.value;
+    });
+
+    wave.addEventListener('change', () => {
+      if(isPlaying && osc) osc.type = wave.value;
+    });
+
+    btnPlay.addEventListener('click', () => {
+      if(isPlaying) return;
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      osc = ctx.createOscillator();
+      gainNode = ctx.createGain();
+      
+      osc.type = wave.value;
+      osc.frequency.value = freq.value;
+      gainNode.gain.value = 0.3; // Volume master reduzido para não estourar
+      
+      osc.connect(gainNode).connect(ctx.destination);
+      osc.start();
+      isPlaying = true;
+      btnPlay.style.boxShadow = "0 0 15px var(--kob-voice-primary)";
+    });
+
+    btnStop.addEventListener('click', () => {
+      if(!isPlaying) return;
+      osc.stop();
+      ctx.close();
+      isPlaying = false;
+      btnPlay.style.boxShadow = "none";
+    });
+  }
+
+  function initTerm(el){
+    const out = el.querySelector('#term_out');
+    const inp = el.querySelector('#term_in');
+
+    function print(text, color="var(--text)") {
+      out.innerHTML += `<span style="color:${color}">${text}</span><br>`;
+      out.scrollTop = out.scrollHeight;
+    }
+
+    inp.addEventListener('keypress', (e) => {
+      if(e.key === 'Enter') {
+        const val = inp.value.trim();
+        print(`> ${val}`, "var(--kob-voice-primary)");
+        inp.value = '';
+
+        const args = val.toLowerCase().split(' ');
+        const cmd = args[0];
+
+        switch(cmd) {
+          case 'help':
+            print("Comandos: help, clear, theme [atlas|nova|pulse|matrix], echo [texto]");
+            break;
+          case 'clear':
+            out.innerHTML = "KODUX OS v8.0<br>";
+            break;
+          case 'theme':
+            if(args[1] && archs.includes(args[1])) {
+              document.body.setAttribute('data-voice-arch', args[1]);
+              currentArchIndex = archs.indexOf(args[1]);
+              print(`Tema alterado para: ${args[1]}`, "#0f0");
+            } else {
+              print("Tema inválido. Tente: atlas, nova, pulse, matrix", "#f00");
+            }
+            break;
+          case 'echo':
+            print(val.substring(5));
+            break;
+          case '':
+            break;
+          default:
+            print(`Comando não reconhecido: ${cmd}`, "#f00");
+        }
+      }
+    });
+  }
+
+  function spawnApp(name){
+    const id = 'kob_app_' + name + '_' + Date.now();
+    const titles = { calc:'Core Calc', notes:'Memory Text', todo:'Task Queue', binaural:'Neural Sync', synth:'Wave Engine', term:'Root Terminal' };
+    const el = window.KOBOS.spawn(id, titles[name] || name, templates[name]);
+    
+    // Binding dos scripts após renderização
+    setTimeout(()=>{
+      if(name === 'calc') initCalc(el);
+      if(name === 'notes') initNotes(el, id);
+      if(name === 'todo') initTodo(el, id);
+      if(name === 'binaural') initBinaural(el);
+      if(name === 'synth') initSynth(el);
+      if(name === 'term') initTerm(el);
+    }, 50);
+  }
+
+  // Bind botoes da dock
+  document.querySelectorAll('.symbol-button[data-kodux]').forEach(btn => {
+    btn.addEventListener('click', () => spawnApp(btn.dataset.kodux));
+  });
+
+  // Iniciar com um app de exemplo aberto
+  window.onload = () => {
+    setTimeout(() => spawnApp('term'), 300);
+  };
+
+})();
+</script>
+
+</body>
+</html>
+

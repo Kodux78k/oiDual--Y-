@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Fm BRAVA · Core Controller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0c12;
+      --text: #f0f3f9;
+      --text-muted: #9aa4c8;
+      --panel-bg: rgba(8, 10, 18, 0.75);
+      --border: rgba(255,255,255,0.08);
+      --orb-speed: 5.2s;
+
+      /* cores padrão (BRAVA) */
+      --kob-voice-primary: #ff3b3b;
+      --kob-voice-secondary: #b9134b;
+      --kob-voice-accent: #ffffff;
+    }
+
+    /* temas baseados no atributo data-voice-arch */
+    body[data-voice-arch="atlas"]   { --kob-voice-primary: #38BDF8; --kob-voice-secondary: #1E3A8A; }
+    body[data-voice-arch="nova"]    { --kob-voice-primary: #F72585; --kob-voice-secondary: #7209B7; }
+    body[data-voice-arch="pulse"]   { --kob-voice-primary: #FF9E00; --kob-voice-secondary: #E85D04; }
+    body[data-voice-arch="matrix"]  { --kob-voice-primary: #00FF41; --kob-voice-secondary: #008F11; }
+    body[data-voice-arch="brava"]   { --kob-voice-primary: #ff3b3b; --kob-voice-secondary: #b9134b; }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 20%, color-mix(in srgb, var(--kob-voice-primary) 10%, transparent) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, color-mix(in srgb, var(--kob-voice-secondary) 10%, transparent) 0%, transparent 50%);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      transition: background 0.4s;
+      overflow-x: hidden;
+    }
+
+    /* ===== BARRA FLUTUANTE (SYMBOL BAR) ===== */
+    .symbol-bar {
+      position: fixed;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px 10px;
+      background: rgba(10, 12, 20, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 30%, transparent);
+      border-radius: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      transition: border-color 0.3s, opacity 0.2s;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+    .symbol-bar:active { cursor: grabbing; }
+    .symbol-bar.dragging { transition: none; opacity: 0.9; }
+
+    .symbol-button {
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      color: var(--text);
+      font-size: 1.4rem;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2,0.9,0.3,1);
+    }
+    .symbol-button:hover {
+      background: color-mix(in srgb, var(--kob-voice-primary) 60%, black);
+      color: #000;
+      border-color: var(--kob-voice-primary);
+      transform: scale(1.1);
+      box-shadow: 0 0 20px var(--kob-voice-primary);
+    }
+
+    /* ORB no botão */
+    .orb-mini {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff 5%, var(--kob-voice-primary) 70%);
+      box-shadow: 0 0 12px var(--kob-voice-primary);
+      animation: orbSpin var(--orb-speed) linear infinite;
+    }
+    @keyframes orbSpin { to { transform: rotate(360deg); } }
+
+    /* ===== FUSION CARD ===== */
+    .fusion-card {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      width: 360px;
+      max-width: calc(100vw - 48px);
+      background: var(--panel-bg);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 30%, transparent);
+      border-radius: 32px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      transition: border-color 0.3s, opacity 0.3s, transform 0.3s;
+      z-index: 5000;
+    }
+    
+    .fusion-card.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px) scale(0.95);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .avatar-slot {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--kob-voice-primary) 40%, black);
+      border: 2px solid var(--kob-voice-primary);
+      box-shadow: 0 0 10px color-mix(in srgb, var(--kob-voice-primary) 50%, transparent);
+    }
+
+    .text-block {
+      flex: 1;
+    }
+    .greeting-row {
+      display: flex;
+      gap: 6px;
+      font-size: 1rem;
+    }
+    .txt-thin {
+      font-weight: 300;
+    }
+    .txt-heavy {
+      font-weight: 800;
+      color: var(--kob-voice-primary);
+    }
+    .brand-dual {
+      font-size: 0.7rem;
+      opacity: 0.6;
+      letter-spacing: 2px;
+    }
+
+    .clock-widget {
+      text-align: right;
+    }
+    .time-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      color: var(--kob-voice-primary);
+    }
+    .status-led {
+      display: inline-block;
+      background: var(--kob-voice-primary);
+      color: #000;
+      font-size: 0.6rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      box-shadow: 0 0 8px var(--kob-voice-primary);
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cyber-input {
+      width: 100%;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 12px 16px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    .cyber-input:focus {
+      outline: none;
+      border-color: var(--kob-voice-primary);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--kob-voice-primary) 20%, transparent);
+    }
+
+    .activation-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    .activation-card {
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      max-height: 0;
+      padding: 0 4px;
+    }
+    .activation-card.open {
+      max-height: 400px;
+      padding: 12px 4px;
+    }
+
+    .trigger-btn {
+      background: var(--kob-voice-primary);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 700;
+      color: #000;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .trigger-btn:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 0 18px var(--kob-voice-primary);
+    }
+
+    /* ===== WIDGET SYSTEM ===== */
+    .di-widget {
+      position: fixed;
+      min-width: 280px;
+      width: 340px;
+      max-width: calc(100vw - 32px);
+      background: rgba(8, 10, 18, 0.9);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 30%, transparent);
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      z-index: 8000;
+      display: flex;
+      flex-direction: column;
+      resize: both;
+      overflow: hidden;
+    }
+    .di-header {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+    .di-header:active { cursor: grabbing; }
+    .di-title {
+      flex: 1;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--kob-voice-primary);
+    }
+    .di-controls {
+      display: flex;
+      gap: 6px;
+    }
+    .di-controls button {
+      background: rgba(255,255,255,0.05);
+      border: none;
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .di-controls button:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    .di-body {
+      padding: 14px;
+      font-size: 0.9rem;
+    }
+    .di-footer {
+      padding: 6px 14px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255,255,255,0.02);
+    }
+
+    /* ===== CUSTOM MODAL ===== */
+    .cyber-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .cyber-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .cyber-modal-content {
+      background: var(--panel-bg);
+      border: 1px solid var(--kob-voice-primary);
+      padding: 24px;
+      border-radius: 16px;
+      text-align: center;
+      min-width: 300px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+      transform: translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.2,0.9,0.3,1);
+    }
+    .cyber-modal.active .cyber-modal-content {
+      transform: translateY(0);
+    }
+    .cyber-modal-text {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    .cyber-modal-btn {
+      background: var(--kob-voice-primary);
+      color: #000;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .cyber-modal-btn:hover {
+      box-shadow: 0 0 15px var(--kob-voice-primary);
+    }
+
+  </style>
+</head>
+<body data-voice-arch="brava">
+
+  <!-- Barra flutuante (arrastável) -->
+  <div class="symbol-bar" id="mainSymbolBar">
+    <button class="symbol-button" id="btnToggleMenu" title="Toggle Card">≡</button>
+    <button class="symbol-button" id="btnPrev" title="Anterior">◀</button>
+    <button class="symbol-button" id="btnPlay" title="Play">▶</button>
+    <button class="symbol-button" id="btnNext" title="Próximo">▶▶</button>
+    <button class="symbol-button" id="btnArch" title="Trocar Arquétipo">
+      <div class="orb-mini"></div>
+    </button>
+    <button class="symbol-button" id="btnSpawn" title="Novo Widget">+</button>
+  </div>
+
+  <!-- Fusion Card -->
+  <div class="fusion-card" id="mainFusionCard">
+    <div class="card-header">
+      <div class="avatar-slot"></div>
+      <div class="text-block">
+        <div class="greeting-row">
+          <span class="txt-thin">Oi,</span>
+          <span class="txt-heavy" id="userNameDisplay">Convidado</span>
+        </div>
+        <div class="brand-dual">BRAVA CORE</div>
+      </div>
+      <div class="clock-widget">
+        <div class="time-display" id="clock">00:00</div>
+        <span class="status-led">ONLINE</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <input type="text" class="cyber-input" id="inputName" placeholder="Seu nome..." value="Convidado">
+
+      <div class="activation-toggle" onclick="toggleSection('archPanel')">
+        <span>🔱 ARQUÉTIPO ATUAL</span>
+        <span id="currentArchName">BRAVA</span>
+      </div>
+      <div id="archPanel" class="activation-card">
+        <select id="archSelect" class="cyber-input" style="margin-bottom:8px;">
+          <option value="brava" selected>BRAVA (agressivo)</option>
+          <option value="atlas">ATLAS (gelado)</option>
+          <option value="nova">NOVA (explosivo)</option>
+          <option value="pulse">PULSE (energético)</option>
+          <option value="matrix">MATRIX (verde)</option>
+        </select>
+        <button class="trigger-btn" id="applyArch">Aplicar Arquétipo</button>
+      </div>
+
+      <div class="activation-toggle" onclick="toggleSection('configPanel')">
+        <span>⚙️ CONFIGURAÇÕES</span>
+      </div>
+      <div id="configPanel" class="activation-card">
+        <input type="password" class="cyber-input" placeholder="Chave API (Opcional)" id="apiKey">
+        <button class="trigger-btn" style="margin-top:8px; width: 100%;" id="saveConfig">Salvar Configuração</button>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top: 8px;">
+        <button class="trigger-btn" style="flex:1;" id="btnCardMode">CARD</button>
+        <button class="trigger-btn" style="flex:1; background: rgba(255,255,255,0.1); color: #fff;" id="btnOrbMode">ORB (Ocultar)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container para widgets -->
+  <div id="widgetContainer"></div>
+
+  <!-- Custom Modal -->
+  <div class="cyber-modal" id="customModal">
+    <div class="cyber-modal-content">
+      <div class="cyber-modal-text" id="modalMessage">Mensagem do sistema</div>
+      <button class="cyber-modal-btn" onclick="closeModal()">RECONHECIDO</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ----- CUSTOM MODAL (Substitui Alert) -----
+      window.showModal = function(message) {
+        document.getElementById('modalMessage').textContent = message;
+        document.getElementById('customModal').classList.add('active');
+      };
+      window.closeModal = function() {
+        document.getElementById('customModal').classList.remove('active');
+      };
+
+      // ----- UNIFICAÇÃO DE TEMA -----
+      const archSelect = document.getElementById('archSelect');
+      const currentArchName = document.getElementById('currentArchName');
+      const applyArch = document.getElementById('applyArch');
+
+      function setArchetype(archId) {
+        document.body.setAttribute('data-voice-arch', archId);
+        const names = { brava:'BRAVA', atlas:'ATLAS', nova:'NOVA', pulse:'PULSE', matrix:'MATRIX' };
+        currentArchName.textContent = names[archId] || archId.toUpperCase();
+        localStorage.setItem('fm_arch', archId);
+      }
+
+      applyArch.addEventListener('click', () => {
+        setArchetype(archSelect.value);
+        showModal(`Arquétipo alterado para ${archSelect.value.toUpperCase()}`);
+      });
+
+      const savedArch = localStorage.getItem('fm_arch');
+      if (savedArch) {
+        archSelect.value = savedArch;
+        setArchetype(savedArch);
+      }
+
+      // ----- RELÓGIO -----
+      function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      // ----- NOME DO USUÁRIO -----
+      const inputName = document.getElementById('inputName');
+      const userNameDisplay = document.getElementById('userNameDisplay');
+      
+      function updateName() {
+        const name = inputName.value.trim() || 'Convidado';
+        userNameDisplay.textContent = name;
+        localStorage.setItem('fm_user', name);
+      }
+      inputName.addEventListener('input', updateName);
+      
+      const savedName = localStorage.getItem('fm_user');
+      if (savedName) {
+        inputName.value = savedName;
+        userNameDisplay.textContent = savedName;
+      }
+
+      // ----- SEÇÕES EXPANSÍVEIS -----
+      window.toggleSection = function(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle('open');
+      };
+
+      // ----- BARRA ARRASTÁVEL -----
+      const bar = document.getElementById('mainSymbolBar');
+      let draggingBar = false;
+      let barStartX, barStartY, barStartLeft, barStartTop;
+
+      bar.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('button')) return;
+        e.preventDefault();
+        draggingBar = true;
+        bar.setPointerCapture(e.pointerId);
+        bar.classList.add('dragging');
+
+        const rect = bar.getBoundingClientRect();
+        barStartX = e.clientX;
+        barStartY = e.clientY;
+        barStartLeft = rect.left;
+        barStartTop = rect.top;
+      });
+
+      bar.addEventListener('pointermove', (e) => {
+        if (!draggingBar) return;
+        const dx = e.clientX - barStartX;
+        const dy = e.clientY - barStartY;
+        let newLeft = barStartLeft + dx;
+        let newTop = barStartTop + dy;
+        
+        newLeft = Math.max(8, Math.min(window.innerWidth - bar.offsetWidth - 8, newLeft));
+        newTop = Math.max(8, Math.min(window.innerHeight - bar.offsetHeight - 8, newTop));
+        
+        bar.style.left = newLeft + 'px';
+        bar.style.top = newTop + 'px';
+        bar.style.right = 'auto';
+        bar.style.transform = 'none';
+      });
+
+      bar.addEventListener('pointerup', (e) => {
+        if (draggingBar) {
+          draggingBar = false;
+          bar.classList.remove('dragging');
+          try { bar.releasePointerCapture(e.pointerId); } catch(err) {}
+          const rect = bar.getBoundingClientRect();
+          localStorage.setItem('fm_bar_pos', JSON.stringify({ left: rect.left, top: rect.top }));
+        }
+      });
+
+      const savedPos = localStorage.getItem('fm_bar_pos');
+      if (savedPos) {
+        try {
+          const { left, top } = JSON.parse(savedPos);
+          // Previne que a barra suma se a tela foi redimensionada para menor
+          const safeLeft = Math.min(left, window.innerWidth - 60);
+          const safeTop = Math.min(top, window.innerHeight - 300);
+          bar.style.left = Math.max(8, safeLeft) + 'px';
+          bar.style.top = Math.max(8, safeTop) + 'px';
+          bar.style.right = 'auto';
+          bar.style.transform = 'none';
+        } catch(e) {}
+      }
+
+      // ----- WIDGET SIMPLES (SPAWN) -----
+      const btnSpawn = document.getElementById('btnSpawn');
+      let widgetCounter = 0;
+
+      btnSpawn.addEventListener('click', () => {
+        widgetCounter++;
+        const id = 'widget_' + Date.now();
+        const w = document.createElement('div');
+        w.className = 'di-widget';
+        w.id = id;
+        w.innerHTML = `
+          <div class="di-header" id="header_${id}">
+            <div class="di-title">Terminal [0${widgetCounter}]</div>
+            <div class="di-controls">
+              <button data-action="min" title="Minimizar">–</button>
+              <button data-action="close" title="Fechar">✕</button>
+            </div>
+          </div>
+          <div class="di-body">
+            <div style="font-family:monospace; background:rgba(0,0,0,0.5); padding:10px; border-radius:8px; height:120px; overflow-y:auto; border: 1px solid rgba(255,255,255,0.05);" id="termOut_${id}">> SYSTEM CORE INITIATED...<br>> WAITING FOR INPUT</div>
+            <input type="text" class="cyber-input" placeholder="Insira o comando..." id="termIn_${id}" style="margin-top:8px;">
+          </div>
+          <div class="di-footer">kob://core/terminal_${widgetCounter}</div>
+        `;
+        document.getElementById('widgetContainer').appendChild(w);
+
+        const offset = (document.querySelectorAll('.di-widget').length * 30) % 200;
+        w.style.left = Math.max(10, (window.innerWidth/2 - 170 + offset)) + 'px';
+        w.style.top = Math.max(10, (window.innerHeight/2 - 100 + offset)) + 'px';
+
+        // Widget Dragging Logic
+        const header = document.getElementById(`header_${id}`);
+        let draggingWidget = false;
+        let wStartX, wStartY, wStartLeft, wStartTop;
+
+        const onPointerMove = (e) => {
+          if(!draggingWidget) return;
+          w.style.left = (wStartLeft + e.clientX - wStartX) + 'px';
+          w.style.top = (wStartTop + e.clientY - wStartY) + 'px';
+        };
+
+        const onPointerUp = (e) => {
+          draggingWidget = false;
+          try { header.releasePointerCapture(e.pointerId); } catch(err){}
+          document.removeEventListener('pointermove', onPointerMove);
+          document.removeEventListener('pointerup', onPointerUp);
+        };
+
+        header.addEventListener('pointerdown', (e) => {
+          if (e.target.closest('button')) return;
+          e.preventDefault();
+          draggingWidget = true;
+          wStartX = e.clientX;
+          wStartY = e.clientY;
+          wStartLeft = parseFloat(w.style.left) || w.getBoundingClientRect().left;
+          wStartTop = parseFloat(w.style.top) || w.getBoundingClientRect().top;
+          
+          // Traz para frente
+          document.querySelectorAll('.di-widget').forEach(el => el.style.zIndex = 8000);
+          w.style.zIndex = 8001;
+
+          try { header.setPointerCapture(e.pointerId); } catch(err){}
+          document.addEventListener('pointermove', onPointerMove);
+          document.addEventListener('pointerup', onPointerUp);
+        });
+
+        // Controles do Widget
+        w.querySelector('[data-action="close"]').addEventListener('click', () => w.remove());
+        w.querySelector('[data-action="min"]').addEventListener('click', () => {
+          const body = w.querySelector('.di-body');
+          const footer = w.querySelector('.di-footer');
+          const isHidden = body.style.display === 'none';
+          body.style.display = isHidden ? '' : 'none';
+          footer.style.display = isHidden ? '' : 'none';
+        });
+
+        // Terminal Simulado
+        const termIn = document.getElementById('termIn_' + id);
+        const termOut = document.getElementById('termOut_' + id);
+        termIn.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && termIn.value.trim() !== '') {
+            const cmd = termIn.value;
+            termOut.innerHTML += `<br><span style="color:var(--kob-voice-primary)">></span> ${cmd}`;
+            
+            // Simula resposta
+            setTimeout(() => {
+              termOut.innerHTML += `<br><span style="color:#aaa">Comando não reconhecido.</span>`;
+              termOut.scrollTop = termOut.scrollHeight;
+            }, 300);
+            
+            termIn.value = '';
+            termOut.scrollTop = termOut.scrollHeight;
+          }
+        });
+      });
+
+      // ----- MUDANÇA DE MODO (CARD / ORB) E TOGGLE -----
+      const mainFusionCard = document.getElementById('mainFusionCard');
+      
+      document.getElementById('btnCardMode').addEventListener('click', () => {
+        mainFusionCard.classList.remove('hidden');
+      });
+      document.getElementById('btnOrbMode').addEventListener('click', () => {
+        mainFusionCard.classList.add('hidden');
+      });
+      
+      // O botão Menu na barra agora funciona como um "Toggle" pro Fusion Card
+      document.getElementById('btnToggleMenu').addEventListener('click', () => {
+        mainFusionCard.classList.toggle('hidden');
+      });
+
+      // ----- BOTÕES DE ARQUÉTIPO (CICLO) -----
+      const btnArch = document.getElementById('btnArch');
+      const archList = ['brava', 'atlas', 'nova', 'pulse', 'matrix'];
+      let archIndex = archList.indexOf(savedArch) >= 0 ? archList.indexOf(savedArch) : 0;
+      btnArch.addEventListener('click', () => {
+        archIndex = (archIndex + 1) % archList.length;
+        setArchetype(archList[archIndex]);
+        archSelect.value = archList[archIndex];
+      });
+
+      // ----- BOTÕES DE MÍDIA (Simulados) -----
+      document.getElementById('btnPrev').addEventListener('click', () => showModal('Ação de mídia: Faixa Anterior'));
+      document.getElementById('btnPlay').addEventListener('click', () => showModal('Ação de mídia: Reproduzir/Pausar'));
+      document.getElementById('btnNext').addEventListener('click', () => showModal('Ação de mídia: Próxima Faixa'));
+
+      // ----- CONFIGURAÇÃO (API KEY) -----
+      document.getElementById('saveConfig').addEventListener('click', () => {
+        const key = document.getElementById('apiKey').value;
+        localStorage.setItem('fm_api_key', key);
+        showModal('Configurações do sistema gravadas localmente com sucesso.');
+      });
+      const savedKey = localStorage.getItem('fm_api_key');
+      if (savedKey) document.getElementById('apiKey').value = savedKey;
+    })();
+  </script>
+</body>
+</html>
+
