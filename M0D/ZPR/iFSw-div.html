@@ -1,0 +1,45 @@
+<body class="ui-safe-vertical">
+  <div id="kxtsk-shell">
+    <div class="os-topbar">
+      <div class="os-brand">
+        KxTsK
+        <small>Unified Patch Loader</small>
+      </div>
+
+     
+    </div>
+
+<div id="dock"></div>
+
+    <div id="stackWrap">
+      <div class="session-window" id="session-iframe">
+        <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
+          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+
+ <div class="top-actions">
+        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+        <button class="soft-btn" id="openLogsBtn">Logs</button>
+      </div>
+
+          <div class="win-controls" onclick="event.stopPropagation()">
+            <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
+            <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
+            <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
+            <button onclick="closeWindow('session-iframe')" title="Fechar">✕</button>
+          </div>
+        </div>
+
+        <iframe
+          class="win-frame"
+          src="https://kodux78k.github.io/oiDual-H0/DH0-10.html"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+          allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  
+</body>
+         
