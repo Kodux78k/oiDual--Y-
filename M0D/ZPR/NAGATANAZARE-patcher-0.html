@@ -1,0 +1,1040 @@
+<!-- ===== NAGATANAZARE · PAINEL COMPLETO + CSS + MOTOR ===== -->
+<style>
+  :root{
+    --nag-bg: rgba(5, 7, 10, .62);
+    --nag-panel: rgba(18, 22, 30, .86);
+    --nag-line: rgba(255,255,255,.08);
+    --nag-text: rgba(255,255,255,.94);
+    --nag-dim: rgba(255,255,255,.62);
+    --nag-soft: rgba(255,255,255,.06);
+    --nag-soft2: rgba(255,255,255,.10);
+    --nag-glow: 0 24px 80px rgba(0,0,0,.48);
+    --nag-radius: 28px;
+  }
+
+  #kblx-back{
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background: var(--nag-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 999999;
+  }
+
+  #kblx-back.is-open{
+    display: flex;
+  }
+
+  #kblx-panel{
+    width: min(94vw, 560px);
+    border-radius: var(--nag-radius);
+    padding: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+      var(--nag-panel);
+    border: 1px solid var(--nag-line);
+    box-shadow: var(--nag-glow);
+    color: var(--nag-text);
+    font-family: "Montserrat","Inter",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .kblx-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+  }
+
+  .p-chip{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.06);
+    font-size: .74rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--nag-text);
+    white-space: nowrap;
+  }
+
+  .kblx-icon-btn{
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 14px;
+    background: rgba(255,255,255,.08);
+    color: var(--nag-text);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display:grid;
+    place-items:center;
+    flex: 0 0 auto;
+  }
+
+  .kblx-icon-btn:active,
+  .kblx-btn:active,
+  .kblx-preset:active{
+    transform: scale(.98);
+  }
+
+  .kblx-title-wrap{
+    margin-top: 16px;
+  }
+
+  .p-title{
+    margin: 0;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -.02em;
+  }
+
+  .kblx-sub{
+    margin: 7px 0 0;
+    color: var(--nag-dim);
+    font-size: .92rem;
+  }
+
+  .kblx-section{
+    margin-top: 18px;
+    padding-top: 0;
+  }
+
+  .p-lbl{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: var(--nag-dim);
+    font-size: .85rem;
+    line-height: 1.2;
+  }
+
+  .p-lbl code{
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.06);
+    color: var(--nag-text);
+    font-size: .8rem;
+  }
+
+  #kblx-inp{
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 15px;
+    border: 1px solid rgba(255,255,255,.08);
+    outline: none;
+    border-radius: 18px;
+    background: rgba(255,255,255,.06);
+    color: #fff;
+    font-size: .96rem;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+
+  #kblx-inp::placeholder{
+    color: rgba(255,255,255,.42);
+  }
+
+  #kblx-inp:focus{
+    border-color: rgba(255,255,255,.16);
+    box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+  }
+
+  .kblx-preview{
+    margin-top: 10px;
+    padding: 11px 12px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.05);
+    color: var(--nag-dim);
+    font-size: .82rem;
+    line-height: 1.35;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .kblx-sec-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin: 0 0 10px;
+    color: var(--nag-dim);
+    font-size: .82rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .kblx-presets{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 10px;
+  }
+
+  .kblx-preset{
+    min-height: 42px;
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 10px 13px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.06);
+    color: var(--nag-text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .kblx-row{
+    display:flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  .kblx-btn{
+    flex: 1 1 160px;
+    min-height: 50px;
+    border: 0;
+    border-radius: 18px;
+    background: rgba(255,255,255,.10);
+    color: var(--nag-text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  }
+
+  .kblx-save{
+    background: rgba(255,255,255,.14);
+  }
+
+  .kblx-clear{
+    background: rgba(255,255,255,.06);
+  }
+
+  .kblx-inject{
+    background: rgba(255,255,255,.08);
+  }
+
+  .kblx-note{
+    margin-top: 12px;
+    color: rgba(255,255,255,.48);
+    font-size: .74rem;
+    line-height: 1.35;
+  }
+
+  .symbol-button{
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .symbol-button .symbol-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width: 1em;
+  }
+
+  .di-btn-icon-fallback{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+  }
+
+  .di-icon-ready{
+    position: relative;
+  }
+</style>
+
+<div id="kblx-back" aria-hidden="true">
+  <div id="kblx-panel">
+    <div class="kblx-head">
+      <div class="p-chip">⌘ NAGATANAZARE · EDITOR DE ROTA</div>
+      <button class="kblx-icon-btn" id="kblx-btn-close" type="button">✕</button>
+    </div>
+
+    <div class="kblx-title-wrap">
+      <h2 class="p-title" id="kblx-ttl">Botão</h2>
+      <p class="kblx-sub" id="kblx-sub">Edite a rota, aplique preset e injete Orb no Symbol Bar.</p>
+    </div>
+
+    <section class="kblx-section">
+      <label class="p-lbl" for="kblx-inp">
+        Novo valor para <code>data-url</code>
+      </label>
+
+      <input
+        id="kblx-inp"
+        type="text"
+        placeholder="arquivo.html  ou  https://..."
+        spellcheck="false"
+        autocomplete="off"
+      >
+
+      <div class="kblx-preview" id="kblx-preview">
+        Nenhuma rota definida.
+      </div>
+    </section>
+
+    <section class="kblx-section">
+      <div class="kblx-sec-head">
+        <span>Presets</span>
+      </div>
+
+      <div class="kblx-presets">
+        <button class="kblx-preset" type="button" data-orb-preset="orb">◉ Orb</button>
+        <button class="kblx-preset" type="button" data-orb-preset="frame">⟁ Frame</button>
+        <button class="kblx-preset" type="button" data-orb-preset="dock">⌘ Dock</button>
+      </div>
+    </section>
+
+    <section class="kblx-section">
+      <div class="kblx-sec-head">
+        <span>OrbInject</span>
+      </div>
+
+      <!-- troque o bloco .kblx-row por este -->
+<div class="kblx-row">
+  <button class="kblx-btn kblx-save" id="kblx-btn-save" type="button">⊙ Salvar no botão</button>
+  <button class="kblx-btn kblx-inject" id="kblx-btn-orb-inject" type="button">◉ OrbInject</button>
+  <button class="kblx-btn kblx-dup" id="kblx-btn-dup" type="button">⧉ Duplicar Orb</button>
+  <button class="kblx-btn kblx-del" id="kblx-btn-del" type="button">⌫ Remover Orb</button>
+  <button class="kblx-btn kblx-clear" id="kblx-btn-clear" type="button">⌫ Limpar</button>
+</div>
+
+      <div class="kblx-note">
+        Long press em qualquer <code>.symbol-button[data-url]</code> abre este painel. O motor guarda sessão e persistência, além de atualizar o ícone automaticamente.
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+  const ENGINE_NAME = 'NAGATANAZARE';
+  const CACHE_KEY = 'di_btn_icon_cache_v2';
+  const STORAGE_PREFIX = 'symbol_button_';
+  const LONG_PRESS_MS = 550;
+
+  const ORB_PRESETS = {
+    orb: {
+      name: 'Orb',
+      icon: '◉',
+      mode: 'orb',
+      injectTarget: 'symbol-bar'
+    },
+    frame: {
+      name: 'Frame',
+      icon: '⟁',
+      mode: 'special-frame',
+      injectTarget: 'special-frame'
+    },
+    dock: {
+      name: 'Dock',
+      icon: '⌘',
+      mode: 'dock',
+      injectTarget: 'symbol-bar'
+    }
+  };
+
+  const state = {
+    currentButton: null,
+    longPressTimer: null
+  };
+
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const storageGet = (storage, key) => {
+    try {
+      const raw = storage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const storageSet = (storage, key, value) => {
+    try {
+      storage.setItem(key, JSON.stringify(value));
+    } catch {}
+  };
+
+  const loadCache = () => storageGet(localStorage, CACHE_KEY) || {};
+  const saveCache = (cache) => storageSet(localStorage, CACHE_KEY, cache);
+
+  const cache = loadCache();
+
+  const normKey = (url) => {
+    try {
+      return new URL(url, location.href).href;
+    } catch {
+      return String(url || '');
+    }
+  };
+
+  const storageKeyForBtn = (btn) => {
+    if (!btn) return null;
+    if (btn.id) return `${STORAGE_PREFIX}${btn.id}`;
+    if (btn.dataset.storeKey) return `${STORAGE_PREFIX}${btn.dataset.storeKey}`;
+    return null;
+  };
+
+  function dispatch(name, detail = {}) {
+    window.dispatchEvent(new CustomEvent(name, { detail }));
+  }
+
+  async function fetchText(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.text();
+  }
+
+  async function fetchJSON(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  }
+
+  function pickBestIcon(icons = []) {
+    if (!Array.isArray(icons) || !icons.length) return null;
+
+    const parsed = icons
+      .map(i => ({
+        ...i,
+        sizeNum: (() => {
+          const m = String(i.sizes || '').match(/(\d+)\s*x\s*(\d+)/i);
+          return m ? Math.max(+m[1], +m[2]) : 0;
+        })()
+      }))
+      .sort((a, b) => b.sizeNum - a.sizeNum);
+
+    return (
+      parsed.find(i => String(i.sizes || '').includes('192')) ||
+      parsed.find(i => i.sizeNum >= 192) ||
+      parsed[0] ||
+      null
+    );
+  }
+
+  async function resolveIcon(url) {
+    const key = normKey(url);
+    if (cache[key]) return cache[key];
+
+    try {
+      const base = new URL(key);
+      const html = await fetchText(base.href);
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+
+      const manifestLink = doc.querySelector('link[rel="manifest"]');
+      if (manifestLink) {
+        const manifestUrl = new URL(
+          manifestLink.getAttribute('href'),
+          base
+        ).href;
+
+        try {
+          const manifest = await fetchJSON(manifestUrl);
+          const icon = pickBestIcon(manifest?.icons);
+          if (icon?.src) {
+            const resolved = new URL(icon.src, manifestUrl).href;
+            cache[key] = resolved;
+            saveCache(cache);
+            return resolved;
+          }
+        } catch {}
+      }
+
+      const apple = doc.querySelector(
+        'link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]'
+      );
+      if (apple?.getAttribute('href')) {
+        const resolved = new URL(apple.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const shortcut = doc.querySelector(
+        'link[rel="shortcut icon"], link[rel="icon"]'
+      );
+      if (shortcut?.getAttribute('href')) {
+        const resolved = new URL(shortcut.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const fallback = new URL('/favicon.ico', base).href;
+      cache[key] = fallback;
+      saveCache(cache);
+      return fallback;
+    } catch {
+      const fallback = (() => {
+        try {
+          return new URL('/favicon.ico', new URL(key, location.href)).href;
+        } catch {
+          return null;
+        }
+      })();
+
+      if (fallback) {
+        cache[key] = fallback;
+        saveCache(cache);
+      }
+
+      return fallback;
+    }
+  }
+
+  function getAutoIcon(url = '') {
+    const u = String(url).toLowerCase();
+
+    if (!u) return '◉';
+    if (u.startsWith('http://') || u.startsWith('https://')) return '⇱';
+    if (u.includes('youtube')) return '▶';
+    if (u.includes('github')) return '⌘';
+    if (u.includes('ai')) return '✦';
+    if (u.includes('orb')) return '◉';
+    if (u.includes('frame')) return '⟁';
+    if (u.includes('dock')) return '⌘';
+    if (u.endsWith('.html')) return '◈';
+    if (/\.(png|jpg|jpeg|webp|gif|svg)$/i.test(u)) return '▣';
+    if (/\.(mp4|webm|mov)$/i.test(u)) return '▸';
+
+    return '◉';
+  }
+
+  function updatePreview(text) {
+    const preview = $('#kblx-preview');
+    if (!preview) return;
+
+    const value = String(text || '').trim();
+    preview.textContent = value
+      ? `Destino: ${value}`
+      : 'Nenhuma rota definida.';
+  }
+
+  function ensureIconEl(btn) {
+    if (!btn) return null;
+
+    let iconEl = $('.symbol-icon', btn);
+    if (!iconEl) {
+      iconEl = document.createElement('span');
+      iconEl.className = 'symbol-icon';
+      if (btn.firstChild) {
+        btn.insertBefore(iconEl, btn.firstChild);
+      } else {
+        btn.appendChild(iconEl);
+      }
+    }
+    return iconEl;
+  }
+
+  function paintButton(btn, iconText) {
+    if (!btn) return;
+
+    const iconEl = ensureIconEl(btn);
+    if (!iconEl) return;
+
+    iconEl.textContent = iconText || getAutoIcon(btn.dataset.url || '');
+    btn.classList.add('di-icon-ready');
+    btn.dataset.diIconDone = '1';
+  }
+
+  function applyPreset(btn, presetKey) {
+    if (!btn || !ORB_PRESETS[presetKey]) return null;
+
+    const preset = ORB_PRESETS[presetKey];
+
+    btn.dataset.preset = presetKey;
+    btn.dataset.injectTarget = preset.injectTarget;
+    btn.dataset.mode = preset.mode;
+
+    paintButton(btn, preset.icon);
+
+    const payload = {
+      id: btn.id || '',
+      preset: presetKey,
+      url: btn.dataset.url || '',
+      mode: preset.mode,
+      updatedAt: Date.now()
+    };
+
+    const key = storageKeyForBtn(btn);
+    if (key) {
+      storageSet(sessionStorage, key, payload);
+      storageSet(localStorage, key, payload);
+    }
+
+    dispatch('nagatanazare:preset-applied', { button: btn, preset, payload });
+    return payload;
+  }
+
+  async function updateAttrBtn(
+    btn,
+    {
+      url,
+      preset = '',
+      save = true,
+      session = true,
+      refresh = true,
+      fallback = '◉'
+    } = {}
+  ) {
+    if (!btn) return null;
+
+    const cleanUrl = String(url || '').trim();
+    if (!cleanUrl && !preset) return null;
+
+    if (cleanUrl) btn.dataset.url = cleanUrl;
+    btn.dataset.fallback = fallback;
+
+    let iconText = '';
+
+    if (preset && ORB_PRESETS[preset]) {
+      applyPreset(btn, preset);
+      iconText = ORB_PRESETS[preset].icon;
+    } else {
+      iconText = getAutoIcon(cleanUrl);
+      paintButton(btn, iconText);
+    }
+
+    let iconUrl = '';
+    if (refresh && cleanUrl) {
+      const resolved = await resolveIcon(cleanUrl);
+      if (resolved) {
+        iconUrl = resolved;
+        btn.dataset.iconUrl = resolved;
+        paintButton(btn, iconText || getAutoIcon(cleanUrl));
+      }
+    }
+
+    const payload = {
+      id: btn.id || '',
+      url: cleanUrl,
+      preset: preset || btn.dataset.preset || '',
+      icon: ($('.symbol-icon', btn)?.textContent || iconText || ''),
+      iconUrl,
+      updatedAt: Date.now()
+    };
+
+    const key = storageKeyForBtn(btn);
+    if (key) {
+      if (session) storageSet(sessionStorage, key, payload);
+      if (save) storageSet(localStorage, key, payload);
+    }
+
+    dispatch('nagatanazare:button-updated', {
+      button: btn,
+      payload
+    });
+
+    return payload;
+  }
+
+  function restoreButtons() {
+    $$('.symbol-button').forEach(btn => {
+      const key = storageKeyForBtn(btn);
+      if (!key) return;
+
+      const data = storageGet(sessionStorage, key) || storageGet(localStorage, key);
+      if (!data) return;
+
+      if (data.url) btn.dataset.url = data.url;
+      if (data.preset) btn.dataset.preset = data.preset;
+      if (data.mode) btn.dataset.mode = data.mode;
+      if (data.injectTarget) btn.dataset.injectTarget = data.injectTarget;
+      if (data.iconUrl) btn.dataset.iconUrl = data.iconUrl;
+
+      paintButton(btn, data.icon || getAutoIcon(data.url || ''));
+
+      if (data.preset && ORB_PRESETS[data.preset]) {
+        btn.dataset.mode = ORB_PRESETS[data.preset].mode;
+        btn.dataset.injectTarget = ORB_PRESETS[data.preset].injectTarget;
+      }
+    });
+  }
+
+  function observeDynamicButtons() {
+    const root = document.body;
+    if (!root) return;
+
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === 'childList') {
+          m.addedNodes.forEach((node) => {
+            if (!(node instanceof Element)) return;
+
+            if (node.matches?.('.symbol-button')) {
+              paintButton(node, getAutoIcon(node.dataset.url || ''));
+            }
+
+            node.querySelectorAll?.('.symbol-button').forEach(btn => {
+              paintButton(btn, getAutoIcon(btn.dataset.url || ''));
+            });
+          });
+        }
+
+        if (m.type === 'attributes' && m.attributeName === 'data-url') {
+          const btn = m.target;
+          if (btn?.classList?.contains('symbol-button')) {
+            btn.dataset.diIconDone = '';
+            paintButton(btn, getAutoIcon(btn.dataset.url || ''));
+          }
+        }
+      }
+    });
+
+    mo.observe(root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-url']
+    });
+  }
+
+  function openPanel(btn) {
+    if (!btn) return;
+
+    state.currentButton = btn;
+
+    const back = $('#kblx-back');
+    const title = $('#kblx-ttl');
+    const input = $('#kblx-inp');
+    const preview = $('#kblx-preview');
+
+    if (back) {
+      back.classList.add('is-open');
+      back.setAttribute('aria-hidden', 'false');
+    }
+
+    if (title) title.textContent = btn.dataset.title || btn.id || 'Botão';
+    if (input) input.value = btn.dataset.url || '';
+    if (preview) updatePreview(btn.dataset.url || '');
+
+    dispatch('nagatanazare:panel-open', {
+      button: btn,
+      url: btn.dataset.url || '',
+      preset: btn.dataset.preset || ''
+    });
+  }
+
+  function closePanel() {
+    const back = $('#kblx-back');
+
+    if (back) {
+      back.classList.remove('is-open');
+      back.setAttribute('aria-hidden', 'true');
+    }
+
+    dispatch('nagatanazare:panel-close', {
+      button: state.currentButton
+    });
+
+    state.currentButton = null;
+  }
+
+  function bindLongPress() {
+    document.addEventListener('touchstart', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+
+      clearTimeout(state.longPressTimer);
+      state.longPressTimer = setTimeout(() => openPanel(btn), LONG_PRESS_MS);
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+      clearTimeout(state.longPressTimer);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', () => {
+      clearTimeout(state.longPressTimer);
+    }, { passive: true });
+
+    document.addEventListener('mousedown', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+
+      clearTimeout(state.longPressTimer);
+      state.longPressTimer = setTimeout(() => openPanel(btn), LONG_PRESS_MS);
+    });
+
+    document.addEventListener('mouseup', () => {
+      clearTimeout(state.longPressTimer);
+    });
+
+    document.addEventListener('mouseleave', () => {
+      clearTimeout(state.longPressTimer);
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+      e.preventDefault();
+      openPanel(btn);
+    });
+  }
+
+  function bindPanelUI() {
+    document.addEventListener('click', async (e) => {
+      const closeBtn = e.target.closest?.('#kblx-btn-close');
+      const saveBtn = e.target.closest?.('#kblx-btn-save');
+      const clearBtn = e.target.closest?.('#kblx-btn-clear');
+      const injectBtn = e.target.closest?.('#kblx-btn-orb-inject');
+      const presetBtn = e.target.closest?.('[data-orb-preset]');
+      const back = e.target.closest?.('#kblx-back');
+
+// dentro de bindPanelUI(), adicione estes blocos no document.addEventListener('click', ...)
+
+const dupBtn = e.target.closest?.('#kblx-btn-dup');
+const delBtn = e.target.closest?.('#kblx-btn-del');
+
+if (dupBtn) {
+  const current = state.currentButton;
+  if (!current) return;
+
+  const clone = cloneCurrentButton(current);
+  if (clone) {
+    openPanel(clone);
+  }
+  return;
+}
+
+if (delBtn) {
+  const current = state.currentButton;
+  if (!current) return;
+
+  const wasRemoved = removeCurrentButton(current);
+  if (wasRemoved) closePanel();
+  return;
+}
+
+      if (back && back.id === 'kblx-back' && e.target === back) {
+        closePanel();
+        return;
+      }
+
+      if (closeBtn) {
+        closePanel();
+        return;
+      }
+
+      if (presetBtn) {
+        const presetKey = presetBtn.dataset.orbPreset;
+        const current = state.currentButton;
+        if (!current) return;
+
+        await updateAttrBtn(current, {
+          preset: presetKey,
+          url: current.dataset.url || '',
+          save: true,
+          session: true,
+          refresh: true
+        });
+
+        const title = $('#kblx-ttl');
+        if (title && ORB_PRESETS[presetKey]) {
+          title.textContent = `${current.dataset.title || current.id || 'Botão'} · ${ORB_PRESETS[presetKey].name}`;
+        }
+        return;
+      }
+
+      if (saveBtn) {
+        const input = $('#kblx-inp');
+        const current = state.currentButton;
+        if (!input || !current) return;
+
+        await updateAttrBtn(current, {
+          url: input.value,
+          save: true,
+          session: true,
+          refresh: true
+        });
+
+        updatePreview(input.value);
+        return;
+      }
+
+      if (clearBtn) {
+        const input = $('#kblx-inp');
+        const current = state.currentButton;
+        if (!input || !current) return;
+
+        input.value = '';
+        updatePreview('');
+        current.dataset.url = '';
+        current.dataset.preset = '';
+        current.dataset.mode = '';
+        current.dataset.injectTarget = '';
+        current.dataset.iconUrl = '';
+        current.dataset.diIconDone = '';
+
+        paintButton(current, '◉');
+
+        const key = storageKeyForBtn(current);
+        if (key) {
+          try { sessionStorage.removeItem(key); } catch {}
+          try { localStorage.removeItem(key); } catch {}
+        }
+
+        dispatch('nagatanazare:button-cleared', { button: current });
+        return;
+      }
+
+      if (injectBtn) {
+        const current = state.currentButton;
+        if (!current) return;
+
+        const detail = {
+          button: current,
+          target: current.dataset.injectTarget || 'symbol-bar',
+          url: current.dataset.url || '',
+          preset: current.dataset.preset || '',
+          mode: current.dataset.mode || ''
+        };
+
+        dispatch('nagatanazare:orb-inject', detail);
+      }
+    });
+
+    document.addEventListener('input', async (e) => {
+      const input = e.target;
+      if (!input.matches?.('#kblx-inp')) return;
+
+      const current = state.currentButton;
+      if (!current) return;
+
+      updatePreview(input.value);
+
+      await updateAttrBtn(current, {
+        url: input.value,
+        save: false,
+        session: true,
+        refresh: true
+      });
+    });
+  }
+
+// cole dentro do script, junto das outras funções
+
+function makeUniqueId(base = 'orb') {
+  const clean = String(base || 'orb')
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '') || 'orb';
+
+  return `${clean}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+}
+
+function cloneCurrentButton(current) {
+  if (!current) return null;
+
+  const clone = current.cloneNode(true);
+  const parent = current.parentElement;
+  if (!parent) return null;
+
+  const newId = makeUniqueId(current.id || current.dataset.storeKey || 'orb');
+  clone.id = newId;
+
+  clone.dataset.storeKey = newId;
+  clone.dataset.url = current.dataset.url || '';
+  clone.dataset.preset = current.dataset.preset || '';
+  clone.dataset.mode = current.dataset.mode || '';
+  clone.dataset.injectTarget = current.dataset.injectTarget || '';
+  clone.dataset.iconUrl = current.dataset.iconUrl || '';
+  clone.dataset.diIconDone = '';
+
+  const label = clone.querySelector('.symbol-label');
+  if (label && current.dataset.title) {
+    label.textContent = current.dataset.title;
+  }
+
+  parent.insertBefore(clone, current.nextSibling);
+
+  paintButton(clone, current.querySelector('.symbol-icon')?.textContent || getAutoIcon(clone.dataset.url || ''));
+
+  const key = storageKeyForBtn(clone);
+  if (key) {
+    const payload = {
+      id: clone.id,
+      url: clone.dataset.url || '',
+      preset: clone.dataset.preset || '',
+      mode: clone.dataset.mode || '',
+      injectTarget: clone.dataset.injectTarget || '',
+      icon: clone.querySelector('.symbol-icon')?.textContent || '',
+      iconUrl: clone.dataset.iconUrl || '',
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    try { sessionStorage.setItem(key, JSON.stringify(payload)); } catch {}
+    try { localStorage.setItem(key, JSON.stringify(payload)); } catch {}
+  }
+
+  dispatch('nagatanazare:button-duplicated', {
+    from: current,
+    to: clone
+  });
+
+  return clone;
+}
+
+function removeCurrentButton(current) {
+  if (!current) return false;
+
+  const key = storageKeyForBtn(current);
+  if (key) {
+    try { sessionStorage.removeItem(key); } catch {}
+    try { localStorage.removeItem(key); } catch {}
+  }
+
+  dispatch('nagatanazare:button-removed', { button: current });
+  current.remove();
+  return true;
+}
+
+  window.NAGATANAZARE = {
+    name: ENGINE_NAME,
+    presets: ORB_PRESETS,
+    openPanel,
+    closePanel,
+    applyPreset,
+    updateAttrBtn,
+    restoreButtons,
+    getCurrentButton: () => state.currentButton
+  };
+
+  function init() {
+    restoreButtons();
+    observeDynamicButtons();
+    bindLongPress();
+    bindPanelUI();
+
+    dispatch('nagatanazare:ready', { engine: ENGINE_NAME });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+<!-- ===== /NAGATANAZARE ===== -->
