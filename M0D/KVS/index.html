@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#05070a">
+  <title>ZPR Studio Masterclass Dual</title>
+  
+<link rel="stylesheet" href="./css/main.css"></head>
+<body>
+  <div class="app" id="app">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">⚙️</div>
+        <div style="min-width:0">
+          <h1>ZPR Studio Masterclass</h1>
+          <small>Motor Dual de Realidades Processadas v2.0</small>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="showThemeMenu()" title="Tema">🌙</button>
+        <button class="btn" onclick="validateCode()" title="Validar">✓</button>
+        <button class="btn primary" onclick="loadUltimateZPR()">Cofre KODUX</button>
+        <button class="btn good" onclick="saveZone()">Salvar</button>
+        <button class="btn bad" onclick="downloadHTML()">HTML</button>
+      </div>
+    </header>
+
+```
+<!-- TABS -->
+<nav class="tabs">
+  <button class="tab active" data-tab="kaos" onclick="setTab('kaos')">⚡ Kaos</button>
+  <button class="tab" data-tab="genus" onclick="setTab('genus')">🧬 Genus</button>
+  <button class="tab" data-tab="kobllux" onclick="setTab('kobllux')">⚙️ Kobllux</button>
+  <button class="tab" data-tab="lumine" onclick="setTab('lumine')">👁️ Lumine</button>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+  <section class="panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <strong id="mainTitle">Kaos de Entrada</strong>
+        <span id="mainSubtitle">Cole HTML, processe, construa e exporte sua zona ZPR.</span>
+      </div>
+      <div class="toolbar">
+        <button class="btn" onclick="loadSample()">Exemplo</button>
+        <button class="btn" onclick="clearWorkspace()">Limpar</button>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <div class="hero">
+        <h2>🌀 ZPR Studio Masterclass Dual</h2>
+        <p>Sistema completo de construção, validação e exportação de zonas ZPR. Upload, drag-drop, histórico, temas, preview dinâmico.</p>
+        <div class="pillrow">
+          <span class="pill">Parser avançado</span>
+          <span class="pill">Upload &amp; drag-drop</span>
+          <span class="pill">Validação</span>
+          <span class="pill">Histórico</span>
+          <span class="pill">Temas visuais</span>
+          <span class="pill">Fusão smart</span>
+        </div>
+      </div>
+
+      <!-- KAOS TAB -->
+      <div id="tab-kaos" class="section" style="margin-top:14px;">
+        <div class="grid two">
+          <div class="field">
+            <label>Entrada bruta</label>
+            <textarea id="rawInput" placeholder="Cole HTML, CSS, JS..."></textarea>
+            <div id="validationMsg"></div>
+          </div>
+          <div class="field">
+            <label>Upload &amp; Drag-drop</label>
+            <div class="dropzone" id="dropzone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('fileInput').click()">
+              <div style="font-size:24px;margin-bottom:8px">📁</div>
+              <div style="color:#e9eef7;font-weight:700">Arraste arquivos ou clique</div>
+              <div style="color:#98a3b5;font-size:11px;margin-top:4px">Suporta: .html, .css, .js, .zip</div>
+            </div>
+            <input type="file" id="fileInput" style="display:none" multiple="" onchange="handleFileInput(event)">
+          </div>
+        </div>
+
+        <div class="tabs-h">
+          <button class="active" onclick="switchView('raw')">HTML Bruto</button>
+          <button onclick="switchView('preview')">Visualizar</button>
+          <button onclick="switchView('history')">Histórico</button>
+        </div>
+
+        <div id="view-raw" class="field">
+          <textarea id="htmlTextarea" placeholder="HTML pré-processado aparecerá aqui..."></textarea>
+          <div class="toolbar" style="margin-top:12px">
+            <button class="btn primary" onclick="processKaos()">Destilar no Genus</button>
+            <button class="btn" onclick="minifyHTML()">Minificar</button>
+            <button class="btn" onclick="formatHTML()">Formatar</button>
+          </div>
+        </div>
+
+        <div id="view-preview" class="hidden" style="margin-top:12px;">
+          <div class="preview">
+            <iframe id="previewKaos" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+          </div>
+        </div>
+
+        <div id="view-history" class="hidden" style="margin-top:12px;">
+          <div class="history" id="historyList"></div>
+        </div>
+      </div>
+
+      <!-- GENUS TAB -->
+      <div id="tab-genus" class="hidden section" style="margin-top:14px;">
+        <div class="grid three">
+          <div class="field">
+            <label>Target / ID</label>
+            <input id="targetInput" value="#app-root">
+          </div>
+          <div class="field">
+            <label>Modo de injeção</label>
+            <select id="modeInput">
+              <option value="replace">replace</option>
+              <option value="append">append</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Nome da zona</label>
+            <input id="zoneNameInput" value="Nexus Zone">
+          </div>
+        </div>
+
+        <div class="tabs-h">
+          <button class="active" onclick="switchGenusView('assets')">Assets</button>
+          <button onclick="switchGenusView('editor')">Editor</button>
+          <button onclick="switchGenusView('validate')">Validar</button>
+        </div>
+
+        <div id="genus-assets">
+          <div class="grid three">
+            <div class="card">
+              <h3>IDs detectados</h3>
+              <div class="history" id="idsList" style="max-height:200px;margin-top:10px"></div>
+            </div>
+            <div class="card">
+              <h3>CSS (<span id="cssCnt">0</span>)</h3>
+              <div class="history" id="cssList" style="max-height:200px;margin-top:10px"></div>
+            </div>
+            <div class="card">
+              <h3>JS (<span id="jsCnt">0</span>)</h3>
+              <div class="history" id="jsList" style="max-height:200px;margin-top:10px"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="genus-editor" class="hidden">
+          <div class="grid two">
+            <div class="field">
+              <label>HTML editável</label>
+              <textarea id="htmlEditor" placeholder="HTML..."></textarea>
+            </div>
+            <div class="field">
+              <label>JS inline editável</label>
+              <textarea id="inlineEditor" placeholder="JavaScript..."></textarea>
+            </div>
+          </div>
+          <button class="btn primary" onclick="updateStateFromEditors()" style="margin-top:12px">Aplicar edições</button>
+        </div>
+
+        <div id="genus-validate" class="hidden">
+          <div class="callout" style="margin-bottom:14px">
+            Validação estrutural da zona. Verifica sintaxe, referências e possíveis erros.
+          </div>
+          <div id="validationResults"></div>
+          <button class="btn primary" onclick="validateFull()" style="margin-top:12px">Validar agora</button>
+        </div>
+      </div>
+
+      <!-- KOBLLUX TAB -->
+      <div id="tab-kobllux" class="hidden section" style="margin-top:14px;">
+        <div class="callout" style="margin-bottom:14px">
+          Fusão inteligente de duas ou mais zonas salvas. O sistema detecta duplicatas e mescla assets automaticamente.
+        </div>
+        <div class="saved-grid" id="savedGrid"></div>
+      </div>
+
+      <!-- LUMINE TAB -->
+      <div id="tab-lumine" class="hidden section" style="margin-top:14px;">
+        <div class="tabs-h">
+          <button class="active" onclick="switchLumineView('js')">JS Export</button>
+          <button onclick="switchLumineView('html')">HTML Full</button>
+          <button onclick="switchLumineView('json')">JSON</button>
+        </div>
+
+        <div id="lumine-js" style="margin-top:12px;">
+          <textarea id="jsExport" readonly="" style="height:360px"></textarea>
+          <button class="btn primary" onclick="copyText(getJSExport())" style="margin-top:12px">Copiar JS</button>
+        </div>
+
+        <div id="lumine-html" class="hidden" style="margin-top:12px;">
+          <textarea id="htmlExport" readonly="" style="height:360px"></textarea>
+          <button class="btn primary" onclick="copyText(getFullHTML())" style="margin-top:12px">Copiar HTML</button>
+        </div>
+
+        <div id="lumine-json" class="hidden" style="margin-top:12px;">
+          <textarea id="jsonExport" readonly="" style="height:360px"></textarea>
+          <button class="btn primary" onclick="downloadJSON()" style="margin-top:12px">Baixar JSON</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:12px 14px 16px;border-top:1px solid var(--line);color:#98a3b5;font-size:11px;line-height:1.7">
+      ZPR Studio Masterclass v2.0 - Sistema completo de construção visual de zonas ZPR. Todas as mudanças são salvas localmente.
+    </div>
+  </section>
+
+  <!-- RIGHT PANEL - PREVIEW -->
+  <aside class="panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <strong>Preview / Status</strong>
+        <span>Visualização em tempo real</span>
+      </div>
+      <div class="toolbar">
+        <button class="btn" onclick="renderPreview()">🔄</button>
+        <button class="btn" onclick="resetSaved()">🗑️</button>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <div style="display:flex;flex-direction:column;gap:12px;height:100%;min-height:0">
+        <div class="preview">
+          <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        </div>
+
+        <div class="card">
+          <h3>📊 Resumo</h3>
+          <div class="stats" style="margin-top:10px">
+            <div class="stat"><strong id="countHtml">0</strong><span>HTML</span></div>
+            <div class="stat"><strong id="countCss">0</strong><span>CSS</span></div>
+            <div class="stat"><strong id="countJs">0</strong><span>JS</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📌 Zona ativa</h3>
+          <p id="zoneSummary" class="muted">Processando...</p>
+        </div>
+
+        <div class="card">
+          <h3>💾 Zonas salvas</h3>
+          <p id="savedCount" class="muted">0 zonas</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="themeModal">
+  <div class="modal-content">
+    <h3>Escolher tema</h3>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px">
+      <button class="btn" onclick="setTheme('dark')">🌙 Dark</button>
+      <button class="btn" onclick="setTheme('light')">☀️ Light</button>
+      <button class="btn" onclick="setTheme('KODUX')">⚙️ KODUX</button>
+      <button class="btn" onclick="setTheme('matrix')">💚 Matrix</button>
+    </div>
+    <button onclick="document.getElementById('themeModal').classList.remove('show')" style="width:100%;margin-top:16px;padding:12px;background:rgba(255,255,255,.1);border:1px solid var(--line);border-radius:12px;color:#e9eef7;cursor:pointer">Fechar</button>
+  </div>
+</div>
+```
+
+  </div>
+
+  
+
+`;
+      $('previewFrame').srcdoc = doc;
+    }
+
+```
+function addHistory(msg){
+  state.history.unshift({time: new Date().toLocaleTimeString(), msg});
+  if(state.history.length &gt; HISTORY_MAX) state.history.pop();
+}
+
+function renderHistory(){
+  const list = $('historyList');
+  if(!state.history.length){
+    list.innerHTML = '<div class="muted">Nenhum histórico.</div>';
+    return;
+  }
+  list.innerHTML = state.history.map((h,i) =&gt; `
+    <div class="history-item ${i===0?'current':''}">
+      <strong>${h.time}</strong> - ${escapeHtml(h.msg)}
+    </div>
+  `).join('');
+}
+
+async function copyText(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    showToast('✓ Copiado', 'success');
+  }catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+  }
+}
+
+function downloadFile(content, filename, mime='text/plain'){
+  const blob = new Blob([content], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  setTimeout(() =&gt; URL.revokeObjectURL(url), 1000);
+}
+
+function downloadHTML(){
+  downloadFile(getFullHTML(), `zpr-${state.zprState.zoneName.replace(/\s/g,'-')}.html`, 'text/html');
+  showToast('✓ HTML baixado');
+}
+
+function downloadJSON(){
+  const data = {version:2,zone:state.zprState,savedZones:state.savedZones,exportedAt:new Date().toISOString()};
+  downloadFile(JSON.stringify(data,null,2), 'zpr-state.json', 'application/json');
+  showToast('✓ JSON baixado');
+}
+
+function loadSample(){
+  $('rawInput').value = '<div id="app"><h2>Sample</h2><p>Clique em Destilar.</p></div><link rel="stylesheet" href="https://cdn.example.com/style.css">
+
+<script type="module" src="./js/main.js"></script></body></html>
