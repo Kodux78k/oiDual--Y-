@@ -1,39 +1,29 @@
-<html lang="pt-BR"><head>
-  <meta charset="UTF-8">
-  
-                <!-- PWA METADATA & VIEWPORT FIX -->
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#05070a">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KOBLLUX Monolith - Shell Integrado</title>
-<!-- iOS Support -->
-<meta name="apple-mobile-web-app-capable" content="yes">
 
-<link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFSw/css/iFSw-fix.css">
 
-<!-- Manifest -->
-<link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-e.css">
 
 <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css"> 
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css">
-
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix-drag.css">
 
 
-<style>
-        :root {
-          --z-base: 0;
-          --z-content: 100;
-          --z-widget: 500;
-          --z-overlay: 1000;
-          --z-system: 5000;
-        }
-      </style></head>
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-nanai.css"> 
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
-<body class="ui-safe-vertical">
+</head>
 
+<body class="ui-safe-vertical" data-theme="dark" data-arch="kodux" data-user="Convidado" data-zpr="9" data-intensity="0.72">
  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LS/js/insert-LS-3.js"></script>
+ <div id="kxtsk-shell">
 
-  <div id="kxtsk-shell">
+
     <div class="os-topbar">
       <div class="os-brand">
         KxTsK
@@ -41,17 +31,23 @@
       </div>
 
       <div class="top-actions">
-        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+        <button class="launcher-btn" id="openKobBtn">+ Abrir</button>
         <button class="soft-btn" id="openLogsBtn">Logs</button>
       </div>
     </div>
 
     <div id="dock"></div>
 
+    <div id="bg-gradient"></div>
+
+    <div id="bg-fake-custom"></div>
+
+    <div id="arch-overlayy"></div>
+
     <div id="stackWrap">
-      <div class="session-window collapsed" id="session-iframe">
+      <div class="session-window peeked" id="session-iframe">
         <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
-          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+          <div class="win-title">🌐 //</div>
 
           <div class="win-controls" onclick="event.stopPropagation()">
             <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
@@ -66,19 +62,20 @@
       </div>
     </div>
   </div>
-<div id="bg-fake-custom"></div>
-  
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
-
- <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix-drag.js"></script>
-
-<!-- -->
 
 
-<script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script>
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
 
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/css/zpr.css">
 
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPaneli.js"></script>
 
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script>
+  <div class="theme-switch" id="themeSwitch" title="Alternar tema"></div>
+<style> body, html{
+overflow-y:auto ;}
 
+</style>
 
-</body></html>
+</body>
+</html>
