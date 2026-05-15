@@ -13,7 +13,7 @@
 
     const DEFAULTS = {
       API_URL: 'https://openrouter.ai/api/v1/chat/completions',
-      MODEL:   'deepseek/deepseek-chat-v3-0324:free',
+      MODEL:   'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
       TEMP:    0.2,
       CHUNK_SIZE: 12000
     };
