@@ -1,5 +1,12 @@
-(function(h,s='#inject-here'){const p=new DOMParser(),c=p.parseFromString(h,'text/html'),f=document.createDocumentFragment(),t=document.querySelector(s)||document.body;Array.from(c.body.childNodes).forEach(n=>f.appendChild(document.importNode(n,true)));t.appendChild(f);Array.from(c.querySelectorAll('script')).forEach(x=>{const n=document.createElement('script');for(const a of x.attributes)n.setAttribute(a.name,a.value);n.textContent=x.textContent;document.body.appendChild(n)})})(`<style>
-  :root{
+(function(h,s='#inject-here'){const p=new DOMParser(),c=p.parseFromString(h,'text/html'),
+  f=document.createDocumentFragment(),
+  t=document.querySelector(s)||document.body;Array.from(c.body.childNodes).forEach(n=>f.appendChild(document.importNode(n,true)));t.appendChild(f);
+  Array.from(c.querySelectorAll('script')).forEach(x=>{const n=document.createElement('script');for(const a of x.attributes)n.setAttribute(a.name,a.value);
+    n.textContent=x.textContent;
+    document.body.appendChild(n)})})(`
+<body>
+ <style>
+ :root{
     --nag-bg: rgba(5, 7, 10, .18);
     --nag-panel: rgba(18, 22, 30, .92);
     --nag-line: rgba(255,255,255,.08);
@@ -1153,4 +1160,5 @@
   }
 })();
 </script>
+</body>
 `); 
