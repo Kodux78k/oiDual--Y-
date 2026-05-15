@@ -765,20 +765,6 @@ resetIdle();
      ╚══════════════════════════════════════════╝ -->
 <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
 
-<div id="kblx-back">
-  <div id="kblx-panel">
-    <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
-    <div class="p-title" id="kblx-ttl">Botão</div>
-    <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
-    <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
-    <div class="kblx-row">
-      <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
-      <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
-    </div>
-  </div>
-</div>
-
-
 <script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script>
 
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
@@ -834,4 +820,74 @@ function resetIdle(){
 resetIdle();
 </script><script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-0.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script><script>
 const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","aion","kobllux","artemis","serena","genus","solus","rhea","uno","dual","trinity","infodose","horus","bllue", localStorage.getItem("di_userName")];
-</script><script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/dikob0000.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script></body></html>
+</script><script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/dikob0000.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/NAGATANAZARE.css">
+
+<div id="kblx-quick">
+  <button class="kq-item" data-kq="edit">✦ Editar</button>
+  <button class="kq-item" data-kq="symbol">◉ SymbolBar</button>
+  <button class="kq-item" data-kq="frame">⟁ Session</button>
+  <button class="kq-item" data-kq="dock">⌘ Dock</button>
+  <button class="kq-item" data-kq="duplicate">📋 Duplicar</button>
+  <button class="kq-item" data-kq="favorite">⭐ Favoritar</button>
+  <button class="kq-item" data-kq="full">⋯ Mais</button>
+</div>
+
+<div id="kblx-back" aria-hidden="true">
+  <div id="kblx-panel">
+    <div class="kblx-head">
+      <div class="p-chip">⌘ NAGATANAZARE · QUICK ROUTE</div>
+      <button class="kblx-icon-btn" id="kblx-btn-close" type="button">✕</button>
+    </div>
+
+    <div class="kblx-title-wrap">
+      <h2 class="p-title" id="kblx-ttl">Botão</h2>
+      <p class="kblx-sub" id="kblx-sub">Escolha rápido, salve e injete sem cobrir a tela.</p>
+    </div>
+
+    <div class="kblx-current" id="kblx-current">Nenhuma rota definida.</div>
+
+    <section class="kblx-section">
+      <label class="p-lbl" for="kblx-inp">
+        Novo valor para <code>data-url</code>
+      </label>
+
+      <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+    </section>
+
+    <div class="kblx-actions">
+      <button class="kblx-btn kblx-save" id="kblx-btn-save" type="button">Salvar</button>
+      <button class="kblx-btn kblx-inject" id="kblx-btn-orb-inject" type="button">SB</button>
+      <button class="kblx-btn kblx-frame" id="kblx-btn-frame" type="button"> Frame</button>
+    </div>
+
+    <div class="kblx-more-row">
+      <button class="kblx-mini" id="kblx-btn-more" type="button">Mais</button>
+      <button class="kblx-mini" id="kblx-btn-clear" type="button">Limpar</button>
+    </div>
+
+    <div class="kblx-advanced" id="kblx-advanced">
+      <section class="kblx-section">
+        <div class="kblx-note" style="margin-top:0">Presets rápidos</div>
+        <div class="kblx-more-row">
+          <button class="kblx-mini" type="button" data-orb-preset="orb">◉ Orb</button>
+          <button class="kblx-mini" type="button" data-orb-preset="frame">⟁ Frame</button>
+          <button class="kblx-mini" type="button" data-orb-preset="dock">⌘ Dock</button>
+        </div>
+      </section>
+
+      <section class="kblx-section">
+        <div class="kblx-note">
+          Long press em qualquer <code>.symbol-button[data-url]</code> abre este painel.
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/NAGATANAZARE-0.js"></script>     
+
+
+</body></html>
