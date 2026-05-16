@@ -305,3 +305,41 @@ const ARCHETYPES = [
   }
 
 ];
+
+(() => {
+  window.KOBLLUX_VOICES = ARCHETYPES.reduce((acc, a) => {
+    acc[a.name.toLowerCase()] = a;
+    acc[a.id] = a;
+    return acc;
+  }, {});
+
+  const pickVoice = (wanted) => {
+    const voices = speechSynthesis.getVoices() || [];
+    const target = String(wanted || '').toLowerCase();
+    return (
+      voices.find(v => v && v.name && v.name.toLowerCase() === target) ||
+      voices.find(v => v && v.name && v.name.toLowerCase().includes(target)) ||
+      null
+    );
+  };
+
+  const origSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
+
+  window.speechSynthesis.speak = (u) => {
+    const text = (u.text || '').toLowerCase();
+    const found = ARCHETYPES.find(a => text.includes(a.name.toLowerCase()) || text.includes(a.id.toLowerCase()));
+
+    if (found) {
+      const match = pickVoice(found.voice);
+      if (match) u.voice = match;
+      u.pitch = found.pitch;
+      u.rate = found.rate;
+      console.log('🎙️ KOBLLUX Voice →', found.name, '→', found.voice, `(rate=${found.rate}, pitch=${found.pitch})`);
+    }
+
+    origSpeak(u);
+  };
+
+  console.log('⚡ KOBLLUX Voices Integradas —', ARCHETYPES.length, 'perfis ativos');
+  window.dispatchEvent(new Event('KOBLLUX_VOICES_READY'));
+})();
