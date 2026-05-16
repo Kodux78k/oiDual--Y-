@@ -7,7 +7,7 @@ import "./modules/inline-2.js";
 import "./modules/inline-3.js";
 import "./modules/inline-4.js";
 import "./modules/inline-5.js";
-import "./modules/inline-6.js";
+import "./modules/inline-7.js";
 
 
 import "./modules/inline-7-3.js";
