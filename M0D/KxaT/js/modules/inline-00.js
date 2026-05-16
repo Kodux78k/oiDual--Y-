@@ -92,7 +92,7 @@ const ARCHETYPES = [
     voice: 'Reed',
     lang: 'pt-BR',
     rate: 1.0,
-    pitch: 1.14,
+    pitch: 1.78,
     color: '#a8e6cf',
     theme: {
       primary: '#a8e6cf',
