@@ -7,12 +7,12 @@ import "./modules/inline-2.js";
 import "./modules/inline-3.js";
 import "./modules/inline-4.js";
 import "./modules/inline-5.js";
-
+import "./modules/inline-6.js";
 
 
 import "./modules/inline-7-3.js";
 import "./modules/inline-8.js";
 import "./modules/inline-9.js";
-
-
+import "./modules/inline-10.js";
+import "./modules/inline-11.js";
 
