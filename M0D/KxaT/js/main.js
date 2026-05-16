@@ -14,10 +14,10 @@ import "./modules/inline-6.js";
 import "./modules/inline-7-7.js";
 import "./modules/inline-8.js";
 
-/*
+
 import "./modules/inline-9.js";
 import "./modules/inline-10.js";
-*/
+
 import "./modules/inline-11.js";
 
 
