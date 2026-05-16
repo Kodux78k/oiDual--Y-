@@ -142,7 +142,7 @@ const ARCHETYPES = [
     modulation: 'Intenso, ritmo entrecortado.',
     voice: 'Rocko',
     lang: 'pt-BR',
-    rate: 1.53,
+    rate: 1.28,
     pitch: 0.67,
     color: '#ff8066',
     theme: {
@@ -193,8 +193,8 @@ const ARCHETYPES = [
     modulation: 'Grave, lento, eco sutil.',
     voice: 'Satu',
     lang: 'fi-FI',
-    rate: 0.88,
-    pitch: 0.87,
+    rate: 0.90,
+    pitch: 0.58,
     color: '#ffb347',
     theme: {
       primary: '#ffb347',
@@ -227,8 +227,8 @@ const ARCHETYPES = [
     modulation: 'Tom constante, progressivo.',
     voice: 'Milena',
     lang: 'ru-RU',
-    rate: 0.98,
-    pitch: 1.0,
+    rate: 1.07,
+    pitch: 1.08,
     color: '#c79aff',
     theme: {
       primary: '#c79aff',
@@ -245,7 +245,7 @@ const ARCHETYPES = [
     voice: 'Grandma',
     lang: 'en-US',
     rate: 0.9,
-    pitch: 0.93,
+    pitch: 0.33,
     color: '#f97316',
     theme: {
       primary: '#f97316',
@@ -279,7 +279,7 @@ const ARCHETYPES = [
     voice: 'Sandy',
     lang: 'en-US',
     rate: 1.04,
-    pitch: 1.04,
+    pitch: 0.36,
     color: '#ec4899',
     theme: {
       primary: '#ec4899',
