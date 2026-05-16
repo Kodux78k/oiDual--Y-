@@ -783,10 +783,10 @@
   // -------------------
   // Config de leitura
   // -------------------
-  const SPEAK_COUNT = 9;
-  const PAUSE_BETWEEN_BLOCKS_MS = 120;
+  const SPEAK_COUNT = 6;
+  const PAUSE_BETWEEN_BLOCKS_MS = 369;
   const HIGHLIGHT_CLASS = 'speaking';
-  const HIGHLIGHT_DURATION = 90;
+  // const HIGHLIGHT_DURATION = 90;
 
   function detectArchetypeFromText(text){
     if (!text) return null;
