@@ -8,7 +8,8 @@ import "./modules/inline-3.js";
 import "./modules/inline-4.js";
 import "./modules/inline-5.js";
 
-
+import "./modules/isoCos.js";
+import "./modules/kob.js";
 
 import "./modules/inline-7-5.js";
 import "./modules/inline-8.js";
