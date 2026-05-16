@@ -10,7 +10,7 @@ import "./modules/inline-5.js";
 import "./modules/inline-6.js";
 
 
-import "./modules/inline-7-2.js";
+import "./modules/inline-7.js";
 import "./modules/inline-8.js";
 import "./modules/inline-9.js";
 import "./modules/inline-10.js";
