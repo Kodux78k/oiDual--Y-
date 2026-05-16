@@ -125,7 +125,7 @@
     return remaining < threshold;
   }
 
-  let __kdxAutoScrollEnabled = true;
+  let __kdxAutoScrollEnabled = false;
   let __kdxScrollRaf = 0;
 
   function updateAutoScrollState(){
@@ -786,7 +786,7 @@
   const SPEAK_COUNT = 6;
   const PAUSE_BETWEEN_BLOCKS_MS = 369;
   const HIGHLIGHT_CLASS = 'speaking';
-  // const HIGHLIGHT_DURATION = 90;
+  const HIGHLIGHT_DURATION = 90;
 
   function detectArchetypeFromText(text){
     if (!text) return null;
@@ -1113,7 +1113,7 @@
       model: CONFIG.MODEL,
       temperature: CONFIG.TEMP,
       messages,
-      max_tokens: 1200
+      max_tokens: 7800
     };
 
     const res = await fetch(CONFIG.API_URL,{
