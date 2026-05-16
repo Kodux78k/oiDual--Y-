@@ -772,7 +772,15 @@
       return;
     }
 
-    const detectedArch = detectArchetypeFromText(text);
+const tagArch =
+block.dataset.archetype;
+
+const textArch =
+detectArchetypeFromText(text);
+
+const detectedArch =
+tagArch || textArch;
+
     if (detectedArch){
       currentVoiceKey = detectedArch;
       localStorage.setItem('ARCHETYPE_ACTIVE', detectedArch);
