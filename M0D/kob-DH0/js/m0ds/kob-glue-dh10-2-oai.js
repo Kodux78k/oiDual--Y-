@@ -82,7 +82,7 @@
   {
     id:'kobllux',
     name:'KOBLLUX',
-    voice:'Reed',
+    voice:'Luciana',
     lang:'pt-BR',
     rate:0.98,
     pitch:0.48,
@@ -98,10 +98,10 @@
   {
     id:'kodux',
     name:'KODUX',
-    voice:'Reed',
+    voice:'Rocko',
     lang:'pt-BR',
     rate:0.86,
-    pitch:0.68,
+    pitch:0.18,
     color:'#F97316',
     theme:{
       primary:'#F97316',
@@ -133,7 +133,7 @@
     voice:'Luciana',
     lang:'pt-BR',
     rate:1.06,
-    pitch:1.34,
+    pitch:1.39,
     color:'#ff6b6b',
     theme:{
       primary:'#ff6b6b',
@@ -149,7 +149,7 @@
     voice:'Rocko',
     lang:'pt-BR',
     rate:0.96,
-    pitch:1.42,
+    pitch:1.39,
     color:'#4ecdc4',
     theme:{
       primary:'#4ecdc4',
@@ -165,7 +165,7 @@
     voice:'Reed',
     lang:'pt-BR',
     rate:1.00,
-    pitch:1.14,
+    pitch:1.87,
     color:'#a8e6cf',
     theme:{
       primary:'#a8e6cf',
