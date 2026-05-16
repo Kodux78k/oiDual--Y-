@@ -117,7 +117,7 @@
     voice:'Reed',
     lang:'en-US',
     rate:1.00,
-    pitch:0.87,
+    pitch:0.78,
     color:'#78e3ff',
     theme:{
       primary:'#78e3ff',
@@ -165,7 +165,7 @@
     voice:'Reed',
     lang:'pt-BR',
     rate:1.00,
-    pitch:1.87,
+    pitch:1.48,
     color:'#a8e6cf',
     theme:{
       primary:'#a8e6cf',
@@ -370,10 +370,10 @@
   {
     id:'horus',
     name:'HORUS',
-    voice:'Majed',
-    lang:'ar-001',
+    voice:'Flo',
+    lang:'it-IT',
     rate:1.24,
-    pitch:0.72,
+    pitch:0.14,
     color:'#f59e0b',
     theme:{
       primary:'#f59e0b',
