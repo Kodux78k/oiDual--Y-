@@ -1168,70 +1168,38 @@
   }
 
   if (copyBtn){
+  copyBtn.addEventListener('click', async ()=>{
 
-  let pressTimer = null;
-  let longPress = false;
+    const blocks =
+      getSpeakableBlocks().length
+      ? getSpeakableBlocks()
+      : responseBlocks;
 
-  copyBtn.addEventListener('touchstart', startPress);
-  copyBtn.addEventListener('mousedown', startPress);
+    if (!blocks.length) return;
 
-  copyBtn.addEventListener('touchend', endPress);
-  copyBtn.addEventListener('mouseup', endPress);
-  copyBtn.addEventListener('mouseleave', cancelPress);
-
-  function startPress(){
-
-    longPress = false;
-
-    pressTimer = setTimeout(async ()=>{
-
-      longPress = true;
-
-      try{
-        await navigator.clipboard.writeText(
-          responseList?.innerHTML || ''
-        );
-
-        if (footerHint){
-          footerHint.textContent =
-            'HTML renderizado copiado.';
-        }
-
-      }catch(e){
-        console.error(e);
-      }
-
-    },700);
-
-  }
-
-  async function endPress(){
-
-    clearTimeout(pressTimer);
-
-    if (longPress) return;
+    const text = blocks
+      .map(block => getBlockText(block))
+      .filter(Boolean)
+      .join('\n\n──────────\n\n');
 
     try{
-
-      await navigator.clipboard.writeText(
-        responseList?.innerText || ''
-      );
+      await navigator.clipboard.writeText(text);
 
       if (footerHint){
         footerHint.textContent =
-          'Render copiado.';
+          `${blocks.length} blocos copiados.`;
       }
 
-    }catch(e){
-      console.error(e);
+    }catch{
+
+      if (footerHint){
+        footerHint.textContent =
+          'Não consegui copiar automaticamente.';
+      }
+
     }
 
-  }
-
-  function cancelPress(){
-    clearTimeout(pressTimer);
-  }
-
+  });
 }
 
   if (pasteBtn){
