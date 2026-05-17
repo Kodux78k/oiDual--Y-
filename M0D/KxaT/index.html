@@ -33,11 +33,54 @@
   
 
   <link rel="manifest" href="./manifest.json">
-  
+
 <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css">
  <style>
-   
-   
+
+  /* Botão Orb + Logo */
+    #btn-arch {
+
+      background: transparent;
+      border-radius: 50%;       border: none ;
+
+
+      transition: transform 0.3s ease;
+          background: radial-gradient(circle at 30% 30%, var(--kob-voice-primary), transparent 60%),
+                  radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow: var(--kob-voice-primary);
+
+    }
+
+
+    .orb {
+
+      width: 100%;
+      height: 100%;
+      animation: orbSpin 112s linear infinite;    
+
+    }
+
+    .orb-core {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--kob-voice-secondary), transparent 60%),
+                  radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow: var(--kob-voice-primary);
+  z-index: 991;      animation: orbSpin var(--kob-orb-spin) linear infinite;
+    }
+
+    .logo-overlay{
+
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      color: var(--kob-voice-secondary);
+      filter: drop-shadow(0 0 5px rgba(255,255,255,0.12));
+    }
+
+  
 
     #kobFooter{
       position: relative;
@@ -144,9 +187,18 @@
   <button id="themeToggle" aria-label="Alternar tema"></button>
 
   <div class="svg-container" id="logoContainer">
-    <svg viewBox="0 0 24 24">
-      <use href="#icon-orb"></use>
-    </svg>
+
+  <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+          <div class="orb" id="main-orb">
+            <div class="orb-core"></div>
+          </div>
+          <svg class="logo-overlay" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="90" stroke="currentColor" stroke-width="2" fill="none" stroke-opacity="0.6"></circle>
+            <line x1="100" y1="10" x2="100" y2="190" stroke="currentColor" stroke-width="3" opacity="0.2"></line>
+            <path d="M100 10 A90 90 0 0 0 100 190" stroke="currentColor" stroke-width="6" fill="none"></path>
+          </svg>
+        </button>
+
   </div>
 
 <footer id="kobFooter" class="kob-footer">
@@ -272,6 +324,3 @@
 
 <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main-0.js"></script>
 </body></html>
-
-
-
