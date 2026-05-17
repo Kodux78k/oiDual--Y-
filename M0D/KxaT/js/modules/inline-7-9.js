@@ -1274,8 +1274,8 @@
 
     if (bootText){
       const msg =
-`[${randomArch}] Roda-Viva aleatória ativada.
-Hoje quem abre o portal é ${randomArch}.
+`[${randomArch}] Onda-Viva aleatória ativada.
+åY€, quem abre o portal é ${randomArch}.
 Iniciando. Pulso simbiótico detectado. Presença reconhecida.`;
       bootText.dataset.text = msg;
       bootText.textContent  = msg;
@@ -1312,7 +1312,7 @@ Iniciando. Pulso simbiótico detectado. Presença reconhecida.`;
     init();
   }
 })();
-
+/*
 (function() {
   function makeCollapsible(node) {
     if (!node || node.dataset.accordionInit) return;
@@ -1674,4 +1674,4 @@ Iniciando. Pulso simbiótico detectado. Presença reconhecida.`;
   }
 
   if (dom.archSelect) dom.body.setAttribute('data-arch', dom.archSelect.value);
-})();
+})(); */
