@@ -1067,7 +1067,8 @@
       headers:{
         'Content-Type':'application/json',
         'Authorization': CONFIG.AUTH_TOKEN,
-        'HTTP-Referer': 'https://infodose.com.br',
+          'HTTP-Referer': location.origin,
+       // 'HTTP-Referer': 'https://infodose.com.br',
         'X-Title':'Dual-Infodose Chat Cinemático'
       },
       body: JSON.stringify(body)
