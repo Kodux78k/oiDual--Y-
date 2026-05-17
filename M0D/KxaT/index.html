@@ -36,14 +36,19 @@
 
 <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css">
  <style>
-
+   
   /* Botão Orb + Logo */
     #btn-arch {
 
+  /*    width: 60px;
+      height: 60px;
+      display: flex;
+     justify-content: center;
+      align-items: center; */
       background: transparent;
       border-radius: 50%;       border: none ;
-
-
+      cursor: pointer;
+      scale:0.87;
       transition: transform 0.3s ease;
           background: radial-gradient(circle at 30% 30%, var(--kob-voice-primary), transparent 60%),
                   radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
@@ -67,7 +72,7 @@
       background: radial-gradient(circle at 30% 30%, var(--kob-voice-secondary), transparent 60%),
                   radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
       box-shadow: var(--kob-voice-primary);
-  z-index: 991;      animation: orbSpin var(--kob-orb-spin) linear infinite;
+       animation: orbSpin var(--kob-orb-spin) linear infinite;
     }
 
     .logo-overlay{
@@ -76,7 +81,7 @@
       height: 100%;
       z-index: 1;
       pointer-events: none;
-      color: var(--kob-voice-secondary);
+      color: var(--grad-a);
       filter: drop-shadow(0 0 5px rgba(255,255,255,0.12));
     }
 
@@ -88,7 +93,7 @@
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      margin-top: auto;
+      margin-bottom : 0;
 
       z-index: 999999;
       box-sizing: border-box;
