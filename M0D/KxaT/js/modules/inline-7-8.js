@@ -12,7 +12,7 @@
 
   const DEFAULTS = {
     API_URL: 'https://openrouter.ai/api/v1/chat/completions',
-    MODEL: 'deepseek/deepseek-chat-v3-0324:free',
+    MODEL:   'nvidia/nemotron-3-nano-omni-30b-a3-b-reasoning:free',
     TEMP: 0.2,
     CHUNK_SIZE: 12000
   };
@@ -32,40 +32,45 @@
     synth.onvoiceschanged = loadVoices;
   }
 
-  const $  = sel => document.querySelector(sel);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const qs = (selectors, root = document) => {
+    for (const sel of selectors) {
+      const el = root.querySelector(sel);
+      if (el) return el;
+    }
+    return null;
+  };
 
-  const responseContainer = $('#response');
-  const responseList   = $('#responseList');
-  let   bootBlock      = $('#bootBlock');
-  const bootText       = $('#bootText');
-  const footerHint     = $('#footerHint');
-  const copyBtn        = $('#copyBtn');
-  const pasteBtn       = $('#pasteBtn');
-  const parserBtn      = $('#parserBtn');
-  const parserFile     = $('#parserFile');
-  const voiceConfigBtn = $('#voiceConfigBtn');
-  const voiceConfigFile= $('#voiceConfigFile');
-  const toggleLoginBtn = $('#toggleLoginBtn');
-  const loginBox       = $('#loginBox');
-  const loginForm      = $('#loginForm');
-  const userNameInput  = $('#userName');
-  const assistantInput = $('#assistantInput');
-  const assistantNameEl= $('#assistantName');
-  const userInput      = $('#userInput');
-  const sendBtn        = $('#sendBtn');
-  const themeToggleBtn = $('#themeToggle');
-  const voiceBtn       = $('#voiceBtn');
+  const responseContainer = qs(['#response']);
+  const responseList   = qs(['#responseList']);
+  let   bootBlock      = qs(['#bootBlock']);
+  const bootText       = qs(['#bootText']);
+  const footerHint     = qs(['#footerHint']);
+  const copyBtn        = qs(['#copyBtn']);
+  const pasteBtn       = qs(['#pasteBtn']);
+  const parserBtn      = qs(['#parserBtn']);
+  const parserFile     = qs(['#parserFile']);
+  const voiceConfigBtn = qs(['#voiceConfigBtn']);
+  const voiceConfigFile= qs(['#voiceConfigFile']);
+  const toggleLoginBtn = qs(['#toggleLoginBtn']);
+  const loginBox       = qs(['#loginBox']);
+  const loginForm      = qs(['#loginForm']);
+  const userNameInput  = qs(['#profileUserNameInput', '#userName', '#diUserNameInput']);
+  const assistantInput = qs(['#assistantInput']);
+  const assistantNameEl= qs(['#assistantName']);
+  const userInput      = qs(['#chatMessageInput', '#userInput', '#inputText', '#messageInput', '#dualMessageInput']);
+  const sendBtn        = qs(['#sendBtn']);
+  const themeToggleBtn = qs(['#themeToggle']);
+  const voiceBtn       = qs(['#voiceBtn']);
 
-  const iaConfigPanel   = $('#iaConfigPanel');
-  const apiKeyInput     = $('#apiKeyInput');
-  const modelSelect     = $('#modelSelect');
-  const customModelInput= $('#customModelInput');
-  const saveIaConfigBtn = $('#saveIaConfigBtn');
-  const clearIaConfigBtn= $('#clearIaConfigBtn');
-  const iaStatus        = $('#iaStatus');
-  const themeSelect     = $('#themeSelect');
-  const settingsBtn     = $('#toggleSettingsBtn');
+  const iaConfigPanel   = qs(['#iaConfigPanel']);
+  const apiKeyInput     = qs(['#apiKeyInput']);
+  const modelSelect     = qs(['#modelSelect']);
+  const customModelInput= qs(['#customModelInput']);
+  const saveIaConfigBtn = qs(['#saveIaConfigBtn']);
+  const clearIaConfigBtn= qs(['#clearIaConfigBtn']);
+  const iaStatus        = qs(['#iaStatus']);
+  const themeSelect     = qs(['#themeSelect']);
+  const settingsBtn     = qs(['#toggleSettingsBtn']);
 
   const CONFIG = {
     API_URL: DEFAULTS.API_URL,
@@ -75,7 +80,6 @@
     AUTH_TOKEN: ''
   };
 
-  // ===== ARCHETYPES · UNIFIED MAP =====
   const ARCHETYPE_KEYWORDS = {
     Atlas:   ["atlas","fluxo","mapa","estrutura","organização","organizar","planejamento","árvore","checklist","estratégia"],
     Nova:    ["nova","começar","começo","ideia","idéia","visão","criar","protótipo","protótipos","imaginar","descobrir","ativar","estado"],
@@ -124,6 +128,7 @@
     CONFIG.AUTH_TOKEN = key ? 'Bearer ' + key : '';
 
     if (apiKeyInput) apiKeyInput.value = key;
+
     let optionFound = false;
     if (modelSelect) {
       Array.from(modelSelect.options).forEach(opt=>{
@@ -458,11 +463,11 @@
   if (loginForm){
     loginForm.addEventListener('submit',(ev)=>{
       ev.preventDefault();
-      const user = userNameInput.value.trim() || 'Você';
-      const asst = assistantInput.value.trim() || 'Dual.Infodose';
+      const user = userNameInput ? (userNameInput.value.trim() || 'Você') : 'Você';
+      const asst = assistantInput ? (assistantInput.value.trim() || 'Dual.Infodose') : 'Dual.Infodose';
       localStorage.setItem(STORAGE.USER_NAME, user);
       localStorage.setItem(STORAGE.ASSISTANT_NAME, asst);
-      assistantNameEl.textContent = asst;
+      if (assistantNameEl) assistantNameEl.textContent = asst;
       loginBox.classList.remove('active');
       conversation.unshift({
         role:'system',
@@ -721,7 +726,7 @@
     return (clone.innerText || clone.textContent || '').trim();
   }
 
-  const SPEAK_COUNT = 9;
+  const SPEAK_COUNT = 5;
   const PAUSE_BETWEEN_BLOCKS_MS = 120;
   const HIGHLIGHT_CLASS = 'speaking';
   const HIGHLIGHT_DURATION = 90;
@@ -757,6 +762,19 @@
     badge.textContent = archeName;
   }
 
+  function resolveBlockArchetypes(block, text){
+    const tagArch = (block && block.dataset && block.dataset.archetype) ? String(block.dataset.archetype).trim() : '';
+    const textArch = detectArchetypeFromText(text);
+    const stack = [tagArch, textArch].filter(Boolean);
+    const uniqueStack = [...new Set(stack)];
+    return {
+      tagArch: tagArch || null,
+      textArch: textArch || null,
+      detectedArch: uniqueStack[0] || null,
+      stack: uniqueStack
+    };
+  }
+
   function speakBlock(block){
     if (!synth){
       if (footerHint) footerHint.textContent = 'Seu navegador não suporta voz (SpeechSynthesis).';
@@ -767,44 +785,21 @@
       return;
     }
     const text = getBlockText(block);
-    
-    const tagArch =
-block.dataset.archetype || null;
-
-const textArch =
-detectArchetypeFromText(text);
-
-let detectedArch = null;
-
-// prioridade:
-if(tagArch){
-
-   detectedArch = tagArch;
-
-}else if(textArch){
-
-   detectedArch = textArch;
-
-}
     if (!text){
       if (footerHint) footerHint.textContent = 'Nada para ler nesse bloco.';
       return;
     }
 
-const tagArch =
-block.dataset.archetype;
+    const resolved = resolveBlockArchetypes(block, text);
+    if (resolved.stack.length) {
+      block.dataset.archetypeStack = resolved.stack.join('|');
+    }
 
-const textArch =
-detectArchetypeFromText(text);
-
-const detectedArch =
-tagArch || textArch;
-
-    if (detectedArch){
-      currentVoiceKey = detectedArch;
-      localStorage.setItem('ARCHETYPE_ACTIVE', detectedArch);
+    if (resolved.detectedArch){
+      currentVoiceKey = resolved.detectedArch;
+      localStorage.setItem('ARCHETYPE_ACTIVE', resolved.detectedArch);
       localStorage.setItem(STORAGE.VOICE_CURRENT_KEY, currentVoiceKey);
-      markBlockArchetype(block, detectedArch);
+      markBlockArchetype(block, resolved.detectedArch);
       updateVoiceOrbLabel();
     }
 
@@ -922,16 +917,20 @@ tagArch || textArch;
     });
   }
 
+  function getSpeakableBlocks(){
+    return (responseBlocks || []).filter(b => b && b.parentNode && !b.classList.contains('user-pulse'));
+  }
+
   async function speakRecentBlocks(count = SPEAK_COUNT, opts = {}){
     if (!responseBlocks || !responseBlocks.length) return;
-    let blocks;
+    let blocks = getSpeakableBlocks();
+
     if (!isFinite(count)){
-      blocks = Array.from(responseBlocks);
+      // já está tudo
     } else {
-      const start = Math.max(0, responseBlocks.length - count);
-      blocks = responseBlocks.slice(start);
+      const start = Math.max(0, blocks.length - count);
+      blocks = blocks.slice(start);
     }
-    blocks = blocks.filter(b => b && b.parentNode);
 
     for (let i = 0; i < blocks.length; i++){
       const b = blocks[i];
@@ -947,28 +946,26 @@ tagArch || textArch;
   }
 
   function onBlockClick(ev){
-  const block = ev.currentTarget;
+    const block = ev.currentTarget;
+    block.classList.add('clicked');
+    setTimeout(() => block.classList.remove('clicked'), 350);
 
-  block.classList.add('clicked');
-  setTimeout(() => block.classList.remove('clicked'), 350);
+    const state = block.dataset.state || 'idle';
+    const text = getBlockText(block);
+    if (!text) return;
 
-  const state = block.dataset.state || 'idle';
-  const text = getBlockText(block);
+    if (state === 'idle' || state === 'sent'){
+      block.dataset.state = 'spoken';
+      speakBlock(block);
+      return;
+    }
 
-  if (!text) return;
-
-  if (state === 'idle' || state === 'sent'){
-    block.dataset.state = 'spoken';
-    speakBlock(block);
-    return;
+    if (state === 'spoken'){
+      block.dataset.state = 'sent';
+      sendPrompt(text, { fromBlock: true });
+      return;
+    }
   }
-
-  if (state === 'spoken'){
-    block.dataset.state = 'sent';
-    sendPrompt(text, { fromBlock: true });
-    return;
-  }
-}
 
   function addTtsButtonToBlock(div){
     if (!div || div.querySelector('.block-tts-btn')) return;
@@ -1005,6 +1002,7 @@ tagArch || textArch;
     blocks.forEach(page=>{
       const div = document.createElement('div');
       div.className = 'response-block ' + (page.kind || 'middle');
+      div.dataset.role = 'assistant';
       div.innerHTML = page.html;
       enhanceBlock(div);
       responseList.appendChild(div);
@@ -1019,6 +1017,7 @@ tagArch || textArch;
     }
     const div = document.createElement('div');
     div.className = 'response-block user-pulse';
+    div.dataset.role = 'user';
     const html = '<p>'+parseMarkdownBasic(text).replace(/\n/g,'<br/>')+'</p>';
     div.innerHTML = html;
     enhanceBlock(div);
@@ -1068,7 +1067,8 @@ tagArch || textArch;
       headers:{
         'Content-Type':'application/json',
         'Authorization': CONFIG.AUTH_TOKEN,
-        'HTTP-Referer': 'https://infodose.com.br',
+          'HTTP-Referer': location.origin,
+       // 'HTTP-Referer': 'https://infodose.com.br',
         'X-Title':'Dual-Infodose Chat Cinemático'
       },
       body: JSON.stringify(body)
@@ -1152,7 +1152,7 @@ tagArch || textArch;
   }
 
   async function handleSendFromInput(){
-    const text = userInput.value.trim();
+    const text = userInput ? userInput.value.trim() : '';
     if (!text) return;
     await sendPrompt(text,{ fromBlock:false });
   }
@@ -1168,20 +1168,71 @@ tagArch || textArch;
   }
 
   if (copyBtn){
-    copyBtn.addEventListener('click', async ()=>{
-      let target = responseBlocks[responseBlocks.length - 1];
-      if (!target && bootBlock) target = bootBlock;
-      if (!target) return;
-      const temp = getBlockText(target);
-      if (!temp) return;
+
+  let pressTimer = null;
+  let longPress = false;
+
+  copyBtn.addEventListener('touchstart', startPress);
+  copyBtn.addEventListener('mousedown', startPress);
+
+  copyBtn.addEventListener('touchend', endPress);
+  copyBtn.addEventListener('mouseup', endPress);
+  copyBtn.addEventListener('mouseleave', cancelPress);
+
+  function startPress(){
+
+    longPress = false;
+
+    pressTimer = setTimeout(async ()=>{
+
+      longPress = true;
+
       try{
-        await navigator.clipboard.writeText(temp);
-        if (footerHint) footerHint.textContent = 'Bloco copiado para a área de transferência.';
-      }catch{
-        if (footerHint) footerHint.textContent = 'Não consegui copiar automaticamente.';
+        await navigator.clipboard.writeText(
+          responseList?.innerHTML || ''
+        );
+
+        if (footerHint){
+          footerHint.textContent =
+            'HTML renderizado copiado.';
+        }
+
+      }catch(e){
+        console.error(e);
       }
-    });
+
+    },700);
+
   }
+
+  async function endPress(){
+
+    clearTimeout(pressTimer);
+
+    if (longPress) return;
+
+    try{
+
+      await navigator.clipboard.writeText(
+        responseList?.innerText || ''
+      );
+
+      if (footerHint){
+        footerHint.textContent =
+          'Render copiado.';
+      }
+
+    }catch(e){
+      console.error(e);
+    }
+
+  }
+
+  function cancelPress(){
+    clearTimeout(pressTimer);
+  }
+
+}
 
   if (pasteBtn){
     pasteBtn.addEventListener('click', async ()=>{
@@ -1260,6 +1311,7 @@ tagArch || textArch;
     const RV_ARCHES = ['Atlas','Nova','Vitalis','Pulse','Artemis','Serena','Kaos','Genus','Lumine','Rhea','Solus','Aion'];
     const randomArch = RV_ARCHES[Math.floor(Math.random()*RV_ARCHES.length)];
     localStorage.setItem('ARCHETYPE_ACTIVE', randomArch);
+
     if (bootText){
       const msg =
 `[${randomArch}] Roda-Viva aleatória ativada.
@@ -1287,8 +1339,7 @@ Iniciando. Pulso simbiótico detectado. Presença reconhecida.`;
           speakRecentBlocks(Infinity);
           return;
         }
-        const last = responseBlocks[responseBlocks.length - 1];
-        if (last) speakBlock(last);
+        speakRecentBlocks(SPEAK_COUNT);
       });
     }
 
@@ -1300,4 +1351,367 @@ Iniciando. Pulso simbiótico detectado. Presença reconhecida.`;
   } else {
     init();
   }
+})();
+
+(function() {
+  function makeCollapsible(node) {
+    if (!node || node.dataset.accordionInit) return;
+    node.dataset.accordionInit = "true";
+    const header = node.querySelector('.accordion-header');
+    const body = node.querySelector('.collapsible-body');
+    if (!header || !body) return;
+    if (!header.querySelector('.indicator')) {
+      const indicator = document.createElement('span');
+      indicator.className = 'indicator';
+      indicator.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+      header.appendChild(indicator);
+    }
+    if (!node.classList.contains('is-collapsed') && !node.classList.contains('is-open')) node.classList.add('is-open');
+    if (node.classList.contains('is-collapsed')) body.style.height = '0px';
+    header.addEventListener('click', (e) => {
+      const targetTag = e.target.tagName.toLowerCase();
+      if (['input', 'select', 'button', 'textarea'].includes(targetTag)) return;
+      const isCollapsed = node.classList.contains('is-collapsed');
+      if (isCollapsed) {
+        node.classList.remove('is-collapsed');
+        node.classList.add('is-open');
+        body.style.height = body.scrollHeight + 'px';
+        body.addEventListener('transitionend', function handler(ev) {
+          if (ev.propertyName === 'height') {
+            body.style.height = 'auto';
+            body.removeEventListener('transitionend', handler);
+          }
+        });
+      } else {
+        body.style.height = body.scrollHeight + 'px';
+        void body.offsetHeight;
+        node.classList.remove('is-open');
+        node.classList.add('is-collapsed');
+        body.style.height = '0px';
+      }
+    });
+  }
+
+  window.KobAccordion = {
+    open: (card) => { card = (typeof card === 'string') ? document.querySelector(card) : card; if(card){ card.classList.remove('is-collapsed'); card.classList.add('is-open'); } },
+    close: (card) => { card = (typeof card === 'string') ? document.querySelector(card) : card; if(card){ card.classList.remove('is-open'); card.classList.add('is-collapsed'); } },
+    toggle: (card) => { card = (typeof card === 'string') ? document.querySelector(card) : card; card && card.querySelector('.accordion-header')?.click(); }
+  };
+
+  const observer = new MutationObserver((muts) => {
+    muts.forEach((m) => {
+      m.addedNodes && m.addedNodes.forEach((node) => {
+        if (!(node instanceof Element)) return;
+        if (node.matches && node.matches('.accordion')) makeCollapsible(node);
+        node.querySelectorAll && node.querySelectorAll('.accordion').forEach((el) => makeCollapsible(el));
+      });
+    });
+  });
+
+  if (document.body) observer.observe(document.body, { childList: true, subtree: true });
+  document.querySelectorAll('.accordion').forEach(makeCollapsible);
+
+  const di_userNameRaw = localStorage.getItem("di_userName") || localStorage.getItem("infodoseUserName") || "";
+  const userKey = di_userNameRaw.trim().toLowerCase();
+  const displayUserName = di_userNameRaw.trim() || "User";
+
+  let ARCHETYPES_BASE = [
+    "atlas", "nova", "vitalis", "pulse", "kaos", "kodux", "lumine",
+    "aion", "kobllux", "artemis", "serena", "genus", "solus",
+    "rhea", "uno", "dual", "trinity", "infodose", "horus", "bllue"
+  ];
+  if (userKey && !ARCHETYPES_BASE.includes(userKey)) {
+    ARCHETYPES_BASE.push(userKey);
+  }
+  const ARCHETYPES = [...ARCHETYPES_BASE];
+
+  const ARCH_NAMES = {
+    atlas: "Atlas", nova: "Nova", vitalis: "Vitalis", pulse: "Pulse", kaos: "Kaos",
+    kodux: "Kodux", lumine: "Lumine", aion: "Aion", kobllux: "Kobllux", artemis: "Artemis",
+    serena: "Serena", genus: "Genus", solus: "Solus", rhea: "Rhea", uno: "Uno",
+    dual: "Dual", trinity: "Trinity", infodose: "Infodose", horus: "Horus", bllue: "Bllue"
+  };
+  if (userKey) ARCH_NAMES[userKey] = di_userNameRaw.trim();
+
+  const userOption = document.getElementById("diUserOption");
+  if (userOption) {
+    userOption.value = userKey || "user";
+    userOption.textContent = `${displayUserName} (Usuário/Núcleo)`;
+  }
+
+  let di_engineStep = parseInt(localStorage.getItem('kobllux_engine_step') || '0', 10);
+  let di_reverse = localStorage.getItem('kobllux_reverse_mode') === 'true';
+  let di_jump = parseInt(localStorage.getItem('kobllux_jump_step') || '0', 10);
+  let di_use3697 = localStorage.getItem('kobllux_cycle_3697') === 'true';
+
+  function saveEngineState() {
+    localStorage.setItem('kobllux_engine_step', String(di_engineStep));
+    localStorage.setItem('kobllux_reverse_mode', String(di_reverse));
+    localStorage.setItem('kobllux_jump_step', String(di_jump));
+    localStorage.setItem('kobllux_cycle_3697', String(di_use3697));
+  }
+
+  function syncEngineUI() {
+    document.querySelectorAll('[data-engine]').forEach(btn => {
+      const val = parseInt(btn.dataset.engine, 10);
+      if (val === di_engineStep) btn.classList.add('is-active');
+      else btn.classList.remove('is-active');
+    });
+    document.querySelectorAll('[data-jump]').forEach(btn => {
+      const val = parseInt(btn.dataset.jump, 10);
+      if (val === di_jump) btn.classList.add('is-active');
+      else btn.classList.remove('is-active');
+    });
+    const reverseBtn = document.getElementById('reverseToggle');
+    if (reverseBtn) {
+      reverseBtn.textContent = `Reverse: ${di_reverse ? 'ON' : 'OFF'}`;
+      reverseBtn.classList.toggle('is-active', di_reverse);
+    }
+    const cycleBtn = document.getElementById('cycle3697');
+    if (cycleBtn) {
+      cycleBtn.textContent = `3-6-9-7: ${di_use3697 ? 'ON' : 'OFF'}`;
+      cycleBtn.classList.toggle('is-active', di_use3697);
+    }
+  }
+
+  function di_getSequence(startIndex, length) {
+    const total = ARCHETYPES.length;
+    const sequence = [];
+    let currentIndex = ((startIndex % total) + total) % total;
+    const pattern = di_use3697 ? [3, 6, 9, 7] : [di_engineStep];
+    for (let i = 0; i < length; i++) {
+      sequence.push(ARCHETYPES[currentIndex]);
+      let step = pattern[i % pattern.length];
+      if (di_reverse) step *= -1;
+      step += di_jump;
+      currentIndex = (currentIndex + step) % total;
+      if (currentIndex < 0) currentIndex += total;
+    }
+    return sequence;
+  }
+
+  function updateStatusWithEngine() {
+    const statusBar = document.getElementById('statusBar');
+    if (statusBar && !statusBar.textContent.includes('Opcode')) {
+      statusBar.textContent = `Motor ${di_engineStep} · ${di_reverse ? 'Reverse' : 'Forward'} · salto +${di_jump} · ${di_use3697 ? '3-6-9-7' : 'Linear'}`;
+    }
+  }
+
+  document.querySelectorAll('[data-engine]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      di_engineStep = parseInt(btn.dataset.engine, 10);
+      saveEngineState();
+      syncEngineUI();
+      updateStatusWithEngine();
+      showToast(`Motor +${di_engineStep} ativado`);
+    });
+  });
+
+  document.querySelectorAll('[data-jump]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      di_jump = parseInt(btn.dataset.jump, 10);
+      saveEngineState();
+      syncEngineUI();
+      updateStatusWithEngine();
+      showToast(`Salto extra +${di_jump}`);
+    });
+  });
+
+  const reverseBtnDom = document.getElementById('reverseToggle');
+  if (reverseBtnDom) {
+    reverseBtnDom.addEventListener('click', () => {
+      di_reverse = !di_reverse;
+      saveEngineState();
+      syncEngineUI();
+      updateStatusWithEngine();
+      showToast(`Reverse ${di_reverse ? 'ATIVADO' : 'DESATIVADO'}`);
+    });
+  }
+
+  const cycleBtnDom = document.getElementById('cycle3697');
+  if (cycleBtnDom) {
+    cycleBtnDom.addEventListener('click', () => {
+      di_use3697 = !di_use3697;
+      saveEngineState();
+      syncEngineUI();
+      updateStatusWithEngine();
+      showToast(`Ciclo 3-6-9-7 ${di_use3697 ? 'ATIVADO' : 'DESATIVADO'}`);
+    });
+  }
+  syncEngineUI();
+  updateStatusWithEngine();
+
+  const dom = {
+    input: document.getElementById('inputText'),
+    output: document.getElementById('outputContainer'),
+    genBtn: document.getElementById('genBtn'),
+    archSelect: document.getElementById('startArch'),
+    cycleCheck: document.getElementById('cycleMode'),
+    body: document.body,
+    copyBtn: document.getElementById('copyBtn'),
+    clearBtn: document.getElementById('clearBtn'),
+    downloadBtn: document.getElementById('downloadBtn'),
+    statusBar: document.getElementById('statusBar'),
+    hudStatus: document.getElementById('hudStatus'),
+    toastContainer: document.getElementById('toast-container'),
+    mainCard: document.getElementById('mainHeroCard')
+  };
+
+  function showToast(message, isError = false) {
+    if (!dom.toastContainer) return;
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    if (!isError) {
+      const currentColor = getComputedStyle(document.body).getPropertyValue('--kob-voice-primary').trim();
+      if (currentColor) toast.style.background = currentColor;
+    } else toast.style.background = "#c44";
+    dom.toastContainer.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  if (dom.input) {
+    const savedInput = localStorage.getItem('kobllux_draft_input');
+    if (savedInput) dom.input.value = savedInput;
+  }
+
+  if (dom.archSelect) {
+    dom.archSelect.addEventListener('change', (e) => {
+      dom.body.setAttribute('data-arch', e.target.value);
+    });
+  }
+
+  function generateFractals() {
+    if (!dom.input || !dom.output || !dom.archSelect || !dom.cycleCheck) return;
+    const text = dom.input.value.trim();
+    if (!text) {
+      showToast("Aviso: Texto de entrada vazio.", true);
+      return;
+    }
+    localStorage.setItem('kobllux_draft_input', text);
+
+    const sentencesMatch = text.replace(/\n+/g, ' ').match(/[^.!?]+[.!?]+|[^.!?]+$/g);
+    const sentences = sentencesMatch ? sentencesMatch.map(s => s.trim()).filter(Boolean) : [];
+    if (sentences.length === 0) return;
+
+    const startArchName = dom.archSelect.value;
+    const startIdx = ARCHETYPES.indexOf(startArchName);
+    const isCycleMode = dom.cycleCheck.checked;
+
+    const sequence = isCycleMode ? di_getSequence(startIdx, sentences.length) : [ARCHETYPES[startIdx]];
+
+    dom.output.innerHTML = '';
+    let resultTextForExport = "";
+
+    sentences.forEach((sentence, i) => {
+      const currentArchName = isCycleMode ? sequence[i] : ARCHETYPES[startIdx];
+
+      const block = document.createElement('div');
+      block.className = 'para-block accordion is-open';
+      block.style.animationDelay = `${i * 0.1}s`;
+
+      const dummyBody = document.createElement('body');
+      dummyBody.setAttribute('data-arch', currentArchName);
+      document.documentElement.appendChild(dummyBody);
+      const archColor = getComputedStyle(dummyBody).getPropertyValue('--kob-voice-primary').trim();
+      document.documentElement.removeChild(dummyBody);
+
+      block.style.setProperty('--kob-voice-primary', archColor);
+      block.style.setProperty('--kob-voice-bg-soft', `color-mix(in srgb, ${archColor} 12%, transparent)`);
+      block.style.borderLeftColor = archColor;
+      block.style.setProperty('--card-accent', archColor);
+
+      const displayArchName = ARCH_NAMES[currentArchName] || currentArchName;
+
+      block.innerHTML = `
+        <div class="accordion-header">
+          <div class="arch-tag" style="color: ${archColor}; border-color: color-mix(in srgb, ${archColor} 30%, rgba(255,255,255,0.1))">
+            ${displayArchName} · Δ
+          </div>
+        </div>
+        <div class="collapsible-body">
+          <div class="content-inner">${escapeHtml(sentence)}</div>
+        </div>
+      `;
+      dom.output.appendChild(block);
+      resultTextForExport += `${displayArchName.toUpperCase()} — ${sentence}\n\n`;
+    });
+
+    localStorage.setItem('kobllux_last_result', resultTextForExport.trim());
+    const total = sentences.length;
+    if (dom.statusBar) dom.statusBar.textContent = `Opcode 0x0B · Motor 3·6·9 · ${total} Fractal(s) Gerado(s)`;
+    if (dom.hudStatus) dom.hudStatus.textContent = `Δ-${total}`;
+
+    if (dom.mainCard && dom.mainCard.classList.contains('is-open')) {
+      dom.mainCard.querySelector('.accordion-header')?.click();
+    }
+    showToast(`Integração concluída | Motor: +${di_engineStep} | Reverse: ${di_reverse ? 'ON' : 'OFF'} | Salto: +${di_jump} | ${di_use3697 ? 'Ciclo 3697' : 'Linear'}`);
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  if (dom.genBtn) dom.genBtn.addEventListener('click', generateFractals);
+  if (dom.input) {
+    dom.input.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') generateFractals();
+    });
+  }
+
+  if (dom.copyBtn) {
+    dom.copyBtn.addEventListener('click', async () => {
+      const content = localStorage.getItem('kobllux_last_result');
+      if (!content) { showToast("Nenhum fractal para copiar.", true); return; }
+      try {
+        await navigator.clipboard.writeText(content);
+        showToast("Fractais copiados para o Códex");
+      } catch (err) {
+        const ta = document.createElement('textarea');
+        ta.value = content;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast("Fractais copiados (fallback)");
+      }
+    });
+  }
+
+  if (dom.clearBtn) {
+    dom.clearBtn.addEventListener('click', () => {
+      if (dom.input) dom.input.value = '';
+      if (dom.output) dom.output.innerHTML = '<div class="empty-state">Sistema reiniciado. Aguardando novos dados.</div>';
+      localStorage.removeItem('kobllux_last_result');
+      localStorage.removeItem('kobllux_draft_input');
+      if (dom.statusBar) dom.statusBar.textContent = 'Sistema em repouso · Matrix Pronta';
+      if (dom.hudStatus) dom.hudStatus.textContent = '78K-ID';
+      if (dom.mainCard && dom.mainCard.classList.contains('is-collapsed')) dom.mainCard.querySelector('.accordion-header')?.click();
+      showToast("Memória Limpa");
+    });
+  }
+
+  if (dom.downloadBtn) {
+    dom.downloadBtn.addEventListener('click', () => {
+      const content = localStorage.getItem('kobllux_last_result');
+      if (!content) { showToast("Nenhum fractal para transferir.", true); return; }
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `KOBLLUX_Fractais_${new Date().toISOString().slice(0,10)}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("Transferência Concluída");
+    });
+  }
+
+  if (dom.archSelect) dom.body.setAttribute('data-arch', dom.archSelect.value);
 })();
