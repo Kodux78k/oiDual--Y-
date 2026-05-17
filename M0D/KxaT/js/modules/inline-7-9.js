@@ -726,7 +726,7 @@
     return (clone.innerText || clone.textContent || '').trim();
   }
 
-  const SPEAK_COUNT = 5;
+  const SPEAK_COUNT = 9;
   const PAUSE_BETWEEN_BLOCKS_MS = 120;
   const HIGHLIGHT_CLASS = 'speaking';
   const HIGHLIGHT_DURATION = 90;
