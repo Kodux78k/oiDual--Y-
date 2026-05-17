@@ -1168,19 +1168,31 @@
   }
 
   if (copyBtn){
-    copyBtn.addEventListener('click', async ()=>{
-      let target = getSpeakableBlocks().slice(-1)[0] || bootBlock || responseBlocks[responseBlocks.length - 1];
-      if (!target) return;
-      const temp = getBlockText(target);
-      if (!temp) return;
-      try{
-        await navigator.clipboard.writeText(temp);
-        if (footerHint) footerHint.textContent = 'Bloco copiado para a área de transferência.';
-      }catch{
-        if (footerHint) footerHint.textContent = 'Não consegui copiar automaticamente.';
+  copyBtn.addEventListener('click', async ()=>{
+
+    const temp = responseList?.innerText || '';
+
+    if (!temp) return;
+
+    try{
+      await navigator.clipboard.writeText(temp);
+
+      if (footerHint){
+        footerHint.textContent =
+        'Tudo copiado.';
       }
-    });
-  }
+
+    }catch{
+
+      if (footerHint){
+        footerHint.textContent =
+        'Não consegui copiar.';
+      }
+
+    }
+
+  });
+}
 
   if (pasteBtn){
     pasteBtn.addEventListener('click', async ()=>{
