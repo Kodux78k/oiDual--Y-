@@ -35,8 +35,26 @@
   <link rel="manifest" href="./manifest.json">
 
 <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css">
+
+<section id="motorDock" class="motor-dock" aria-label="Motor 78K" hidden>
+    <div class="motor-dock-head">
+      <div>
+        <strong>Motor 78K</strong>
+        <span>· painel isolado · usa o HTML original dentro de iframe</span>
+      </div>
+      <button type="button" id="motorDockClose" class="pill-btn secondary">Fechar</button>
+    </div>
+    <iframe
+      id="motorFrame"
+      title="Motor 78K"
+      sandbox="allow-scripts allow-forms allow-same-origin"
+      loading="lazy"
+    ></iframe>
+  </section>
+
+
  <style>
-   
+
   /* Botão Orb + Logo */
     #btn-arch {
 
@@ -48,7 +66,7 @@
       background: transparent;
       border-radius: 50%;       border: none ;
       cursor: pointer;
-      scale:0.87;
+
       transition: transform 0.3s ease;
           background: radial-gradient(circle at 30% 30%, var(--kob-voice-primary), transparent 60%),
                   radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
@@ -69,10 +87,10 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, var(--grad-a), transparent 60%),
-                  radial-gradient(circle at 70% 70%, var(--grad-b), var(--kob-voice-secondary));
+      background: radial-gradient(circle at 30% 30%, var(--kob-voice-secondary), transparent 60%),
+                  radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
       box-shadow: var(--kob-voice-primary);
-       animation: orbSpin var(--kob-orb-spin) linear infinite;
+  z-index: 991;      animation: orbSpin var(--kob-orb-spin) linear infinite;
     }
 
     .logo-overlay{
@@ -81,7 +99,7 @@
       height: 100%;
       z-index: 1;
       pointer-events: none;
-      color: var(--grad-a);
+      color: var(--kob-voice-secondary);
       filter: drop-shadow(0 0 5px rgba(255,255,255,0.12));
     }
 
@@ -93,7 +111,7 @@
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      margin-bottom : 0;
+      margin-top: auto;
 
       z-index: 999999;
       box-sizing: border-box;
@@ -133,6 +151,91 @@
     }
 
   </style>
+
+  <style>
+    #motorDock{
+      margin: 16px 0 0;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(6,10,16,.72);
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+    }
+    #motorDock[hidden]{
+      display: none !important;
+    }
+    #motorDock .motor-dock-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      backdrop-filter: blur(16px);
+    }
+    #motorDock .motor-dock-head strong{
+      display:block;
+      font-size: 1rem;
+      letter-spacing:.02em;
+    }
+    #motorDock .motor-dock-head span{
+      display:block;
+      font-size:.8rem;
+      opacity:.75;
+      margin-top:2px;
+    }
+    #motorFrame{
+      width: 100%;
+      height: min(78vh, 920px);
+      border: 0;
+      display:block;
+      background: #000;
+    }
+    body.motor-mode .response-container,
+    body.motor-mode .input-container{
+      display:none !important;
+    }
+    body.motor-mode #motorDock{
+      display:block !important;
+    }
+  </style>
+
+
+  <style>
+    .response-block{
+      position: relative;
+    }
+    .send-to-motor-btn{
+      position:absolute;
+      top:10px;
+      right:10px;
+      z-index:5;
+      border:0;
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:.78rem;
+      line-height:1;
+      background: rgba(255,255,255,.10);
+      color: inherit;
+      backdrop-filter: blur(12px);
+      cursor:pointer;
+    }
+    .send-to-motor-btn:active{
+      transform: scale(.96);
+    }
+    #motorDock .motor-dock-head .motor-mode-state{
+      display:inline-block;
+      margin-top:6px;
+      font-size:.72rem;
+      opacity:.82;
+    }
+    #kdx-mode-toggle.kdx-motor-armed{
+      outline: 2px solid rgba(255,255,255,.22);
+      box-shadow: 0 0 0 6px rgba(255,255,255,.06);
+    }
+  </style>
+
 </head>
 <body>
   
@@ -187,7 +290,7 @@
     </symbol>
   </svg>
 
-  <div id="particles-js"></div>
+  <div class="content" id="particles-js"></div>
 
   <button id="themeToggle" aria-label="Alternar tema"></button>
 
@@ -205,6 +308,15 @@
         </button>
 
   </div>
+
+<footer id="kobFooter" class="kob-footer">
+    <div class="kob-footer-inner">
+      <p class="footer-text" id="footerHint">
+        <span class="footer-dot"></span>
+        Do seu jeito. Sempre único. Sempre seu.
+      </p>
+    </div>
+  </footer>
 
   <div id="assistantName">Dual.Infodose · Cinemático</div>
 
@@ -238,6 +350,9 @@
         </button>
         <button class="icon-btn secondary" id="toggleSettingsBtn" title="Configuração IA / Tema" type="button">
           <svg viewBox="0 0 24 24"><use href="#icon-settings"></use></svg>
+        </button>
+        <button class="icon-btn secondary" id="toggleMotorBtn" title="Usar motor 78K" type="button">
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5L12 2z"></path></svg>
         </button>
       </div>
     </div>
@@ -282,15 +397,8 @@
     </div>
   </div>
 
-<footer id="kobFooter" class="kob-footer">
-    <div class="kob-footer-inner">
-      <p class="footer-text" id="footerHint">
-        <span class="footer-dot"></span>
-        Do seu jeito. Sempre único. Sempre seu.
-      </p>
-    </div>
-  </footer>
 
+ 
   <div class="input-container">
     <input id="userInput" type="text" placeholder="Diga algo para o Dual." aria-label="Digite sua mensagem">
     <button id="sendBtn" title="Enviar" type="button">
@@ -326,6 +434,10 @@
 
 
 
-
+<!-- Cole antes de </body> no KxaT/index.html: -->
 <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main-0.js"></script>
+<script type="module" src="https://truetruextrue.github.io/JESUS_VERB-/web/BRIDGE/kobllux_kxat_bridge.js"></script>
+
+<!-- DEPOIS: 1 script que faz tudo + preserva os externos necessários -->
+
 </body></html>
