@@ -756,7 +756,7 @@
       }
     }
 
-    // fallback: use local SpeechSynthesis
+   /* // fallback: use local SpeechSynthesis
     if(!synth){ toast('TTS indisponível'); return; }
     try{ synth.cancel(); }catch(e){}
     const u = new SpeechSynthesisUtterance(txt);
@@ -772,7 +772,7 @@
     u.onerror = (ev) => { console.warn('tts error', ev); if(state.isSpeaking){ state.currentBlockIdx++; speakCurrent(); } };
     synth.speak(u);
   }
-
+*/
   /* -----------------------------
      start/stop
      ----------------------------- */
@@ -780,7 +780,7 @@
     if(!state.blocks.length) rebuildBlocks();
     if(!state.blocks.length){ toast('Nada para ler'); return; }
     state.isSpeaking = true;
-    BTN_PLAY && (BTN_PLAY.textContent = '■');
+    BTN_PLAY && (BTN_PLAY.textContent = '▶');
     speakCurrent();
   }
 
