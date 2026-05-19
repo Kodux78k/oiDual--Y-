@@ -34,8 +34,29 @@
   <link rel="manifest" href="./manifest.json">
 
 <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css">
+
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style></head><body><section id="motorDock" class="motor-dock" aria-label="Motor 78K" hidden="">
+    <div class="motor-dock-head">
+      <div>
+        <strong>Motor 78K</strong>
+        <span>· painel isolado · usa o HTML original dentro de iframe</span>
+      </div>
+      <button type="button" id="motorDockClose" class="pill-btn secondary">Fechar</button>
+    </div>
+    <iframe id="motorFrame" title="Motor 78K" sandbox="allow-scripts allow-forms allow-same-origin" loading="lazy"></iframe>
+  </section>
+
+
  <style>
-   
+
   /* Botão Orb + Logo */
     #btn-arch {
 
@@ -47,7 +68,7 @@
       background: transparent;
       border-radius: 50%;       border: none ;
       cursor: pointer;
-      scale:0.87;
+
       transition: transform 0.3s ease;
           background: radial-gradient(circle at 30% 30%, var(--kob-voice-primary), transparent 60%),
                   radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
@@ -71,7 +92,7 @@
       background: radial-gradient(circle at 30% 30%, var(--kob-voice-secondary), transparent 60%),
                   radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
       box-shadow: var(--kob-voice-primary);
-       animation: orbSpin var(--kob-orb-spin) linear infinite;
+  z-index: 991;      animation: orbSpin var(--kob-orb-spin) linear infinite;
     }
 
     .logo-overlay{
@@ -80,7 +101,7 @@
       height: 100%;
       z-index: 1;
       pointer-events: none;
-      color: var(--grad-a);
+      color: var(--kob-voice-secondary);
       filter: drop-shadow(0 0 5px rgba(255,255,255,0.12));
     }
 
@@ -92,7 +113,7 @@
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      margin-bottom : 0;
+      margin-top: auto;
 
       z-index: 999999;
       box-sizing: border-box;
@@ -132,41 +153,93 @@
     }
 
   </style>
-<style>
-        :root {
-          --z-base: 0;
-          --z-content: 100;
-          --z-widget: 500;
-          --z-overlay: 1000;
-          --z-system: 5000;
-        }
-      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css"><style>
 
-.panel-section {
-      background: rgba(255,255,255,.01);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: var(--shadow-soft);
+  <style>
+    #motorDock{
+      margin: 16px 0 0;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(6,10,16,.72);
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
     }
-
-    .panel-section label.section-label { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; color: var(--text-muted); letter-spacing: .12em; }
-    .panel-section input[type="range"] { width: 100%; cursor: pointer; }
-    .panel-section select {
-      width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--kob-voice-secondary);
-      background: #444; font-size: 14px; outline: none; cursor: pointer;
+    #motorDock[hidden]{
+      display: none !important;
     }
-
-    .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .preset-btn {
-      padding: 12px 8px; font-size: 11px; border: 1px solid var(--kob-voice-secondary); border-radius: 12px;
-      background: #444; cursor: pointer; font-weight: 300; transition: 0.2s; text-align: center;
+    #motorDock .motor-dock-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      backdrop-filter: blur(16px);
     }
-    .preset-btn:hover, .preset-btn.active { border-color: var(--kob-voice-primary); color: var(--kob-voice-primary); transform: translateY(-1px); }
+    #motorDock .motor-dock-head strong{
+      display:block;
+      font-size: 1rem;
+      letter-spacing:.02em;
+    }
+    #motorDock .motor-dock-head span{
+      display:block;
+      font-size:.8rem;
+      opacity:.75;
+      margin-top:2px;
+    }
+    #motorFrame{
+      width: 100%;
+      height: min(78vh, 920px);
+      border: 0;
+      display:block;
+      background: #000;
+    }
+    body.motor-mode .response-container,
+    body.motor-mode .input-container{
+      display:none !important;
+    }
+    body.motor-mode #motorDock{
+      display:block !important;
+    }
+  </style>
 
 
-</style></head>
-<body>
+  <style>
+    .response-block{
+      position: relative;
+    }
+    .send-to-motor-btn{
+      position:absolute;
+      top:10px;
+      right:10px;
+      z-index:5;
+      border:0;
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:.78rem;
+      line-height:1;
+      background: rgba(255,255,255,.10);
+      color: inherit;
+      backdrop-filter: blur(12px);
+      cursor:pointer;
+    }
+    .send-to-motor-btn:active{
+      transform: scale(.96);
+    }
+    #motorDock .motor-dock-head .motor-mode-state{
+      display:inline-block;
+      margin-top:6px;
+      font-size:.72rem;
+      opacity:.82;
+    }
+    #kdx-mode-toggle.kdx-motor-armed{
+      outline: 2px solid rgba(255,255,255,.22);
+      box-shadow: 0 0 0 6px rgba(255,255,255,.06);
+    }
+  </style>
+
+
+
   
   <!-- ===== KDX — Kael DomnnuS STARTUP (splash + mode + orb) ===== -->
 <div id="kdx-splash" class="kdx-splash" aria-hidden="true">
@@ -219,7 +292,7 @@
     </symbol>
   </svg>
 
-  <div id="particles-js"></div>
+  <div class="content" id="particles-js"></div>
 
   <button id="themeToggle" aria-label="Alternar tema"></button>
 
@@ -280,6 +353,9 @@
         <button class="icon-btn secondary" id="toggleSettingsBtn" title="Configuração IA / Tema" type="button">
           <svg viewBox="0 0 24 24"><use href="#icon-settings"></use></svg>
         </button>
+        <button class="icon-btn secondary" id="toggleMotorBtn" title="Usar motor 78K" type="button">
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5L12 2z"></path></svg>
+        </button>
       </div>
     </div>
 
@@ -323,6 +399,8 @@
     </div>
   </div>
 
+
+ 
   <div class="input-container">
     <input id="userInput" type="text" placeholder="Diga algo para o Dual." aria-label="Digite sua mensagem">
     <button id="sendBtn" title="Enviar" type="button">
@@ -359,192 +437,17 @@
 
 
 
-<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main-0.js"></script>
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main-00.js"></script>
+
+<!-- Cole antes de </body> no KxaT/index.html: -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main.js"></script>
+<script type="module" src="https://truetruextrue.github.io/JESUS_VERB-/web/BRIDGE/kobllux_kxat_bridge.js"></script>
+
+<!-- DEPOIS: 1 script que faz tudo + preserva os externos necessários -->
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js" type="module"></script>
+
+<script src="https://truetruextrue.github.io/JESUS_VERB-/web/js/modules/kobllux_dock_extract.js"></script>
 
 
-
-  <!-- Ambient Blobs -->
-  <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
-  <div id="snap-zone"></div>
-  <div class="toaster-wrap" id="toasterWrap"></div>
-
-  <!-- Distortion SVG Filter -->
-  <svg style="display: none;">
-    <filter id="distort">
-      <feTurbulence baseFrequency="0.01" numOctaves="3" result="turb"></feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="turb" scale="30"></feDisplacementMap>
-    </filter>
-  </svg>
-
-  <!-- Título e Frase -->
-  <div class="infodose">dual.<strong>Infodose</strong></div>
- 
-
-<svg style="display:none">
-    <symbol id="icon-orb" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="7"></circle>
-      <circle cx="12" cy="12" r="8"></circle>
-    </symbol>
-    <symbol id="icon-cards" viewBox="0 0 24 24">
-      <rect x="2" y="2" width="16" height="16" rx="2"></rect>
-      <path d="M22 6v14a2 2 0 0 1-2 2H6"></path>
-    </symbol>
-    <symbol id="icon-gem" viewBox="0 0 24 24">
-      <path d="M6 3h12l4 6-10 12L2 9z"></path>
-    </symbol>
-    <symbol id="icon-settings" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="3"></circle>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-    </symbol>
-    <symbol id="icon-send" viewBox="0 0 24 24">
-      <line x1="22" y1="2" x2="11" y2="13"></line>
-      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-    </symbol>
-    <symbol id="icon-voice" viewBox="0 0 24 24">
-      <rect x="9" y="1" width="6" height="12" rx="3"></rect>
-      <path d="M5 10a7 7 0 0 0 14 0"></path>
-      <line x1="12" y1="19" x2="12" y2="23"></line>
-      <line x1="8" y1="23" x2="16" y2="23"></line>
-    </symbol>
-    <symbol id="icon-upload" viewBox="0 0 24 24">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-      <polyline points="7 10 12 3 7 8"></polyline>
-      <line x1="12" y1="3" x2="12" y2="15"></line>
-    </symbol>
-  </svg>
-
-  <div class="sky-layer"><div class="sun-background"></div></div>
-  <div id="bg-fake-custom"></div>
-  <div id="nv-toast"></div>
-  <div id="modeIndicator">CARREGANDO nO.Sºlar...</div>
-
-  <div class="header-orb" id="orbToggle" title="Acessar Cockpit do Usuário" onclick="toggleDrawer('drawerProfile')">
-    <svg><use href="#icon-orb"></use></svg>
-  </div>
-
-  <div id="usernameDisplay"></div>
-
- 
-
-  <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
-
-  <div id="drawerProfile" class="drawer" aria-hidden="true">
-    <div class="drawer-content">
-      <div class="drawer-header">
-        <h3>
-          <svg style="width:20px;height:20px;margin-right:8px;stroke:var(--secondary)"><use href="#icon-orb"></use></svg>
-          Cockpit Solar
-        </h3>
-        <button class="btn-icon" style="width:38px;height:38px;border-radius:12px;" onclick="toggleDrawer('drawerProfile')">✕</button>
-      </div>
-
-      <div class="drawer-body">
-        <div class="cockpit-item" style="text-align:center;margin-bottom:15px;">
-          <div class="cockpit-label">Ciclo Solar</div>
-          <div id="statusSolarMode" style="font-size:1.2rem;font-weight:bold;margin:5px 0;">AUTO</div>
-          <div class="control-row">
-            <button class="btn-block" id="btnCycleSolar">Manual ☀️/🌙</button>
-            <button class="btn-block" id="btnAutoSolar">Auto 🕒</button>
-          </div>
-        </div>
-
-        <div class="cockpit-grid">
-          <div class="cockpit-item">
-            <div class="cockpit-label">Identificação</div>
-            <input type="text" id="inputUserId" class="cockpit-input" placeholder="Viajante">
-          </div>
-
-          <div class="cockpit-item">
-            <div class="cockpit-label">Modelo IA</div>
-            <input type="text" id="inputModel" class="cockpit-input" placeholder="google/gemini-2.0-flash-exp">
-          </div>
-
-          <div class="cockpit-item">
-         <div class="panel-section">
-        <label class="section-label"><span>Opacidade</span><span id="val-op">15%</span></label>
-        <input id="bgOpacity" type="range" min="0" max="100" value="15" oninput="updateBgAttr('opacity', this.value)">
-      </div>
-
-      <div class="panel-section">
-        <label class="section-label"><span>Mix Blend Mode</span><span>CSS</span></label>
-        <select id="bgBlend" onchange="updateBgAttr('blend', this.value)">
-          <option value="normal">Normal</option>
-          <option value="multiply">Multiply (Escurecer)</option>
-          <option value="screen">Screen (Clarear)</option>
-          <option value="overlay" selected="">Overlay (Realçar)</option>
-          <option value="soft-light">Soft Light (Suave)</option>
-          <option value="luminosity">Luminosity (Fantasma)</option>
-        </select>
-      </div>
-
-      <div class="panel-section">
-        <label class="section-label"><span>Presets de Estilo</span><span>BG</span></label>
-        <div class="preset-grid">
-          <button class="preset-btn" data-bg-preset="ghost" onclick="applyPreset('ghost')">Fantasma</button>
-          <button class="preset-btn active" data-bg-preset="vivid" onclick="applyPreset('vivid')">Vívido</button>
-          <button class="preset-btn" data-bg-preset="deep" onclick="applyPreset('deep')">Profundo</button>
-        </div>
-      </div>   <div class="cockpit-label">Background</div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span id="bgStatusText" style="font-size:0.8rem;color:var(--text-muted)">Nenhum</span>
-              <label class="btn-icon" style="width:30px;height:30px;border-radius:5px;">
-                <input type="file" id="bgUploadInput" accept="image/*" style="display:none">
-                <svg><use href="#icon-cards"></use></svg>
-              </label>
-            </div>
-          </div>
-
-          <div id="bgThumbPanel" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;"></div>
-
-
-    </div>
-
-  </div> 
-  </div>
-      </div>
-    
-  
-
-
-<style>
-
-.panel-section {
-      background: rgba(255,255,255,.01);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .panel-section label.section-label { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; color: var(--text-muted); letter-spacing: .12em; }
-    .panel-section input[type="range"] { width: 100%; cursor: pointer; }
-    .panel-section select {
-      width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--kob-voice-secondary);
-      background: #444; font-size: 14px; outline: none; cursor: pointer;
-    }
-
-    .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .preset-btn {
-      padding: 12px 8px; font-size: 11px; border: 1px solid var(--kob-voice-secondary); border-radius: 12px;
-      background: #444; cursor: pointer; font-weight: 300; transition: 0.2s; text-align: center;
-    }
-    .preset-btn:hover, .preset-btn.active { border-color: var(--kob-voice-primary); color: var(--kob-voice-primary); transform: translateY(-1px); }
-
-
-</style>
-   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script>
-
-
- <!-- Seus Scripts Originais -->
-  <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
-  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
-  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
-  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
-  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script> 
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
-  
-<!-- <script src="https://kodux78k.github.io/oiDual--Y-/js/0RB-0S17.js"></script>
--->
- <script src="https://unpkg.com/lucide@latest"></script><script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script><script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script></body></html>
+</body></html>
