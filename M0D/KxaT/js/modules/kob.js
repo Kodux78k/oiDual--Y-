@@ -21,8 +21,8 @@
   /* -----------------------------
      UI elements (tolerant selectors)
      ----------------------------- */
-  const bar = $('#symbolBar');
-  const toggleBtn = $('#toggleBtn');
+  const bar = $('#symbolBar') || document.querySelector('symbol-bar') ;
+  const toggleBtn = $('#toggleBtn') || document.querySelector('main-toggle');
   const frame = $('#content-frame') || $('#frame') || document.querySelector('iframe');
   const root = $('#root') || document.body;
   const hudStatus = $('#hudStatus');
@@ -43,7 +43,7 @@
   const BTN_PLAY = $('#btn-play');
   const BTN_NEXT = $('#btn-next');
   const BTN_PREV = $('#btn-prev');
-  const BTN_ARCH = $('#btn-arch');
+  const BTN_ARCH = $('#btn-arch')|| document.querySelector('orb') ;
 
   /* -----------------------------
      Archetypes (keep structure compat)
@@ -213,7 +213,7 @@
     voice:'Rocko',
     lang:'pt-BR',
     rate:1.09,
-    pitch:1.28,
+    pitch:1.37,
     color:'#ff8066',
     theme:{
       primary:'#ff8066',
