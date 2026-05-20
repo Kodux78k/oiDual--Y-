@@ -47,7 +47,7 @@ console.log(`
 console.log("❤️ te amo kobllux");
 
 console.groupEnd();
-import "./modules/0-kob.js";
+import "./modules/kob.js";
 import "./modules/inline-00.js";
 import "./modules/inline-1.js";
 import "./modules/inline-2.js";
