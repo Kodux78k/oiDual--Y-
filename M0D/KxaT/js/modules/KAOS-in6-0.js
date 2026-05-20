@@ -1,4 +1,63 @@
-(function KOBLLUX_UNIFIED_FALLBACK() {
+
+(async function(){
+
+  const CACHE='KDX_78K-motor_HTML';
+
+  try{
+
+    let m0d78k=localStorage.getItem(CACHE);
+
+    if(!m0d78k){
+
+      console.log('[KOBLLUX] baixando Motor 78K...');
+
+      m0d78k=await fetch(
+        'https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/index.html'
+      ).then(r=>r.text());
+
+      localStorage.setItem(
+        CACHE,
+        m0d78k
+      );
+
+      console.log('[KOBLLUX] motor salvo em cache ✔');
+
+    }else{
+
+      console.log(
+        '[KOBLLUX] motor carregado do cache ⚡'
+      );
+
+    }
+
+    // disponibiliza globalmente
+    window.MOTOR_HTML=m0d78k;
+
+    // sinal opcional para outros módulos
+    window.dispatchEvent(
+      new CustomEvent(
+        'kdx:motor-ready',
+        {
+          detail:{
+            size:m0d78k.length
+          }
+        }
+      )
+    );
+
+  }catch(err){
+
+    console.error(
+      '[KOBLLUX] erro carregando MOTOR_HTML',
+      err
+    );
+
+  }
+
+})();
+
+  
+  (function KOBLLUX_UNIFIED_FALLBACK() {
 
   'use strict';
 
@@ -1462,14 +1521,42 @@
 
   }
 
-  if (document.readyState === 'loading') {
+  function startWhenReady(){
 
-    document.addEventListener('DOMContentLoaded', boot);
-
-  } else {
-
-    boot();
-
+  if(
+    typeof window.MOTOR_HTML==='string' &&
+    window.MOTOR_HTML.trim()
+  ){
+      boot();
+      return;
   }
 
+  window.addEventListener(
+    'kdx:motor-ready',
+    function(){
+
+      console.log(
+        '[KBLX] MOTOR_HTML recebido ✔'
+      );
+
+      boot();
+
+    },
+    {once:true}
+  );
+
+}
+
+if(document.readyState==='loading'){
+
+   document.addEventListener(
+      'DOMContentLoaded',
+      startWhenReady
+   );
+
+}else{
+
+   startWhenReady();
+
+}
 })();
