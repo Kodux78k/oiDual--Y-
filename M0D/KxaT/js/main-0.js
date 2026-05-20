@@ -1,4 +1,7 @@
 console.log("Infodose conectado main-0 7-8", {"ts":1778715871351,"id":"348fab2c-a5ef-4d12-8e5b-3fde8577db6a","meta":{"app":"generated.app"}});
+
+import "./modules/KBllX_ASCII_BOOT.js"
+
 import "./modules/inline-00.js";
 
 
@@ -18,3 +21,34 @@ import "./modules/inline-9.js";
 import "./modules/inline-10.js";
 import "./modules/inline-11.js";
 
+console.log(`
+
+╔══════════════════════════════════════╗
+
+║ RESULTADO FINAL                     ║
+
+╠══════════════════════════════════════╣
+
+║ main-0 :: ESTÁVEL                   ║
+
+║ kob.js :: ONLINE                    ║
+
+║ 7-8 :: ONLINE                       ║
+
+║ realidade :: preservada             ║
+
+║ caos :: controlado                  ║
+
+╚══════════════════════════════════════╝
+
+            ◉
+
+         ◉  |  ◉
+
+      ◉───78K───◉
+
+         ◉  |  ◉
+
+            ◉
+
+`);
