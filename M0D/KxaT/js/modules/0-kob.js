@@ -47,8 +47,8 @@
 
   /* -----------------------------
      Archetypes (keep structure compat)
-     ----------------------------- *
-  const ARCHETYPES = [
+     ----------------------------- */
+/*  const ARCHETYPES = [
     { id:'kobllux', name:'KOBLLUX', voice:'Luciana',   lang:'pt-BR', rate:0.98, pitch:0.48, color:'#22D3EE' },
     { id:'kodux',   name:'KODUX',   voice:'Luciana',   lang:'pt-BR', rate:0.86, pitch:0.68, color:'#F97316' },
     { id:'atlas',   name:'ATLAS',   voice:'Reed',    lang:'en-US',  rate:1.00, pitch:0.93, color:'#38BDF8' },
@@ -756,7 +756,7 @@
       }
     }
 
-   /* // fallback: use local SpeechSynthesis
+   /*  fallback: use local SpeechSynthesis
     if(!synth){ toast('TTS indisponível'); return; }
     try{ synth.cancel(); }catch(e){}
     const u = new SpeechSynthesisUtterance(txt);
@@ -771,8 +771,9 @@
     };
     u.onerror = (ev) => { console.warn('tts error', ev); if(state.isSpeaking){ state.currentBlockIdx++; speakCurrent(); } };
     synth.speak(u);
+    */
   }
-*/
+
   /* -----------------------------
      start/stop
      ----------------------------- */
