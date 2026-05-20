@@ -110,15 +110,24 @@ window.KBLX_motorToChat = function() {
   function latestSpeakableText() {
     var root = qs('responseList');
     if (!root) return '';
+
     var blocks = root.querySelectorAll('.response-block');
-    for (var i = blocks.length - 1; i >= 0; i--) {
-      var b = blocks[i];
-      if (!b) continue;
-      var txt = (b.innerText || b.textContent || '').trim();
-      if (txt) return txt;
+
+    var allText = '';
+
+    for (var i = 0; i < blocks.length; i++) {
+        var b = blocks[i];
+        if (!b) continue;
+
+        var txt = (b.innerText || b.textContent || '').trim();
+
+        if (txt) {
+            allText += txt + '\n\n────────\n\n';
+        }
     }
-    return '';
-  }
+
+    return allText.trim();
+}
 
   function getCurrentArchFromBlock(block) {
     if (!block) return null;
