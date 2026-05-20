@@ -204,7 +204,7 @@ window.KBLX_motorToChat = function() {
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'send-to-motor-btn';
-        btn.textContent = '↗ Motor';
+        btn.textContent = '↗78K';
         btn.addEventListener('click', function(ev) {
           ev.stopPropagation();
           var text = (block.innerText || block.textContent || '').trim();
@@ -301,7 +301,7 @@ window.KBLX_motorToChat = function() {
       motorReady = true;
       flushMotorPayload();
       var hint = qs('footerHint');
-      if (hint) hint.textContent = 'Motor 78K pronto para receber mensagens.';
+      if (hint) hint.textContent = 'Motor 78K USE•TRANSFORME•DEVOLVA';
     }
   });
 
