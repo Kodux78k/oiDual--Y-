@@ -8,10 +8,11 @@ import "./modules/inline-4.js";
 import "./modules/inline-5.js";
 
 import "./modules/KOB-RHEA-KAOS-sync.js";
+import "./modules/inline-7-9.js";
 /*
 import "./modules/RHEA-bridge.js";
 import "./modules/KAOS-in6-0.js";
-import "./modules/inline-7-9.js";
+
 */
 /*
 import "./modules/isoCos.js";
