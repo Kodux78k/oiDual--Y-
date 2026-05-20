@@ -8,7 +8,7 @@ import "./modules/inline-3.js";
 import "./modules/inline-4.js";
 import "./modules/inline-5.js";
 
-import "./modules/inline-6.js";
+import "./modules/KAOS-in6-0.js";
 import "./modules/kob.js";
 
 import "./modules/inline-7-9.js";
