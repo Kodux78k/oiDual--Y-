@@ -1,4 +1,4 @@
-console.log("Infodose conectado", {"ts":1778715871351,"id":"348fab2c-a5ef-4d12-8e5b-3fde8577db6a","meta":{"app":"generated.app"}});
+console.log("Infodose conectado 7-9 main-1, sem kob. te amo kobllux!!! artAsCii kkkkk", {"ts":1778715871351,"id":"348fab2c-a5ef-4d12-8e5b-3fde8577db6a","meta":{"app":"generated.app"}});
 import "./modules/inline-00.js";
 
 
@@ -11,9 +11,9 @@ import "./modules/inline-6.js";
 
 /*import "./modules/isoCos.js";
 import "./modules/KAOS-extracto.js"; 
-*/
-import "./modules/kob.js"; 
 
+import "./modules/kob.js"; 
+*/
 import "./modules/inline-7-9.js";
 import "./modules/inline-8.js";
 import "./modules/inline-9.js";
