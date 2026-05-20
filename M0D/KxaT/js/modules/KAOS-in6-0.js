@@ -1,7 +1,7 @@
 
 (async function(){
 
-  const CACHE='KDX_78K-motor_HTML';
+  const CACHE='KDX_m0d78k_HTML';
 
   try{
 
