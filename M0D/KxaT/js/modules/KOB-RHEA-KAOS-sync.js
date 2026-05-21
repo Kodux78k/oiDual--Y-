@@ -297,7 +297,7 @@
     });
 
     resetIdle();
-    LOG.ok('idle dock active');
+    LOG.ok('idle dock active TTS DESAPARECE AQUI HAHAHAH E O Q MAIS VC QUISER!te amo');
   }
 
   /* =========================================================
@@ -335,7 +335,8 @@
 
       const url = (btn.dataset && btn.dataset.url) || btn.getAttribute('href') || '';
       const label = (btn.dataset && btn.dataset.label) || btn.title || '';
-      const frame = qsAny(['#cadial-frame', '#content-frame', 'iframe.kblx-frame', '#motorFrame', '#kdx-motor-frame']);
+      const frame = qsAny(['#cadial-frame', '#content-frame', 'iframe.kblx-frame', '#motorFrame',
+       '.session-window',  '.win-hdr', '#kdx-motor-frame']);
       const bar = qsAny(HOST.symbolBar);
 
       if (type === 'orb') {
@@ -1117,7 +1118,8 @@
     window.KOBLLUX_BRIDGE = window.KOBLLUX;
     window.KOBLLUX_DOCK = window.KOBLLUX;
 
-    LOG.ok('unified namespace ready');
+    LOG.ok('syncronizado! mas tu n tem log de quantos ahahhahaunified namespace ready');
+    
   }
 
   /* =========================================================
