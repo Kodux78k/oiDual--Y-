@@ -17,8 +17,9 @@ import "./modules/KAOS-in6-0.js";
 /*
 import "./modules/isoCos.js";
 import "./modules/KAOS-extracto.js"; 
-
-import "./modules/kob.js;
+*/
+import "./modules/00-kob.js;"
+/*
 import "./modules/inline-7-9.js";
 */
 import "./modules/inline-8.js";
