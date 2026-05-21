@@ -1276,14 +1276,14 @@
     setCollapsed(true);
     initParticles();
 
-    const RV_ARCHES = ['Atlas','Nova','Vitalis','Pulse','Artemis','Serena','Kaos','Genus','Lumine','Rhea','Solus','Aion'];
+    const RV_ARCHES = ['Kodux','Kobllux','Bllue','Atlas','Nova','Vitalis','Pulse','Artemis','Serena','Kaos','Genus','Lumine','Rhea','Solus','Aion'];
     const randomArch = RV_ARCHES[Math.floor(Math.random()*RV_ARCHES.length)];
     localStorage.setItem('ARCHETYPE_ACTIVE', randomArch);
 
     if (bootText){
       const msg =
 `[${randomArch}] Roda-Viva aleatória ativada.
-Hoje quem abre o portal  â€”é ${userName}.
+Hoje quem abre o portal â€ é ${user}. [SÜMBÜS]!
 Iniciando. Pulso simbiótico detectado. Presença reconhecida.`;
       bootText.dataset.text = msg;
       bootText.textContent  = msg;
@@ -1297,7 +1297,7 @@ Iniciando. Pulso simbiótico detectado. Presença reconhecida.`;
 
     if (bootText) bootText.classList.add('pulse');
     if (bootBlock && synth){
-      setTimeout(()=>{ try{ speakBlock(bootBlock); }catch(e){}; }, 700);
+      setTimeout(()=>{ try{ speakBlock(bootBlock); }catch(e){}; }, 8700);
     }
 
     if (voiceBtn){
