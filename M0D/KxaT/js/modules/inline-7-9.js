@@ -243,7 +243,7 @@
             d.innerHTML = `<div><strong>${escapeHtml(item.role)}</strong><div style="opacity:.85;margin-top:6px">${escapeHtml(item.content || '')}</div></div>`;
             responseList.appendChild(d);
           });
-          if (footerHint) footerHint.textContent = 'Conversa carregada do histórico.';
+          if (footerHint) footerHint.textContent = 'â€•Conversa carregada do histórico.';
         }
       });
     });
@@ -319,7 +319,7 @@
         <strong>Configurações · Dual.Infodose</strong>
         <button id="kdxSpClose" aria-label="Fechar">✕</button>
       </header>
-      <div class="kdx-sp-body">
+      <div style="z-index:0" class="kdx-sp-body">
         <section class="kdx-section">
           <label>Tema</label>
           <select id="kdxThemeSelect">
@@ -848,7 +848,7 @@
     };
     utter.onerror = ()=>{
       if (voiceBtn) voiceBtn.classList.remove('speaking');
-      if (footerHint) footerHint.textContent = 'Erro ao tentar falar.';
+     // if (footerHint) footerHint.textContent = 'Erro ao tentar falar.';
     };
 
     synth.cancel();
