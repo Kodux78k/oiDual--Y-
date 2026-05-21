@@ -1274,7 +1274,7 @@
 
     if (bootText){
       const msg =
-`[${randomArch}] Onda-Viva aleatória ativada.
+`[${randomArch}]  â€”Onda-Viva 78K ativada.
 åY€, quem abre o portal é ${randomArch}.
 Iniciando. Pulso simbiótico detectado. Presença reconhecida.`;
       bootText.dataset.text = msg;
