@@ -9,7 +9,7 @@ import "./modules/inline-4.js";
 import "./modules/inline-5.js";
 import "./modules/KOB-RHEA-KAOS-sync.js";
 
-import "./modules/orbKard.js";
+import "./modules/orbKard-ASCII.js";
 import "./modules/kob.js"; 
 
 
