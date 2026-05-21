@@ -76,7 +76,7 @@ function bootKBLX(version = '7-8', opts = {}) {
   console.log(`
 [00] init  :: ok
 [01] core  :: ok
-[02] sync  :: pending
+[02] sync  :: ok - view pending
 [03] motor :: ready
 [04] dock  :: ready
 [05] orb   :: ready
