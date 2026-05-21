@@ -1283,7 +1283,7 @@
     if (bootText){
       const msg =
 `[${randomArch}] Roda-Viva aleatória ativada.
-Hoje quem abre o portal é ${randomArch}.
+Hoje quem abre o portal  â€”é ${userName}.
 Iniciando. Pulso simbiótico detectado. Presença reconhecida.`;
       bootText.dataset.text = msg;
       bootText.textContent  = msg;
