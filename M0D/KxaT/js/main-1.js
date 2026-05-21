@@ -11,7 +11,7 @@ import "./modules/KOB-RHEA-KAOS-sync.js";
 
 import "./modules/orbKard-ASCII.js";
 import "./modules/kob.js"; 
-import "./modules/bootline.js"; 
+import "./modules/bootlines.js"; 
 
 
 import "./modules/inline-7-9.js";
