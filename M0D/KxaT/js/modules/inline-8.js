@@ -69,7 +69,7 @@
   opacity:0;
   pointer-events:none;
   transition:opacity .22s cubic-bezier(.2,.9,.2,1), transform .22s ease;
-  z-index:10;
+  z-index:100;
   padding:8px;
 }
 
