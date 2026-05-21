@@ -11,9 +11,11 @@ import "./modules/KOB-RHEA-KAOS-sync.js";
 import "./modules/inline-7-9.js";
 /*
 import "./modules/RHEA-bridge.js";
-import "./modules/KAOS-in6-0.js";
-
 */
+
+import "./modules/DSJSUSS-di.js";
+
+
 /*
 import "./modules/isoCos.js";
 import "./modules/KAOS-extracto.js"; 
