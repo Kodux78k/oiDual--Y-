@@ -58,7 +58,7 @@ function bootKBLX(version = '7-8', opts = {}) {
 
   window.__KBLX_ASCII_BOOT_ACTIVE__ = profile.tag;
 
-  if (opts.clear !== false) console.clear();
+  //if (opts.clear !== false) console.clear();
 
   console.group(`[KOBLLUX] ASCII BOOT :: ${profile.label}`);
 
