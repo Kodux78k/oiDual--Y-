@@ -17,6 +17,8 @@
 
 <!-- CSS Safe Area Fix -->
 <style>
+
+
   html, body {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
@@ -36,8 +38,6 @@
   
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
-
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css">
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
@@ -112,7 +112,7 @@
     #motorDock .motor-dock-head strong { display:block; font-size: 1rem; letter-spacing:.02em; }
     #motorDock .motor-dock-head span { display:block; font-size:.8rem; opacity:.75; margin-top:2px; }
     #motorFrame { width: 100%; height: min(78vh, 920px); border: 0; display:block; background: #000; }
-    body.motor-mode .response-container, body.motor-mode .input-container { display:none !important; }
+    body.motor-mode .response-container, body.motor-mode .input-container { display:flex !important; }
     body.motor-mode #motorDock { display:block !important; }
     
     .response-block { position: relative; }
@@ -151,9 +151,28 @@
 
 <body class="field-closed mode-night">
 
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css">
+
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
   <div id="root">
+
+<section id="motorDock" class="motor-dock" aria-label="Motor 78K" hidden>
+    <div class="motor-dock-head">
+      <div>
+        <strong>Motor 78K</strong>
+        <span>· painel isolado · usa o HTML original dentro de iframe</span>
+      </div>
+      <button type="button" id="motorDockClose" class="pill-btn secondary">Fechar</button>
+    </div>
+    <iframe
+      id="motorFrame"
+      title="Motor 78K"
+      sandbox="allow-scripts allow-forms allow-same-origin"
+      loading="lazy"
+    ></iframe>
+  </section>
+
     <div class="bg-gradient"></div>
     <div id="bg-layer-fixed"></div>
 
@@ -263,7 +282,31 @@
           <div class="kob-footer-inner"><p class="footer-text" id="footerHint"><span class="footer-dot"></span>Do seu jeito. Sempre único. Sempre seu.</p></div>
         </footer>
 
-        <div style="display:none" id="assistantName">Dual.Infodose · Cinemático</div>
+        <div style="display:flex; opacity:.18;" id="assistantName">Dual.Infodose · Cinemático</div>
+
+<button id="kdx-mode-toggle" aria-pressed="false" title="Modo: You / Assistant"><span id="kdx-mode-icon">🧬</span><span id="kdx-mode-label">✦</span></button>
+      <div id="kdx-orb" class="kdx-orb kdx-hidden" role="button" aria-label="Orb de voz Kaion"><div class="kdx-orb-icon">◎</div></div>
+
+      <div class="nebula content wrap" id="particles-js"></div>
+      <button id="themeToggle" aria-label="Alternar tema"></button>
+
+      <div class="svg-container" id="logoContainer"></div>
+
+      <div class="input-container">
+        <input id="userInput" type="text" placeholder="Diga algo para o Dual." aria-label="Digite sua mensagem">
+        <button id="sendBtn" title="Enviar" type="button"><span class="send-label">➤</span></button>
+        <button id="voiceBtn" title="Ouvir último bloco" type="button"><svg viewBox="0 0 24 24"><use href="#icon-mic"></use></svg></button>
+      </div>
+
+      <div class="login-container" id="loginBox" aria-modal="true" role="dialog">
+        <h2>Ativar Dual.Infodose</h2>
+        <p>Defina o seu nome e o nome-base do assistente para personalizar as respostas.</p>
+        <form id="loginForm"><input id="userName" type="text" placeholder="Seu nome" required=""><input id="assistantInput" type="text" placeholder="Nome do assistente" required=""><button type="submit">Ativar</button></form>
+      </div>
+
+      <input type="file" id="parserFile" accept=".js,.css" style="display:none">
+      <input type="file" id="voiceConfigFile" accept=".json" style="display:none">
+      <div id="arch-overlay"></div>
 
         <div class="response-container" id="response">
           <div class="pages-wrapper" id="responseList">
@@ -322,29 +365,7 @@
         </div>
       </div>
 
-      <button id="kdx-mode-toggle" aria-pressed="false" title="Modo: You / Assistant"><span id="kdx-mode-icon">🧬</span><span id="kdx-mode-label">✦</span></button>
-      <div id="kdx-orb" class="kdx-orb kdx-hidden" role="button" aria-label="Orb de voz Kaion"><div class="kdx-orb-icon">◎</div></div>
-
-      <div class="nebula content wrap" id="particles-js"></div>
-      <button id="themeToggle" aria-label="Alternar tema"></button>
-
-      <div class="svg-container" id="logoContainer"></div>
-
-      <div class="input-container">
-        <input id="userInput" type="text" placeholder="Diga algo para o Dual." aria-label="Digite sua mensagem">
-        <button id="sendBtn" title="Enviar" type="button"><span class="send-label">➤</span></button>
-        <button id="voiceBtn" title="Ouvir último bloco" type="button"><svg viewBox="0 0 24 24"><use href="#icon-mic"></use></svg></button>
-      </div>
-
-      <div class="login-container" id="loginBox" aria-modal="true" role="dialog">
-        <h2>Ativar Dual.Infodose</h2>
-        <p>Defina o seu nome e o nome-base do assistente para personalizar as respostas.</p>
-        <form id="loginForm"><input id="userName" type="text" placeholder="Seu nome" required=""><input id="assistantInput" type="text" placeholder="Nome do assistente" required=""><button type="submit">Ativar</button></form>
-      </div>
-
-      <input type="file" id="parserFile" accept=".js,.css" style="display:none">
-      <input type="file" id="voiceConfigFile" accept=".json" style="display:none">
-      <div id="arch-overlay"></div>
+     
     </div> 
 
     <div id="keysModal" class="modal-overlay" aria-hidden="true">
