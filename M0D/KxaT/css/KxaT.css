@@ -737,9 +737,9 @@
   box-shadow:0 18px 40px rgba(0,0,0,.6);
   z-index:0;
   transform:translateY(-8px) scale(.98);
-  opacity:0;
+  opacity:0; display:none;
   transition:all .26s ease;
-  overflow:hidden;
+  overflow-x:hidden;
 }
 .kdx-settings-panel.active{ display:block; transform:translateY(0) scale(1); opacity:1; }
 .kdx-sp-header{ display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid rgba(255,255,255,.04);}
@@ -751,7 +751,7 @@
 .kdx-style-btn:hover{ background:var(--accent); color:#050515; }
 .kdx-settings-panel .pill-btn{ padding:.5rem .7rem; border-radius:999px; font-size:.82rem; }
 body.minimal-style *{ transition:none !important; backdrop-filter:none !important; filter:none !important; }
-body.turbo-style { --kob-voice-theme-duration: 1600ms; filter:contrast(1.06) saturate(1.08); }
+body.turbo-style { --kob-voice-theme-duration: 7800ms; filter:contrast(1.06) saturate(1.08); }
 
 /* ================= KDX — Kael DomnnuS UI ================= */
 
