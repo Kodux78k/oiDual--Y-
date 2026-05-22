@@ -311,7 +311,7 @@ const ARCHETYPES = [
     tone: 'Sábio, observador, solar',
     modulation: 'Ritmo firme, presença elevada.',
     voice: 'Flo',
-    lang: 'it-IT',
+    lang: 'en-EN',
     rate: 1.24,
     pitch: 0.14,
     color: '#f59e0b',
@@ -346,8 +346,8 @@ const ARCHETYPES = [
     modulation: 'Rápido, cortes secos, foco em termos técnicos.',
     voice: 'Reed',
     lang: 'pt-BR',
-    rate: 1.05,
-    pitch: 0.9,
+    rate: 0.27,
+    pitch: 1.78,
     color: '#95e1d3',
     theme: {
       primary: '#95e1d3',
@@ -364,7 +364,7 @@ const ARCHETYPES = [
     voice: 'Milena',
     lang: 'pt-BR',
     rate: 1.0,
-    pitch: 1.08,
+    pitch: 2.2,
     color: '#f9f3b2',
     theme: {
       primary: '#f9f3b2',
@@ -380,7 +380,7 @@ const ARCHETYPES = [
   modulation: 'Baixo, limpo, quase ritualístico, com pausas curtas.',
   voice: 'Satu',
   lang: 'fi-FI',
-  rate: 0.87,
+  rate: 0.89,
   pitch: 0.03,
   color: '#9BE7FF',
   theme: {
@@ -398,7 +398,7 @@ const ARCHETYPES = [
     voice: 'Grandma',
     lang: 'pt-BR',
     rate: 0.8,
-    pitch: 1.68,
+    pitch: 2.34,
     color: '#c79aff',
     theme: {
       primary: '#c79aff',
@@ -406,7 +406,41 @@ const ARCHETYPES = [
       bgSoft: 'radial-gradient(circle at 50% 30%, rgba(199,154,255,.08), transparent)',
       glow: '0 0 18px rgba(199,154,255,.55)'
     }
-  }
+  },
+  { id:'KOΦD1',
+    name: 'KOΦD1',
+    aliases: ['KΦD1', 'KΦD°1', 'KOΦDX', 'KOΦ°D1', 'KΦD1', 'KOΦDo°1'],
+    tone: 'Núcleo silencioso, preciso, centralizado',
+    modulation: 'Baixo, limpo, quase ritualístico, com pausas curtas.',
+    voice: 'Satu',
+    lang: 'fi-FI',
+    rate: 0.3,
+    pitch: 0.1,
+    color: '#9BE7FF',
+    theme: {
+      primary: '#8BE7FF',
+      secondary: '#7A8CFF',
+      bgSoft: 'radial-gradient(circle at 45% 25%, rgba(155,231,255,.10), transparent)',
+      glow: '0 0 18px rgba(155,231,255,.58)'
+    }
+  },
+  {
+    id: 'christos',
+    name: 'CHRISTOS',
+    aliases: ['christos', 'cristo', 'cristos', 'jesus'],
+    voice: 'Felipe',
+    lang: 'safe',
+    speechLang: 'pt-BR',
+    rate: 0.33,
+    pitch: 0.03,
+    color: '#FFB84D',
+    theme: {
+      primary: '#FFB84D',
+      secondary: '#FFD166',
+      bgSoft: 'radial-gradient(circle at 45% 30%, rgba(255,184,77,.10), transparent)',
+      glow: '0 0 18px rgba(255,184,77,.58)'
+    }
+  },
 ];
 
 (() => {
