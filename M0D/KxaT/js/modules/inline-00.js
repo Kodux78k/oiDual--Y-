@@ -414,7 +414,7 @@ const ARCHETYPES = [
     modulation: 'Baixo, limpo, quase ritualístico, com pausas curtas.',
     voice: 'Satu',
     lang: 'fi-FI',
-    rate: 0.3,
+    rate: 0.93,
     pitch: 0.1,
     color: '#9BE7FF',
     theme: {
@@ -428,7 +428,7 @@ const ARCHETYPES = [
     id: 'christos',
     name: 'CHRISTOS',
     aliases: ['christos', 'cristo', 'cristos', 'jesus'],
-    voice: 'Felipe',
+    voice: 'Shelley',
     lang: 'safe',
     speechLang: 'pt-BR',
     rate: 0.33,
