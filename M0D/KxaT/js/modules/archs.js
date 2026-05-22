@@ -19,10 +19,10 @@ const ARCHETYPES = [
   {
     id:'kodux',
     name:'KODUX',
-    voice:'Rocko',
+    voice:'Reed',
     lang:'pt-BR',
     rate:0.86,
-    pitch:0.18,
+    pitch:0.078,
     color:'#F97316',
     theme:{
       primary:'#F97316',
@@ -305,6 +305,58 @@ const ARCHETYPES = [
   }
 
 ];
+  const ARCHETYPE_KEYWORDS = {
+
+    Atlas:   ['atlas', 'fluxo', 'mapa', 'estrutura', 'organização', 'organizar', 'planejamento', 'árvore', 'checklist', 'estratégia'],
+
+    Nova:    ['nova', 'começar', 'começo', 'ideia', 'idéia', 'visão', 'criar', 'protótipo', 'protótipos', 'imaginar', 'descobrir', 'ativar', 'estado'],
+
+    Vitalis: ['vitalis', 'corpo', 'energia', 'respiração', 'ritmo', 'h3o2', 'saúde', 'vitalidade', 'hidratação', 'movimento'],
+
+    Pulse:   ['pulse', 'pulso', 'tempo', 'ciclo', 'ciclos', 'batida', 'pulsar', 'ritmo', 'loop', 'síncrono', 'batimento'],
+
+    Artemis: ['artemis', 'foco', 'focada', 'mira', 'precisão', 'aventura', 'explorar', 'exploração', 'alvo', 'caçada'],
+
+    Serena:  ['serena', 'serenidade', 'calma', 'acolhimento', 'cuidar', 'suave', 'pausa', 'repouso', 'apoio', 'paz', 'tranquilo', 'tranquilidade'],
+
+    Kaos:    ['kaos', 'quebra', 'ruptura', 'caos', 'provocação', 'virada', 'rebeldia', 'desalinho', 'disrupção', 'choque'],
+
+    Genus:   ['genus', 'padrão', 'padrões', 'tabela', 'planilha', 'referência', 'documento', 'estrutura lógica', 'dados', 'sistematizar'],
+
+    Lumine:  ['lumine', 'luz', 'cores', 'estética', 'beleza', 'design', 'gradiente', 'iluminar', 'alegria', 'lúdico', 'brincadeira', 'brilho', 'colorido'],
+
+    Rhea:    ['rhea', 'guia', 'cuidado', 'conectar', 'empatia', 'acompanhamento', 'profundo', 'profundidade', 'vínculo', 'raízes', 'intimidade'],
+
+    Solus:   ['solus', 'unidade', 'sozinho', 'inteiro', 'solo', 'núcleo', 'essência', 'solidão', 'silêncio', 'meditação', 'contemplar', 'introspecção'],
+
+    Aion:    ['aion', 'tempo longo', 'ciclos grandes', 'eras', 'fractal', 'registro', 'eterno', 'futuro', 'linha do tempo', 'cíclico', 'infinito'],
+
+    KOBLLUX: ['kobllux', 'kob', 'nó raiz', 'núcleo do sistema', 'portal', 'oráculo', 'meta-sistema'],
+
+    Uno:     ['uno', 'origem', 'fonte', 'essência', 'essencial', 'mínimo', 'minimalista', 'centro'],
+
+    Dual:    ['dual', 'espelho', 'contraste', 'polaridade', 'dois lados', 'reverso', 'espelhado'],
+
+    Trinity: ['trinity', 'trindade', 'tríade', '3·6·9', '3x', 'síntese', 'triângulo', 'triádico'],
+
+    Infodose:['infodose', 'dose', 'arquétipo', 'arquétipos', 'ativação', 'dopamina', 'pílula'],
+
+    Kodux:   ['kodux', 'criador', 'metaconsciência', 'pulso criador', 'manifesto', 'metafuturo'],
+
+    Bllue:   ['bllue', 'blue', 'emoção', 'emocional', 'sensível', 'sensação', 'sensório', 'intuitivo'],
+
+    Minuz:   ['minuz', 'minimalista', 'hacker', 'hackear', 'direto ao ponto', 'compressão', 'refatorar'],
+
+    HANAH:   ['hanah', 'hannah', 'estético', 'estética', 'futurista', 'visual', 'simbolismo', 'símbolos'],
+
+    MetaLux: ['metalux', 'meta lux', 'lux', 'oráculo', 'luxar', 'portal lux', 'estético-simbólico'],
+
+    KD1:     ['kd°1', 'kd1', 'kd primeiro', 'kadê primeiro', 'cade primeiro', 'cadê primeiro', 'kd graus 1', 'k d 1', 'k-d-1', 'solus-online'],
+
+    CHRISTOS:['christos', 'cristo', 'cristos', 'christus', 'kristos', 'kristos']
+
+  };
+
 
 (() => {
   window.KOBLLUX_VOICES = ARCHETYPES.reduce((acc, a) => {
