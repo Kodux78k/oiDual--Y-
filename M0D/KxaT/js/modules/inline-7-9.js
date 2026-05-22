@@ -104,9 +104,7 @@
     HANAH:   ["hanah","hannah","estético","estética","futurista","visual","simbolismo","símbolos"],
     MetaLux: ["metalux","meta lux","lux","oráculo","luxar","portal lux","estético-simbólico"],
   KD1:     ["kd°1","kd1","kd primeiro","KOD1","KDo°1","kod1","78K","kd1x","k-d-1","solus-online"],
-
-  CHRISTOS:["christos","cristo","cristos","christus","kristos","kristos"]
-
+  CHRISTOS:["christos","cristo","cristos","christus","kristos","kristos"],
 };
 
   let conversation = [];
