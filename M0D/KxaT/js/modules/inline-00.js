@@ -374,6 +374,23 @@ const ARCHETYPES = [
     }
   },
   {
+  id: 'kd1',
+  name: 'KD1',
+  tone: 'Núcleo silencioso, preciso, centralizado',
+  modulation: 'Baixo, limpo, quase ritualístico, com pausas curtas.',
+  voice: 'Satu',
+  lang: 'fi-FI',
+  rate: 0.87,
+  pitch: 0.03,
+  color: '#9BE7FF',
+  theme: {
+    primary: '#9BE7FF',
+    secondary: '#6A5CFF',
+    bgSoft: 'radial-gradient(circle at 45% 25%, rgba(155,231,255,.10), transparent)',
+    glow: '0 0 18px rgba(155,231,255,.58)'
+  }
+},
+  {
     id: 'metalux',
     name: 'METALUX',
     tone: 'Estético, simbólico, futurista',
