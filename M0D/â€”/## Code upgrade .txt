@@ -1,0 +1,138 @@
+Como atualizar
+
+
+Quero implementar um export arch com id salvo no local storage do di_userName , sendo exibido na section de playback . Quero salvar no local storage e tb poder exportar. 
+
+
+Bases:
+
+const ARCHETYPES = [
+  {
+    id: 'kobllux',
+    name: 'KOBLLUX',
+    tone: 'Núcleo do sistema, oracular',
+    modulation: 'Grave-médio, presença de comando, ritmo estável.',
+    voice: 'Luciana',
+    lang: 'pt-BR',
+    rate: 0.98,
+    pitch: 0.48,
+    color: '#22D3EE',
+    theme: {
+      primary: '#22D3EE',
+      secondary: '#7dd3fc',
+      bgSoft: 'radial-gradient(circle at 30% 20%, rgba(34,211,238,.08), transparent)',
+      glow: '0 0 18px rgba(34,211,238,.55)'
+    }
+  },
+
+(() => {
+  window.KOBLLUX_VOICES = ARCHETYPES.reduce((acc, a) => {
+    acc[a.name.toLowerCase()] = a;
+    acc[a.id] = a;
+    return acc;
+  }, {});
+
+  const pickVoice = (wanted) => {
+    const voices = speechSynthesis.getVoices() || [];
+    const target = String(wanted || '').toLowerCase();
+    return (
+      voices.find(v => v && v.name && v.name.toLowerCase() === target) ||
+      voices.find(v => v && v.name && v.name.toLowerCase().includes(target)) ||
+      null
+    );
+  };
+
+  const origSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
+
+  window.speechSynthesis.speak = (u) => {
+    const text = (u.text || '').toLowerCase();
+    const found = ARCHETYPES.find(a => text.includes(a.name.toLowerCase()) || text.includes(a.id.toLowerCase()));
+
+    if (found) {
+      const match = pickVoice(found.voice);
+      if (match) u.voice = match;
+      u.pitch = found.pitch;
+      u.rate = found.rate;
+      console.log('🎙️ KOBLLUX Voice →', found.name, '→', found.voice, `(rate=${found.rate}, pitch=${found.pitch})`);
+    }
+
+    origSpeak(u);
+  };
+
+  console.log('⚡ KOBLLUX Voices Integradas —', ARCHETYPES.length, 'perfis ativos');
+  window.dispatchEvent(new Event('KOBLLUX_VOICES_READY'));
+})();
+
+
+function makeOrbAvatar(name = 'DUAL', size = 64) {
+  injectOrbStyles();
+
+  const safe = String(name || 'DUAL').trim() || 'DUAL';
+  const seed = safe.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  const h1 = seed % 360;
+  const h2 = (seed * 37) % 360;
+  const uid = Math.random().toString(36).slice(2, 7);
+  const gradId = `orb_${seed.toString(36)}_${uid}`;
+
+  return
+Para implementar o salvamento de um "export arch" (arquétipo) no localStorage vinculado a um di_userName e garantir que ele seja exibido na seção de *playback*, você deve seguir a lógica de persistência de dados no navegador.
+Como você já possui uma estrutura de ARCHETYPES e um sistema de voz funcionando, aqui está o roteiro técnico:
+### 1. Estrutura de Salvamento (JSON no LocalStorage)
+O localStorage aceita apenas strings. Portanto, vamos armazenar o arquétipo em um objeto chaveado pelo di_userName.
+```javascript
+// Função para salvar o arquétipo
+function saveArchetype(userName, archData) {
+  const storageKey = `arch_${userName}`;
+  localStorage.setItem(storageKey, JSON.stringify(archData));
+  console.log(`✅ Arquétipo salvo para: ${userName}`);
+}
+
+// Função para recuperar
+function getArchetype(userName) {
+  const data = localStorage.getItem(`arch_${userName}`);
+  return data ? JSON.parse(data) : null;
+}
+
+```
+### 2. Exportação (Download de Arquivo)
+Para permitir a exportação, criamos um *Blob* que força o download de um arquivo .json com a configuração do arquétipo.
+```javascript
+function exportArchetype(archData) {
+  const dataStr = JSON.stringify(archData, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${archData.name || 'arquétipo'}_config.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+```
+### 3. Integração na Seção de Playback
+Para que isso apareça na seção de *playback* (onde você lida com as configurações de voz/orb), você precisa identificar o container onde as opções de arquétipo são renderizadas. Considerando sua estrutura, você deve injetar o dado recuperado na inicialização:
+```javascript
+// Exemplo de integração no carregamento da página
+window.addEventListener('KOBLLUX_VOICES_READY', () => {
+  const user = localStorage.getItem('di_userName'); // Ou a variável que você usa
+  if (user) {
+    const savedArch = getArchetype(user);
+    if (savedArch) {
+      // Aplica o arquétipo salvo ao sistema
+      // Supondo que você precise atualizar a UI de playback
+      updatePlaybackUI(savedArch); 
+    }
+  }
+});
+
+```
+### Considerações para o seu código:
+ 1. **Sincronização:** Quando o usuário alterar o arquétipo na interface, chame a função saveArchetype(di_userName, currentArch).
+ 2. **Identificação:** Certifique-se de que di_userName está definido globalmente ou que você está pegando o valor correto do input do usuário antes de salvar.
+ 3. **UI de Export:** No seu HTML, dentro da section.card de configurações, adicione um botão:
+   ```html
+   <button class="btn" onclick="exportCurrentArch()">Exportar Arquétipo</button>
+   
+   ```
+Dessa forma, você cria um fluxo onde o estado da voz é persistente por usuário e portável através do arquivo JSON exportado. Se precisar que a seção de *playback* reaja dinamicamente ao salvar (ex: atualizar o avatar ou as cores), certifique-se de disparar um evento customizado (window.dispatchEvent) após o setItem no localStorage.
