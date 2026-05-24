@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>motor 78K ·</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
+
+<link rel="apple-touch-icon" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/icon-192.png">
+
+  
+<link rel="manifest" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/manifest.json">
+
+ <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/main-0-i1.css">
+ <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/motor-369.css">
+
+    <style>
+    /* ==========================================================
+       1) BASE & LAYOUT (KOBLLUX CORE)
+       ========================================================== */
+    :root {
+      --nebula-card-bg-strong: radial-gradient(circle at 0 0, rgba(255,119,233,0.22), transparent 55%),
+                                radial-gradient(circle at 100% 100%, rgba(93,242,255,0.16), transparent 55%),
+                                rgba(4, 6, 20, 0.98);
+      --nebula-card-border-strong: rgba(255,255,255,0.20);
+      --nebula-card-shadow-strong: 0 24px 80px rgba(0,0,0,0.95);
+      --nebula-card-blur: 18px;
+      --nebula-chip-bg: linear-gradient(120deg, rgba(255,119,233,0.18), rgba(93,242,255,0.16));
+      --nebula-chip-ink: #fdf7ff;
+      --nebula-accent-cyan: #5df2ff;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+    }
+
+    body {
+      background: #02040c;
+      color: #e0e0e0;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding:0px;
+      overflow-y: auto;
+    }
+
+    .container { max-width: 980px; margin: 0 auto; padding-bottom: 100px; }
+
+    /* ==========================================================
+       2) NEBULA GLASSMORPHISM PATCH[span_3](start_span)[span_3](end_span)
+       ========================================================== */
+    .fusion-card, .stack-card, .callout {
+      background: var(--nebula-card-bg-strong);
+      border: 1px solid var(--nebula-card-border-strong);
+      box-shadow: var(--nebula-card-shadow-strong);
+      backdrop-filter: blur(var(--nebula-card-blur));
+      border-radius: var(--radius-lg);
+      transition: all 0.2s ease;
+    }
+
+    .stack-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.35); }
+
+    .header-78k { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .logo-orb { width: 40px; height: 40px; background: var(--nebula-accent-cyan); border-radius: 50%; box-shadow: 0 0 20px var(--nebula-accent-cyan); }
+    
+    .title-block h1 { margin: 0; font-family: 'Montserrat', sans-serif; font-size: 1.5rem; letter-spacing: 2px; }
+    .title-block p { margin: 0; font-size: 0.8rem; opacity: 0.6; }
+
+    textarea {
+      width: 100%; min-height: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; padding: 15px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; box-sizing: border-box;
+    }
+
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; }
+    
+    .engine-btn {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: 0.2s;
+    }
+    .engine-btn.is-active { background: var(--nebula-accent-cyan); color: #000; font-weight: bold; }
+
+    .chip { 
+      background: var(--nebula-chip-bg); padding: 4px 12px; border-radius: 999px; 
+      font-size: 0.7rem; border: 1px solid rgba(255,255,255,0.2); color: var(--nebula-chip-ink);
+    }
+
+    .btn-generate {
+      width: 100%; padding: 15px; background: var(--nebula-accent-cyan); border: none;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg); font-weight: 800; text-transform: uppercase; cursor: pointer;
+    }
+
+    /* ACORDEÃO */
+    .collapsible-body { overflow: hidden; transition: height 0.3s ease-out; }
+    .is-collapsed .collapsible-body { height: 0 !important; }
+
+    /* HUD */
+    .symbol-bar {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(4,6,20,0.9); padding: 10px 20px; border-radius: 50px;
+      display: flex; gap: 15px; align-items: center; border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px); z-index: 1000;
+    }
+    .symbol-btn { background: none; border: none; color: #fff; cursor: pointer; opacity: 0.7; transition: 0.2s; }
+    .symbol-btn:hover { opacity: 1; transform: scale(1.1); }
+
+    .toast {
+      position: fixed; top: 20px; right: 20px; background: var(--nebula-card-bg-strong);
+      border: 1px solid var(--nebula-accent-cyan); padding: 12px 20px; border-radius: 10px; z-index: 2000;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  </style>
+
+  
+
+</head>
+<body data-arch="kodux">
+
+  <div class="container">
+    <main class="fusion-card accordion is-open" id="mainHeroCard">
+      <div class="header-78k accordion-header">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <div class="logo-orb"></div>
+          <div class="title-block">
+            <h1>Motor 78K</h1>
+            <p>Kobllux Matrix Densa · Nebula Pro</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="collapsible-body">
+        <div style="padding: 20px;">
+          <textarea id="inputText" placeholder="Insira o texto original aqui..."></textarea>
+        </div>
+        
+        <div class="controls-grid">
+          <div>
+            <label style="font-size: 0.7rem; opacity: 0.6; display: block; margin-bottom: 8px;">ARQUÉTIPO INICIAL</label>
+            <select id="startArch" class="engine-btn" style="width: 100%;">
+              <option value="atlas">Atlas</option><option value="nova">Nova</option>
+              <option value="kaos">Kaos</option><option value="kodux" selected>Kodux</option>
+              <option value="lumine">Lumine</option><option value="kobllux">Kobllux</option>
+              <option value="user" id="diUserOption">Usuário</option>
+            </select>
+          </div>
+          
+          <div style="display: flex; align-items: center;">
+            <input type="checkbox" id="cycleMode" checked>
+            <label for="cycleMode" style="font-size: 0.8rem; margin-left: 8px;">Ciclagem de Motor</label>
+          </div>
+        </div>
+
+        <div style="padding: 0 20px 20px 20px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+            <div class="btn-group">
+                <button type="button" class="engine-btn" data-engine="1">⚪ Neutro</button>
+                <button type="button" class="engine-btn" data-engine="3">➕3</button>
+                <button type="button" class="engine-btn" data-engine="6">➕6</button>
+                <button type="button" class="engine-btn" data-engine="9">➕9</button>
+            </div>
+            <button type="button" class="engine-btn" id="reverseToggle">Reverse: OFF</button>
+            <button type="button" class="engine-btn" id="cycle3697">3-6-9-7: OFF</button>
+          </div>
+        </div>
+
+        <button class="btn-generate" id="genBtn">Integrar Fractais</button>
+      </div>
+    </main>
+
+    <div id="outputContainer" style="margin-top: 30px;">
+      <div style="text-align: center; opacity: 0.5; padding: 40px;">Aguardando inserção de dados...</div>
+    </div>
+  </div>
+
+  <div class="symbol-bar" id="hudBar">
+    <button class="symbol-btn" id="copyBtn" title="Copiar">📋</button>
+    <button class="symbol-btn" id="clearBtn" title="Limpar">🗑️</button>
+    <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+    <div id="hudStatus" style="font-size: 0.7rem; font-family: 'JetBrains Mono'; color: var(--nebula-accent-cyan);">78K-READY</div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script>
+    /**
+     * 1) MOTOR 3·6·9[span_4](start_span)[span_4](end_span)
+     */
+    const KoblluxEngine = {
+        state: {
+            archetypes: ["atlas", "nova", "vitalis", "pulse", "kaos", "kodux", "lumine", "aion", "kobllux", "artemis", "serena", "genus", "solus", "rhea", "uno", "dual", "trinity", "infodose", "horus", "bllue"],
+            step: parseInt(localStorage.getItem('kobllux_engine_step') || '1', 10),
+            reverse: localStorage.getItem('kobllux_reverse_mode') === 'true',
+            jump: 0,
+            use3697: localStorage.getItem('kobllux_cycle_3697') === 'true'
+        },
+        getSequence(startArch, length) {
+            const total = this.state.archetypes.length;
+            let currentIndex = this.state.archetypes.indexOf(startArch);
+            if (currentIndex === -1) currentIndex = 0;
+            
+            const sequence = [];
+            const pattern = this.state.use3697 ? [3, 6, 9, 7] : [this.state.step];
+
+            for (let i = 0; i < length; i++) {
+                sequence.push(this.state.archetypes[currentIndex]);
+                let step = pattern[i % pattern.length];
+                if (this.state.reverse) step *= -1;
+                currentIndex = (currentIndex + step) % total;
+                if (currentIndex < 0) currentIndex += total;
+            }
+            return sequence;
+        },
+        save() {
+            localStorage.setItem('kobllux_engine_step', this.state.step);
+            localStorage.setItem('kobllux_reverse_mode', this.state.reverse);
+            localStorage.setItem('kobllux_cycle_3697', this.state.use3697);
+        }
+    };
+
+    /**
+     * 2) RENDERIZADOR NEBULA[span_5](start_span)[span_5](end_span)
+     */
+    const KoblluxRenderer = {
+        render() {
+            const text = document.getElementById('inputText').value.trim();
+            if (!text) return;
+            
+            const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [text];
+            const startArch = document.getElementById('startArch').value;
+            const sequence = KoblluxEngine.getSequence(startArch, sentences.length);
+            
+            const container = document.getElementById('outputContainer');
+            container.innerHTML = '';
+
+            sentences.forEach((s, i) => {
+                const arch = sequence[i];
+                const card = document.createElement('div');
+                card.className = 'stack-card callout info';
+                card.style.padding = '20px';
+                card.style.marginBottom = '15px';
+                card.innerHTML = `
+                  <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span class="chip"><strong>${arch.toUpperCase()}</strong></span>
+                    <span style="font-size:0.6rem; opacity:0.4;">FRACTAL Δ-${i}</span>
+                  </div>
+                  <div style="line-height:1.6;">${s.trim()}</div>
+                `;
+                container.appendChild(card);
+            });
+            
+            document.getElementById('hudStatus').textContent = `Δ-${sentences.length} ACTIVE`;
+            showToast("Sincronização Fractal Concluída");
+        }
+    };
+
+    /**
+     * 3) UI & EVENTOS
+     */
+    function showToast(msg) {
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.textContent = msg;
+        document.getElementById('toast-container').appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    // Toggle Acordeão
+    document.querySelectorAll('.accordion-header').forEach(h => {
+        h.addEventListener('click', () => {
+            h.parentElement.classList.toggle('is-collapsed');
+        });
+    });
+
+    // Controles do Motor
+    document.querySelectorAll('[data-engine]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            KoblluxEngine.state.step = parseInt(btn.dataset.engine);
+            document.querySelectorAll('[data-engine]').forEach(b => b.classList.remove('is-active'));
+            btn.classList.add('is-active');
+            KoblluxEngine.save();
+        });
+    });
+
+    document.getElementById('reverseToggle').addEventListener('click', (e) => {
+        KoblluxEngine.state.reverse = !KoblluxEngine.state.reverse;
+        e.target.textContent = `Reverse: ${KoblluxEngine.state.reverse ? 'ON' : 'OFF'}`;
+        KoblluxEngine.save();
+    });
+
+    document.getElementById('cycle3697').addEventListener('click', (e) => {
+        KoblluxEngine.state.use3697 = !KoblluxEngine.state.use3697;
+        e.target.textContent = `3-6-9-7: ${KoblluxEngine.state.use3697 ? 'ON' : 'OFF'}`;
+        KoblluxEngine.save();
+    });
+
+    document.getElementById('genBtn').addEventListener('click', () => KoblluxRenderer.render());
+    document.getElementById('clearBtn').addEventListener('click', () => {
+        document.getElementById('inputText').value = '';
+        document.getElementById('outputContainer').innerHTML = '';
+        showToast("Matrix Limpa");
+    });
+
+    // Inicialização do Nome de Usuário
+    const user = localStorage.getItem("di_userName") || "User";
+    const opt = document.getElementById("diUserOption");
+    opt.textContent = `${user} (Núcleo)`;
+
+  </script>
+
+
+</body>
+</html>
