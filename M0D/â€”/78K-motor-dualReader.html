@@ -1,0 +1,2953 @@
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Nebula Pro — Listen to PDFs</title>
+
+<meta name="theme-color" content="#0f0f11">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="manifest" href="./manifest.json">
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+</style>
+
+<style>
+  :root{
+    --bg1:#2a1b62;
+    --bg2:#0e2c4d;
+    --accent1:#7a57ff;
+    --accent2:#5cc6ff;
+    --card: rgba(255,255,255,0.06);
+    --stroke: rgba(255,255,255,0.12);
+    --muted: rgba(255,255,255,0.75);
+    --soft:  rgba(255,255,255,0.55);
+    --radius:16px;
+    --grad_a: #00d8d8;
+    --grad_b: #d800d8;
+    --bg: #000;
+
+    --lib-drawer-w: min(92vw, 430px);
+    --lib-handle-w: 46px;
+    --lib-drawer-top: 92px;
+    --lib-drawer-bottom: calc(env(safe-area-inset-bottom) + 96px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html,body{
+    width: 100%;
+    height:100%;
+    margin:0;
+    padding:0 !important;
+    color:#fff;
+    font-family: Inter, ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial;
+    background:
+      radial-gradient(circle at 25% 25%, color-mix(in srgb, var(--grad_a) 65%, transparent), transparent 70%),
+      radial-gradient(circle at 75% 75%, color-mix(in srgb, var(--grad_b) 55%, transparent), transparent 70%),
+      var(--bg);
+    background-attachment: fixed;
+    background-size: cover;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body.playing::before{
+    content:"";
+    position:fixed;
+    inset:-20% -20% auto -20%;
+    height:140vh;
+    z-index:-1;
+    pointer-events:none;
+    background:
+      radial-gradient(40% 30% at 20% 20%, #7a57ff55, transparent 60%),
+      radial-gradient(35% 35% at 80% 0%,  #5cc6ff44, transparent 70%),
+      radial-gradient(40% 40% at 50% 80%, #c15bff33, transparent 70%);
+    filter: blur(60px);
+    animation: floatAurora 7s ease-in-out infinite alternate;
+  }
+
+  @keyframes floatAurora{
+    0%{ transform:translateY(-10px) scale(1); opacity:.9 }
+    100%{ transform:translateY(20px) scale(1.03); opacity:1 }
+  }
+
+  .wrap {
+    min-height: 100dvh;
+    padding: 0;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 140px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100vw;
+    max-width: 100%;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 16px 0;
+  }
+
+  section.card { margin: 0 16px; }
+
+  .orb{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #8cf, #85f 60%, #8231ff 100%);
+    box-shadow: 0 0 22px #7bd4ff66;
+  }
+
+  .brand{
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:0.2px
+  }
+
+  .listen{
+    margin-left:auto;
+    border:none;
+    color:#fff;
+    font-weight:700;
+    font-size:16px;
+    padding:12px 20px;
+    border-radius:14px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    box-shadow: 0 10px 24px rgba(0,0,0,.25), inset 0 0 0 1px #ffffff20;
+    cursor:pointer;
+    transition:transform .06s;
+  }
+
+  .listen:active{transform:scale(.98)}
+
+  .row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px
+  }
+
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.18));
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius);
+    padding:14px;
+    box-shadow: 0 8px 28px rgba(0,0,0,.35);
+  }
+
+  h2{
+    margin:0;
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:0.2px
+  }
+
+  .usage{font-size:14px; opacity:.9}
+  .muted{color:var(--muted); font-size:13px}
+
+  .items{
+    display:grid;
+    gap:10px;
+    margin-top:12px
+  }
+
+  .item{
+    background: rgba(255,255,255,0.06);
+    border:1px solid var(--stroke);
+    border-radius:14px;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .pdf-ico{
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(180deg,#ffffffcc,#ffffff99);
+    color:#222;
+    font-weight:900;
+    font-size:12px;
+    box-shadow:inset 0 0 0 1px #00000014;
+    flex-shrink:0;
+  }
+
+  .meta{flex:1; min-width:0}
+
+  .name{
+    font-weight:300;
+    word-break:break-word;
+    font-size:12px;
+    overflow:hidden;
+    text-overflow:ellipsis
+  }
+
+  .size{
+    font-size:12px;
+    color:var(--soft);
+    margin-top:2px
+  }
+
+  .thinbar{
+    height:6px;
+    background:rgba(255,255,255,.12);
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:8px
+  }
+
+  .thinbar > i{
+    display:block;
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, #fff, #ffffff80)
+  }
+
+  .icon-btn{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    border:1px solid #ffffff22;
+    background: linear-gradient(180deg, var(--accent1), var(--accent2));
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,.3);
+    flex-shrink:0;
+  }
+
+  .icon-btn svg{width:16px;height:16px; fill:#fff}
+  .ghost{background:transparent; border-color:#ffffff33}
+  .danger{background:#ff586699; border-color:#ff9aa3cc}
+
+  .io-row{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    margin-top:12px;
+    flex-wrap:wrap
+  }
+
+  .btn{
+    border:none;
+    color:#0b0b12;
+    background:#fff;
+    font-weight:800;
+    letter-spacing:.2px;
+    padding:12px 14px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:13px;
+    flex:1;
+    text-align:center;
+    white-space:nowrap;
+  }
+
+  .btn:active{transform:scale(.98)}
+
+  .bar{
+    height:10px;
+    background:rgba(255,255,255,.12);
+    border-radius:10px;
+    overflow:hidden
+  }
+
+  .bar > i{
+    display:block;
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--accent1), var(--accent2))
+  }
+
+  input[type=file]{display:none}
+
+  .settings{display:grid; gap:10px}
+
+  .field{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap
+  }
+
+  .select, .range{
+    background: rgba(255,255,255,.08);
+    border:1px solid #ffffff20;
+    color:#fff;
+    padding:10px 12px;
+    border-radius:12px;
+    font-weight:600;
+    flex:1;
+  }
+
+  .range{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:10px
+  }
+
+  input[type=range]{
+    -webkit-appearance:none;
+    width:100%;
+    background: rgba(255,255,255,0.15);
+    height: 6px;
+    border-radius: 6px;
+    outline:none;
+  }
+
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width: 16px;
+    height: 16px;
+    border-radius:50%;
+    background:#fff;
+    cursor:pointer;
+    box-shadow:0 0 10px rgba(0,0,0,0.5);
+  }
+
+  .pill{
+    font-size:12px;
+    background:#ffffff22;
+    padding:4px 8px;
+    border-radius:999px
+  }
+
+  .bm-list{
+    display:grid;
+    gap:8px;
+    margin-top:10px
+  }
+
+  .bm-item{
+    background: rgba(255,255,255,.06);
+    border:1px solid #ffffff22;
+    border-radius:12px;
+    padding:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap
+  }
+
+  .bm-text{
+    flex:1 1 100%;
+    min-width:0
+  }
+
+  .bm-text strong{
+    font-size:13px;
+    display:block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis
+  }
+
+  .bm-text small{color:var(--muted)}
+  .bm-item .btn{ flex: unset; padding: 8px 12px; }
+
+  .player{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    padding:0 12px calc(env(safe-area-inset-bottom) + 12px);
+    z-index: 40;
+  }
+
+  .player-wrap{
+    background: rgba(15, 15, 20, 0.85);
+    backdrop-filter: blur(16px);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:20px;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap: wrap;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    position: relative;
+  }
+
+  .player-top {
+    display:flex;
+    align-items:center;
+    width:100%;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  .pp{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:1px solid #ffffff22;
+    background:linear-gradient(180deg, var(--accent1), var(--accent2));
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+
+  .pp.pulse{ animation: pulse 1.2s ease-in-out infinite; }
+
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(122,87,255,.55) }
+    100%{ box-shadow:0 0 0 20px rgba(122,87,255,0) }
+  }
+
+  .pp svg{width:18px;height:18px; fill:#fff}
+  .track{flex:1; overflow:hidden;}
+  .now{
+    font-size:13px;
+    font-weight:600;
+    color:#fff;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis
+  }
+
+  .player-slider-wrap{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:4px
+  }
+
+  .time-label{
+    font-size:11px;
+    font-weight:600;
+    color:var(--muted);
+    min-width:35px;
+    text-align:center;
+  }
+
+  #progressSlider{
+    flex:1;
+    max-width:100%;
+    height:4px;
+  }
+
+  #progressSlider::-webkit-slider-thumb{
+    width:14px;
+    height:14px;
+    background:var(--accent2);
+  }
+
+  .view-mini{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    border:1px solid #ffffff33;
+    background:transparent;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+
+  .view-mini svg{width:18px;height:18px;fill:#fff}
+
+  .overlay{
+    position:fixed;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    z-index:50;
+    background: radial-gradient(120% 120% at 50% 0%, rgba(0,0,0,.75), rgba(0,0,0,.95));
+    backdrop-filter: blur(8px);
+  }
+
+  .overlay.show{ display:flex; }
+
+  .ov-wrap{
+    width:100%;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding: calc(env(safe-area-inset-top) + 12px) 12px 12px;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+
+  .ov-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-shrink:0;
+  }
+
+  .ov-title{
+    font-weight:800;
+    font-size:18px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis
+  }
+
+  .ov-close{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    border:1px solid #ffffff33;
+    background:transparent;
+    color:#fff;
+    font-weight:900;
+    cursor:pointer;
+    font-size:18px;
+    display:grid;
+    place-items:center;
+    flex-shrink:0;
+  }
+
+  .ov-topbar{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+    flex-shrink:0;
+  }
+
+  .ov-topbar .chip{
+    background:#ffffff18;
+    border:1px solid #ffffff22;
+    color:#fff;
+    padding:8px 10px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex:1 1 auto;
+    justify-content:center;
+    min-width:120px;
+  }
+
+  .ov-stage{
+    position:relative;
+    flex:1;
+    min-height:40vh;
+    background:#05050a;
+    border-radius:12px;
+    overflow:auto;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:10px;
+  }
+
+  #ovCanvas{
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+    box-shadow:0 6px 22px rgba(0,0,0,.5);
+    display:block;
+    margin:0 auto;
+  }
+
+  #ovSkel, #ovTrail, #ovHl{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    pointer-events:none;
+    max-width:100%;
+    height:auto;
+  }
+
+  #ovCont{ display:none; width:100%; }
+
+  .pageWrap{
+    position:relative;
+    margin:0 auto 14px;
+    width:100%;
+    max-width:900px;
+    display:flex;
+    justify-content:center
+  }
+
+  .pageWrap canvas{
+    display:block;
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+    box-shadow:0 6px 22px rgba(0,0,0,.45)
+  }
+
+  .skelLayer, .trailLayer, .hlLayer{
+    position:absolute;
+    pointer-events:none;
+  }
+
+  .ov-btn{
+    border:1px solid #ffffff33;
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    padding:8px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:13px;
+    flex-shrink:0;
+    white-space:nowrap;
+  }
+
+  .ov-page{
+    font-weight:700;
+    font-size:14px;
+    white-space:nowrap;
+  }
+
+  .ov-zoom{
+    accent-color:#fff;
+    max-width:80px !important;
+  }
+
+  #ovTimeline{
+    width:100%;
+    height:36px;
+    background:#ffffff0b;
+    border:1px solid #ffffff22;
+    border-radius:10px;
+    flex-shrink:0;
+  }
+
+  #ovSnippet{
+    background:#ffffff0f;
+    border:1px solid #ffffff22;
+    border-radius:12px;
+    padding:10px;
+    font-size:13px;
+    color:#fff;
+    line-height:1.4;
+    flex-shrink:0;
+    max-height:80px;
+    overflow-y:auto;
+  }
+
+  #ovSnippet mark{
+    background:#ffd54d;
+    color:#1b1b1b;
+    padding:0 3px;
+    border-radius:4px
+  }
+
+  #libCard{
+    position: fixed;
+    top: var(--lib-drawer-top);
+    right: 0;
+    bottom: var(--lib-drawer-bottom);
+    width: var(--lib-drawer-w);
+    z-index: 46;
+    margin: 0 !important;
+    border-radius: 18px 0 0 18px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.45);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,.14);
+    overflow: hidden;
+    transform: translateX(calc(100% - var(--lib-handle-w)));
+    transition: transform .32s cubic-bezier(.2,.85,.2,1), box-shadow .32s ease;
+    will-change: transform;
+  }
+
+  #libCard.is-open{
+    transform: translateX(0);
+    box-shadow: 0 24px 70px rgba(0,0,0,.58);
+  }
+
+  #libCard .lib-drawer-handle{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: var(--lib-handle-w);
+    height: 132px;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: 0 16px 16px 0;
+    background: linear-gradient(180deg, rgba(122,87,255,.95), rgba(92,198,255,.95));
+    color: #fff;
+    font-weight: 900;
+    letter-spacing: .08em;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    box-shadow: 8px 0 20px rgba(0,0,0,.22);
+    z-index: 3;
+  }
+
+  #libCard .lib-drawer-handle span{
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  #libCard.is-open .lib-drawer-handle{
+    background: rgba(255,255,255,.12);
+    border-right: 1px solid rgba(255,255,255,.12);
+  }
+
+  #libCard #items{
+    margin-top: 0;
+    padding: 12px 10px 14px calc(var(--lib-handle-w) + 10px);
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  #libCard #items::-webkit-scrollbar{
+    height: 7px;
+  }
+
+  #libCard #items::-webkit-scrollbar-thumb{
+    background: rgba(255,255,255,.25);
+    border-radius: 999px;
+  }
+
+  #libCard .item{
+    flex: 0 0 84%;
+    min-width: 84%;
+    scroll-snap-align: start;
+    align-items: center;
+  }
+
+  #libCard .meta{ min-width:0; }
+
+  #libCard .name{
+    font-size: 13px;
+    line-height: 1.15;
+    word-break: break-word;
+  }
+
+  #libCard .size{ font-size: 11px; }
+  #libCard .thinbar{ margin-top: 8px; }
+  #libCard .icon-btn{ width: 34px; height: 34px; }
+  #libCard .pdf-ico{ width: 42px; height: 42px; font-size: 11px; }
+
+  .lib-tabs{
+    display:flex;
+    gap:8px;
+    margin: 8px 0 10px;
+    padding-left: calc(var(--lib-handle-w) + 10px);
+  }
+
+  .lib-tab{
+    border:1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.08);
+    color:#fff;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .lib-tab.active{
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  }
+
+  #libBookmarksPane{
+    display:none;
+    padding: 10px 10px 14px calc(var(--lib-handle-w) + 10px);
+    overflow-y:auto;
+    max-height: 100%;
+  }
+
+  #libCard.show-bookmarks #items{
+    display:none !important;
+  }
+
+  #libCard.show-bookmarks #libBookmarksPane{
+    display:block;
+  }
+
+  #libBookmarksPane .bm-list{
+    margin-top: 0;
+  }
+
+  #libBookmarksPane .bm-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom: 10px;
+  }
+
+  #libBookmarksPane .bm-head h3{
+    margin:0;
+    font-size: 14px;
+  }
+
+  #libBookmarksPane .bm-head .btn{
+    flex:0 0 auto;
+    padding: 8px 12px;
+  }
+
+  #playbackCard,
+  #bookmarksCard{
+    display:none !important;
+  }
+
+  .player-sheet{
+    width: 100%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(8px);
+    transition: max-height .28s ease, opacity .2s ease, transform .28s ease;
+    margin-top: 0;
+    border-top: 1px solid transparent;
+  }
+
+  .player-sheet.open{
+    max-height: 280px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top-color: rgba(255,255,255,.12);
+  }
+
+  .player-sheet-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    color:#fff;
+  }
+
+  .sheet-close{
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.08);
+    color:#fff;
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .player-sheet .settings{
+    display:grid;
+    gap:10px;
+  }
+
+  .player-sheet .field{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  .player-sheet .select,
+  .player-sheet .range{
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
+  @media (max-width: 560px){
+    :root{
+      --lib-drawer-w: min(96vw, 420px);
+      --lib-drawer-top: 86px;
+      --lib-drawer-bottom: calc(env(safe-area-inset-bottom) + 88px);
+      --lib-handle-w: 42px;
+    }
+
+    #libCard .item{
+      flex-basis: 88%;
+      min-width: 88%;
+    }
+  }
+
+  @media(min-width:900px){
+    .wrap{max-width:1000px; margin:0 auto;}
+    .ov-wrap{max-width:1100px; margin:0 auto; padding-top:20px;}
+  }
+</style>
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=JetBrains+Mono:wght@400;700&amp;family=Montserrat:wght@800;900&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/main-v2.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/main-0-1.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/motor-369.css"><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/unif.css"><style>
+body{overflow-y:auto}
+
+</style>
+
+  <div class="container">
+    <!-- Bloco Principal (Agora é um Acordeão) -->
+    <main class="fusion-card accordion is-open" id="mainHeroCard">
+      <!-- HEADER ACORDEÃO -->
+      <div class="header-78k accordion-header">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <div class="logo-orb"></div>
+          <div class="title-block">
+            <h1>Motor 78K</h1>
+            <p>Kobllux Matrix Densa · VEEB</p>
+          </div>
+        </div>
+        <!-- Indicador será injetado pelo JS ou pode ser hardcoded. Deixaremos o JS injetar. -->
+      </div>
+      
+      <!-- BODY ACORDEÃO -->
+      <div class="collapsible-body">
+        <div class="input-group">
+          <textarea id="inputText" placeholder="Insira o texto original aqui. O motor usará a pontuação (. ! ?) para segmentar os fractais..."></textarea>
+        </div>
+        
+        <div class="controls-grid">
+          <div class="input-group">
+            <label>Frequência Inicial (Arquétipo)</label>
+            <select id="startArch">
+              <option value="atlas">Atlas (Ordem/Estrutura)</option>
+<option value="nova">Nova (Energia/Inovação)</option>
+<option value="vitalis">Vitalis (Crescimento/Vida)</option>
+<option value="pulse">Pulse (Ritmo/Ação)</option>
+<option value="kaos">Kaos (Desconstrução)</option>
+<option value="kodux" selected="">Kodux (Síntese/Mestre)</option>
+<option value="lumine">Lumine (Clareza/Luz)</option>
+<option value="aion">Aion (Tempo/Eternidade)</option>
+<option value="kobllux">Kobllux (Origem/Núcleo)</option>
+<option value="artemis">Artemis (Foco/Estratégia)</option>
+<option value="serena">Serena (Equilíbrio/Calma)</option>
+<option value="genus">Genus (Lógica/Inteligência)</option>
+<option value="solus">Solus (Isolamento/Profundidade)</option>
+<option value="rhea">Rhea (Fluxo/Natureza)</option>
+<option value="uno">Uno (Unidade/Essência)</option>
+<option value="dual">Dual (Polaridade/Espelho)</option>
+<option value="trinity">Trinity (Integração/Totalidade)</option>
+<option value="infodose">Infodose (Síntese/Rápida)</option>
+<option value="horus">Horus (Visão/Consciência)</option>
+<option value="bllue">Bllue (Expansão/Digital)</option>
+<option value="user" id="diUserOption"></option>            </select>
+          </div>
+          
+          <label class="checkbox-wrapper" title="Alterna os arquétipos sequencialmente para cada parágrafo gerado">
+            <input type="checkbox" id="cycleMode" checked="">
+            <span>Modo Roda Viva (Ciclagem)</span>
+          </label>
+        </div>
+<!-- PAINEL MOTOR 3·6·9 -->
+<div class="engine-controls accordion is-collapsed">
+
+  <div class="accordion-header">
+    <div class="arch-tag">
+      ⚙️ Motor 3·6·9 ·
+    </div>
+  </div>
+
+  <div class="collapsible-body">
+    <div class="engine-row">
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label>⚡ Motor</label>
+        <div class="btn-group">
+          <!-- NOVO BOTÃO NEUTRO + ÍCONES EM TODOS -->
+          <button type="button" class="engine-btn" data-engine="1" title="Estado Neutro - Sem avanço de arquétipos">⚪ Neutro</button>
+          <button type="button" class="engine-btn" data-engine="3" title="+3">➕3</button>
+          <button type="button" class="engine-btn" data-engine="6" title="+6">➕6</button>
+          <button type="button" class="engine-btn" data-engine="9" title="+9">➕9</button>
+        </div>
+      </div>
+
+      <!-- o resto do engine-row fica IGUAL (Direção, Salto, Ciclo Especial) -->
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label>🔄 Direção</label>
+        <button type="button" class="engine-btn" id="reverseToggle">Reverse: OFF</button>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label>⤴️ Salto</label>
+        <div class="btn-group">
+          <button type="button" class="engine-btn" data-jump="0">0</button>
+          <button type="button" class="engine-btn" data-jump="3">+3</button>
+          <button type="button" class="engine-btn" data-jump="6">+6</button>
+          <button type="button" class="engine-btn" data-jump="9">+9</button>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label>🌀 Ciclo Especial</label>
+        <button type="button" class="engine-btn" id="cycle3697">3-6-9-7: OFF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <button class="btn-generate" id="genBtn">Integrar Fractais de Texto</button>
+      </div>
+    </main>
+
+    <!-- Área de Saída (.content) -->
+    <div id="outputContainer" class="output-area content">
+      <div class="empty-state">Aguardando inserção de dados. O processamento ocorrerá na frequência selecionada.</div>
+    </div>
+
+    <div class="status-bar" id="statusBar">Sistema em repouso · Matrix Pronta</div>
+  </div>
+
+  <!-- HUD Magnético -->
+  <div class="symbol-bar" id="hudBar">
+    <div class="drag-handle" id="hudDrag" title="Arrastar HUD"></div>
+    <button class="symbol-btn" id="copyBtn" title="Copiar Texto Processado">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+    </button>
+    <button class="symbol-btn" id="clearBtn" title="Limpar Tudo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+    </button>
+    <button class="symbol-btn" id="downloadBtn" title="Transferir Documento">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    </button>
+    <div class="hud-info" id="hudStatus">78K-ID</div>
+  </div>
+
+  <div id="toast-container"></div>
+
+
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/js/modules/inline-1-369.js"></script>
+
+
+<style>
+body{overflow-y:auto}
+
+</style>
+
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/unif.js"></script></head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="orb" aria-hidden="true"></div>
+      <div class="brand">Nebula Pro</div>
+      <button id="listenBtn" class="listen">Listen</button>
+    </div>
+
+    <section class="card" id="libCard">
+      <div class="row">
+        <h2>Library</h2>
+        <div class="usage"><span id="usageVal">0 MB</span></div>
+      </div>
+
+      <div id="items" class="items">
+        <div class="item">
+          <div class="pdf-ico">PDF</div>
+          <div class="meta">
+            <div class="name">Nenhum PDF salvo</div>
+            <div class="size">Use Import para adicionar</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px" class="row">
+        <div class="muted">IndexedDB</div>
+        <div class="muted" id="countInfo">0 item(s)</div>
+      </div>
+
+      <div style="margin-top:8px">
+        <div class="muted">Import</div>
+        <div class="bar"><i id="importBar"></i></div>
+        <div class="muted" id="importStatus" style="margin-top:6px">Pronto</div>
+      </div>
+
+      <div style="margin-top:8px">
+        <div class="muted">Export</div>
+        <div class="bar"><i id="exportBar"></i></div>
+        <div class="muted" id="exportStatus" style="margin-top:6px">Pronto</div>
+      </div>
+
+      <div class="io-row">
+        <button id="importBtn" class="btn">Import</button>
+        <button id="exportBtn" class="btn" style="background:linear-gradient(90deg,#d9e9ff,#ffffff);">Export</button>
+        <button id="clearLibBtn" class="btn" style="background:#ffe3e6; color:#7a1a25">Clear Lib</button>
+        <button id="clearUiBtn" class="btn" style="background:#efe6ff; color:#3b247b" title="Apaga configurações">Clear UI</button>
+        <input id="filePicker" type="file" accept=".pdf,.zip,.txt,.md" multiple="">
+      </div>
+
+      <div id="libBookmarksPane"></div>
+    </section>
+
+    <section class="card" id="playbackCard">
+      <div class="row"><h2>Playback</h2><span class="pill" id="voiceCount">—</span></div>
+      <div class="settings">
+        <div class="field">
+          <label class="muted">Voice</label>
+          <select id="voiceSelect" class="select"></select>
+          <button id="testVoice" class="btn" style="flex:0 0 auto">Test</button>
+        </div>
+        <div class="field">
+          <label class="muted">Speed</label>
+          <div class="range">
+            <input id="rateRange" type="range" min="0.7" max="1.8" step="0.1" value="1.0">
+            <span id="rateOut" class="pill">1.0×</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="bookmarksCard">
+      <div class="row">
+        <h2>Bookmarks</h2>
+        <div style="display:flex; gap:8px; align-items:center">
+          <button id="clearBmBtn" class="btn" style="background:#ffe3e6; color:#7a1a25; flex:0 0 auto; padding:8px 12px">Clear</button>
+        </div>
+      </div>
+      <div id="bmList" class="bm-list">
+        <div class="muted">Sem marcadores ainda. Use o botão ⭐ no viewer.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="player">
+    <div class="player-wrap">
+      <div class="player-top">
+        <button id="ppBtn" class="pp" title="Play/Pause">
+          <svg viewBox="0 0 24 24" id="ppIcon"><path d="M8 5v14l11-7z"></path></svg>
+        </button>
+
+        <div class="track">
+          <div id="nowPlaying" class="now">Nada tocando</div>
+        </div>
+
+        <button id="libQuickBtn" class="view-mini" title="Library">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg>
+        </button>
+
+        <button id="bmQuickBtn" class="view-mini" title="Bookmarks">
+          <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>
+        </button>
+
+        <button id="moreBtn" class="view-mini" title="Configurações">
+          <svg viewBox="0 0 24 24"><path d="M12 7a2 2 0 110 4 2 2 0 010-4zm0 6a2 2 0 110 4 2 2 0 010-4zm0-12a2 2 0 110 4 2 2 0 010-4z"></path></svg>
+        </button>
+
+        <button id="viewBtn" class="view-mini" title="Ver páginas">
+          <svg viewBox="0 0 24 24"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 110-10 5 5 0 010 10z"></path></svg>
+        </button>
+      </div>
+
+      <div id="playerSheet" class="player-sheet">
+        <div class="player-sheet-head">
+          <span>Playback</span>
+          <button id="playerSheetClose" class="sheet-close">×</button>
+        </div>
+      </div>
+
+      <div class="player-slider-wrap">
+        <span class="time-label" id="timeCur">0%</span>
+        <input type="range" id="progressSlider" min="0" max="100" value="0" step="0.1">
+        <span class="time-label" id="timeTotal">100%</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="ov-wrap">
+      <div class="ov-head">
+        <div class="ov-title" id="ovTitle">–</div>
+        <button id="ovClose" class="ov-close" title="Fechar">×</button>
+      </div>
+
+      <div class="ov-topbar">
+        <div class="chip">
+          <button id="ovPrev" class="ov-btn">Prev</button>
+          <div class="ov-page" id="ovPageInfo">– / –</div>
+          <button id="ovNext" class="ov-btn">Next</button>
+        </div>
+        <div class="chip">
+          <span style="font-size:13px">Zoom</span>
+          <input id="ovZoom" class="ov-zoom" type="range" min="0.8" max="2.0" step="0.1" value="1.2">
+        </div>
+        <div class="chip" style="flex: 1 1 100%;">
+          <input id="searchInput" placeholder="Buscar..." style="background:#00000022;border:1px solid #ffffff33;color:#fff;padding:8px 10px;border-radius:8px; flex:1; min-width:0; outline:none;">
+          <button id="searchBtn" class="ov-btn">Find</button>
+          <button id="searchPrev" class="ov-btn">◀</button>
+          <button id="searchNext" class="ov-btn">▶</button>
+          <span id="searchCount" class="pill">0/0</span>
+          <button id="searchClear" class="ov-btn">Clear</button>
+        </div>
+        <div class="chip">
+          <button id="bmBtn" class="ov-btn">⭐ Bookmark</button>
+          <button id="contBtn" class="ov-btn">Continuous: OFF</button>
+          <button id="karaBtn" class="ov-btn">Karaoke: OFF</button>
+          <button id="skelBtn" class="ov-btn">Skeleton: ON</button>
+        </div>
+        <div class="chip">
+          <button id="trailExportBtn" class="ov-btn">Export Trail</button>
+          <button id="trailImportBtn" class="ov-btn">Import Trail</button>
+          <input id="trailImportInput" type="file" accept="image/png" style="display:none">
+        </div>
+      </div>
+
+      <div class="ov-stage" id="stage">
+        <canvas id="ovCanvas" width="600" height="800"></canvas>
+        <canvas id="ovSkel" width="600" height="800"></canvas>
+        <canvas id="ovTrail" width="600" height="800"></canvas>
+        <canvas id="ovHl" width="600" height="800"></canvas>
+        <div id="ovCont"></div>
+      </div>
+
+      <canvas id="ovTimeline" height="36"></canvas>
+      <div id="ovSnippet" class="muted">—</div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  function loadScript(src){
+    return new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src=src;
+      s.onload=res;
+      s.onerror=()=>rej(new Error('Falha '+src));
+      document.head.appendChild(s);
+    });
+  }
+
+  (async ()=>{
+    await loadScript('https://unpkg.com/pdfjs-dist@3.6.172/build/pdf.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+    await loadScript('https://unpkg.com/tesseract.js@5.0.3/dist/tesseract.min.js');
+    window.pdfjsLib = window['pdfjs-dist/build/pdf'];
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.6.172/build/pdf.worker.min.js';
+    initApp();
+  })();
+
+  let voices = [];
+  const settings = JSON.parse(localStorage.getItem('nebula.settings')||'{"voice":"","rate":1}');
+  let current = { id:null, name:null, type:'pdf', pdfData:null, pdfDoc:null, pages:0, paragraphs:[], idx:0, playing:false };
+  let utter = null;
+  let progressMap = JSON.parse(localStorage.getItem('nebula.progress')||'{}');
+  const ocrCache = {};
+  let searchHits = [];
+  let searchPtr = 0;
+  let contMode = false;
+  let karaMode = false;
+  let skelMode = true;
+  const contMap = {};
+  const pageProgress = {};
+  const timelineCache = {};
+
+  const listenBtn   = document.getElementById('listenBtn');
+  const itemsWrap   = document.getElementById('items');
+  const usageVal    = document.getElementById('usageVal');
+  const countInfo   = document.getElementById('countInfo');
+  const importBar   = document.getElementById('importBar');
+  const exportBar   = document.getElementById('exportBar');
+  const importStatus= document.getElementById('importStatus');
+  const exportStatus= document.getElementById('exportStatus');
+  const importBtn   = document.getElementById('importBtn');
+  const exportBtn   = document.getElementById('exportBtn');
+  const clearLibBtn = document.getElementById('clearLibBtn');
+  const clearUiBtn  = document.getElementById('clearUiBtn');
+  const filePicker  = document.getElementById('filePicker');
+  const ppBtn       = document.getElementById('ppBtn');
+  const ppIcon      = document.getElementById('ppIcon');
+  const nowPlaying  = document.getElementById('nowPlaying');
+  const viewBtn     = document.getElementById('viewBtn');
+
+  const progressSlider = document.getElementById('progressSlider');
+  const timeCur        = document.getElementById('timeCur');
+
+  const voiceSelect = document.getElementById('voiceSelect');
+  const rateRange   = document.getElementById('rateRange');
+  const rateOut     = document.getElementById('rateOut');
+  const voiceCount  = document.getElementById('voiceCount');
+  const testVoice   = document.getElementById('testVoice');
+
+  const bmList      = document.getElementById('bmList');
+  const clearBmBtn  = document.getElementById('clearBmBtn');
+
+  const overlay   = document.getElementById('overlay');
+  const stage     = document.getElementById('stage');
+  const ovCanvas  = document.getElementById('ovCanvas');
+  const ovSkel    = document.getElementById('ovSkel');
+  const ovTrail   = document.getElementById('ovTrail');
+  const ovHl      = document.getElementById('ovHl');
+  const ovTitle   = document.getElementById('ovTitle');
+  const ovClose   = document.getElementById('ovClose');
+  const ovPrev    = document.getElementById('ovPrev');
+  const ovNext    = document.getElementById('ovNext');
+  const ovPageInfo= document.getElementById('ovPageInfo');
+  const ovZoom    = document.getElementById('ovZoom');
+  const ovCtx     = ovCanvas.getContext('2d');
+  const ovSkelCtx = ovSkel.getContext('2d');
+  const ovTrailCtx= ovTrail.getContext('2d');
+  const ovHlCtx   = ovHl.getContext('2d');
+  const ovCont    = document.getElementById('ovCont');
+  const bmBtn     = document.getElementById('bmBtn');
+  const contBtn   = document.getElementById('contBtn');
+  const karaBtn   = document.getElementById('karaBtn');
+  const skelBtn   = document.getElementById('skelBtn');
+  const ovTimeline= document.getElementById('ovTimeline');
+  const ovSnippet = document.getElementById('ovSnippet');
+
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn   = document.getElementById('searchBtn');
+  const searchPrev  = document.getElementById('searchPrev');
+  const searchNext  = document.getElementById('searchNext');
+  const searchClear = document.getElementById('searchClear');
+  const searchCount = document.getElementById('searchCount');
+
+  const trailExportBtn = document.getElementById('trailExportBtn');
+  const trailImportBtn = document.getElementById('trailImportBtn');
+  const trailImportInput = document.getElementById('trailImportInput');
+
+  const libCard = document.getElementById('libCard');
+  const playerSheet = document.getElementById('playerSheet');
+  const playerSheetClose = document.getElementById('playerSheetClose');
+  const moreBtn = document.getElementById('moreBtn');
+  const libQuickBtn = document.getElementById('libQuickBtn');
+  const bmQuickBtn = document.getElementById('bmQuickBtn');
+  const playbackCard = document.getElementById('playbackCard');
+  const bookmarksCard = document.getElementById('bookmarksCard');
+  const libBookmarksPane = document.getElementById('libBookmarksPane');
+
+  const DB = 'nebula-db', STORE='pdfs', VER=1;
+
+  function openDB(){
+    return new Promise((res,rej)=>{
+      const req = indexedDB.open(DB, VER);
+      req.onupgradeneeded = (e)=> {
+        const db = e.target.result;
+        if(!db.objectStoreNames.contains(STORE)){
+          const st = db.createObjectStore(STORE, {keyPath:'id'});
+          st.createIndex('by_name','name',{unique:false});
+        }
+      };
+      req.onsuccess = ()=>res(req.result);
+      req.onerror = ()=>rej(req.error);
+    });
+  }
+
+  async function dbPut(obj){
+    const db=await openDB();
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(STORE,'readwrite');
+      tx.objectStore(STORE).put(obj);
+      tx.oncomplete=()=>{db.close();res(true)};
+      tx.onerror=()=>{db.close();rej(tx.error)};
+    });
+  }
+
+  async function dbAll(){
+    const db=await openDB();
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(STORE,'readonly');
+      const req=tx.objectStore(STORE).getAll();
+      req.onsuccess=()=>{db.close();res(req.result||[])};
+      req.onerror=()=>{db.close();rej(req.error)};
+    });
+  }
+
+  async function dbGet(id){
+    const db=await openDB();
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(STORE,'readonly');
+      const req=tx.objectStore(STORE).get(id);
+      req.onsuccess=()=>{db.close();res(req.result||null)};
+      req.onerror=()=>{db.close();rej(req.error)};
+    });
+  }
+
+  async function dbDelete(id){
+    const db=await openDB();
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(STORE,'readwrite');
+      tx.objectStore(STORE).delete(id);
+      tx.oncomplete=()=>{db.close();res(true)};
+      tx.onerror=()=>{db.close();rej(tx.error)};
+    });
+  }
+
+  function saveSettings(){
+    localStorage.setItem('nebula.settings', JSON.stringify(settings));
+  }
+
+  function esc(s=''){
+    return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+  }
+
+  function fmtBytes(b){
+    if(!b) return '0 B';
+    const u=['B','KB','MB','GB'];
+    let i=0, v=b;
+    while(v>=1024 && i<u.length-1){ v/=1024; i++; }
+    return (v.toFixed((i<=1)?0:1).replace('.',','))+' '+u[i];
+  }
+
+  function sumSizes(list){
+    return list.reduce((a,x)=> a + (x.size || (x.blob?.size||0)), 0);
+  }
+
+  function normalize(s=''){
+    return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  }
+
+  function safeName(n){
+    return (n||'file').replace(/[^a-z0-9_\-\.]/gi,'_');
+  }
+
+  function roundRect(ctx, x,y,w,h,r, fill, stroke){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    if(fill) ctx.fill();
+    if(stroke) ctx.stroke();
+  }
+
+  function setPP(isPlaying){
+    ppIcon.innerHTML = isPlaying
+      ? '<path d="M8 5h3v14H8zm5 0h3v14h-3z"/>'
+      : '<path d="M8 5v14l11-7z"/>';
+    listenBtn.textContent = isPlaying ? 'Pause' : 'Listen';
+    document.body.classList.toggle('playing', isPlaying);
+    ppBtn.classList.toggle('pulse', isPlaying);
+  }
+
+  function splitTextDoc(text=''){
+    const clean = String(text).replace(/\r/g,'').trim();
+    if(!clean) return [];
+    const blocks = clean.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
+    const out = [];
+    for(const block of blocks){
+      if(block.length <= 700) out.push({text:block});
+      else{
+        for(let i=0;i<block.length;i+=420){
+          out.push({text:block.slice(i, i+420)});
+        }
+      }
+    }
+    return out.length ? out : [{text:clean}];
+  }
+
+  function getBookmarks(){
+    return JSON.parse(localStorage.getItem('nebula.bookmarks')||'[]');
+  }
+
+  function saveBookmarks(arr){
+    localStorage.setItem('nebula.bookmarks', JSON.stringify(arr));
+  }
+
+  function addBookmark(){
+    if(!current.id || !current.paragraphs.length) return alert('Nada para marcar.');
+    const seg = current.paragraphs[current.idx] || {text:''};
+    const arr = getBookmarks();
+    arr.unshift({
+      id:'bm-'+Date.now(),
+      docId: current.id,
+      docName: current.name,
+      page: current.type === 'pdf' ? (seg.page||1) : (current.idx+1),
+      segIdx: current.idx,
+      text: seg.text.slice(0,160),
+      at: Date.now()
+    });
+    saveBookmarks(arr);
+    renderBookmarks();
+    alert('Marcador salvo.');
+  }
+
+  function clearBookmarksAll(){
+    saveBookmarks([]);
+    renderBookmarks();
+  }
+
+  function renderBookmarks(){
+    const arr = getBookmarks();
+    bmList.innerHTML = '';
+    if(!arr.length){
+      bmList.innerHTML = '<div class="muted">Sem marcadores ainda. Use o botão ⭐ no viewer.</div>';
+      return;
+    }
+
+    for(const bm of arr.slice(0,50)){
+      const el = document.createElement('div');
+      el.className='bm-item';
+      el.innerHTML = `
+        <div class="bm-text">
+          <strong>${esc(bm.docName)} — p.${bm.page}</strong>
+          <small>${new Date(bm.at).toLocaleString()} — ${esc(bm.text)}</small>
+        </div>
+        <button class="btn" data-bm-go="${bm.id}">Play</button>
+        <button class="btn" style="background:#ffe3e6;color:#7a1a25" data-bm-del="${bm.id}">Remover</button>
+      `;
+      bmList.appendChild(el);
+    }
+
+    bmList.querySelectorAll('[data-bm-go]').forEach(b=>{
+      b.onclick = async (e)=>{
+        const id = e.currentTarget.getAttribute('data-bm-go');
+        const bm = getBookmarks().find(x=>x.id===id);
+        if(!bm) return;
+        await startFromLibrary(bm.docId, false);
+        current.idx = bm.segIdx || 0;
+        openViewerForCurrent();
+        speakCurrent();
+      };
+    });
+
+    bmList.querySelectorAll('[data-bm-del]').forEach(b=>{
+      b.onclick = (e)=>{
+        const id = e.currentTarget.getAttribute('data-bm-del');
+        saveBookmarks(getBookmarks().filter(x=>x.id!==id));
+        renderBookmarks();
+      };
+    });
+  }
+
+  async function onPickFiles(ev){
+    const files = Array.from(ev.target.files||[]);
+    ev.target.value = '';
+    if(!files.length) return;
+
+    const pdfs = [], zips = [], texts = [];
+    for(const f of files){
+      if(/\.(zip)$/i.test(f.name)) zips.push(f);
+      else if(/\.(txt|md)$/i.test(f.name)) texts.push(f);
+      else pdfs.push(f);
+    }
+
+    if(pdfs.length){
+      importStatus.textContent = `Importando ${pdfs.length} PDF(s)...`;
+      for(let i=0;i<pdfs.length;i++){
+        const f = pdfs[i];
+        const id = 'pdf-'+Date.now()+'-'+Math.floor(Math.random()*99999);
+        await dbPut({
+          id,
+          name:f.name,
+          blob:f,
+          size:f.size,
+          savedAt:Date.now(),
+          pages:0,
+          type:'pdf'
+        });
+        const pct = Math.round((i+1)/pdfs.length*100);
+        importBar.style.width = pct+'%';
+        importStatus.textContent = `Importando ${i+1}/${pdfs.length} (${pct}%)`;
+        await new Promise(r=>setTimeout(r,30));
+      }
+      importStatus.textContent = 'Import PDFs concluído';
+      setTimeout(()=>{
+        importBar.style.width='0%';
+        importStatus.textContent='Pronto';
+      }, 1200);
+    }
+
+    if(texts.length){
+      importStatus.textContent = `Importando ${texts.length} TXT/MD...`;
+      for(let i=0;i<texts.length;i++){
+        const f = texts[i];
+        const text = await f.text();
+        const id = 'txt-'+Date.now()+'-'+Math.floor(Math.random()*99999);
+        await dbPut({
+          id,
+          name:f.name,
+          blob:new Blob([text], { type: 'text/plain' }),
+          size:text.length,
+          savedAt:Date.now(),
+          pages: splitTextDoc(text).length,
+          type: /\.(md)$/i.test(f.name) ? 'md' : 'txt',
+          text
+        });
+        const pct = Math.round((i+1)/texts.length*100);
+        importBar.style.width = pct+'%';
+        importStatus.textContent = `Importando ${i+1}/${texts.length} TXT/MD (${pct}%)`;
+        await new Promise(r=>setTimeout(r,20));
+      }
+      importStatus.textContent = 'Import TXT/MD concluído';
+      setTimeout(()=>{
+        importBar.style.width='0%';
+        importStatus.textContent='Pronto';
+      }, 1200);
+    }
+
+    if(zips.length){
+      const JSZip = window.JSZip;
+      for(const z of zips){
+        importStatus.textContent = `Abrindo ZIP: ${z.name}`;
+        const zip = await JSZip.loadAsync(z);
+        const names = Object.keys(zip.files).filter(n=>!zip.files[n].dir && /\.(pdf|txt|md)$/i.test(n));
+        if(!names.length){
+          importStatus.textContent = 'ZIP sem arquivos suportados';
+          continue;
+        }
+        let done = 0;
+        for(const n of names){
+          const ext = n.split('.').pop().toLowerCase();
+          const id = `${ext}-${Date.now()}-${Math.floor(Math.random()*99999)}`;
+          if(ext === 'pdf'){
+            const u8 = await zip.files[n].async('uint8array');
+            const blob = new Blob([u8],{type:'application/pdf'});
+            await dbPut({ id, name:n.split('/').pop(), blob, size:blob.size, savedAt:Date.now(), pages:0, type:'pdf' });
+          } else {
+            const text = await zip.files[n].async('string');
+            const blob = new Blob([text],{type:'text/plain'});
+            await dbPut({
+              id,
+              name:n.split('/').pop(),
+              blob,
+              size:text.length,
+              savedAt:Date.now(),
+              pages: splitTextDoc(text).length,
+              type: ext === 'md' ? 'md' : 'txt',
+              text
+            });
+          }
+          done++;
+          const pct = Math.round(done/names.length*100);
+          importBar.style.width = pct+'%';
+          importStatus.textContent = `Import ZIP ${done}/${names.length} (${pct}%)`;
+          await new Promise(r=>setTimeout(r,20));
+        }
+      }
+      setTimeout(()=>{
+        importBar.style.width='0%';
+        importStatus.textContent='Pronto';
+      }, 1200);
+    }
+
+    await renderLibrary();
+  }
+
+  async function onExportZip(){
+    const JSZip = window.JSZip;
+    const items = await dbAll();
+    if(!items.length){ alert('Biblioteca vazia.'); return; }
+    exportStatus.textContent = 'Preparando ZIP...';
+    exportBar.style.width='2%';
+    const zip = new JSZip();
+    const meta=[];
+
+    for(const it of items){
+      zip.file(safeName(it.name), it.blob);
+      meta.push({id:it.id,name:it.name,size:(it.size||it.blob.size),savedAt:it.savedAt,pages:it.pages,type:it.type||'pdf'});
+    }
+
+    zip.file('metadata.json', JSON.stringify(meta,null,2));
+    const blob = await zip.generateAsync({type:'blob'}, (m)=>{
+      exportBar.style.width = Math.round(m.percent)+'%';
+      exportStatus.textContent = `Gerando ZIP — ${Math.round(m.percent)}%`;
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href=url;
+    a.download='nebula-library-'+new Date().toISOString().slice(0,10)+'.zip';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    exportStatus.textContent = 'Export concluído';
+    setTimeout(()=>{
+      exportBar.style.width='0%';
+      exportStatus.textContent='Pronto';
+    }, 1800);
+  }
+
+  async function clearLibrary(){
+    if(!confirm('Remover TODOS os arquivos da biblioteca?')) return;
+    const items = await dbAll();
+    for(const it of items) await dbDelete(it.id);
+    progressMap = {};
+    localStorage.setItem('nebula.progress', JSON.stringify(progressMap));
+    await renderLibrary();
+  }
+
+  async function startFromLibrary(id, autoplay=false){
+    const rec = await dbGet(id);
+    if(!rec){ alert('Arquivo não encontrado'); return; }
+    await loadCurrentFromRecord(rec);
+    if(autoplay) startSpeaking();
+  }
+
+  async function viewFromLibrary(id){
+    const rec = await dbGet(id);
+    if(!rec){ alert('Arquivo não encontrado'); return; }
+    await loadCurrentFromRecord(rec, {parseText:false});
+    openViewerForCurrent();
+  }
+
+  async function loadCurrentFromRecord(rec, {parseText=true} = {}){
+    current.id = rec.id;
+    current.name = rec.name;
+    current.type = rec.type || (/\.(txt|md)$/i.test(rec.name) ? 'txt' : 'pdf');
+    nowPlaying.textContent = rec.name;
+
+    if(current.type === 'pdf'){
+      const ab = await rec.blob.arrayBuffer();
+      current.pdfData = new Uint8Array(ab);
+      current.pdfDoc = await pdfjsLib.getDocument({data: current.pdfData}).promise;
+      current.pages = current.pdfDoc.numPages;
+
+      if(parseText){
+        current.paragraphs = await extractTextSmart(current.pdfDoc);
+        for(const seg of current.paragraphs){ delete seg._karaTrailIdx; }
+        const savedPct = progressMap[current.id] || 0;
+        current.idx = Math.floor((savedPct / 100) * current.paragraphs.length);
+        if(current.idx >= current.paragraphs.length) current.idx = 0;
+        updateProgressBars(false);
+      }
+      return;
+    }
+
+    const text = rec.text || await rec.blob.text();
+    current.pdfData = null;
+    current.pdfDoc = null;
+    current.pages = Math.max(1, splitTextDoc(text).length);
+    current.paragraphs = splitTextDoc(text).map((seg, i) => ({
+      text: seg.text,
+      page: i + 1
+    }));
+    current.idx = 0;
+    updateProgressBars(false);
+  }
+
+  async function openViewerForCurrent(){
+    if(!current.id){
+      const list = await dbAll();
+      if(list.length) await viewFromLibrary(list.sort((a,b)=>b.savedAt-a.savedAt)[0].id);
+      else alert('Importe um arquivo primeiro.');
+      return;
+    }
+
+    ovTitle.textContent = current.name || 'Arquivo';
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden','false');
+
+    if(current.type !== 'pdf'){
+      contMode = false;
+      contBtn.textContent = 'Continuous: OFF';
+      ovCont.style.display = 'none';
+      ovCanvas.style.display = 'block';
+      ovSkel.style.display = 'none';
+      ovTrail.style.display = 'none';
+      ovHl.style.display = 'none';
+      await renderTextPage();
+      return;
+    }
+
+    if(!current.pdfDoc && current.pdfData){
+      current.pdfDoc = await pdfjsLib.getDocument({data: current.pdfData}).promise;
+      current.pages = current.pdfDoc.numPages;
+    }
+
+    ovPages = current.pages;
+    if(!ovPage) ovPage = 1;
+
+    if(contMode){
+      ensureContinuous();
+      const pg = current.paragraphs[current.idx]?.page || ovPage;
+      scrollToPage(pg);
+      prepareTimeline(pg);
+    } else {
+      await renderOverlayPage();
+    }
+  }
+
+  function closeOverlay(){
+    overlay.classList.remove('show');
+    overlay.setAttribute('aria-hidden','true');
+    clearHighlight();
+  }
+
+  function toggleContinuous(){
+    if(current.type !== 'pdf'){
+      contMode = false;
+      contBtn.textContent = 'Continuous: OFF';
+      return;
+    }
+    contMode = !contMode;
+    contBtn.textContent = 'Continuous: ' + (contMode?'ON':'OFF');
+    if(contMode){
+      ovCanvas.style.display='none';
+      ovSkel.style.display='none';
+      ovTrail.style.display='none';
+      ovHl.style.display='none';
+      ovCont.style.display='block';
+      ensureContinuous();
+      const pg = current.paragraphs[current.idx]?.page || ovPage;
+      scrollToPage(pg);
+      prepareTimeline(pg);
+    }else{
+      ovCont.style.display='none';
+      ovCanvas.style.display='block';
+      ovSkel.style.display='block';
+      ovTrail.style.display='block';
+      ovHl.style.display='block';
+      renderOverlayPage();
+    }
+  }
+
+  function toggleKaraoke(){
+    karaMode = !karaMode;
+    karaBtn.textContent = 'Karaoke: ' + (karaMode ? 'ON' : 'OFF');
+    if(!karaMode) clearAllTrails();
+  }
+
+  function toggleSkeleton(){
+    skelMode = !skelMode;
+    skelBtn.textContent = 'Skeleton: ' + (skelMode ? 'ON' : 'OFF');
+    if(skelMode) drawSkeleton(curPage());
+    else clearSkeletonLayers();
+  }
+
+  let ovPage = 1, ovPages = 0, ovScale = parseFloat(ovZoom.value)||1.2;
+
+  async function ensureContinuous(){
+    if(!Object.keys(contMap).length){
+      ovCont.innerHTML='';
+      for(let p=1;p<=current.pages;p++){
+        const wrap=document.createElement('div');
+        wrap.className='pageWrap';
+        wrap.id='pg-'+p;
+
+        const cnv = document.createElement('canvas');
+        cnv.width=600;
+        cnv.height=800;
+
+        const sk  = document.createElement('canvas');
+        sk.className='skelLayer';
+        sk.width=600;
+        sk.height=800;
+        sk.style.position='absolute';
+
+        const tr  = document.createElement('canvas');
+        tr.className='trailLayer';
+        tr.width=600;
+        tr.height=800;
+        tr.style.position='absolute';
+
+        const hl  = document.createElement('canvas');
+        hl.className='hlLayer';
+        hl.width=600;
+        hl.height=800;
+        hl.style.position='absolute';
+
+        wrap.appendChild(cnv);
+        wrap.appendChild(sk);
+        wrap.appendChild(tr);
+        wrap.appendChild(hl);
+        ovCont.appendChild(wrap);
+        contMap[p] = {wrap, canvas:cnv, skel:sk, trail:tr, hl:hl, rendered:false};
+      }
+    }
+
+    const center = current.paragraphs[current.idx]?.page || 1;
+    for(const p of [center-1, center, center+1]){
+      if(p>=1 && p<=current.pages) await renderContPage(p);
+    }
+  }
+
+  async function renderContPage(p){
+    const obj = contMap[p];
+    if(!obj || obj.rendered) return;
+    const page = await current.pdfDoc.getPage(p);
+    const viewport = page.getViewport({ scale: ovScale });
+    obj.canvas.width = viewport.width;
+    obj.canvas.height = viewport.height;
+    obj.skel.width = viewport.width;
+    obj.skel.height = viewport.height;
+    obj.trail.width = viewport.width;
+    obj.trail.height = viewport.height;
+    obj.hl.width = viewport.width;
+    obj.hl.height = viewport.height;
+    await page.render({canvasContext: obj.canvas.getContext('2d'), viewport}).promise;
+    obj.rendered = true;
+    if(skelMode) drawSkeleton(p);
+  }
+
+  function scrollToPage(p){
+    const obj = contMap[p];
+    if(!obj) return;
+    obj.wrap.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  async function renderOverlayPage(){
+    if(current.type !== 'pdf' || !current.pdfDoc) return;
+    const page = await current.pdfDoc.getPage(ovPage);
+    const viewport = page.getViewport({ scale: ovScale });
+    ovCanvas.width = viewport.width;
+    ovCanvas.height = viewport.height;
+    ovSkel.width = viewport.width;
+    ovSkel.height = viewport.height;
+    ovTrail.width = viewport.width;
+    ovTrail.height = viewport.height;
+    ovHl.width = viewport.width;
+    ovHl.height = viewport.height;
+    await page.render({canvasContext: ovCtx, viewport}).promise;
+    ovPageInfo.textContent = `${ovPage} / ${ovPages}`;
+    clearHighlight();
+    if(skelMode) drawSkeleton(ovPage);
+    prepareTimeline(ovPage);
+  }
+
+  async function renderTextPage(){
+    const seg = current.paragraphs[current.idx] || { text:'—' };
+    ovPages = current.paragraphs.length || 1;
+    ovPage = Math.min(Math.max(current.idx + 1, 1), ovPages);
+
+    const W = Math.max(320, stage.clientWidth - 20);
+    const H = Math.max(420, Math.min(window.innerHeight * 0.72, 1000));
+
+    ovCanvas.width = W;
+    ovCanvas.height = H;
+    ovSkel.style.display = 'none';
+    ovTrail.style.display = 'none';
+    ovHl.style.display = 'none';
+    ovCont.style.display = 'none';
+    ovCanvas.style.display = 'block';
+
+    const ctx = ovCtx;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#05050a';
+    ctx.fillRect(0,0,W,H);
+
+    ctx.fillStyle = 'rgba(255,255,255,.92)';
+    ctx.font = '700 16px Inter, system-ui, sans-serif';
+    ctx.fillText(current.name || 'TXT/MD', 18, 28);
+
+    ctx.fillStyle = 'rgba(255,255,255,.74)';
+    ctx.font = '600 12px Inter, system-ui, sans-serif';
+    ctx.fillText(`${ovPage} / ${ovPages}`, 18, 48);
+
+    const x = 18;
+    const y = 78;
+    const maxW = W - 36;
+    const lineH = 24;
+
+    ctx.fillStyle = '#fff';
+    ctx.font = '15px Inter, system-ui, sans-serif';
+
+    const words = (seg.text || '').split(/\s+/);
+    let line = '';
+    let yy = y;
+
+    for (const word of words) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, yy);
+        yy += lineH;
+        line = word;
+      } else {
+        line = test;
+      }
+    }
+    if (line) ctx.fillText(line, x, yy);
+
+    ovPageInfo.textContent = `${ovPage} / ${ovPages}`;
+    ovSnippet.textContent = seg.text.slice(0, 250);
+    clearTimeline();
+  }
+
+  function clearHighlight(){
+    ovHlCtx.clearRect(0,0,ovHl.width,ovHl.height);
+    if(contMode){
+      for(const p in contMap){
+        const ctx=contMap[p].hl.getContext('2d');
+        ctx.clearRect(0,0,contMap[p].hl.width, contMap[p].hl.height);
+      }
+    }
+  }
+
+  function clearAllTrails(){
+    ovTrailCtx.clearRect(0,0,ovTrail.width,ovTrail.height);
+    for(const p in contMap){
+      const ctx=contMap[p].trail.getContext('2d');
+      ctx.clearRect(0,0,contMap[p].trail.width, contMap[p].trail.height);
+    }
+    for(const seg of current.paragraphs){ delete seg._karaTrailIdx; }
+  }
+
+  function clearSkeletonLayers(){
+    ovSkelCtx.clearRect(0,0,ovSkel.width,ovSkel.height);
+    for(const p in contMap){
+      const ctx=contMap[p].skel.getContext('2d');
+      ctx.clearRect(0,0,contMap[p].skel.width, contMap[p].skel.height);
+    }
+  }
+
+  async function ensurePageWords(page){
+    if(ocrCache[page]?.pageWords) return ocrCache[page].pageWords;
+    if(!ocrCache[page]?.segments){
+      const pg = await current.pdfDoc.getPage(page);
+      await ocrPage(pg, page);
+    }
+    const segs = ocrCache[page].segments || [];
+    let base=0;
+    const flat=[];
+    for(const seg of segs){
+      seg._pageWordBase = base;
+      if(seg.words){
+        flat.push(...seg.words);
+        base += seg.words.length;
+      }
+    }
+    ocrCache[page].pageWords = flat;
+    return flat;
+  }
+
+  async function prepareTimeline(page){
+    const words = await ensurePageWords(page);
+    if(!words || !words.length){ clearTimeline(); return; }
+    const bins = 80, counts = new Array(bins).fill(0);
+    const total = words.length;
+    for(let i=0;i<total;i++) counts[Math.floor(i*bins/total)]++;
+    const max = Math.max(1, ...counts);
+    timelineCache[page] = {bins, counts, total, max};
+    redrawTimeline(page, pageProgress[page]||0);
+  }
+
+  function redrawTimeline(page, idx=0){
+    const cvs = ovTimeline;
+    const rect = cvs.getBoundingClientRect();
+    cvs.width = Math.max(300, Math.floor(rect.width||900));
+    cvs.height = 36;
+    const ctx = cvs.getContext('2d');
+    ctx.clearRect(0,0,cvs.width,cvs.height);
+    const t = timelineCache[page];
+    if(!t) return;
+    const w=cvs.width, h=cvs.height, pad=4, barW=(w-2*pad)/t.bins;
+    for(let b=0;b<t.bins;b++){
+      const v=t.counts[b]/t.max, bh=(h-2*pad)*v;
+      ctx.fillStyle='rgba(255,255,255,0.18)';
+      ctx.fillRect(pad + b*barW, h-pad-bh, Math.max(1,barW*0.8), bh);
+    }
+    const frac = t.total ? (idx / t.total) : 0;
+    const progX = pad + (w-2*pad)*frac;
+    ctx.fillStyle='rgba(122,87,255,0.25)';
+    ctx.fillRect(pad, pad, progX-pad, h-2*pad);
+    ctx.fillStyle='rgba(92,198,255,0.95)';
+    ctx.fillRect(progX-1, pad, 2, h-2*pad);
+  }
+
+  function clearTimeline(){
+    const ctx = ovTimeline.getContext('2d');
+    ctx.clearRect(0,0,ovTimeline.width, ovTimeline.height);
+  }
+
+  function doSearch(){
+    const q = searchInput.value.trim();
+    if(!q){
+      searchHits=[];
+      searchPtr=0;
+      searchCount.textContent='0/0';
+      ovSnippet.textContent='—';
+      clearHighlight();
+      return;
+    }
+    const Q = normalize(q);
+    searchHits = [];
+    for(let i=0;i<current.paragraphs.length;i++){
+      const seg = current.paragraphs[i];
+      const norm = normalize(seg.text);
+      let idx=0;
+      while((idx = norm.indexOf(Q, idx)) !== -1){
+        searchHits.push({ segIdx:i, page: seg.page||1, start: idx, len: Q.length });
+        idx += Q.length;
+      }
+    }
+    searchPtr = 0;
+    searchCount.textContent = searchHits.length ? `1/${searchHits.length}` : '0/0';
+    if(searchHits.length) gotoSearchHit(0, true);
+  }
+
+  function navSearch(delta){
+    if(!searchHits.length) return;
+    searchPtr = (searchPtr + delta + searchHits.length) % searchHits.length;
+    searchCount.textContent = `${searchPtr+1}/${searchHits.length}`;
+    gotoSearchHit(searchPtr, false);
+  }
+
+  function gotoSearchHit(i, speak){
+    const hit = searchHits[i];
+    if(!hit) return;
+    current.idx = hit.segIdx;
+    const seg = current.paragraphs[current.idx];
+    if(!overlay.classList.contains('show')) openViewerForCurrent();
+    if(contMode && current.type === 'pdf'){
+      ensureContinuous();
+      scrollToPage(seg.page||1);
+    } else {
+      ovPage = seg.page||1;
+      if(current.type === 'pdf') renderOverlayPage();
+      else renderTextPage();
+    }
+
+    const txt = seg.text;
+    const before = esc(txt.slice(Math.max(0, hit.start-80), hit.start));
+    const mid = esc(txt.slice(hit.start, hit.start+hit.len));
+    const after = esc(txt.slice(hit.start+hit.len, hit.start+hit.len+160));
+    ovSnippet.innerHTML = `…${before}<mark>${mid}</mark>${after}…`;
+    clearHighlight();
+
+    if(current.type === 'pdf' && seg.words && seg.baseW && seg.baseH){
+      const end = hit.start + hit.len;
+      const words = seg.words.filter(w => (w.start < end && (w.start + w.len) > hit.start));
+      if(contMode){
+        const ctx = contMap[seg.page].hl.getContext('2d');
+        const sx = contMap[seg.page].hl.width / seg.baseW;
+        const sy = contMap[seg.page].hl.height / seg.baseH;
+        ctx.fillStyle='rgba(255,213,77,.35)';
+        ctx.strokeStyle='rgba(92,198,255,.9)';
+        ctx.lineWidth=2;
+        words.forEach(w=>{
+          const x=w.x0*sx, y=w.y0*sy, wdt=(w.x1-w.x0)*sx, hgt=(w.y1-w.y0)*sy;
+          roundRect(ctx, x-2,y-2,wdt+4,hgt+4,5, true, true);
+        });
+      }else{
+        const sx = ovCanvas.width / seg.baseW;
+        const sy = ovCanvas.height / seg.baseH;
+        ovHlCtx.fillStyle='rgba(255,213,77,.35)';
+        ovHlCtx.strokeStyle='rgba(92,198,255,.9)';
+        ovHlCtx.lineWidth=2;
+        words.forEach(w=>{
+          const x=w.x0*sx, y=w.y0*sy, wdt=(w.x1-w.x0)*sx, hgt=(w.y1-w.y0)*sy;
+          roundRect(ovHlCtx, x-2,y-2,wdt+4,hgt+4,5, true, true);
+        });
+      }
+    }
+
+    if(speak) speakCurrent();
+  }
+
+  async function extractTextSmart(pdfDoc){
+    const parts = [];
+    for(let p=1; p<=pdfDoc.numPages; p++){
+      const page = await pdfDoc.getPage(p);
+      const c = await page.getTextContent();
+      const textJoined = (c.items||[]).map(i=>i.str).join(' ').trim();
+      if(!textJoined || textJoined.length < 20 || (c.items||[]).length < 5){
+        const segs = await ocrPage(page, p);
+        parts.push(...segs);
+      }else{
+        const split = textJoined.split(/\n+|\r+|\.\s{1,}|•|-{2,}/g).map(t=>t.trim()).filter(Boolean);
+        for(const seg of split){
+          if(seg.length>600){
+            for(let i=0;i<seg.length;i+=420){
+              parts.push({text:seg.slice(i,i+420), page:p});
+            }
+          }else{
+            parts.push({text:seg, page:p});
+          }
+        }
+      }
+    }
+
+    const perPage = {};
+    parts.forEach(seg=>{
+      if(seg.words) (perPage[seg.page]||(perPage[seg.page]=[])).push(seg);
+    });
+
+    for(const p in perPage){
+      let base=0;
+      const fl=[];
+      for(const seg of perPage[p]){
+        seg._pageWordBase = base;
+        if(seg.words){
+          fl.push(...seg.words);
+          base += seg.words.length;
+        }
+      }
+      if(!ocrCache[p]) ocrCache[p]={};
+      if(!ocrCache[p].pageWords) ocrCache[p].pageWords = fl;
+    }
+    return parts;
+  }
+
+  async function ocrPage(page, pageNum){
+    if(ocrCache[pageNum]) return ocrCache[pageNum].segments;
+    const vw = page.getViewport({scale:1.6});
+    const cnv = document.createElement('canvas');
+    cnv.width = vw.width;
+    cnv.height = vw.height;
+    await page.render({canvasContext: cnv.getContext('2d'), viewport: vw}).promise;
+    let result;
+    try{
+      result = await Tesseract.recognize(cnv, 'por+eng', { logger:()=>{} });
+    }catch(e){
+      console.warn('OCR falhou:', e);
+      ocrCache[pageNum]={baseW:cnv.width, baseH:cnv.height, segments:[{text:'[OCR indisponível nesta página]', page:pageNum}]};
+      return ocrCache[pageNum].segments;
+    }
+
+    const words = result?.data?.words || [];
+    const groups = {};
+    words.forEach((w)=>{
+      const key = `${w.block_num||0}-${w.par_num||0}-${w.line_num||0}`;
+      (groups[key]||(groups[key]=[])).push(w);
+    });
+
+    const segments = [];
+    for(const k of Object.keys(groups)){
+      const arr = groups[k].sort((a,b)=> (a.x0-b.x0) || (a.y0-b.y0));
+      const text = arr.map(w=>w.text).join(' ').trim();
+      if(!text) continue;
+      let cursor = 0;
+      const wordsMap = arr.map(w=>{
+        const t = (w.text||'').toString();
+        const start = cursor;
+        const len = t.length + 1;
+        cursor += len;
+        const bb = w.bbox || w;
+        return { t, x0:bb.x0, y0:bb.y0, x1:bb.x1, y1:bb.y1, start, len };
+      });
+      segments.push({ text, page: pageNum, words: wordsMap, baseW: cnv.width, baseH: cnv.height });
+    }
+
+    ocrCache[pageNum] = { baseW: cnv.width, baseH: cnv.height, segments };
+    return segments;
+  }
+
+  function drawCurrentWordHighlight(page, word, baseW, baseH){
+    const drawRect = (ctx, W, H)=>{
+      const sx = W / baseW, sy = H / baseH;
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle='rgba(122,87,255,.38)';
+      ctx.strokeStyle='rgba(92,198,255,.95)';
+      ctx.lineWidth=2;
+      const x=word.x0*sx, y=word.y0*sy, w=(word.x1-word.x0)*sx, h=(word.y1-word.y0)*sy;
+      roundRect(ctx, x-2,y-2,w+4,h+4,6, true, true);
+    };
+    if(contMode){
+      const obj=contMap[page];
+      if(!obj) return;
+      drawRect(obj.hl.getContext('2d'), obj.hl.width, obj.hl.height);
+    }else{
+      drawRect(ovHlCtx, ovHl.width, ovHl.height);
+    }
+  }
+
+  function addTrailWords(page, words, fromIdx, toIdx, baseW, baseH){
+    const fillTrail = (ctx, W, H)=>{
+      const sx = W / baseW, sy = H / baseH;
+      ctx.fillStyle='rgba(255,213,77,.20)';
+      ctx.strokeStyle='rgba(255,213,77,.35)';
+      ctx.lineWidth=1.5;
+      for(let i=fromIdx;i<=toIdx;i++){
+        const w=words[i];
+        const x=w.x0*sx, y=w.y0*sy, wd=(w.x1-w.x0)*sx, ht=(w.y1-w.y0)*sy;
+        roundRect(ctx, x-1.5,y-1.5,wd+3,ht+3,4, true, false);
+      }
+    };
+    if(contMode){
+      const obj=contMap[page];
+      if(!obj) return;
+      fillTrail(obj.trail.getContext('2d'), obj.trail.width, obj.trail.height);
+    }else{
+      fillTrail(ovTrailCtx, ovTrail.width, ovTrail.height);
+    }
+  }
+
+  function updateProgressBars(finished){
+    if(!current.id) return;
+    const pct = finished ? 100 : ((current.idx+1)/current.paragraphs.length*100);
+    progressSlider.value = pct.toFixed(1);
+    timeCur.textContent = Math.round(pct) + '%';
+    const bar = document.getElementById('bar-'+current.id);
+    if(bar) bar.style.width = pct + '%';
+    progressMap[current.id] = pct;
+    localStorage.setItem('nebula.progress', JSON.stringify(progressMap));
+  }
+
+  function curPage(){
+    return contMode && current.type === 'pdf'
+      ? (current.paragraphs[current.idx]?.page || ovPage)
+      : ovPage;
+  }
+
+  function drawSkeleton(page){
+    if(current.type !== 'pdf') return;
+    const cache = ocrCache[page];
+    if(!cache) return;
+    const words = cache.pageWords || [];
+    if(!words.length) return;
+    const baseW = cache.baseW||1000, baseH = cache.baseH||1000;
+    const drawSk = (ctx, W, H)=>{
+      const sx=W/baseW, sy=H/baseH;
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle='rgba(255,255,255,0.07)';
+      ctx.strokeStyle='rgba(255,255,255,0.12)';
+      ctx.lineWidth=1;
+      for(const w of words){
+        const x=w.x0*sx, y=w.y0*sy, wd=(w.x1-w.x0)*sx, ht=(w.y1-w.y0)*sy;
+        roundRect(ctx, x,y,wd,ht,3, true, true);
+      }
+    };
+    if(contMode){
+      const obj=contMap[page];
+      if(!obj) return;
+      drawSk(obj.skel.getContext('2d'), obj.skel.width, obj.skel.height);
+    }else{
+      drawSk(ovSkelCtx, ovSkel.width, ovSkel.height);
+    }
+  }
+
+  function exportTrailPNG(){
+    const p = curPage();
+    const canvas = contMode ? (contMap[p]?.trail) : ovTrail;
+    if(!canvas){ alert('Página não disponível.'); return; }
+    const url = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href=url;
+    a.download = `${safeName(current.name||'doc')}-trail-page-${p}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  function importTrailPNG(ev){
+    const file = ev.target.files?.[0];
+    ev.target.value = '';
+    if(!file) return;
+    const p = curPage();
+    const canvas = contMode ? (contMap[p]?.trail) : ovTrail;
+    if(!canvas){ alert('Página não disponível.'); return; }
+    const img = new Image();
+    img.onload = ()=>{
+      const ctx=canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(img, 0,0, canvas.width, canvas.height);
+    };
+    img.onerror = ()=> alert('Falha ao carregar PNG.');
+    const reader = new FileReader();
+    reader.onload = ()=> img.src = reader.result;
+    reader.readAsDataURL(file);
+  }
+
+  function onListenMain(){
+    if(!current.id){
+      dbAll().then(list=>{
+        if(list.length){
+          startFromLibrary(list.sort((a,b)=>b.savedAt-a.savedAt)[0].id, true);
+        }else{
+          filePicker.click();
+        }
+      });
+      return;
+    }
+    togglePlayPause();
+  }
+
+  function startSpeaking(){
+    if(!('speechSynthesis' in window)){ alert('SpeechSynthesis não suportado.'); return; }
+    if(!current.paragraphs.length){ alert('Não há texto reconhecido no arquivo.'); return; }
+    setPP(true);
+    current.playing = true;
+    speakCurrent();
+  }
+
+  function togglePlayPause(){
+    if(!current.id){ onListenMain(); return; }
+    if(speechSynthesis.speaking && !speechSynthesis.paused){
+      speechSynthesis.pause();
+      current.playing=false;
+      setPP(false);
+    }else if(speechSynthesis.paused){
+      speechSynthesis.resume();
+      current.playing=true;
+      setPP(true);
+    }else{
+      startSpeaking();
+    }
+  }
+
+  function prevSegment(){
+    if(!current.paragraphs.length) return;
+    speechSynthesis.cancel();
+    current.idx = Math.max(0, current.idx-1);
+    speakCurrent();
+  }
+
+  function nextSegment(){
+    if(!current.paragraphs.length) return;
+    speechSynthesis.cancel();
+    current.idx = Math.min(current.paragraphs.length-1, current.idx+1);
+    speakCurrent();
+  }
+
+  function speakCurrent(){
+    if(utter){
+      speechSynthesis.cancel();
+      utter=null;
+    }
+
+    const seg = current.paragraphs[current.idx];
+    if(!seg){
+      current.playing=false;
+      setPP(false);
+      return;
+    }
+
+    if(overlay.classList.contains('show')){
+      const pg = seg.page || ovPage;
+      if(current.type === 'pdf' && contMode){
+        ensureContinuous();
+        scrollToPage(pg);
+        prepareTimeline(pg);
+      }else{
+        if(current.type === 'pdf'){
+          if(pg !== ovPage){
+            ovPage = pg;
+            renderOverlayPage();
+          }else{
+            prepareTimeline(pg);
+          }
+        }else{
+          ovPage = current.idx + 1;
+          renderTextPage();
+        }
+      }
+    }
+
+    ovSnippet.textContent = seg.text.slice(0,250);
+
+    utter = new SpeechSynthesisUtterance(seg.text);
+    const v = voices.find(x=>x.name===voiceSelect.value) || voices[0];
+    if(v) utter.voice = v;
+    utter.rate = parseFloat(rateRange.value)||1;
+    utter.pitch = 1;
+
+    utter.onboundary = (e)=>{
+      if(current.type !== 'pdf') return;
+      const ch = e.charIndex||0;
+      if(seg.words && seg.baseW && seg.baseH){
+        let wi = -1, wcur=null;
+        for(let i=0;i<seg.words.length;i++){
+          const w=seg.words[i];
+          if(ch>=w.start && ch<w.start+w.len){
+            wi=i;
+            wcur=w;
+            break;
+          }
+        }
+        if(wcur){
+          drawCurrentWordHighlight(seg.page, wcur, seg.baseW, seg.baseH);
+          if(karaMode){
+            const from = (typeof seg._karaTrailIdx==='number' ? seg._karaTrailIdx+1 : 0);
+            if(wi>=from){
+              addTrailWords(seg.page, seg.words, from, wi, seg.baseW, seg.baseH);
+              seg._karaTrailIdx = wi;
+            }
+          }
+          const base = seg._pageWordBase || 0;
+          const pageIdx = base + wi + 1;
+          pageProgress[seg.page] = pageIdx;
+          redrawTimeline(seg.page, pageIdx);
+        }
+      }
+    };
+
+    utter.onend = ()=>{
+      if(current.idx < current.paragraphs.length-1){
+        current.idx++;
+        updateProgressBars(false);
+        speakCurrent();
+      }else{
+        current.playing=false;
+        setPP(false);
+        updateProgressBars(true);
+      }
+    };
+
+    speechSynthesis.speak(utter);
+    updateProgressBars(false);
+  }
+
+  function toggleDrawer(open){
+    libCard.classList.toggle('is-open', open);
+    handleAria(open);
+    localStorage.setItem('nebula.libDrawerOpen', open ? '1' : '0');
+  }
+
+  function handleAria(open){
+    const h = libCard.querySelector('.lib-drawer-handle');
+    if(h) h.setAttribute('aria-expanded', String(open));
+  }
+
+  function setLibTab(tab){
+    const isBookmarks = tab === 'bookmarks';
+    libCard.classList.toggle('show-bookmarks', isBookmarks);
+    libCard.querySelectorAll('.lib-tab').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.libtab === tab);
+    });
+    localStorage.setItem('nebula.libTab', tab);
+  }
+
+  async function renderLibrary(){
+    const items = await dbAll();
+    countInfo.textContent = `${items.length} item(s)`;
+    usageVal.textContent = fmtBytes(sumSizes(items));
+    itemsWrap.innerHTML = '';
+
+    if(!items.length){
+      itemsWrap.innerHTML = `
+        <div class="item">
+          <div class="pdf-ico">PDF</div>
+          <div class="meta">
+            <div class="name">Nenhum arquivo salvo</div>
+            <div class="size">Use Import para adicionar</div>
+          </div>
+        </div>`;
+      return;
+    }
+
+    items.sort((a,b)=> b.savedAt - a.savedAt);
+
+    for(const it of items){
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = `
+        <div class="pdf-ico">${(it.type==='txt' || it.type==='md') ? 'TXT' : 'PDF'}</div>
+        <div class="meta">
+          <div class="name" title="${esc(it.name)}">${esc(it.name)}</div>
+          <div class="size">${fmtBytes(it.size||it.blob.size)}</div>
+          <div class="thinbar"><i id="bar-${it.id}" style="width:${progressMap[it.id]||0}%"></i></div>
+        </div>
+        <button class="icon-btn" data-play="${it.id}" title="Reproduzir">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="icon-btn ghost" data-view="${it.id}" title="Ver páginas">
+          <svg viewBox="0 0 24 24"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 110-10 5 5 0 010 10z"/></svg>
+        </button>
+        <button class="icon-btn danger" data-del="${it.id}" title="Remover">
+          <svg viewBox="0 0 24 24"><path d="M6 7h12v2H6zm2 3h8l-1 9H9zM9 4h6l1 2H8z"/></svg>
+        </button>
+      `;
+      itemsWrap.appendChild(row);
+    }
+
+    itemsWrap.querySelectorAll('[data-play]').forEach(btn=>{
+      btn.onclick = (e)=> startFromLibrary(e.currentTarget.getAttribute('data-play'), true);
+    });
+
+    itemsWrap.querySelectorAll('[data-view]').forEach(btn=>{
+      btn.onclick = (e)=> viewFromLibrary(e.currentTarget.getAttribute('data-view'));
+    });
+
+    itemsWrap.querySelectorAll('[data-del]').forEach(btn=>{
+      btn.onclick = async (e)=>{
+        const id = e.currentTarget.getAttribute('data-del');
+        if(confirm('Remover este arquivo?')){
+          await dbDelete(id);
+          delete progressMap[id];
+          localStorage.setItem('nebula.progress', JSON.stringify(progressMap));
+          await renderLibrary();
+        }
+      };
+    });
+  }
+
+  function updatePlayerSheetFromHiddenCard(){
+    const settingsNode = playbackCard?.querySelector('.settings');
+    if(settingsNode && playerSheet && !playerSheet.querySelector('.settings')){
+      playerSheet.appendChild(settingsNode);
+    }
+  }
+
+  function buildLibraryBookmarksPane(){
+    if(!libCard || !bmList) return;
+    let tabs = libCard.querySelector('.lib-tabs');
+    if(!tabs){
+      tabs = document.createElement('div');
+      tabs.className = 'lib-tabs';
+      tabs.innerHTML = `
+        <button class="lib-tab active" data-libtab="files">Arquivos</button>
+        <button class="lib-tab" data-libtab="bookmarks">Bookmarks</button>
+      `;
+      libCard.insertBefore(tabs, document.getElementById('items'));
+
+      tabs.querySelectorAll('.lib-tab').forEach(btn=>{
+        btn.onclick = ()=> setLibTab(btn.dataset.libtab);
+      });
+    }
+
+    const pane = document.getElementById('libBookmarksPane');
+    if(pane && !pane.dataset.ready){
+      pane.dataset.ready = '1';
+      pane.innerHTML = `
+        <div class="bm-head">
+          <h3>Bookmarks</h3>
+          <button id="clearBmBtnDrawer" class="btn" style="background:#ffe3e6;color:#7a1a25;flex:0 0 auto;padding:8px 12px">Clear</button>
+        </div>
+      `;
+      pane.appendChild(bmList);
+      const clearBmBtnDrawer = document.getElementById('clearBmBtnDrawer');
+      if(clearBmBtnDrawer) clearBmBtnDrawer.onclick = clearBookmarksAll;
+    }
+  }
+
+  function initApp(){
+    updatePlayerSheetFromHiddenCard();
+    buildLibraryBookmarksPane();
+
+    function populateVoices(){
+      voices = speechSynthesis.getVoices() || [];
+      voiceSelect.innerHTML = '';
+      const preferPT = voices.filter(v=>/^pt(-|_)/i.test(v.lang)).concat(voices.filter(v=>!/^pt(-|_)/i.test(v.lang)));
+      (preferPT.length ? preferPT : voices).forEach(v=>{
+        const opt = document.createElement('option');
+        opt.value=v.name;
+        opt.textContent = `${v.name}${v.lang? ' · '+v.lang:''}`;
+        voiceSelect.appendChild(opt);
+      });
+      voiceCount.textContent = voices.length ? `${voices.length}` : '0';
+      const saved = settings.voice && voices.find(v=>v.name===settings.voice);
+      if(saved) voiceSelect.value=settings.voice;
+      else if(preferPT[0]) voiceSelect.value=preferPT[0].name;
+    }
+
+    populateVoices();
+    window.speechSynthesis.onvoiceschanged = populateVoices;
+
+    rateRange.value = settings.rate || 1.0;
+    rateOut.textContent = (parseFloat(rateRange.value)||1).toFixed(1)+'×';
+    rateRange.oninput = ()=>{
+      rateOut.textContent=(+rateRange.value).toFixed(1)+'×';
+      settings.rate=+rateRange.value;
+      saveSettings();
+    };
+
+    voiceSelect.onchange = ()=>{
+      settings.voice=voiceSelect.value;
+      saveSettings();
+    };
+
+    testVoice.onclick = ()=>{
+      if(!('speechSynthesis' in window)) return alert('SpeechSynthesis não suportado.');
+      const u=new SpeechSynthesisUtterance('Teste de voz do Nebula Pro.');
+      const v=voices.find(x=>x.name===voiceSelect.value)||voices[0];
+      if(v) u.voice=v;
+      u.rate=+rateRange.value||1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    };
+
+    importBtn.onclick = ()=> filePicker.click();
+    filePicker.onchange = onPickFiles;
+    exportBtn.onclick = onExportZip;
+    clearLibBtn.onclick = clearLibrary;
+    clearUiBtn.onclick = ()=>{
+      localStorage.removeItem('nebula.progress');
+      localStorage.removeItem('nebula.settings');
+      localStorage.removeItem('nebula.bookmarks');
+      alert('Config/Progresso/Bookmarks limpos.');
+      renderBookmarks();
+    };
+
+    listenBtn.onclick = onListenMain;
+    ppBtn.onclick = togglePlayPause;
+    viewBtn.onclick = openViewerForCurrent;
+
+    progressSlider.addEventListener('input', onSliderInput);
+
+    ovClose.onclick = closeOverlay;
+    ovPrev.onclick = ()=>{
+      if(current.type === 'pdf'){
+        if(ovPage>1){ ovPage--; renderOverlayPage(); }
+      }else{
+        if(current.idx>0){ current.idx--; renderTextPage(); }
+      }
+    };
+
+    ovNext.onclick = ()=>{
+      if(current.type === 'pdf'){
+        if(ovPage<ovPages){ ovPage++; renderOverlayPage(); }
+      }else{
+        if(current.idx<current.paragraphs.length-1){ current.idx++; renderTextPage(); }
+      }
+    };
+
+    ovZoom.oninput = ()=>{
+      ovScale = parseFloat(ovZoom.value)||1.2;
+      if(overlay.classList.contains('show') && current.type === 'pdf') renderOverlayPage();
+    };
+
+    bmBtn.onclick   = addBookmark;
+    contBtn.onclick = toggleContinuous;
+    karaBtn.onclick = toggleKaraoke;
+    skelBtn.onclick = toggleSkeleton;
+
+    trailExportBtn.onclick = exportTrailPNG;
+    trailImportBtn.onclick = ()=> trailImportInput.click();
+    trailImportInput.onchange = importTrailPNG;
+
+    searchBtn.onclick = doSearch;
+    searchPrev.onclick = ()=> navSearch(-1);
+    searchNext.onclick = ()=> navSearch(1);
+    searchClear.onclick = ()=>{
+      searchInput.value='';
+      searchHits=[];
+      searchPtr=0;
+      searchCount.textContent='0/0';
+      ovSnippet.textContent='—';
+      clearHighlight();
+    };
+
+    moreBtn.onclick = ()=> playerSheet.classList.toggle('open');
+    playerSheetClose.onclick = ()=> playerSheet.classList.remove('open');
+
+    libQuickBtn.onclick = ()=>{
+      toggleDrawer(true);
+      setLibTab('files');
+    };
+
+    bmQuickBtn.onclick = ()=>{
+      toggleDrawer(true);
+      setLibTab('bookmarks');
+    };
+
+    document.addEventListener('click', (e)=>{
+      if(!libCard.classList.contains('is-open')) return;
+      if(!libCard.contains(e.target) && !e.target.closest('#libQuickBtn') && !e.target.closest('#bmQuickBtn')){
+        toggleDrawer(false);
+      }
+    });
+
+    window.addEventListener('keydown', (e)=>{
+      if(e.target && ['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName) && e.target!==searchInput) return;
+      if(e.key===' '){
+        e.preventDefault();
+        togglePlayPause();
+      }else if(e.key==='ArrowRight' && !overlay.classList.contains('show')){
+        nextSegment();
+      }else if(e.key==='ArrowLeft' && !overlay.classList.contains('show')){
+        prevSegment();
+      }else if(e.key.toLowerCase()==='o'){
+        overlay.classList.contains('show') ? closeOverlay() : openViewerForCurrent();
+      }else if(e.key==='Escape'){
+        closeOverlay();
+        toggleDrawer(false);
+        playerSheet.classList.remove('open');
+      }else if((e.key==='+' || e.key==='=' || e.key===']') && overlay.classList.contains('show')){
+        ovZoom.value = (+ovZoom.value + 0.1).toFixed(1);
+        ovZoom.oninput();
+      }else if((e.key==='-' || e.key==='_') && overlay.classList.contains('show')){
+        ovZoom.value = (+ovZoom.value - 0.1).toFixed(1);
+        ovZoom.oninput();
+      }else if(e.key===',' ){
+        rateRange.value = Math.max(0.7,(+rateRange.value-0.1)).toFixed(1);
+        rateRange.oninput();
+      }else if(e.key==='.' ){
+        rateRange.value = Math.min(1.8,(+rateRange.value+0.1)).toFixed(1);
+        rateRange.oninput();
+      }
+    });
+
+    window.addEventListener('resize', ()=>{
+      const p = curPage();
+      redrawTimeline(p);
+    });
+
+    const savedDrawer = localStorage.getItem('nebula.libDrawerOpen');
+    toggleDrawer(savedDrawer === '1');
+
+    const savedTab = localStorage.getItem('nebula.libTab') || 'files';
+    setLibTab(savedTab);
+
+    renderLibrary();
+    renderBookmarks();
+  }
+
+  function onSliderInput(e){
+    if(!current.paragraphs || !current.paragraphs.length) return;
+    const pct = parseFloat(e.target.value);
+    const targetIdx = Math.floor((pct / 100) * current.paragraphs.length);
+    current.idx = Math.min(Math.max(targetIdx, 0), current.paragraphs.length - 1);
+
+    timeCur.textContent = Math.round(pct) + '%';
+    const bar = document.getElementById('bar-'+current.id);
+    if(bar) bar.style.width = pct + '%';
+    progressMap[current.id] = pct;
+    localStorage.setItem('nebula.progress', JSON.stringify(progressMap));
+
+    if (current.playing){
+      speakCurrent();
+    } else {
+      const seg = current.paragraphs[current.idx];
+      if(seg){
+        ovSnippet.textContent = seg.text.slice(0, 250);
+        if (overlay.classList.contains('show')) {
+          if(current.type === 'pdf'){
+            const pg = seg.page || ovPage;
+            if(contMode) {
+              ensureContinuous();
+              scrollToPage(pg);
+              prepareTimeline(pg);
+            } else if(pg !== ovPage) {
+              ovPage = pg;
+              renderOverlayPage();
+            } else {
+              prepareTimeline(pg);
+            }
+          } else {
+            renderTextPage();
+          }
+        }
+      }
+    }
+  }
+
+  async function renderLibrary(){
+    const items = await dbAll();
+    countInfo.textContent = `${items.length} item(s)`;
+    usageVal.textContent = fmtBytes(sumSizes(items));
+    itemsWrap.innerHTML = '';
+    if(!items.length){
+      itemsWrap.innerHTML = `
+        <div class="item">
+          <div class="pdf-ico">PDF</div>
+          <div class="meta">
+            <div class="name">Nenhum arquivo salvo</div>
+            <div class="size">Use Import para adicionar</div>
+          </div>
+        </div>`;
+      return;
+    }
+
+    items.sort((a,b)=> b.savedAt - a.savedAt);
+
+    for(const it of items){
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = `
+        <div class="pdf-ico">${(it.type==='txt' || it.type==='md') ? 'TXT' : 'PDF'}</div>
+        <div class="meta">
+          <div class="name" title="${esc(it.name)}">${esc(it.name)}</div>
+          <div class="size">${fmtBytes(it.size||it.blob.size)}</div>
+          <div class="thinbar"><i id="bar-${it.id}" style="width:${progressMap[it.id]||0}%"></i></div>
+        </div>
+        <button class="icon-btn" data-play="${it.id}" title="Reproduzir"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <button class="icon-btn ghost" data-view="${it.id}" title="Ver páginas"><svg viewBox="0 0 24 24"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 110-10 5 5 0 010 10z"/></svg></button>
+        <button class="icon-btn danger" data-del="${it.id}" title="Remover"><svg viewBox="0 0 24 24"><path d="M6 7h12v2H6zm2 3h8l-1 9H9zM9 4h6l1 2H8z"/></svg></button>
+      `;
+      itemsWrap.appendChild(row);
+    }
+
+    itemsWrap.querySelectorAll('[data-play]').forEach(btn=>{
+      btn.onclick = (e)=> startFromLibrary(e.currentTarget.getAttribute('data-play'), true);
+    });
+
+    itemsWrap.querySelectorAll('[data-view]').forEach(btn=>{
+      btn.onclick = (e)=> viewFromLibrary(e.currentTarget.getAttribute('data-view'));
+    });
+
+    itemsWrap.querySelectorAll('[data-del]').forEach(btn=>{
+      btn.onclick = async (e)=>{
+        const id=e.currentTarget.getAttribute('data-del');
+        if(confirm('Remover este arquivo?')){
+          await dbDelete(id);
+          delete progressMap[id];
+          localStorage.setItem('nebula.progress', JSON.stringify(progressMap));
+          await renderLibrary();
+        }
+      };
+    });
+  }
+
+  async function clearLibrary(){
+    if(!confirm('Remover TODOS os arquivos da biblioteca?')) return;
+    const items = await dbAll();
+    for(const it of items) await dbDelete(it.id);
+    progressMap = {};
+    localStorage.setItem('nebula.progress', JSON.stringify(progressMap));
+    await renderLibrary();
+  }
+
+  async function onExportZip(){
+    const JSZip = window.JSZip;
+    const items = await dbAll();
+    if(!items.length){ alert('Biblioteca vazia.'); return; }
+    exportStatus.textContent = 'Preparando ZIP...';
+    exportBar.style.width='2%';
+    const zip = new JSZip();
+    const meta = [];
+    for(const it of items){
+      zip.file(safeName(it.name), it.blob);
+      meta.push({id:it.id,name:it.name,size:(it.size||it.blob.size),savedAt:it.savedAt,pages:it.pages,type:it.type||'pdf'});
+    }
+    zip.file('metadata.json', JSON.stringify(meta,null,2));
+    const blob = await zip.generateAsync({type:'blob'}, (m)=>{
+      exportBar.style.width = Math.round(m.percent)+'%';
+      exportStatus.textContent = `Gerando ZIP — ${Math.round(m.percent)}%`;
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href=url;
+    a.download='nebula-library-'+new Date().toISOString().slice(0,10)+'.zip';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    exportStatus.textContent = 'Export concluído';
+    setTimeout(()=>{
+      exportBar.style.width='0%';
+      exportStatus.textContent='Pronto';
+    }, 1800);
+  }
+
+  async function onListenMain(){
+    if(!current.id){
+      const list = await dbAll();
+      if(list.length){
+        await startFromLibrary(list.sort((a,b)=>b.savedAt-a.savedAt)[0].id, true);
+      }else{
+        filePicker.click();
+      }
+      return;
+    }
+    togglePlayPause();
+  }
+
+  function clearTimeline(){
+    const ctx = ovTimeline.getContext('2d');
+    ctx.clearRect(0,0,ovTimeline.width, ovTimeline.height);
+  }
+
+  document.getElementById('filePicker').accept = '.pdf,.zip,.txt,.md';
+
+})();
+</script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/js/modules/inline-1-369.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/unif.js"></script></body></html>
