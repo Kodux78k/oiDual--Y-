@@ -568,7 +568,9 @@ iframe,
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
-</style><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css"><link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanaio.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/inxs.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glassu.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><style>
+</style><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css"><link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanaio.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/inxs.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glassu.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><style>
     /* VARIÁVEIS BASE */
     :root {
       --z-base: 0;
@@ -779,6 +781,47 @@ iframe,
       <button id="listenBtn" class="listen">Listen</button>
     </div>
 
+<!-- Mini Player c/ Slider -->
+  <div class="player" id="playerDock">
+    <div class="player-wrap">
+      <div class="player-top">
+        <button id="ppBtn" class="pp" title="Play/Pause">
+          <svg viewBox="0 0 24 24" id="ppIcon"><path d="M8 5v14l11-7z"></path></svg>
+        </button>
+        <div class="track">
+          <div id="nowPlaying" class="now">Nada tocando</div>
+
+      <div id="ovSnippet" class="muted">—</div>    
+  </div>
+
+             <div class="chip">
+     <button id="bmBtn" class="icon-btn">⭐</button>
+
+        <button id="viewBtn" class="view-mini" title="Ver páginas">
+          <svg viewBox="0 0 24 24"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 110-10 5 5 0 010 10z"></path></svg>
+        </button>
+      </div> </div>
+      <div class="player-slider-wrap">
+        <span class="time-label" id="timeCur">0%</span>
+        <input type="range" id="progressSlider" min="0" max="100" value="0" step="0.1">
+        <span class="time-label" id="timeTotal">100%</span>
+      </div>
+    </div>
+  </div>
+
+ <!-- Bookmarks -->
+    <section class="card">
+      <div class="row">
+        <h2>Bookmarks</h2>
+        <div style="display:flex; gap:8px; align-items:center">
+          <button id="clearBmBtn" class="btn" style="background:#ffe3e6; color:#7a1a25; flex:0 0 auto; padding:8px 12px">Clear</button>
+        </div>
+      </div>
+      <div id="bmList" class="bm-list">
+        <div class="muted">Sem marcadores ainda. Use o botão ⭐ no viewer.</div>
+      </div>
+    </section>
+
     <!-- Library -->
     <section class="card" id="libCard">
     
@@ -809,33 +852,6 @@ iframe,
 
 <div class="io-row">
 
-<!-- Mini Player c/ Slider -->
-  <div class="player" id="playerDock">
-    <div class="player-wrap">
-      <div class="player-top">
-        <button id="ppBtn" class="pp" title="Play/Pause">
-          <svg viewBox="0 0 24 24" id="ppIcon"><path d="M8 5v14l11-7z"></path></svg>
-        </button>
-        <div class="track">
-          <div id="nowPlaying" class="now">Nada tocando</div>
-
-      <div id="ovSnippet" class="muted">—</div>    
-  </div>
-
-             <div class="chip">
-     <button id="bmBtn" class="icon-btn">⭐</button>
-
-        <button id="viewBtn" class="view-mini" title="Ver páginas">
-          <svg viewBox="0 0 24 24"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 110-10 5 5 0 010 10z"></path></svg>
-        </button>
-      </div> </div>
-      <div class="player-slider-wrap">
-        <span class="time-label" id="timeCur">0%</span>
-        <input type="range" id="progressSlider" min="0" max="100" value="0" step="0.1">
-        <span class="time-label" id="timeTotal">100%</span>
-      </div>
-    </div>
-  </div>
    
 
         <button id="importBtn" class="ov-btn" title="Importar PDF / ZIP / MD">📂</button>
@@ -908,18 +924,7 @@ iframe,
       </div>
     </section>
 
-    <!-- Bookmarks -->
-    <section class="card">
-      <div class="row">
-        <h2>Bookmarks</h2>
-        <div style="display:flex; gap:8px; align-items:center">
-          <button id="clearBmBtn" class="btn" style="background:#ffe3e6; color:#7a1a25; flex:0 0 auto; padding:8px 12px">Clear</button>
-        </div>
-      </div>
-      <div id="bmList" class="bm-list">
-        <div class="muted">Sem marcadores ainda. Use o botão ⭐ no viewer.</div>
-      </div>
-    </section>
+   
   </div>
 
   
