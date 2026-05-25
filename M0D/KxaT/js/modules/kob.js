@@ -981,3 +981,318 @@ body, .nebula, details.acc, .btn, #fab, .kob-tts-dock, .kob-tts-panel.is-dock {
 
 })(); 
 // end IIFE
+/* ╔══════════════════════════════╗
+   ║ KOBLLUX COB BRIDGE v1       ║
+   ║ Colar no FINAL do COBJS     ║
+   ╚══════════════════════════════╝ */
+
+(() => {
+
+if(window.KOBLLUX?.bridgeLoaded){
+   console.log("Bridge já ativa");
+   return;
+}
+
+window.KOBLLUX=window.KOBLLUX||{};
+window.KOBLLUX.bridgeLoaded=true;
+
+const NS="KOBLLUX_BRIDGE";
+
+/* =========================
+   FRAME PRINCIPAL
+========================= */
+
+const getFrame=()=>{
+
+return document.getElementById("motorFrame")
+||document.getElementById("content-frame")
+||document.getElementById("frame")
+||document.querySelector("iframe");
+
+};
+
+/* =========================
+   ENVIAR
+========================= */
+
+window.KOBLLUX.send=(type,payload={})=>{
+
+const frame=getFrame();
+
+if(!frame?.contentWindow)return false;
+
+frame.contentWindow.postMessage({
+
+ns:NS,
+type,
+payload,
+ts:Date.now()
+
+},"*");
+
+return true;
+
+};
+
+/* =========================
+   RECEBER
+========================= */
+
+window.addEventListener(
+
+"message",
+
+e=>{
+
+const msg=e.data;
+
+if(
+!msg||
+msg.ns!==NS||
+!msg.type
+)return;
+
+switch(msg.type){
+
+case"READY":
+
+console.log(
+"⚡ Motor pronto",
+msg.payload
+);
+
+break;
+
+
+case"PONG":
+
+window.KOBLLUX.state=
+window.KOBLLUX.state||{};
+
+window.KOBLLUX.state.child=
+msg.payload;
+
+break;
+
+
+case"STATE":
+
+window.KOBLLUX.state=
+window.KOBLLUX.state||{};
+
+window.KOBLLUX.state.bridge=
+msg.payload;
+
+break;
+
+
+case"ARCHETYPE_CHANGE":
+
+if(
+typeof
+window.KOBLLUX.updateArchetype
+==="function"
+){
+
+window.KOBLLUX
+.updateArchetype(
+msg.payload.idx
+);
+
+}
+
+break;
+
+
+case"SPEAK":
+
+if(
+typeof
+window.KOBLLUX.speakText
+==="function"
+){
+
+window.KOBLLUX.speakText(
+msg.payload.text||""
+);
+
+}
+
+break;
+
+
+case"LOG":
+
+console.log(
+"[COB]",
+msg.payload
+);
+
+break;
+
+}
+
+});
+
+/* =========================
+   EVENTOS DO SISTEMA
+========================= */
+
+window.addEventListener(
+
+"KOBLLUX_VOICES_READY",
+
+()=>{
+
+console.log(
+"🎙️ vozes integradas"
+);
+
+window.KOBLLUX.send(
+
+"VOICES_READY",
+
+{
+
+total:
+Object.keys(
+window.KOBLLUX_VOICES||{}
+).length
+
+});
+
+}
+
+);
+
+/* =========================
+   HOOK ARCHETYPE
+========================= */
+
+if(
+
+window.KOBLLUX
+.updateArchetype
+
+){
+
+const old=
+window.KOBLLUX
+.updateArchetype;
+
+window.KOBLLUX
+.updateArchetype=
+
+function(idx){
+
+old.call(
+this,
+idx
+);
+
+const arche=
+
+ARCHETYPES[idx];
+
+window.KOBLLUX.send(
+
+"ARCHETYPE_CHANGE",
+
+{
+
+idx,
+id:arche?.id,
+name:arche?.name,
+voice:arche?.voice
+
+});
+
+};
+
+}
+
+/* =========================
+   HOOK SPEECH
+========================= */
+
+if(
+window.KOBLLUX
+.speakText
+){
+
+const oldSpeak=
+window.KOBLLUX
+.speakText;
+
+window.KOBLLUX
+.speakText=
+
+function(){
+
+window.KOBLLUX.send(
+
+"SPEAK",
+
+{
+
+text:
+arguments[0]
+
+});
+
+return oldSpeak
+.apply(
+this,
+arguments
+);
+
+};
+
+}
+
+/* =========================
+   PING VIVO
+========================= */
+
+setInterval(()=>{
+
+window.KOBLLUX.send(
+
+"PING",
+
+{
+
+time:Date.now()
+
+});
+
+},5000);
+
+
+/* =========================
+   BOOT
+========================= */
+
+window.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
+
+window.KOBLLUX.send(
+
+"READY",
+
+{
+
+title:
+document.title,
+
+archs:
+ARCHETYPES?.length||0
+
+});
+
+});
+
+})();
