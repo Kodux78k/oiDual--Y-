@@ -28,6 +28,23 @@
     <main class="fusion-card accordion is-open" id="mainHeroCard">
       <!-- HEADER ACORDEÃO -->
       <div class="header-78k accordion-header">
+          <!-- HUD Magnético -->
+  <div class="symbol-bar" id="hudBar">
+    <div class="drag-handle" id="hudDrag" title="Arrastar HUD"></div>
+    <button class="symbol-btn" id="copyBtn" title="Copiar Texto Processado">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+    </button>
+    <button class="symbol-btn" id="clearBtn" title="Limpar Tudo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+    </button>
+    <button class="symbol-btn" id="downloadBtn" title="Transferir Documento">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    </button>
+    <div class="hud-info" id="hudStatus">78K-ID</div>
+  </div>
+
+  <div id="toast-container"></div>
+
         <div style="display: flex; align-items: center; gap: 20px;">
           <div class="logo-orb"></div>
           <div class="title-block">
@@ -76,6 +93,8 @@
             <span>Modo Roda Viva (Ciclagem)</span>
           </label>
         </div>
+        
+        
 <!-- PAINEL MOTOR 3·6·9 -->
 <div class="engine-controls accordion is-collapsed">
 
@@ -134,22 +153,6 @@
     <div class="status-bar" id="statusBar">Sistema em repouso · Matrix Pronta</div>
   </div>
 
-  <!-- HUD Magnético -->
-  <div class="symbol-bar" id="hudBar">
-    <div class="drag-handle" id="hudDrag" title="Arrastar HUD"></div>
-    <button class="symbol-btn" id="copyBtn" title="Copiar Texto Processado">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-    </button>
-    <button class="symbol-btn" id="clearBtn" title="Limpar Tudo">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-    </button>
-    <button class="symbol-btn" id="downloadBtn" title="Transferir Documento">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-    </button>
-    <div class="hud-info" id="hudStatus">78K-ID</div>
-  </div>
-
-  <div id="toast-container"></div>
 
 
 
