@@ -114,7 +114,7 @@
     #motorDock .motor-dock-head strong { display:block; font-size: 1rem; letter-spacing:.02em; }
     #motorDock .motor-dock-head span { display:block; font-size:.8rem; opacity:.75; margin-top:2px; }
     #motorFrame { width: 100%; height: min(78vh, 920px); border: 0; display:block; background: #000; }
-    body.motor-mode .response-container, body.motor-mode .input-container { display:none !important; }
+    body.motor-mode .response-container, body.motor-mode .input-container { display:flex !important; }
     body.motor-mode #motorDock { display:block !important; }
     
     .response-block { position: relative; }
@@ -156,6 +156,23 @@
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
   <div id="root">
+
+<section id="motorDock" class="motor-dock" aria-label="Motor 78K" hidden>
+    <div class="motor-dock-head">
+      <div>
+        <strong>Motor 78K</strong>
+        <span>· painel isolado · usa o HTML original dentro de iframe</span>
+      </div>
+      <button type="button" id="motorDockClose" class="pill-btn secondary">Fechar</button>
+    </div>
+    <iframe
+      id="motorFrame"
+      title="Motor 78K"
+      sandbox="allow-scripts allow-forms allow-same-origin"
+      loading="lazy"
+    ></iframe>
+  </section>
+
     <div class="bg-gradient"></div>
     <div id="bg-layer-fixed"></div>
 
@@ -210,12 +227,12 @@
               </div>
             </div>
             
-            <div class="activation-wrap stagger-itemm activation-hidden">
+            <div class="activation-wrap stagger-itemm activation-hiddent">
               <div class="activation-toggle" onclick="toggleSection('systemCard')">
                 <div style="display:block;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div><strong style="letter-spacing:1px;font-size:0.9rem">SYSTEM &amp; NEURAL</strong></div>
                 <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">CONFIG</div>
               </div>
-              <div id="systemCard" class="activation-card activation-hidden">
+              <div id="systemCard" class="activation-card activation-hiddent">
                 <div class="col">
                   <div class="section-title">IDENTIDADE DA INFODOSE</div><input type="text" id="infodoseNameInput" placeholder="Nome: World System..." style="width:100%;margin-bottom:8px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
                   <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div><input type="password" id="apiKeyInput" placeholder="sk-or-..." autocomplete="off" style="width:100%;margin-bottom:6px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
@@ -257,8 +274,8 @@
         </button>
 
         <div class="symbol-wrap"><button class="symbol-button" data-id="phi" data-url="about:blank">Φ</button></div>
-        <div class="symbol-wrap"><button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/">꩜</button></div>
-        <div class="symbol-wrap"><button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button></div>
+        <div class="symbol-wrap"><button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">꩜</button></div>
+        <div class="symbol-wrap"><button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/dual_reader/">◌</button></div>
         <div class="symbol-wrap"><button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button></div>
 
         <footer id="kobFooter" class="kob-footer">
@@ -266,6 +283,30 @@
         </footer>
 
         <div style="display:flex; opacity:.18;" id="assistantName">Dual.Infodose · Cinemático</div>
+
+<button style="border:none" id="kdx-mode-toggle" aria-pressed="false" title="Modo: You / Assistant"><span id="kdx-mode-icon">🧬</span><span id="kdx-mode-label">✦</span></button>
+      <div id="kdx-orb" class="kdx-orb kdx-hidden" role="button" aria-label="Orb de voz Kaion"><div class="kdx-orb-icon">◎</div></div>
+
+      <div class="nebula content wrap" id="particles-js"></div>
+      <button id="themeToggle" aria-label="Alternar tema"></button>
+
+      <div class="svg-container" id="logoContainer"></div>
+
+      <div class="input-container">
+        <input id="userInput" type="text" placeholder="Diga algo para o Dual." aria-label="Digite sua mensagem">
+        <button id="sendBtn" title="Enviar" type="button"><span class="send-label">➤</span></button>
+        <button id="voiceBtn" title="Ouvir último bloco" type="button"><svg viewBox="0 0 24 24"><use href="#icon-mic"></use></svg></button>
+      </div>
+
+      <div class="login-container" id="loginBox" aria-modal="true" role="dialog">
+        <h2>Ativar Dual.Infodose</h2>
+        <p>Defina o seu nome e o nome-base do assistente para personalizar as respostas.</p>
+        <form id="loginForm"><input id="userName" type="text" placeholder="Seu nome" required=""><input id="assistantInput" type="text" placeholder="Nome do assistente" required=""><button type="submit">Ativar</button></form>
+      </div>
+
+      <input type="file" id="parserFile" accept=".js,.css" style="display:none">
+      <input type="file" id="voiceConfigFile" accept=".json" style="display:none">
+      <div id="arch-overlay"></div>
 
         <div class="response-container" id="response">
           <div class="pages-wrapper" id="responseList">
@@ -324,29 +365,7 @@
         </div>
       </div>
 
-      <button id="kdx-mode-toggle" aria-pressed="false" title="Modo: You / Assistant"><span id="kdx-mode-icon">🧬</span><span id="kdx-mode-label">✦</span></button>
-      <div id="kdx-orb" class="kdx-orb kdx-hidden" role="button" aria-label="Orb de voz Kaion"><div class="kdx-orb-icon">◎</div></div>
-
-      <div class="nebula content wrap" id="particles-js"></div>
-      <button id="themeToggle" aria-label="Alternar tema"></button>
-
-      <div class="svg-container" id="logoContainer"></div>
-
-      <div class="input-container">
-        <input id="userInput" type="text" placeholder="Diga algo para o Dual." aria-label="Digite sua mensagem">
-        <button id="sendBtn" title="Enviar" type="button"><span class="send-label">➤</span></button>
-        <button id="voiceBtn" title="Ouvir último bloco" type="button"><svg viewBox="0 0 24 24"><use href="#icon-mic"></use></svg></button>
-      </div>
-
-      <div class="login-container" id="loginBox" aria-modal="true" role="dialog">
-        <h2>Ativar Dual.Infodose</h2>
-        <p>Defina o seu nome e o nome-base do assistente para personalizar as respostas.</p>
-        <form id="loginForm"><input id="userName" type="text" placeholder="Seu nome" required=""><input id="assistantInput" type="text" placeholder="Nome do assistente" required=""><button type="submit">Ativar</button></form>
-      </div>
-
-      <input type="file" id="parserFile" accept=".js,.css" style="display:none">
-      <input type="file" id="voiceConfigFile" accept=".json" style="display:none">
-      <div id="arch-overlay"></div>
+     
     </div> 
 
     <div id="keysModal" class="modal-overlay" aria-hidden="true">
@@ -412,13 +431,13 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-<!--  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main-1.js"></script>
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main-1.js"></script>
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/0-kob.js"></script>
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/KAOS-in6-0.js"></script>
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/inline-6-0.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/kob.js"></script>
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/00-kob.js"></script>
   
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-maino.js"></script> -->
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-maino.js"></script>
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
 
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
@@ -430,7 +449,7 @@
   <script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>
-
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
   
   <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
@@ -468,8 +487,6 @@
       resetIdle();
     }
   </script>
-
- <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/js/modules/archs.js"> 
 
   <script>
     console.log(`
