@@ -1466,7 +1466,7 @@ iframe,
   <div class="player" id="playerDock">
     <div class="player-wrap">
       <div class="player-top">
-        <button id="ppBtn" class="pp" title="Play/Pause">
+        <button id="ppBtn" class="pp chip" title="Play/Pause">
           <svg viewBox="0 0 24 24" id="ppIcon"><path d="M8 5v14l11-7z"></path></svg>
         </button>
         <div class="track">
@@ -1475,12 +1475,34 @@ iframe,
       <div id="ovSnippet" class="muted">—</div>    
   </div>
 
-             <div class="chip">
+             <div class="chipi">
      <button id="bmBtn" class="icon-btn">⭐</button>
 
-        <button id="viewBtn" class="view-mini" title="Ver páginas">
+          <button id="quickPasteBtn" class="icon-btn" title="Quick Actions">📂</button>
+        <!-- Quick Paste Panel -->
+        <div id="quickPastePanel" style="display:none;position:fixed;left:50%;bottom:80px;transform:translateX(-50%);z-index:200;width:min(94vw,360px);background:rgba(12,12,20,0.97);border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:16px;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.6)">
+          <div style="font-size:12px;font-weight:800;letter-spacing:.1em;opacity:.6;margin-bottom:12px">⚡ QUICK ACTIONS</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="qp-btn" id="qp-clipboard">📋 Paste Clipboard (Ctrl+V)</button>
+            <button class="qp-btn" id="qp-input">✏️ Type / Paste Text</button>
+            <button class="qp-btn" id="qp-html">🌐 HTML Inline Text</button>
+            <button class="qp-btn" id="qp-last">🔁 Load Last Text</button>
+
+<button id="viewBtn" class="view-mini" title="Ver páginas">
           <svg viewBox="0 0 24 24"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 110-10 5 5 0 010 10z"></path></svg>
         </button>
+       
+
+ <button id="importBtn" class="ov-btn" title="Importar PDF / ZIP / MD">📂</button>
+    
+
+          </div>
+          <textarea id="qp-textarea" placeholder="Cole ou escreva aqui..." style="display:none;width:100%;margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px;resize:vertical;min-height:80px;outline:none"></textarea>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button id="qp-go" style="display:none;flex:1;background:linear-gradient(90deg,#7a57ff,#5cc6ff);border:none;color:#fff;font-weight:800;padding:10px;border-radius:12px;cursor:pointer;font-size:13px">▶ Play Agora</button>
+            <button id="qp-close" style="border:1px solid rgba(255,255,255,0.15);background:transparent;color:#fff;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:13px">✕</button>
+          </div>
+        </div>
       </div> </div>
       <div class="player-slider-wrap">
         <span class="time-label" id="timeCur">0%</span>
@@ -1535,23 +1557,7 @@ iframe,
 
    
 
-        <button id="importBtn" class="ov-btn" title="Importar PDF / ZIP / MD">📂</button>
-        <button id="quickPasteBtn" class="ov-btn" title="Quick Actions">⚡</button>
-        <!-- Quick Paste Panel -->
-        <div id="quickPastePanel" style="display:none;position:fixed;left:50%;bottom:80px;transform:translateX(-50%);z-index:200;width:min(94vw,360px);background:rgba(12,12,20,0.97);border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:16px;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.6)">
-          <div style="font-size:12px;font-weight:800;letter-spacing:.1em;opacity:.6;margin-bottom:12px">⚡ QUICK ACTIONS</div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <button class="qp-btn" id="qp-clipboard">📋 Paste Clipboard (Ctrl+V)</button>
-            <button class="qp-btn" id="qp-input">✏️ Type / Paste Text</button>
-            <button class="qp-btn" id="qp-html">🌐 HTML Inline Text</button>
-            <button class="qp-btn" id="qp-last">🔁 Load Last Text</button>
-          </div>
-          <textarea id="qp-textarea" placeholder="Cole ou escreva aqui..." style="display:none;width:100%;margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px;resize:vertical;min-height:80px;outline:none"></textarea>
-          <div style="display:flex;gap:8px;margin-top:10px">
-            <button id="qp-go" style="display:none;flex:1;background:linear-gradient(90deg,#7a57ff,#5cc6ff);border:none;color:#fff;font-weight:800;padding:10px;border-radius:12px;cursor:pointer;font-size:13px">▶ Play Agora</button>
-            <button id="qp-close" style="border:1px solid rgba(255,255,255,0.15);background:transparent;color:#fff;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:13px">✕</button>
-          </div>
-        </div>
+        
 
         <button id="exportBtn" class="btn" style="background:linear-gradient(90deg,#d9e9ff,#ffffff);">Export</button>
         <button id="clearLibBtn" class="btn" style="background:#ffe3e6; color:#7a1a25">Clear Lib</button>
