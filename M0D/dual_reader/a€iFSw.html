@@ -1211,12 +1211,12 @@ iframe,
           </div>
         </div>
 
-       <iframe class="win-frame" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
+       <iframe class="win-frame" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" >
         </iframe> 
       </div>
     </div> 
   </div>
-<div id="bg-fake-custou"></div>
+<div id="bg-layer-fixed"></div>
   
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
 
@@ -1529,7 +1529,10 @@ iframe,
     <section class="card" id="libCard">
     
   <div class="row">
-        <h2>Library</h2>
+   <div class="chip">
+          <span style="font-size:78px;opacity:0">•</span>
+        </div>
+     <h2>Library</h2>
 
         <div class="usage"><span id="usageVal">0 MB</span></div>
       </div>
@@ -1588,7 +1591,7 @@ iframe,
    <!-- Playback Settings -->
     <section class="card">
       <div class="row"><h2>Playback</h2><span class="pill" id="voiceCount">—</span></div>
-      <div class="settings">
+      <div class="settings chip">
         <div class="field">
           <label class="muted">Voice</label>
           <select id="voiceSelect" class="select"></select>
@@ -1625,8 +1628,7 @@ iframe,
   </section></div>
 
 
-    
-
+            
 
   <!-- Overlay Viewer -->
   <div id="overlay" class="overlay" aria-hidden="true">
@@ -2957,13 +2959,6 @@ iframe,
   <script src="https://unpkg.com/lucide@latest"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main-1.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/0-kob.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/KAOS-in6-0.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/inline-6-0.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/00-kob.js"></script>
-  
-
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
 
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
@@ -3136,9 +3131,9 @@ iframe,
       id: normalize(userName) || 'custom',
       name: String(userName || 'Custom').toUpperCase(),
       voice: '',
-      lang: 'pt-BR',
-      rate: 1,
-      pitch: 1
+      lang: '',
+      rate: 1.01,
+      pitch: 0.871,
     };
   };
 
