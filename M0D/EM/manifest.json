@@ -1,0 +1,44 @@
+{
+  "name": "SÜMBÜS FUSION · ΔUAL 3.0 · KOBLLUX_VIVO ∆³",
+  "short_name": "FUSÃO ∆³",
+  "description": "IDE simbiótica KOBLLUX · 12 arquétipos CADIAL · HORUS EYE · METALUX BRIDGE · HYPERVISION AI · VEEB ORB · pt-BR",
+  "lang": "pt-BR",
+  "start_url": "./sumbus_fusion.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050516",
+  "theme_color": "#0f0f11",
+  "orientation": "any",
+  "prefer_related_applications": false,
+  "categories": ["productivity", "developer", "utilities"],
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Editor",
+      "short_name": "ED",
+      "description": "Abrir editor de código",
+      "url": "./sumbus_fusion.html#editor",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "HYPERVISION AI",
+      "short_name": "AI ∆³",
+      "description": "Chat com IA KOBLLUX",
+      "url": "./sumbus_fusion.html#hypervision",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
