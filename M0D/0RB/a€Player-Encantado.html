@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Dual Infodose — Player Nebula Pro</title>
+<style>
+  /* ---------- Nebula Pro tokens (mobile-first) ---------- */
+  :root{
+    --bg-1: #12071a;
+    --bg-2: #0c1830;
+    --accent1: #7a57ff; /* magenta */
+    --accent2: #5cc6ff; /* cyan */
+    --card: rgba(255,255,255,0.04);
+    --glass: rgba(255,255,255,0.04);
+    --muted: rgba(255,255,255,0.6);
+    --soft: rgba(255,255,255,0.85);
+    --radius: 18px;
+    --gap: 14px;
+    --shadow: 0 10px 30px rgba(2,2,10,0.6);
+    --glass-blur: 12px;
+    --max-width: 880px;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  html,body{height:100%;margin:0;font-family:var(--font-sans);background:
+    radial-gradient(1200px 600px at 10% 10%, rgba(122,87,255,0.12), transparent 8%),
+    radial-gradient(800px 400px at 90% 90%, rgba(92,198,255,0.06), transparent 8%),
+    linear-gradient(160deg,var(--bg-1),var(--bg-2)); color:var(--soft);-webkit-font-smoothing:antialiased;}
+  .app {
+    max-width:var(--max-width);
+    margin:28px auto;
+    padding:20px;
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:var(--gap);
+    width:calc(100% - 32px);
+  }
+
+  /* container rows */
+  .row { display:grid; gap:var(--gap); }
+
+  /* Import area */
+  .uploader {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: var(--radius);
+    border: 1px dashed rgba(255,255,255,0.06);
+    padding:20px;
+    position:relative;
+    min-height:110px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .uploader.dragging { border-color: rgba(122,87,255,0.8); box-shadow: 0 14px 40px rgba(122,87,255,0.06); }
+  .uploader .cta { font-size:18px; font-weight:700; color:var(--soft); margin-bottom:6px; }
+  .uploader .sub { font-size:13px; color:var(--muted); }
+  .uploader input[type=file]{ display:none; }
+
+  /* layout with playlist on same column for mobile */
+  .grid {
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:var(--gap);
+  }
+
+  /* Player Card */
+  .player-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+    border-radius: 20px;
+    padding:18px;
+    box-shadow: var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .meta {
+    display:flex; gap:12px; align-items:center;
+  }
+  .cover {
+    width:84px; height:84px; border-radius:12px; background:linear-gradient(180deg,#111 0%, #19132a 100%); flex-shrink:0; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cover img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .meta .title { font-size:20px; font-weight:800; letter-spacing:-0.6px; color:#fff; }
+  .meta .sub { font-size:12px; color:var(--muted); margin-top:2px; }
+
+  /* waveform & progress */
+  .wavewrap { position:relative; display:flex; gap:12px; align-items:center; }
+  canvas#wave { width:100%; height:52px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.006), transparent); }
+  .time-row { display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-top:6px; }
+
+  /* controls */
+  .controls { display:flex; gap:18px; align-items:center; justify-content:center; margin-top:6px; }
+  .btn { width:56px; height:56px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        box-shadow: 0 6px 18px rgba(2,2,10,0.5);
+        border: 1px solid rgba(255,255,255,0.04); }
+  .btn.play { width:74px; height:74px; background: radial-gradient(circle at 30% 20%, rgba(92,198,255,0.12), transparent), linear-gradient(180deg, rgba(122,87,255,0.06), rgba(92,198,255,0.03)); border: none; }
+  .btn svg { filter: drop-shadow(0 6px 16px rgba(90,200,255,0.08)); }
+
+  /* playlist */
+  .playlist {
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+    border-radius:16px; padding:12px; box-shadow: var(--shadow);
+  }
+  .tabs { display:flex; gap:12px; margin-bottom:8px; }
+  .tab { font-size:13px; padding:8px 10px; border-radius:12px; color:var(--muted); cursor:pointer; }
+  .tab.active { color:var(--soft); background: linear-gradient(90deg, rgba(122,87,255,0.08), rgba(92,198,255,0.04)); }
+
+  .search { margin-bottom:8px; display:flex; gap:8px; align-items:center; }
+  .search input { flex:1; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:rgba(255,255,255,0.01); color:var(--soft); }
+
+  .track { display:flex; gap:12px; align-items:center; padding:8px; border-radius:10px; margin-bottom:8px; background:transparent; transition:background .18s; }
+  .track:hover { background: rgba(255,255,255,0.02); }
+  .track .tcover { width:56px; height:56px; border-radius:10px; overflow:hidden; background:#0c0c14; flex-shrink:0; }
+  .track .info { flex:1; }
+  .track .info .name { font-weight:700; color:#fff; font-size:15px; }
+  .track .info .meta { font-size:12px; color:var(--muted); margin-top:4px; }
+  .track .actions { display:flex; gap:10px; align-items:center; }
+
+  .space { font-weight:800; text-align:center; color:var(--accent2); margin-top:6px; }
+
+  /* advanced modal */
+  .advanced {
+    display:flex; gap:12px; align-items:center; justify-content:space-between; margin-top:8px;
+  }
+  .advanced .left { display:flex; gap:8px; align-items:center; }
+  .chip { background:rgba(255,255,255,0.02); padding:8px 12px; border-radius:12px; font-size:13px; color:var(--muted); border:1px solid rgba(255,255,255,0.03); }
+
+  /* small responsive */
+  @media(min-width:880px){
+    .grid { grid-template-columns: 1fr 340px; align-items:start; }
+  }
+</style>
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- Uploader -->
+    <div class="uploader row" id="uploader">
+      <div>
+        <div class="cta">+ Importar Arquivo</div>
+        <div class="sub">Arraste e solte um arquivo de áudio (.mp3 .wav .flac .m4a) ou
+          <label style="color:var(--accent2); cursor:pointer;" id="openFile"> selecione</label>
+        </div>
+        <input id="fileInput" type="file" accept=".mp3,.wav,.flac,.m4a" multiple>
+        <div style="margin-top:12px; font-size:13px; color:var(--muted);" id="uploadProgress"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Player left column -->
+      <div>
+        <div class="player-card">
+          <div class="meta">
+            <div class="cover" id="cover">
+              <img id="coverImg" src="" alt="capa" />
+            </div>
+            <div style="flex:1">
+              <div class="title" id="trackTitle">Dual Infodose</div>
+              <div class="sub" id="trackArtist">INFODOSE</div>
+              <div style="margin-top:8px; color:var(--muted); font-size:13px;" id="fileInfo">—</div>
+            </div>
+            <div style="text-align:right">
+              <div class="chip" id="storageUsed">0 MB / 128 MB</div>
+            </div>
+          </div>
+
+          <div class="wavewrap">
+            <canvas id="wave"></canvas>
+          </div>
+          <div class="time-row">
+            <div id="currentTime">0:00</div>
+            <div id="totalTime">0:00</div>
+          </div>
+
+          <div class="controls">
+            <div class="btn" id="prevBtn" title="Anterior">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 6v12L8 12l7-6z" fill="white" opacity="0.9"/></svg>
+            </div>
+            <div class="btn play" id="playBtn" title="Play/Pause">
+              <svg id="playIcon" width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="white"/></svg>
+            </div>
+            <div class="btn" id="nextBtn" title="Próxima">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 6v12l7-6-7-6z" fill="white" opacity="0.9"/></svg>
+            </div>
+          </div>
+
+          <div class="advanced">
+            <div class="left">
+              <div class="chip" id="shuffleBtn" title="Aleatório">Shuffle: OFF</div>
+              <div class="chip" id="repeatBtn" title="Repetir">Repeat: OFF</div>
+            </div>
+            <div>
+              <button id="advancedOpen" class="chip">Configurações Avançadas</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playlist right column -->
+      <div>
+        <div class="playlist">
+          <div class="tabs" role="tablist">
+            <div class="tab active" data-tab="all">Todos</div>
+            <div class="tab" data-tab="recent">Recentes</div>
+            <div class="tab" data-tab="fav">Favoritos</div>
+          </div>
+          <div class="search">
+            <input id="searchInput" placeholder="Buscar" />
+            <div style="width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.01);"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35" stroke="white" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          </div>
+
+          <div id="tracksList"></div>
+
+          <div class="space" id="spaceUsed">0 MB / 128 MB</div>
+
+          <div style="margin-top:12px; display:flex; gap:8px;">
+            <button id="exportAll" class="chip">Exportar Tudo</button>
+            <button id="clearAll" class="chip">Remover Tudo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden audio element -->
+    <audio id="audio" crossorigin="anonymous"></audio>
+
+    <!-- Advanced modal (simple) -->
+    <div id="advancedModal" style="display:none; position:fixed; inset:0; background:linear-gradient(rgba(2,2,10,0.6), rgba(2,2,10,0.6)); align-items:center; justify-content:center; padding:28px;">
+      <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:18px; padding:18px; width:100%; max-width:520px;">
+        <h3 style="margin:0 0 8px 0;">Configurações Avançadas</h3>
+        <div style="display:flex; gap:10px; flex-direction:column;">
+          <label style="font-size:13px; color:var(--muted)">Playback speed</label>
+          <select id="speedSelect" style="padding:10px; border-radius:10px; background:rgba(255,255,255,0.01); color:var(--soft);">
+            <option value="0.75">0.75×</option>
+            <option value="1" selected>1×</option>
+            <option value="1.25">1.25×</option>
+            <option value="1.5">1.5×</option>
+          </select>
+
+          <label style="font-size:13px; color:var(--muted)">Volume</label>
+          <input id="volumeRange" type="range" min="0" max="1" step="0.01" value="1" />
+
+          <label style="font-size:13px; color:var(--muted)">TTS (ler título)</label>
+          <div style="display:flex; gap:8px;">
+            <button id="ttsBtn" class="chip">Ler Título</button>
+            <div style="flex:1"></div>
+            <button id="closeAdvanced" class="chip">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ------------- IndexedDB wrapper (small) ------------- */
+const DB_NAME = 'infodose-db';
+const STORE = 'tracks';
+const DB_VER = 1;
+
+function openDB(){
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if(!db.objectStoreNames.contains(STORE)){
+        const os = db.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
+        os.createIndex('createdAt', 'createdAt', { unique:false });
+        os.createIndex('favorite', 'favorite', { unique:false });
+      }
+    };
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+async function idbPut(track){
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(STORE,'readwrite');
+    const s = tx.objectStore(STORE);
+    const r = s.put(track);
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+async function idbGetAll(){
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(STORE,'readonly');
+    const s = tx.objectStore(STORE);
+    const r = s.getAll();
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+async function idbGet(id){
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(STORE,'readonly');
+    const s = tx.objectStore(STORE);
+    const r = s.get(id);
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+async function idbDelete(id){
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(STORE,'readwrite');
+    const s = tx.objectStore(STORE);
+    const r = s.delete(id);
+    r.onsuccess = () => res(true);
+    r.onerror = () => rej(r.error);
+  });
+}
+async function idbClear(){
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(STORE,'readwrite');
+    const s = tx.objectStore(STORE);
+    const r = s.clear();
+    r.onsuccess = () => res(true);
+    r.onerror = () => rej(r.error);
+  });
+}
+
+/* ------------- App state & elements ------------- */
+const fileInput = document.getElementById('fileInput');
+const openFile = document.getElementById('openFile');
+const uploader = document.getElementById('uploader');
+const uploadProgress = document.getElementById('uploadProgress');
+const tracksList = document.getElementById('tracksList');
+const storageUsed = document.getElementById('storageUsed');
+const spaceUsed = document.getElementById('spaceUsed');
+
+const audio = document.getElementById('audio');
+const playBtn = document.getElementById('playBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const currentTimeLabel = document.getElementById('currentTime');
+const totalTimeLabel = document.getElementById('totalTime');
+const trackTitle = document.getElementById('trackTitle');
+const trackArtist = document.getElementById('trackArtist');
+const fileInfo = document.getElementById('fileInfo');
+const coverImg = document.getElementById('coverImg');
+const cover = document.getElementById('coverImg');
+
+const waveCanvas = document.getElementById('wave');
+const ctxWave = waveCanvas.getContext('2d');
+
+const tabs = document.querySelectorAll('.tab');
+const searchInput = document.getElementById('searchInput');
+
+const shuffleBtn = document.getElementById('shuffleBtn');
+const repeatBtn = document.getElementById('repeatBtn');
+
+const advancedOpen = document.getElementById('advancedOpen');
+const advancedModal = document.getElementById('advancedModal');
+const closeAdvanced = document.getElementById('closeAdvanced');
+const speedSelect = document.getElementById('speedSelect');
+const volumeRange = document.getElementById('volumeRange');
+const ttsBtn = document.getElementById('ttsBtn');
+
+const exportAll = document.getElementById('exportAll');
+const clearAll = document.getElementById('clearAll');
+
+/* ------------- Player variables ------------- */
+let tracks = []; // loaded from DB
+let playlist = []; // order of IDs to play
+let currentIndex = -1; // index in playlist
+let isPlaying = false;
+let audioURL = null;
+let analyser, audioCtx, sourceNode, dataArray, bufferLength;
+let rafId = null;
+let activeTab = 'all';
+let searchQuery = '';
+let shuffle = false;
+let repeatMode = 'off'; // off, one, all
+const STORAGE_LIMIT_BYTES = 128 * 1024 * 1024; // 128 MB default
+
+/* ---------- Helpers ---------- */
+function fmtTime(s){
+  if(!s || isNaN(s)) return '0:00';
+  s = Math.floor(s);
+  const m = Math.floor(s/60), sec = s%60;
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+function bytesToMB(n){ return (n/1024/1024).toFixed(2); }
+
+/* ---------- Waveform & Analyser setup ---------- */
+function setupAudioAnalyser(){
+  if(audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  try{
+    sourceNode = audioCtx.createMediaElementSource(audio);
+  }catch(e){
+    // some browsers require user gesture before createMediaElementSource
+    sourceNode = null;
+  }
+  if(sourceNode){
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 2048;
+    bufferLength = analyser.fftSize;
+    dataArray = new Uint8Array(bufferLength);
+    sourceNode.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    drawWave();
+  }
+}
+function drawWave(){
+  if(!analyser) return;
+  const canvas = waveCanvas;
+  const cw = canvas.width = canvas.clientWidth * devicePixelRatio;
+  const ch = canvas.height = canvas.clientHeight * devicePixelRatio;
+  ctxWave.clearRect(0,0,cw,ch);
+  analyser.getByteTimeDomainData(dataArray);
+  ctxWave.lineWidth = 2 * devicePixelRatio;
+  // gradient stroke
+  const g = ctxWave.createLinearGradient(0,0,cw,0);
+  g.addColorStop(0, 'rgba(122,87,255,0.9)');
+  g.addColorStop(0.5, 'rgba(92,198,255,0.9)');
+  g.addColorStop(1, 'rgba(122,87,255,0.9)');
+  ctxWave.strokeStyle = g;
+  ctxWave.beginPath();
+  const sliceWidth = cw / bufferLength;
+  let x = 0;
+  for(let i=0;i<bufferLength;i++){
+    const v = dataArray[i] / 128.0;
+    const y = v * ch/2;
+    if(i===0) ctxWave.moveTo(x,y);
+    else ctxWave.lineTo(x,y);
+    x += sliceWidth;
+  }
+  ctxWave.stroke();
+  // request next frame
+  rafId = requestAnimationFrame(drawWave);
+}
+
+/* ---------- Storage usage ---------- */
+async function computeStorage(){
+  const all = await idbGetAll();
+  let used = 0;
+  all.forEach(t => used += (t.size || 0));
+  storageUsed.textContent = `${bytesToMB(used)} MB / ${bytesToMB(STORAGE_LIMIT_BYTES)} MB`;
+  spaceUsed.textContent = `${bytesToMB(used)} MB / ${bytesToMB(STORAGE_LIMIT_BYTES)} MB`;
+}
+
+/* ---------- Render playlist UI ---------- */
+function renderList(){
+  tracksList.innerHTML = '';
+  const filtered = tracks.filter(t => {
+    if(activeTab === 'recent'){
+      // recent: last 10 by createdAt
+      // we'll treat as createdAt within 30 days (approx) OR last added
+      return true; // filter later with sort
+    }
+    if(activeTab === 'fav') return !!t.favorite;
+    return true;
+  }).filter(t => {
+    if(!searchQuery) return true;
+    return t.name.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+  // sort recent by createdAt desc for 'recent' tab
+  if(activeTab === 'recent') filtered.sort((a,b)=>b.createdAt - a.createdAt);
+  else filtered.sort((a,b)=>a.name.localeCompare(b.name));
+  for(const t of filtered){
+    const div = document.createElement('div');
+    div.className = 'track';
+    div.innerHTML = `
+      <div class="tcover"><img src="${t.cover || placeholderCover()}" style="width:100%;height:100%;object-fit:cover" /></div>
+      <div class="info">
+        <div class="name">${escapeHtml(t.name)}</div>
+        <div class="meta">${fmtTime(t.duration)} • ${t.type.toUpperCase()} • ${bytesToMB(t.size)} MB</div>
+      </div>
+      <div class="actions">
+        <button class="chip playTrack" data-id="${t.id}" title="Play">▶</button>
+        <button class="chip favBtn" data-id="${t.id}" title="Favorito">${t.favorite ? '★' : '☆'}</button>
+        <button class="chip dlBtn" data-id="${t.id}" title="Download">⬇</button>
+        <button class="chip delBtn" data-id="${t.id}" title="Remover">✖</button>
+      </div>
+    `;
+    tracksList.appendChild(div);
+  }
+}
+
+/* ---------- placeholder cover ---------- */
+function placeholderCover(){
+  // small inline SVG data URI nebula-like placeholder
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'><rect width='100%' height='100%' fill='#0e0820'/><g fill='none' stroke='rgba(122,87,255,0.4)' stroke-width='3'><circle cx='50' cy='50' r='30'/></g></svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+/* ---------- escape helper ---------- */
+function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ---------- load tracks from DB ---------- */
+async function loadTracks(){
+  tracks = await idbGetAll();
+  // ensure consistent shape
+  tracks = tracks.map(t => ({ favorite: false, cover: placeholderCover(), ...t }));
+  renderList();
+  computeStorage();
+  // if playlist not set, fill with ids sorted by createdAt
+  if(playlist.length === 0){
+    playlist = tracks.map(t => t.id);
+  }
+}
+
+/* ---------- play logic ---------- */
+async function playTrackById(id){
+  const tr = await idbGet(id);
+  if(!tr) return;
+  // stop current
+  if(audioURL) { URL.revokeObjectURL(audioURL); audioURL = null; }
+  audioURL = URL.createObjectURL(tr.blob);
+  audio.src = audioURL;
+  audio.playbackRate = parseFloat(speedSelect.value || 1);
+  audio.volume = parseFloat(volumeRange.value || 1);
+  audio.play().then(()=> {
+    isPlaying = true;
+    updatePlayUI(true, tr);
+    setupAudioAnalyser();
+    if(audioCtx && audioCtx.state === 'suspended'){ audioCtx.resume(); }
+  }).catch(err => {
+    console.warn('play failed', err);
+  });
+  // set meta labels
+  trackTitle.textContent = tr.name;
+  trackArtist.textContent = tr.artist || 'INFODOSE';
+  fileInfo.textContent = `${tr.type.toUpperCase()} • ${bytesToMB(tr.size)} MB`;
+  coverImg.src = tr.cover || placeholderCover();
+  // update currentTime/totalTime after metadata
+  audio.onloadedmetadata = () => {
+    totalTimeLabel.textContent = fmtTime(audio.duration || tr.duration);
+  };
+  // update playlist index
+  const idx = playlist.indexOf(id);
+  if(idx >= 0) currentIndex = idx;
+}
+
+function updatePlayUI(play, tr){
+  const playIcon = document.getElementById('playIcon');
+  if(play){
+    playIcon.innerHTML = '<path d="M6 5v14l11-7z" fill="white"/>'; // triangle
+    playBtn.title = 'Pausar';
+  } else {
+    playIcon.innerHTML = '<rect x="6" y="5" width="4" height="14" fill="white"/><rect x="14" y="5" width="4" height="14" fill="white"/>';
+    playBtn.title = 'Play';
+  }
+}
+
+/* ---------- events ---------- */
+playBtn.addEventListener('click', ()=> {
+  if(!audio.src){
+    // play first in playlist
+    if(playlist.length>0) playTrackById(playlist[0]);
+    return;
+  }
+  if(audio.paused){ audio.play(); isPlaying = true; updatePlayUI(true); }
+  else { audio.pause(); isPlaying = false; updatePlayUI(false); }
+});
+prevBtn.addEventListener('click', ()=> {
+  if(playlist.length===0) return;
+  if(shuffle) {
+    const ridx = Math.floor(Math.random()*playlist.length);
+    playTrackById(playlist[ridx]);
+  } else {
+    currentIndex = Math.max(0, (currentIndex <=0 ? playlist.length -1 : currentIndex-1));
+    playTrackById(playlist[currentIndex]);
+  }
+});
+nextBtn.addEventListener('click', ()=> {
+  if(playlist.length===0) return;
+  if(shuffle){
+    const ridx = Math.floor(Math.random()*playlist.length);
+    playTrackById(playlist[ridx]);
+  } else {
+    if(repeatMode === 'one'){
+      audio.currentTime = 0; audio.play();
+      return;
+    }
+    currentIndex = (currentIndex + 1) % playlist.length;
+    if(currentIndex === 0 && repeatMode === 'off'){
+      // stop at end
+      audio.pause(); isPlaying = false; updatePlayUI(false);
+      return;
+    }
+    playTrackById(playlist[currentIndex]);
+  }
+});
+
+// audio time updates
+audio.addEventListener('timeupdate', () => {
+  currentTimeLabel.textContent = fmtTime(audio.currentTime);
+  // small seek bar draw on canvas bg
+  drawProgressBar();
+});
+audio.addEventListener('ended', () => {
+  if(repeatMode==='one'){
+    audio.currentTime = 0; audio.play();
+  } else {
+    nextBtn.click();
+  }
+});
+
+/* ---------- draw progress as background on canvas ---------- */
+function drawProgressBar(){
+  const c = waveCanvas;
+  if(!c) return;
+  const cw = c.width = c.clientWidth * devicePixelRatio;
+  const ch = c.height = c.clientHeight * devicePixelRatio;
+  // draw semi-transparent bg
+  ctxWave.clearRect(0,0,cw,ch);
+  // base gradient background bar
+  ctxWave.fillStyle = 'rgba(255,255,255,0.02)';
+  ctxWave.fillRect(0,ch*0.45,cw,ch*0.1);
+  if(audio.duration){
+    const ratio = (audio.currentTime / audio.duration);
+    const w = Math.max(2, cw * ratio);
+    const g = ctxWave.createLinearGradient(0,0,w,0);
+    g.addColorStop(0, 'rgba(122,87,255,0.9)');
+    g.addColorStop(1, 'rgba(92,198,255,0.9)');
+    ctxWave.fillStyle = g;
+    ctxWave.fillRect(0,ch*0.45,w,ch*0.1);
+  }
+}
+
+/* ---------- upload handling ---------- */
+openFile.addEventListener('click', ()=> fileInput.click());
+fileInput.addEventListener('change', (e)=> handleFiles(e.target.files));
+
+['dragenter','dragover'].forEach(ev => {
+  uploader.addEventListener(ev, (e)=>{ e.preventDefault(); uploader.classList.add('dragging'); }, false);
+});
+['dragleave','drop'].forEach(ev=> {
+  uploader.addEventListener(ev, (e)=> { e.preventDefault(); uploader.classList.remove('dragging'); }, false);
+});
+uploader.addEventListener('drop', (e)=> {
+  const dt = e.dataTransfer;
+  if(dt && dt.files) handleFiles(dt.files);
+});
+
+/* handle multiple file uploads */
+async function handleFiles(fileList){
+  if(!fileList || fileList.length===0) return;
+  for(const f of fileList){
+    if(!['audio/mpeg','audio/wav','audio/x-wav','audio/flac','audio/x-flac','audio/mp4','audio/x-m4a','audio/m4a'].includes(f.type) && !f.name.match(/\.(mp3|wav|flac|m4a)$/i)){
+      console.warn('formato não suportado', f.name, f.type);
+      continue;
+    }
+    // show progress using FileReader
+    await addFileToDB(f);
+  }
+  await loadTracks();
+}
+
+/* add file to DB; get duration before commit */
+function addFileToDB(file){
+  return new Promise((res, rej)=>{
+    uploadProgress.textContent = `Importando ${file.name}...`;
+    // read to trigger progress events
+    const fr = new FileReader();
+    fr.onprogress = (e) => {
+      if(e.lengthComputable) uploadProgress.textContent = `Importando ${file.name} — ${(e.loaded/e.total*100).toFixed(0)}%`;
+    };
+    fr.onload = async () => {
+      // have ArrayBuffer if needed (fr.result), but we store file blob directly
+      // get duration via temporary audio element
+      const tmpUrl = URL.createObjectURL(file);
+      const tmpAudio = new Audio();
+      tmpAudio.src = tmpUrl;
+      tmpAudio.addEventListener('loadedmetadata', async () => {
+        const duration = tmpAudio.duration || 0;
+        const trackObj = {
+          name: file.name.replace(/\.[^/.]+$/, ""),
+          size: file.size,
+          type: (file.type||'audio').split('/').pop(),
+          duration: duration,
+          blob: file,
+          createdAt: Date.now(),
+          favorite: false,
+          artist: '',
+          cover: placeholderCover()
+        };
+        await idbPut(trackObj);
+        URL.revokeObjectURL(tmpUrl);
+        uploadProgress.textContent = `Importado: ${file.name}`;
+        // small delay for UX
+        setTimeout(()=> uploadProgress.textContent = '', 1200);
+        res(true);
+      });
+      tmpAudio.onerror = (err) => {
+        URL.revokeObjectURL(tmpUrl);
+        uploadProgress.textContent = `Falha ao ler ${file.name}`;
+        rej(err);
+      };
+    };
+    fr.onerror = (err) => { uploadProgress.textContent = 'Erro de leitura'; rej(err); };
+    fr.readAsArrayBuffer(file);
+  });
+}
+
+/* ---------- event delegation for playlist actions ---------- */
+tracksList.addEventListener('click', async (e) => {
+  const el = e.target;
+  if(el.matches('.playTrack')){
+    const id = Number(el.dataset.id);
+    playTrackById(id);
+  } else if(el.matches('.favBtn')){
+    const id = Number(el.dataset.id);
+    const tr = await idbGet(id);
+    tr.favorite = !tr.favorite;
+    await idbPut(tr);
+    await loadTracks();
+  } else if(el.matches('.dlBtn')){
+    const id = Number(el.dataset.id);
+    const tr = await idbGet(id);
+    const url = URL.createObjectURL(tr.blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = tr.name + '.' + (tr.type||'mp3');
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=> URL.revokeObjectURL(url), 2000);
+  } else if(el.matches('.delBtn')){
+    const id = Number(el.dataset.id);
+    if(confirm('Remover faixa da biblioteca?')) {
+      await idbDelete(id);
+      await loadTracks();
+    }
+  }
+});
+
+/* ---------- controls toggles ---------- */
+shuffleBtn.addEventListener('click', ()=> {
+  shuffle = !shuffle;
+  shuffleBtn.textContent = `Shuffle: ${shuffle ? 'ON' : 'OFF'}`;
+});
+repeatBtn.addEventListener('click', ()=> {
+  if(repeatMode === 'off') repeatMode = 'one';
+  else if(repeatMode === 'one') repeatMode = 'all';
+  else repeatMode = 'off';
+  repeatBtn.textContent = `Repeat: ${repeatMode.toUpperCase()}`;
+});
+
+/* ---------- tabs & search ---------- */
+tabs.forEach(t => t.addEventListener('click', (e)=>{
+  tabs.forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  activeTab = t.dataset.tab;
+  renderList();
+}));
+searchInput.addEventListener('input', (e)=> {
+  searchQuery = e.target.value;
+  renderList();
+});
+
+/* ---------- advanced modal ---------- */
+advancedOpen.addEventListener('click', ()=> advancedModal.style.display = 'flex');
+closeAdvanced.addEventListener('click', ()=> advancedModal.style.display = 'none');
+speedSelect.addEventListener('change', ()=> { audio.playbackRate = parseFloat(speedSelect.value); });
+volumeRange.addEventListener('input', ()=> { audio.volume = parseFloat(volumeRange.value); });
+ttsBtn.addEventListener('click', ()=> {
+  const text = trackTitle.textContent || 'Sem título';
+  if('speechSynthesis' in window){
+    const s = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(s);
+  } else alert('TTS não suportado neste navegador');
+});
+
+/* export all (zips not implemented - we provide downloads in sequence) */
+exportAll.addEventListener('click', async ()=>{
+  const all = await idbGetAll();
+  if(!all.length) return alert('Nada para exportar');
+  for(const t of all){
+    const url = URL.createObjectURL(t.blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = t.name + '.' + (t.type||'mp3');
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    await new Promise(r=>setTimeout(r, 200)); // small gap
+  }
+});
+clearAll.addEventListener('click', async ()=> {
+  if(confirm('Remover todas as faixas da biblioteca?')){
+    await idbClear();
+    tracks = [];
+    playlist = [];
+    await loadTracks();
+  }
+});
+
+/* ---------- initial load ---------- */
+(async ()=>{
+  await loadTracks();
+  // set cover default
+  coverImg.src = placeholderCover();
+  // canvas initial size
+  function resizeCanvas(){ waveCanvas.width = waveCanvas.clientWidth * devicePixelRatio; waveCanvas.height = waveCanvas.clientHeight * devicePixelRatio; drawProgressBar(); }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+})();
+
+/* ---------- utility: keep UI reactive to DB changes ---------- */
+// We don't have DB change events, so update UI after common ops (idbPut, idbDelete are followed by loadTracks)
+
+/* ---------- ensure AudioContext created on user gesture ---------- */
+document.addEventListener('click', function initOnce(){
+  setupAudioAnalyser();
+  document.removeEventListener('click', initOnce);
+}, { once:true });
+
+/* Keyboard space toggles play/pause for convenience */
+document.addEventListener('keydown', (e)=> {
+  if(e.code === 'Space'){
+    e.preventDefault();
+    playBtn.click();
+  }
+});
+</script>
+\
+<!-- Enhancement: music-metadata-browser + worker usage for waveform & cover generation -->
+<script src="https://unpkg.com/music-metadata-browser/dist/music-metadata-browser.umd.js"></script>
+<script>
+// Create worker (external)
+const peaksWorker = new Worker('worker.js');
+peaksWorker.onmessage = (ev) => {
+  const msg = ev.data;
+  if(msg.type === 'progress'){
+    document.getElementById('uploadProgress').textContent = `Processando waveform... ${(msg.progress*100).toFixed(0)}%`;
+  } else if(msg.type === 'done'){
+    // dispatch custom event with peaks
+    window.dispatchEvent(new CustomEvent('workerPeaks', { detail: msg.peaks }));
+    document.getElementById('uploadProgress').textContent = `Waveform pronto`;
+  } else if(msg.type === 'decoded'){
+    // channels returned as transferred buffers - forward to compute peaks
+    peaksWorker.postMessage({ cmd:'computePeaks', channels: msg.channels, peaksLength: 400 }, msg.channels);
+  } else if(msg.type === 'not_supported'){
+    // fallback handled by main thread
+    console.log('Worker decode not supported; main-thread decode will be used.');
+  }
+};
+
+async function decodeAndComputePeaks(file, peaksLength = 400){
+  // try to ask worker to decode in worker
+  try{
+    const ab = await file.arrayBuffer();
+    // ask worker to tryDecode (worker will reply 'decoded' or 'not_supported')
+    peaksWorker.postMessage({ cmd:'tryDecode', arrayBuffer: ab }, [ab]);
+    return new Promise((res,rej) => {
+      function onDone(ev){
+        window.removeEventListener('workerPeaks', onDone);
+        res(ev.detail);
+      }
+      window.addEventListener('workerPeaks', onDone);
+      // also set a timeout fallback in 6s to do main-thread decode if worker didn't support
+      setTimeout(async ()=>{
+        // if no response yet, do main-thread decode and transfer channels to worker
+        peaksWorker.postMessage({ type: 'timeout_check' }); // noop message
+        // main-thread decode
+        try{
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const audioBuffer = await audioCtx.decodeAudioData(await file.arrayBuffer());
+          const channels = [];
+          for(let c=0;c<audioBuffer.numberOfChannels;c++){
+            const ch = audioBuffer.getChannelData(c);
+            const copy = new Float32Array(ch.length); copy.set(ch);
+            channels.push(copy.buffer);
+          }
+          peaksWorker.postMessage({ cmd:'computePeaks', channels, peaksLength }, channels);
+        }catch(e){
+          console.warn('Main-thread decode failed', e);
+          rej(e);
+        }
+      }, 6000);
+    });
+  }catch(err){
+    console.warn('decodeAndComputePeaks error', err);
+    throw err;
+  }
+}
+
+// metadata extraction using music-metadata-browser
+async function extractMetadataAndCover(file){
+  try{
+    const mm = window.musicMetadataBrowser;
+    if(mm && mm.parseBlob){
+      const meta = await mm.parseBlob(file);
+      const common = meta.common || {};
+      let coverUrl = null;
+      if(common.picture && common.picture.length){
+        const pic = common.picture[0];
+        const blob = new Blob([pic.data], { type: pic.format || 'image/jpeg' });
+        coverUrl = URL.createObjectURL(blob);
+      }
+      return { title: common.title, artist: common.artist, cover: coverUrl, tags: meta.common };
+    }
+  }catch(e){
+    console.warn('music-metadata-browser failed', e);
+  }
+  // fallback: no cover
+  return { title: null, artist: null, cover: null };
+}
+
+// cover generator (canvas -> PNG blob)
+async function generateCoverPNGFromPeaks(peaks, opts={}){
+  const width = opts.width || 1024;
+  const height = opts.height || 1024;
+  const c = document.createElement('canvas');
+  c.width = width; c.height = height;
+  const ctx = c.getContext('2d');
+  // gradient bg
+  const g = ctx.createLinearGradient(0,0,width,height);
+  g.addColorStop(0, '#7a57ff');
+  g.addColorStop(1, '#5cc6ff');
+  ctx.fillStyle = g; ctx.fillRect(0,0,width,height);
+  // blobs
+  for(let i=0;i<8;i++){
+    ctx.beginPath();
+    const rx = (Math.random()*0.3 + 0.1) * width;
+    const ry = (Math.random()*0.15 + 0.06) * height;
+    ctx.fillStyle = `rgba(${120 + Math.floor(Math.random()*80)}, ${30 + Math.floor(Math.random()*120)}, ${180 + Math.floor(Math.random()*60)}, ${0.05 + Math.random()*0.12})`;
+    ctx.ellipse(Math.random()*width, Math.random()*height, rx, ry, Math.random()*Math.PI, 0, Math.PI*2);
+    ctx.fill();
+  }
+  // peaks waveform
+  if(peaks && peaks.length){
+    const len = peaks.length; const barW = width / len;
+    for(let i=0;i<len;i++){
+      const p = peaks[i];
+      const ph = Math.max(1, p * height * 0.6);
+      const x = i * barW; const y = height/2 - ph/2;
+      const grad = ctx.createLinearGradient(x,y,x+barW,y+ph);
+      grad.addColorStop(0, 'rgba(255,255,255,0.95)');
+      grad.addColorStop(1, 'rgba(92,198,255,0.95)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(x, y, Math.max(1, barW*0.75), ph);
+    }
+  }
+  // panel with title
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
+  const panelH = Math.floor(height*0.22);
+  ctx.fillRect(0, height - panelH, width, panelH);
+  ctx.fillStyle = 'white'; ctx.textAlign = 'center';
+  ctx.font = `${Math.floor(height*0.09)}px Inter, Arial, sans-serif`;
+  ctx.fillText('Dual Infodose', width/2, height - panelH + Math.floor(panelH*0.45));
+  ctx.font = `${Math.floor(height*0.04)}px Inter, Arial, sans-serif`;
+  ctx.fillStyle = 'rgba(220,230,255,0.92)';
+  ctx.fillText('Nebula Pro', width/2, height - panelH + Math.floor(panelH*0.82));
+  return new Promise((resolve) => c.toBlob(blob => resolve(blob), 'image/png', 0.92));
+}
+
+// attach generated cover to track and persist
+async function attachGeneratedCoverToTrack(trackId){
+  const tr = await idbGet(trackId);
+  if(!tr) return;
+  const peaks = tr.waveform || null;
+  const pngBlob = await generateCoverPNGFromPeaks(peaks);
+  tr.coverBlob = pngBlob;
+  tr.cover = URL.createObjectURL(pngBlob);
+  await idbPut(tr);
+  await loadTracks();
+  return tr.cover;
+}
+
+// pregenerate covers for all tracks missing coverBlob
+async function pregenerateCoversForAll(){
+  const all = await idbGetAll();
+  if(!all.length) return;
+  for(const t of all){
+    if(!t.coverBlob){
+      document.getElementById('uploadProgress').textContent = `Gerando capa para ${t.name}...`;
+      try{ await attachGeneratedCoverToTrack(t.id); }catch(e){ console.warn(e); }
+      await new Promise(r=>setTimeout(r, 200));
+    }
+  }
+  document.getElementById('uploadProgress').textContent = 'Capas geradas.';
+  await computeStorage();
+}
+
+// Hook into addFileToDB by overriding if present (safe fallback)
+if(typeof window.addFileToDB === 'function'){
+  const originalAdd = window.addFileToDB;
+  window.addFileToDB = async function(file){
+    // run original to store blob and duration
+    const res = await originalAdd(file);
+    // find newly inserted track by name+size+recent createdAt
+    const all = await idbGetAll();
+    const found = all.filter(t => t.name === file.name.replace(/\\.[^/.]+$/, "") && t.size === file.size).sort((a,b)=>b.createdAt - a.createdAt)[0];
+    if(found){
+      // extract metadata and cover
+      try{
+        const meta = await extractMetadataAndCover(file);
+        if(meta.title) { found.name = meta.title; }
+        if(meta.artist) { found.artist = meta.artist; }
+        if(meta.cover){ found.cover = meta.cover; }
+      }catch(e){ console.warn('meta extract error', e); }
+      // compute peaks and attach
+      try{
+        const peaks = await decodeAndComputePeaks(file, 400);
+        found.waveform = peaks;
+        await idbPut(found);
+        // if there's no embedded cover, generate one
+        if(!meta.cover){
+          await attachGeneratedCoverToTrack(found.id);
+        }
+      }catch(e){ console.warn('peaks generation failed', e); }
+    }
+    return res;
+  };
+  console.log('addFileToDB overridden: will compute waveform & covers after import.');
+} else {
+  console.log('Original addFileToDB not found — pregeneration functions are available to call manually.');
+}
+
+// run pregeneration on load (non-blocking)
+window.addEventListener('load', ()=> {
+  // small delay so UI settles
+  setTimeout(()=>{ pregenerateCoversForAll().catch(()=>{}); }, 1000);
+});
+</script>
+</body>
+</html>
