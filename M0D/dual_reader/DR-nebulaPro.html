@@ -760,11 +760,696 @@ iframe,
   }
   .qp-btn:hover{ background:rgba(255,255,255,0.13); }
   .qp-btn:active{ transform:scale(.98); }
-</style></style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css"></head>
+</style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css"><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFSw/css/iFSw-fix.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css"><style>
+
+ :root {
+      --safe-top: env(safe-area-inset-top);
+      --safe-right: env(safe-area-inset-right);
+      --safe-bottom: env(safe-area-inset-bottom);
+      --safe-left: env(safe-area-inset-left);
+
+ --sheet-collapsed-h: 56px;
+  --sheet-peek-h: 34vh;
+  --sheet-full-top-gap: 12px;
+
+      --topbar-h: 58px;
+      --win-radius: 20px;
+      --win-gap: 20px;
+      --peek-h: 156px;
+      --collapsed-h: 52px;
+      --dock-offset-x: -12px;
+      --dock-bottom-gap: 80px;
+    }
+
+    html, body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 50% 0%, #2a2a35 0%, #0f0f15 100%);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      box-sizing: border-box;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    body.ui-safe-vertical {
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    body.ui-immersive {
+      padding: 0;
+    }
+
+    
+    #kxtsk-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+     z-index:1;
+    }
+
+    .os-topbar {
+      height: var(--topbar-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background: rgba(8, 10, 14, .08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      flex-shrink: 0;
+      z-index: 10;
+      position: sticky;
+      top: 0;
+    }
+
+    .os-brand {
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+    }
+
+    .os-brand {
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+    }
+
+    .os-brand small {
+      font-size: 10px;
+      color: rgba(255,255,255,.65);
+      display: block;
+      letter-spacing: .9px;
+      margin-top: 2px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .soft-btn, .launcher-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 8px 16px;
+      background: rgba(255,255,255,.08);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .launcher-btn {
+      background: rgba(0,242,255,.12);
+      border: 1px solid rgba(0,242,255,.3);
+    }
+
+    .soft-btn:hover, .launcher-btn:hover {
+      background: rgba(255,255,255,.16);
+      transform: translateY(-1px);
+    }
+
+    #stackWrap {
+      width: 100%;
+      max-width: 800px;
+      margin: 40px auto 0;
+      padding: 0;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--win-gap);
+    }
+
+    .session-window {
+      background: rgba(30, 30, 35, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--win-radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      height: 78vh;
+      min-height: 387px;
+      width: 100%;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .session-window.peeked {
+      height: var(--peek-h) !important;
+      min-height: var(--peek-h) !important;
+    }
+
+   .session-window.peeked .win-frame {
+  flex: 0 0 78px;
+  height: 78px;
+  min-height: 78px;
+  max-height: 78px;
+}
+
+    .session-window.peeked .win-hdr {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .session-window.collapsed {
+      height: var(--collapsed-h) !important;
+      min-height: var(--collapsed-h) !important;
+    }
+
+    .session-window.collapsed .win-frame {
+      display: none !important;
+    }
+
+    .session-window.minimized {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.9) translateY(50px);
+      position: absolute;
+    }
+
+    .session-window.maximized {
+      position: fixed;
+      top: calc(var(--topbar-h) + var(--safe-top));
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 92000;
+      border-radius: 0;
+      margin: 0;
+      width: 100vw !important;
+      height: calc(100dvh - var(--topbar-h) - var(--safe-top) - var(--safe-bottom)) !important;
+      max-width: none !important;
+      border: none;
+      box-sizing: border-box;
+    }
+
+    .session-window.maximized.peeked {
+      height: var(--peek-h) !important;
+      min-height: var(--peek-h) !important;
+      bottom: auto;
+    }
+
+    .session-window.maximized.collapsed {
+      height: var(--collapsed-h) !important;
+      min-height: var(--collapsed-h) !important;
+      bottom: auto;
+    }
+
+    .win-hdr {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      user-select: none;
+      box-sizing: border-box;
+      min-height: 52px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .win-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .win-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .win-controls button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 0;
+      cursor: pointer;
+      font-size: 10px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      transition: 0.2s;
+      display: grid;
+      place-items: center;
+    }
+
+    .win-controls button:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.1);
+    }
+
+    .win-frame {
+      width: 100%;
+      flex: 1;
+      border: 0;
+      background: transparent;
+    }
+
+    #dock {
+      position: fixed;
+      left: var(--dock-offset-x);
+      bottom: calc(var(--dock-bottom-gap) + var(--safe-bottom));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 10px;
+      border-radius: 24px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.1);
+      z-index: 2500;
+      transition: 0.3s;
+    }
+
+    #dock:empty {
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+
+    .dock-bubble {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 18px;
+      transition: 0.3s;
+      transform-origin: center left;
+      user-select: none;
+    }
+
+    .dock-bubble:hover {
+      transform: translateX(6px) scale(1.08);
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 10px 20px rgba(0,242,255,0.2);
+}
+
+/* Bottom-sheet base */
+.session-window.bottom-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: calc(var(--topbar-h) + var(--safe-top) + var(--sheet-full-top-gap));
+  width: 100vw;
+  max-width: none;
+  margin: 0;
+  height: auto;
+  z-index: 92000;
+  border-radius: 24px 24px 0 0;
+  overflow: hidden;
+  box-shadow: 0 -18px 50px rgba(0, 0, 0, 0.45);
+  will-change: transform;
+  transform: translate3d(0, var(--sheet-y, 0px), 0);
+  transition:
+    transform 0.18s cubic-bezier(.22,.9,.23,1),
+    box-shadow 0.25s ease,
+    border-radius 0.25s ease;
+}
+
+.session-window.bottom-sheet.dragging {
+  transition: none !important;
+}
+
+.session-window.bottom-sheet .win-hdr {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  padding-top: 18px;
+}
+
+.session-window.bottom-sheet.dragging .win-hdr {
+  cursor: grabbing;
+}
+
+/* Grip visual */
+.session-window.bottom-sheet .win-hdr::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 44px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.22);
+  transform: translateX(-50%);
+}
+
+/* Content area scrolls nicely */
+.session-window.bottom-sheet .win-frame {
+  min-height: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Sync with your current states */
+.session-window.bottom-sheet.peeked {
+  border-radius: 24px 24px 0 0;
+}
+
+.session-window.bottom-sheet.collapsed {
+  border-radius: 24px 24px 0 0;
+}
+
+.session-window.bottom-sheet.maximized {
+  border-radius: 0;
+    }
+
+
+/* HANDLE de resize (bottom) */
+.session-window.bottom-sheet .resize-handle-y {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  cursor: ns-resize;
+  touch-action: none;
+  z-index: 5;
+}
+
+/* feedback visual leve (opcional) */
+.session-window.bottom-sheet .resize-handle-y::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  transform: translateX(-50%);
+}
+
+</style>
+
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LS/js/insert-LS-3.js"></script>
+
+  <div id="kxtsk-shell">
+    <div class="os-topbar">
+      <div class="os-brand">
+        KxTsK
+        <small>Unified Patch Loader</small>
+      </div>
+
+      <div class="top-actions">
+        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+        <button class="soft-btn" id="openLogsBtn">Logs</button>
+      </div>
+    </div>
+
+    <div id="dock"></div>
+    
+    <!--
+     <div id="stackWrap">
+      <div class="session-window collapsed" id="session-iframe">
+        <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
+          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+
+          <div class="win-controls" onclick="event.stopPropagation()">
+            <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
+            <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
+            <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
+            <button onclick="closeWindow('session-iframe')" title="Fechar">✕</button>
+          </div>
+        </div>
+
+       <iframe class="win-frame" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" >
+        </iframe> 
+      </div>
+    </div> 
+  </div>
+    -->
+
+   
+<div id="bg-layer-fixed"></div>
+  
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
+
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script>
+
+<script>
+(() => {
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+  const cssNum = (name, fallback = 0) => {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const n = parseFloat(raw);
+    return Number.isFinite(n) ? n : fallback;
+  };
+
+  class IOSBottomSheet {
+    constructor(el) {
+      this.el = el;
+      this.hdr = el.querySelector('.win-hdr');
+      this.frame = el.querySelector('.win-frame');
+
+      this.y = 0;
+      this.v = 0;
+      this.raf = 0;
+      this.dragging = false;
+      this.pointerId = null;
+
+      this.onMove = this.onMove.bind(this);
+      this.onUp = this.onUp.bind(this);
+
+      this.install();
+      this.resize();
+      this.go('collapsed', false);
+
+      window.addEventListener('resize', () => this.resize(), { passive: true });
+      window.visualViewport?.addEventListener('resize', () => this.resize(), { passive: true });
+    }
+
+    install() {
+      this.el.classList.add('bottom-sheet');
+      this.el.dataset.state = this.el.dataset.state || 'collapsed';
+
+      this.hdr?.addEventListener('pointerdown', (e) => this.onDown(e));
+      this.hdr?.addEventListener('click', (e) => {
+        if (this.dragging) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, true);
+    }
+
+    resize() {
+      // Recalculate after layout
+      const rect = this.el.getBoundingClientRect();
+      this.sheetH = rect.height || Math.max(240, window.innerHeight - cssNum('--topbar-h', 58));
+
+      this.peekH = cssNum('--sheet-peek-h', cssNum('--peek-h', 240));
+      this.collapsedH = cssNum('--sheet-collapsed-h', cssNum('--collapsed-h', 52));
+
+      this.positions = {
+        full: 0,
+        peek: Math.max(0, this.sheetH - this.peekH),
+        collapsed: Math.max(0, this.sheetH - this.collapsedH),
+      };
+
+      this.y = clamp(this.y, 0, this.positions.collapsed);
+      this.setY(this.y);
+    }
+
+    onDown(e) {
+      if (e.button != null && e.button !== 0) return;
+      if (e.target.closest('button, a, input, textarea, select, [data-no-drag]')) return;
+
+      this.dragging = true;
+      this.el.classList.add('dragging');
+      this.pointerId = e.pointerId;
+
+      this.hdr.setPointerCapture?.(e.pointerId);
+
+      this.startY = e.clientY;
+      this.startSheetY = this.y;
+      this.lastMoveT = performance.now();
+      this.lastMoveY = e.clientY;
+      this.v = 0;
+
+      cancelAnimationFrame(this.raf);
+
+      window.addEventListener('pointermove', this.onMove, { passive: false });
+      window.addEventListener('pointerup', this.onUp, { passive: true });
+      window.addEventListener('pointercancel', this.onUp, { passive: true });
+
+      e.preventDefault();
+    }
+
+    onMove(ev) {
+      if (!this.dragging || ev.pointerId !== this.pointerId) return;
+      ev.preventDefault();
+
+      const dy = ev.clientY - this.startY;
+      let next = this.startSheetY + dy;
+      const max = this.positions.collapsed;
+
+      // Resistance at extremes
+      if (next < 0) next *= 0.35;
+      if (next > max) next = max + (next - max) * 0.35;
+
+      const now = performance.now();
+      const dt = Math.max(1, now - this.lastMoveT);
+      this.v = (ev.clientY - this.lastMoveY) / dt; // px/ms
+
+      this.lastMoveT = now;
+      this.lastMoveY = ev.clientY;
+
+      this.setY(next);
+    }
+
+    onUp() {
+      if (!this.dragging) return;
+
+      this.dragging = false;
+      this.el.classList.remove('dragging');
+
+      window.removeEventListener('pointermove', this.onMove);
+      window.removeEventListener('pointerup', this.onUp);
+      window.removeEventListener('pointercancel', this.onUp);
+
+      const vy = this.v * 1000; // px/s
+      const y = this.y;
+      const { full, peek, collapsed } = this.positions;
+
+      let target = 'peek';
+
+      if (vy < -850) {
+        target = y < (peek + full) / 2 ? 'full' : 'peek';
+      } else if (vy > 850) {
+        target = y > (peek + collapsed) / 2 ? 'collapsed' : 'peek';
+      } else {
+        const dFull = Math.abs(y - full);
+        const dPeek = Math.abs(y - peek);
+        const dColl = Math.abs(y - collapsed);
+        target = ['full', 'peek', 'collapsed'][[dFull, dPeek, dColl].indexOf(Math.min(dFull, dPeek, dColl))];
+      }
+
+      this.go(target, true);
+    }
+
+    syncClasses(state) {
+      this.el.classList.toggle('peeked', state === 'peek');
+      this.el.classList.toggle('collapsed', state === 'collapsed');
+      this.el.classList.toggle('maximized', state === 'full');
+      this.el.dataset.state = state;
+    }
+
+    setY(y) {
+      this.y = y;
+      this.el.style.setProperty('--sheet-y', `${y.toFixed(2)}px`);
+
+      // live state sync while dragging
+      if (Math.abs(y - this.positions.full) < 1) this.syncClasses('full');
+      else if (Math.abs(y - this.positions.peek) < 1) this.syncClasses('peek');
+      else if (Math.abs(y - this.positions.collapsed) < 1) this.syncClasses('collapsed');
+    }
+
+    go(state, animate = true) {
+      this.syncClasses(state);
+      const target = this.positions[state];
+
+      if (!animate) {
+        this.setY(target);
+        return;
+      }
+
+      this.animateTo(target);
+    }
+
+    animateTo(target) {
+      cancelAnimationFrame(this.raf);
+
+      let x = this.y;
+      let v = 0;
+
+      const stiffness = 0.14;
+      const damping = 0.82;
+
+      const step = () => {
+        const a = (target - x) * stiffness;
+        v = (v + a) * damping;
+        x += v;
+
+        if (Math.abs(target - x) < 0.35 && Math.abs(v) < 0.35) {
+          this.setY(target);
+          return;
+        }
+
+        this.setY(x);
+        this.raf = requestAnimationFrame(step);
+      };
+
+      this.raf = requestAnimationFrame(step);
+    }
+  }
+
+  window.BottomSheet = IOSBottomSheet;
+
+  function boot() {
+    document.querySelectorAll('.session-window').forEach((el) => {
+      if (el.dataset.sheetInit === '1') return;
+      el.dataset.sheetInit = '1';
+      new IOSBottomSheet(el);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+
+
+
+</head>
 <body>
 <div id="root">
 
-<section id="motorDock" class="motor-dock" aria-label="Motor 78K" hidden>
+<section id="motorDock" class="motor-dock" aria-label="Motor 78K" hidden="">
   <div class="motor-dock-head">
     <div>
       <strong>Motor 78K</strong>
@@ -785,7 +1470,7 @@ iframe,
   <div class="player" id="playerDock">
     <div class="player-wrap">
       <div class="player-top">
-        <button id="ppBtn" class="pp" title="Play/Pause">
+        <button id="ppBtn" class="pp chip" title="Play/Pause">
           <svg viewBox="0 0 24 24" id="ppIcon"><path d="M8 5v14l11-7z"></path></svg>
         </button>
         <div class="track">
@@ -794,12 +1479,34 @@ iframe,
       <div id="ovSnippet" class="muted">—</div>    
   </div>
 
-             <div class="chip">
+             <div class="chipi">
      <button id="bmBtn" class="icon-btn">⭐</button>
 
-        <button id="viewBtn" class="view-mini" title="Ver páginas">
+          <button id="quickPasteBtn" class="icon-btn" title="Quick Actions">📂</button>
+        <!-- Quick Paste Panel -->
+        <div id="quickPastePanel" style="display:none;position:fixed;left:50%;bottom:80px;transform:translateX(-50%);z-index:200;width:min(94vw,360px);background:rgba(12,12,20,0.97);border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:16px;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.6)">
+          <div style="font-size:12px;font-weight:800;letter-spacing:.1em;opacity:.6;margin-bottom:12px">⚡ QUICK ACTIONS</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="qp-btn" id="qp-clipboard">📋 Paste Clipboard (Ctrl+V)</button>
+            <button class="qp-btn" id="qp-input">✏️ Type / Paste Text</button>
+            <button class="qp-btn" id="qp-html">🌐 HTML Inline Text</button>
+            <button class="qp-btn" id="qp-last">🔁 Load Last Text</button>
+
+<button id="viewBtn" class="view-mini" title="Ver páginas">
           <svg viewBox="0 0 24 24"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12a5 5 0 110-10 5 5 0 010 10z"></path></svg>
         </button>
+       
+
+ <button id="importBtn" class="ov-btn" title="Importar PDF / ZIP / MD">📂</button>
+    
+
+          </div>
+          <textarea id="qp-textarea" placeholder="Cole ou escreva aqui..." style="display:none;width:100%;margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px;resize:vertical;min-height:80px;outline:none"></textarea>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button id="qp-go" style="display:none;flex:1;background:linear-gradient(90deg,#7a57ff,#5cc6ff);border:none;color:#fff;font-weight:800;padding:10px;border-radius:12px;cursor:pointer;font-size:13px">▶ Play Agora</button>
+            <button id="qp-close" style="border:1px solid rgba(255,255,255,0.15);background:transparent;color:#fff;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:13px">✕</button>
+          </div>
+        </div>
       </div> </div>
       <div class="player-slider-wrap">
         <span class="time-label" id="timeCur">0%</span>
@@ -826,7 +1533,10 @@ iframe,
     <section class="card" id="libCard">
     
   <div class="row">
-        <h2>Library</h2>
+   <div class="chip">
+          <span style="font-size:78px;opacity:0">•</span>
+        </div>
+     <h2>Library</h2>
 
         <div class="usage"><span id="usageVal">0 MB</span></div>
       </div>
@@ -854,23 +1564,7 @@ iframe,
 
    
 
-        <button id="importBtn" class="ov-btn" title="Importar PDF / ZIP / MD">📂</button>
-        <button id="quickPasteBtn" class="ov-btn" title="Quick Actions">⚡</button>
-        <!-- Quick Paste Panel -->
-        <div id="quickPastePanel" style="display:none;position:fixed;left:50%;bottom:80px;transform:translateX(-50%);z-index:200;width:min(94vw,360px);background:rgba(12,12,20,0.97);border:1px solid rgba(255,255,255,0.14);border-radius:20px;padding:16px;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.6)">
-          <div style="font-size:12px;font-weight:800;letter-spacing:.1em;opacity:.6;margin-bottom:12px">⚡ QUICK ACTIONS</div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <button class="qp-btn" id="qp-clipboard">📋 Paste Clipboard (Ctrl+V)</button>
-            <button class="qp-btn" id="qp-input">✏️ Type / Paste Text</button>
-            <button class="qp-btn" id="qp-html">🌐 HTML Inline Text</button>
-            <button class="qp-btn" id="qp-last">🔁 Load Last Text</button>
-          </div>
-          <textarea id="qp-textarea" placeholder="Cole ou escreva aqui..." style="display:none;width:100%;margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px;resize:vertical;min-height:80px;outline:none"></textarea>
-          <div style="display:flex;gap:8px;margin-top:10px">
-            <button id="qp-go" style="display:none;flex:1;background:linear-gradient(90deg,#7a57ff,#5cc6ff);border:none;color:#fff;font-weight:800;padding:10px;border-radius:12px;cursor:pointer;font-size:13px">▶ Play Agora</button>
-            <button id="qp-close" style="border:1px solid rgba(255,255,255,0.15);background:transparent;color:#fff;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:13px">✕</button>
-          </div>
-        </div>
+        
 
         <button id="exportBtn" class="btn" style="background:linear-gradient(90deg,#d9e9ff,#ffffff);">Export</button>
         <button id="clearLibBtn" class="btn" style="background:#ffe3e6; color:#7a1a25">Clear Lib</button>
@@ -901,7 +1595,7 @@ iframe,
    <!-- Playback Settings -->
     <section class="card">
       <div class="row"><h2>Playback</h2><span class="pill" id="voiceCount">—</span></div>
-      <div class="settings">
+      <div class="settings chip">
         <div class="field">
           <label class="muted">Voice</label>
           <select id="voiceSelect" class="select"></select>
@@ -935,11 +1629,10 @@ iframe,
     </section>
 
 
-  </div>
+  </section></div>
 
 
-    </section>
-
+            
 
   <!-- Overlay Viewer -->
   <div id="overlay" class="overlay" aria-hidden="true">
@@ -2270,13 +2963,6 @@ iframe,
   <script src="https://unpkg.com/lucide@latest"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main-1.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/0-kob.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/KAOS-in6-0.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/inline-6-0.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/modules/00-kob.js"></script>
-  
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-maino.js"></script>
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
 
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
@@ -2288,7 +2974,7 @@ iframe,
   <script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
+
   
   <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
@@ -2449,9 +3135,9 @@ iframe,
       id: normalize(userName) || 'custom',
       name: String(userName || 'Custom').toUpperCase(),
       voice: '',
-      lang: 'pt-BR',
-      rate: 1,
-      pitch: 1
+      lang: '',
+      rate: 1.01,
+      pitch: 0.871,
     };
   };
 
@@ -2642,5 +3328,219 @@ iframe,
 })();
 </script>
 
-</body>
-</html>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/LS/js/insert-LS-3.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script><script>
+(() => {
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+  const cssNum = (name, fallback = 0) => {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const n = parseFloat(raw);
+    return Number.isFinite(n) ? n : fallback;
+  };
+
+  class IOSBottomSheet {
+    constructor(el) {
+      this.el = el;
+      this.hdr = el.querySelector('.win-hdr');
+      this.frame = el.querySelector('.win-frame');
+
+      this.y = 0;
+      this.v = 0;
+      this.raf = 0;
+      this.dragging = false;
+      this.pointerId = null;
+
+      this.onMove = this.onMove.bind(this);
+      this.onUp = this.onUp.bind(this);
+
+      this.install();
+      this.resize();
+      this.go('collapsed', false);
+
+      window.addEventListener('resize', () => this.resize(), { passive: true });
+      window.visualViewport?.addEventListener('resize', () => this.resize(), { passive: true });
+    }
+
+    install() {
+      this.el.classList.add('bottom-sheet');
+      this.el.dataset.state = this.el.dataset.state || 'collapsed';
+
+      this.hdr?.addEventListener('pointerdown', (e) => this.onDown(e));
+      this.hdr?.addEventListener('click', (e) => {
+        if (this.dragging) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, true);
+    }
+
+    resize() {
+      // Recalculate after layout
+      const rect = this.el.getBoundingClientRect();
+      this.sheetH = rect.height || Math.max(240, window.innerHeight - cssNum('--topbar-h', 58));
+
+      this.peekH = cssNum('--sheet-peek-h', cssNum('--peek-h', 240));
+      this.collapsedH = cssNum('--sheet-collapsed-h', cssNum('--collapsed-h', 52));
+
+      this.positions = {
+        full: 0,
+        peek: Math.max(0, this.sheetH - this.peekH),
+        collapsed: Math.max(0, this.sheetH - this.collapsedH),
+      };
+
+      this.y = clamp(this.y, 0, this.positions.collapsed);
+      this.setY(this.y);
+    }
+
+    onDown(e) {
+      if (e.button != null && e.button !== 0) return;
+      if (e.target.closest('button, a, input, textarea, select, [data-no-drag]')) return;
+
+      this.dragging = true;
+      this.el.classList.add('dragging');
+      this.pointerId = e.pointerId;
+
+      this.hdr.setPointerCapture?.(e.pointerId);
+
+      this.startY = e.clientY;
+      this.startSheetY = this.y;
+      this.lastMoveT = performance.now();
+      this.lastMoveY = e.clientY;
+      this.v = 0;
+
+      cancelAnimationFrame(this.raf);
+
+      window.addEventListener('pointermove', this.onMove, { passive: false });
+      window.addEventListener('pointerup', this.onUp, { passive: true });
+      window.addEventListener('pointercancel', this.onUp, { passive: true });
+
+      e.preventDefault();
+    }
+
+    onMove(ev) {
+      if (!this.dragging || ev.pointerId !== this.pointerId) return;
+      ev.preventDefault();
+
+      const dy = ev.clientY - this.startY;
+      let next = this.startSheetY + dy;
+      const max = this.positions.collapsed;
+
+      // Resistance at extremes
+      if (next < 0) next *= 0.35;
+      if (next > max) next = max + (next - max) * 0.35;
+
+      const now = performance.now();
+      const dt = Math.max(1, now - this.lastMoveT);
+      this.v = (ev.clientY - this.lastMoveY) / dt; // px/ms
+
+      this.lastMoveT = now;
+      this.lastMoveY = ev.clientY;
+
+      this.setY(next);
+    }
+
+    onUp() {
+      if (!this.dragging) return;
+
+      this.dragging = false;
+      this.el.classList.remove('dragging');
+
+      window.removeEventListener('pointermove', this.onMove);
+      window.removeEventListener('pointerup', this.onUp);
+      window.removeEventListener('pointercancel', this.onUp);
+
+      const vy = this.v * 1000; // px/s
+      const y = this.y;
+      const { full, peek, collapsed } = this.positions;
+
+      let target = 'peek';
+
+      if (vy < -850) {
+        target = y < (peek + full) / 2 ? 'full' : 'peek';
+      } else if (vy > 850) {
+        target = y > (peek + collapsed) / 2 ? 'collapsed' : 'peek';
+      } else {
+        const dFull = Math.abs(y - full);
+        const dPeek = Math.abs(y - peek);
+        const dColl = Math.abs(y - collapsed);
+        target = ['full', 'peek', 'collapsed'][[dFull, dPeek, dColl].indexOf(Math.min(dFull, dPeek, dColl))];
+      }
+
+      this.go(target, true);
+    }
+
+    syncClasses(state) {
+      this.el.classList.toggle('peeked', state === 'peek');
+      this.el.classList.toggle('collapsed', state === 'collapsed');
+      this.el.classList.toggle('maximized', state === 'full');
+      this.el.dataset.state = state;
+    }
+
+    setY(y) {
+      this.y = y;
+      this.el.style.setProperty('--sheet-y', `${y.toFixed(2)}px`);
+
+      // live state sync while dragging
+      if (Math.abs(y - this.positions.full) < 1) this.syncClasses('full');
+      else if (Math.abs(y - this.positions.peek) < 1) this.syncClasses('peek');
+      else if (Math.abs(y - this.positions.collapsed) < 1) this.syncClasses('collapsed');
+    }
+
+    go(state, animate = true) {
+      this.syncClasses(state);
+      const target = this.positions[state];
+
+      if (!animate) {
+        this.setY(target);
+        return;
+      }
+
+      this.animateTo(target);
+    }
+
+    animateTo(target) {
+      cancelAnimationFrame(this.raf);
+
+      let x = this.y;
+      let v = 0;
+
+      const stiffness = 0.14;
+      const damping = 0.82;
+
+      const step = () => {
+        const a = (target - x) * stiffness;
+        v = (v + a) * damping;
+        x += v;
+
+        if (Math.abs(target - x) < 0.35 && Math.abs(v) < 0.35) {
+          this.setY(target);
+          return;
+        }
+
+        this.setY(x);
+        this.raf = requestAnimationFrame(step);
+      };
+
+      this.raf = requestAnimationFrame(step);
+    }
+  }
+
+  window.BottomSheet = IOSBottomSheet;
+
+  function boot() {
+    document.querySelectorAll('.session-window').forEach((el) => {
+      if (el.dataset.sheetInit === '1') return;
+      el.dataset.sheetInit = '1';
+      new IOSBottomSheet(el);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script></body></html>
