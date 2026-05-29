@@ -1,27 +1,52 @@
 <html lang="pt-BR"><head>
   <meta charset="utf-8">
-  <title>Fusion Card // Core Controller</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="manifest" href="manifest.json"> <meta name="theme-color" content="#05070a"> <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>a€kobFX0RB</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
-  
-<script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+<link rel="apple-touch-icon" href="./icon-192.png">
 
-   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+<!-- Manifest -->
+<link rel="manifest" href="./manifest.json">
 
- <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <!-- Fontes e CSS Externos --
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;display=swap" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-root-aa.css">
+    
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/base1.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-hud.css">
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
+
+
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css">
+
+-->
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/inxs.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glassu.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
 <style>
-        :root {
-          --z-base: 0;
-          --z-content: 100;
-          --z-widget: 500;
-          --z-overlay: 1000;
-          --z-system: 5000;
-        }
-      </style><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/inxs.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glassu.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css"><style>
     .symbol-toolbar{
       display:flex;
       align-items:center;
@@ -73,32 +98,9 @@
           --z-overlay: 1000;
           --z-system: 5000;
         }
-      </style>
-  <!-- Fontes e CSS Externos --
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;display=swap" rel="stylesheet">
+      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/0RB/css/main.css"></head><body class="field-closed mode-night"><div id="root">
 
-
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main.css">
-
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass.css">
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-root-aa.css">
-    
-    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/base1.css">
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-hud.css">
-
-
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
-
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
-    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
-
-
-
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css">
-
--->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
   
@@ -120,15 +122,7 @@
           --z-overlay: 1000;
           --z-system: 5000;
         }
-      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/0RB/css/main.css"><style>
-        :root {
-          --z-base: 0;
-          --z-content: 100;
-          --z-widget: 500;
-          --z-overlay: 1000;
-          --z-system: 5000;
-        }
-      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/NAGATANAZARE.css"></head>
+      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/0RB/css/main.css"></head>
 <body>
 
 <div id="root">
@@ -154,17 +148,17 @@
   <div class="symbol-bar floating" id="symbolBar">
           <div class="symbol-wrap">
 
-      
-
-        </div>
-
-  <div class="orb-container">
+       <div class="orb-container">
     <button id="orbBtn" class="orb-btn" aria-label="Toggle System">
       <div class="orb-core"></div>
-      <!--<div class="orb-ring"></div>
+    <!--  <div class="orb-ring"></div>
       <div class="orb-ring inner"></div> -->
     </button>
   </div>
+
+        </div>
+
+  
     <!-- Botão Menu -->
     <div class="toggle-wrap">
       <button class="symbol-button main-toggl" id="toggleBtn" title="Menu / Iniciar">≡</button>
@@ -466,15 +460,15 @@ const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","ai
   </aside>
 
           <div class="sidebar right">
-            <button class="icon-btn nav-btn" data-url="about:blank" title="Void">Φ</button>
-            <button class="icon-btn nav-btn" data-url="https://kodux78k.github.io/oiDual-DeX/" title="a€dualDex">꩜</button>
-            <button class="icon-btn nav-btn" data-url="https://kodux78k.github.io/oiDual-SmB/" title="a€SUMBUS">☼</button>
+            <button class="symbol-button icon-btn nav-btn" data-url="about:blank" title="Void">Φ</button>
+            <button class="symbol-button icon-btn nav-btn" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/KKP/index.html" title="a€dualDex">꩜</button>
+            <button class="symbol-button icon-btn nav-btn" data-url="https://kodux78k.github.io/oiDual-SmB/" title="a€SUMBUS">☼</button>
           <!-- Outros atalhos -->
     <div class="symbol-wrap">
       <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">🌌</button>
     </div>
     <div class="symbol-wrap">
-      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/">🛋️</button>
+      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/editor-mix/">🛋️</button>
     </div>
   
 
@@ -482,7 +476,7 @@ const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","ai
       <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
     </div>
     <div class="symbol-wrap">
-      <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
+      <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/dual_reader/">◘</button>
     </div>
  </div>
 
@@ -559,69 +553,6 @@ const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","ai
 
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/0RB/js/modules/inline-1.js"></script>
 
-<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/0RB/js/modules/inline-1.js"></script>
-<div id="kblx-quick">
-  <button class="kq-item" data-kq="edit">✦ Editar</button>
-  <button class="kq-item" data-kq="symbol">◉ SymbolBar</button>
-  <button class="kq-item" data-kq="frame">⟁ Session</button>
-  <button class="kq-item" data-kq="dock">⌘ Dock</button>
-  <button class="kq-item" data-kq="duplicate">📋 Duplicar</button>
-  <button class="kq-item" data-kq="favorite">⭐ Favoritar</button>
-  <button class="kq-item" data-kq="full">⋯ Mais</button>
-</div>
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/0RB/js/modules/inline-2.js"></script>
 
-<div id="kblx-back" aria-hidden="true">
-  <div id="kblx-panel">
-    <div class="kblx-head">
-      <div class="p-chip">⌘ NAGATANAZARE · QUICK ROUTE</div>
-      <button class="kblx-icon-btn" id="kblx-btn-close" type="button">✕</button>
-    </div>
-
-    <div class="kblx-title-wrap">
-      <h2 class="p-title" id="kblx-ttl">Botão</h2>
-      <p class="kblx-sub" id="kblx-sub">Escolha rápido, salve e injete sem cobrir a tela.</p>
-    </div>
-
-    <div class="kblx-current" id="kblx-current">Nenhuma rota definida.</div>
-
-    <section class="kblx-section">
-      <label class="p-lbl" for="kblx-inp">
-        Novo valor para <code>data-url</code>
-      </label>
-
-      <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
-    </section>
-
-    <div class="kblx-actions">
-      <button class="kblx-btn kblx-save" id="kblx-btn-save" type="button">Salvar</button>
-      <button class="kblx-btn kblx-inject" id="kblx-btn-orb-inject" type="button">SymbolBar</button>
-      <button class="kblx-btn kblx-frame" id="kblx-btn-frame" type="button">Session Frame</button>
-    </div>
-
-    <div class="kblx-more-row">
-      <button class="kblx-mini" id="kblx-btn-more" type="button">Mais</button>
-      <button class="kblx-mini" id="kblx-btn-clear" type="button">Limpar</button>
-    </div>
-
-    <div class="kblx-advanced" id="kblx-advanced">
-      <section class="kblx-section">
-        <div class="kblx-note" style="margin-top:0">Presets rápidos</div>
-        <div class="kblx-more-row">
-          <button class="kblx-mini" type="button" data-orb-preset="orb">◉ Orb</button>
-          <button class="kblx-mini" type="button" data-orb-preset="frame">⟁ Frame</button>
-          <button class="kblx-mini" type="button" data-orb-preset="dock">⌘ Dock</button>
-        </div>
-      </section>
-
-      <section class="kblx-section">
-        <div class="kblx-note">
-          Long press em qualquer <code>.symbol-button[data-url]</code> abre este painel.
-        </div>
-      </section>
-    </div>
-  </div>
-</div>
-
-
-
-<script src="https://kodux78k.github.io/oiDual--Y-/js/NAGATANAZARE.js"></script></body></html>
+</body></html>
