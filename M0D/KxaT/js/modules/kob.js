@@ -23,7 +23,7 @@
      ----------------------------- */
   const bar = $('#symbolBar') || document.querySelector('symbol-bar') ;
   const toggleBtn = $('#toggleBtn') || document.querySelector('main-toggle');
-  const frame = $('#content-frame') || $('#frame') || document.querySelector('iframe');
+  const frame = $('#content-frame') || $('#frame') || $('#navFrame') || document.querySelector('iframe');
   const root = $('#root') || document.body;
   const hudStatus = $('#hudStatus');
   const outline = $('#kob-tts-outline') || (() => {
