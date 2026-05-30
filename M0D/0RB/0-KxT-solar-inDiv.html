@@ -1,0 +1,150 @@
+
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+
+   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+
+ <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<body class="field-closed mode-night">
+
+  <!-- Ambient Blobs -->
+  <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div id="snap-zone"></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
+
+  <!-- Distortion SVG Filter -->
+  <svg style="display: none;">
+    <filter id="distort">
+      <feTurbulence baseFrequency="0.01" numOctaves="3" result="turb"/>
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="30"/>
+    </filter>
+  </svg>
+
+  <!-- Áudio Suave -->
+  <audio id="transitionSound" src="https://kodux78k.github.io/oiDual-oiio/suave_portal.mp3" preload="auto"></audio>
+
+  <!-- Partículas -->
+  <div id="particles-js"></div>
+
+  <!-- Logo com Transição -->
+  <div class="logo-container" id="logo" onclick="goToIndex()">
+    <object data="https://kodux78k.github.io/oiDual-oiio/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
+  </div>
+
+  <!-- Título e Frase -->
+  <div class="infodose">dual.<strong>Infodose</strong></div>
+ 
+
+<svg style="display:none">
+    <symbol id="icon-orb" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="7"></circle>
+      <circle cx="12" cy="12" r="8"></circle>
+    </symbol>
+    <symbol id="icon-cards" viewBox="0 0 24 24">
+      <rect x="2" y="2" width="16" height="16" rx="2"></rect>
+      <path d="M22 6v14a2 2 0 0 1-2 2H6"></path>
+    </symbol>
+    <symbol id="icon-gem" viewBox="0 0 24 24">
+      <path d="M6 3h12l4 6-10 12L2 9z"></path>
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </symbol>
+    <symbol id="icon-send" viewBox="0 0 24 24">
+      <line x1="22" y1="2" x2="11" y2="13"></line>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    </symbol>
+    <symbol id="icon-voice" viewBox="0 0 24 24">
+      <rect x="9" y="1" width="6" height="12" rx="3"></rect>
+      <path d="M5 10a7 7 0 0 0 14 0"></path>
+      <line x1="12" y1="19" x2="12" y2="23"></line>
+      <line x1="8" y1="23" x2="16" y2="23"></line>
+    </symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="7 10 12 3 7 8"></polyline>
+      <line x1="12" y1="3" x2="12" y2="15"></line>
+    </symbol>
+  </svg>
+
+  <div class="sky-layer"><div class="sun-background"></div></div>
+  <div id="bg-fake-custom"></div>
+  <div id="nv-toast"></div>
+  <div id="modeIndicator">CARREGANDO nO.Sºlar...</div>
+
+  <div class="header-orb" id="orbToggle" title="Acessar Cockpit do Usuário" onclick="toggleDrawer('drawerProfile')">
+    <svg><use href="#icon-orb"></use></svg>
+  </div>
+
+  <div id="usernameDisplay"></div>
+
+ 
+
+  <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+
+  <div id="drawerProfile" class="drawer" aria-hidden="true">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <h3>
+          <svg style="width:20px;height:20px;margin-right:8px;stroke:var(--secondary)"><use href="#icon-orb"></use></svg>
+          Cockpit Solar
+        </h3>
+        <button class="btn-icon" style="width:38px;height:38px;border-radius:12px;" onclick="toggleDrawer('drawerProfile')">✕</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="cockpit-item" style="text-align:center;margin-bottom:15px;">
+          <div class="cockpit-label">Ciclo Solar</div>
+          <div id="statusSolarMode" style="font-size:1.2rem;font-weight:bold;margin:5px 0;">AUTO</div>
+          <div class="control-row">
+            <button class="btn-block" id="btnCycleSolar">Manual ☀️/🌙</button>
+            <button class="btn-block" id="btnAutoSolar">Auto 🕒</button>
+          </div>
+        </div>
+
+        <div class="cockpit-grid">
+          <div class="cockpit-item">
+            <div class="cockpit-label">Identificação</div>
+            <input type="text" id="inputUserId" class="cockpit-input" placeholder="Viajante">
+          </div>
+
+          <div class="cockpit-item">
+            <div class="cockpit-label">Modelo IA</div>
+            <input type="text" id="inputModel" class="cockpit-input" placeholder="google/gemini-2.0-flash-exp">
+          </div>
+
+          <div class="cockpit-item">
+            <div class="cockpit-label">Background</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span id="bgStatusText" style="font-size:0.8rem;color:var(--text-muted)">Nenhum</span>
+              <label class="btn-icon" style="width:30px;height:30px;border-radius:5px;">
+                <input type="file" id="bgUploadInput" accept="image/*" style="display:none">
+                <svg><use href="#icon-cards"></use></svg>
+              </label>
+            </div>
+          </div>
+
+          <div id="bgThumbPanel" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+ 
+ <!-- Seus Scripts Originais -->
+  <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script> 
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  
+<!-- <script src="https://kodux78k.github.io/oiDual--Y-/js/0RB-0S17.js"></script>
+-->
+ 
