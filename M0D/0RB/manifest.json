@@ -3,7 +3,7 @@
   "short_name": "a€~DUAL//OS",
   "description": "DUAL Unified — Code Vault & Runtime Environment",
   "lang": "pt-BR",
-  "start_url": "./",
+  "start_url": "./splash.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
