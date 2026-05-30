@@ -1,0 +1,51 @@
+{
+  "total": 19,
+  "fonte": "index.html · docs/Fusion_index.html.txt",
+  "nota": "19 arquétipos visuais (SymbolBar) + 16 arquétipos vocais (Identity Engine) — conjunto unificado",
+  "arquetipos_visuais": [
+    { "name": "atlas",    "opcode": "0x00", "p": "#8e9aaf", "s": "#5c6478", "a": "#b0bec5", "hz": 432, "emoji": "🗿", "role": "FUNDAÇÃO · ESTRUTURA",      "arquiteto": true },
+    { "name": "nova",     "opcode": "0x01", "p": "#00e5ff", "s": "#0099cc", "a": "#80f4ff", "hz": 528, "emoji": "⚡", "role": "ENERGIA · VELOCIDADE",       "arquiteto": false },
+    { "name": "vitalis",  "opcode": "0x02", "p": "#00e070", "s": "#00a050", "a": "#80ffb8", "hz": 639, "emoji": "🌿", "role": "VIDA · CRESCIMENTO",          "arquiteto": false },
+    { "name": "pulse",    "opcode": "0x03", "p": "#ff7020", "s": "#cc3800", "a": "#ffaa60", "hz": 741, "emoji": "🔥", "role": "IMPULSO · AÇÃO",               "arquiteto": false },
+    { "name": "kaos",     "opcode": "0x04", "p": "#ff2a6d", "s": "#aa0040", "a": "#ff80a0", "hz": 852, "emoji": "🌪", "role": "CAOS · TRANSFORMAÇÃO",        "arquiteto": false },
+    { "name": "kodux",    "opcode": "0x05", "p": "#00e28b", "s": "#0ea5e9", "a": "#80f5c8", "hz": 432, "emoji": "🤖", "role": "INTERFACE · SISTEMA",         "arquiteto": true },
+    { "name": "lumine",   "opcode": "0x06", "p": "#ffd700", "s": "#e09000", "a": "#fff280", "hz": 528, "emoji": "✨", "role": "LUZ · ILUMINAÇÃO",             "arquiteto": false },
+    { "name": "aion",     "opcode": "0x07", "p": "#9f7aea", "s": "#5b21b6", "a": "#d4b8ff", "hz": 963, "emoji": "⏳", "role": "TEMPO · ETERNIDADE",           "arquiteto": false },
+    { "name": "kobllux",  "opcode": "0x08", "p": "#C9A84C", "s": "#8B4513", "a": "#F0C060", "hz": 432, "emoji": "∞", "role": "VERDADE · INTEGRAR",           "arquiteto": false, "centro": true },
+    { "name": "artemis",  "opcode": "0x09", "p": "#c8c8e0", "s": "#7070a0", "a": "#f0f0ff", "hz": 741, "emoji": "🏹", "role": "PRECISÃO · FOCO",              "arquiteto": false },
+    { "name": "serena",   "opcode": "0x0A", "p": "#c084fc", "s": "#7c3aed", "a": "#e8c0ff", "hz": 639, "emoji": "🌸", "role": "PAZ · EQUILÍBRIO",             "arquiteto": false },
+    { "name": "genus",    "opcode": "0x0B", "p": "#f59e0b", "s": "#b45309", "a": "#fcd34d", "hz": 528, "emoji": "🧬", "role": "CRIAÇÃO · ESPÉCIE",            "arquiteto": true },
+    { "name": "solus",    "opcode": "0x0C", "p": "#f5f5f5", "s": "#aaaaaa", "a": "#ffffff", "hz": 963, "emoji": "🕯", "role": "SILÊNCIO · VAZIO",             "arquiteto": false },
+    { "name": "rhea",     "opcode": "0x0D", "p": "#b5883c", "s": "#7c5010", "a": "#d4a860", "hz": 432, "emoji": "🌍", "role": "TERRA · MEMÓRIA",              "arquiteto": false },
+    { "name": "trinity",  "opcode": "0x0E", "p": "#D4AF37", "s": "#9a7a10", "a": "#f0d060", "hz": 639, "emoji": "🔱", "role": "TRINDADE · SÍNTESE",           "arquiteto": false },
+    { "name": "infodose", "opcode": "0x0F", "p": "#38bdf8", "s": "#0369a1", "a": "#90e0ff", "hz": 741, "emoji": "💊", "role": "INFORMAÇÃO · DOSE",            "arquiteto": false },
+    { "name": "horus",    "opcode": "0x10", "p": "#f59e0b", "s": "#7c3a00", "a": "#fbbf24", "hz": 852, "emoji": "👁",  "role": "VISÃO · GUARDIÃO",            "arquiteto": false },
+    { "name": "bllue",    "opcode": "0x11", "p": "#3b82f6", "s": "#1e3a8a", "a": "#93c5fd", "hz": 432, "emoji": "🔵", "role": "PROFUNDIDADE · FLUXO",         "arquiteto": false },
+    { "name": "jesus",    "opcode": "0x12", "p": "#f0d080", "s": "#c09040", "a": "#fff8c0", "hz": 528, "emoji": "✝",  "role": "AMOR · VERDADE CENTRAL",      "arquiteto": false, "verbo": true }
+  ],
+  "arquetipos_vocais": [
+    { "idx": "00", "name": "NOVA",    "hz": 432,  "lang": "pt-BR", "pitch": 1.20, "rate": 1.00, "gender": "female" },
+    { "idx": "01", "name": "ATLAS",   "hz": 528,  "lang": "pt-PT", "pitch": 0.90, "rate": 0.95, "gender": "male"   },
+    { "idx": "02", "name": "VITALIS", "hz": 639,  "lang": "pt-BR", "pitch": 1.10, "rate": 1.10, "gender": "male"   },
+    { "idx": "03", "name": "PULSE",   "hz": 594,  "lang": "pt-BR", "pitch": 1.00, "rate": 1.15, "gender": "male"   },
+    { "idx": "04", "name": "ARTEMIS", "hz": 672,  "lang": "es-ES", "pitch": 1.30, "rate": 1.00, "gender": "female" },
+    { "idx": "05", "name": "SERENA",  "hz": 528,  "lang": "pt-BR", "pitch": 1.15, "rate": 0.90, "gender": "female" },
+    { "idx": "06", "name": "KAOS",    "hz": 777,  "lang": "de-DE", "pitch": 0.80, "rate": 1.20, "gender": "male"   },
+    { "idx": "07", "name": "GENUS",   "hz": 852,  "lang": "pt-BR", "pitch": 0.85, "rate": 0.95, "gender": "male"   },
+    { "idx": "08", "name": "LUMINE",  "hz": 963,  "lang": "fr-CA", "pitch": 1.25, "rate": 1.00, "gender": "female" },
+    { "idx": "09", "name": "RHEA",    "hz": 432,  "lang": "pt-BR", "pitch": 1.05, "rate": 0.88, "gender": "female" },
+    { "idx": "10", "name": "SOLUS",   "hz": 528,  "lang": "en-AU", "pitch": 0.95, "rate": 0.92, "gender": "male"   },
+    { "idx": "11", "name": "AION",    "hz": 639,  "lang": "pt-PT", "pitch": 0.88, "rate": 0.85, "gender": "male"   },
+    { "idx": "12", "name": "KODUX",   "hz": 777,  "lang": "pt-BR", "pitch": 1.00, "rate": 1.15, "gender": "male"   },
+    { "idx": "13", "name": "BLLUE",   "hz": 852,  "lang": "en-US", "pitch": 1.10, "rate": 1.05, "gender": "female" },
+    { "idx": "14", "name": "JESUS",   "hz": 963,  "lang": "pt-BR", "pitch": 1.00, "rate": 0.90, "gender": "male"   },
+    { "idx": "15", "name": "KOBLLUX", "hz": 1134, "lang": "pt-BR", "pitch": 1.00, "rate": 1.00, "gender": "male",  "uno": true }
+  ],
+  "voice_map": {
+    "atlas": "alloy", "nova": "nova", "vitalis": "fable", "pulse": "echo",
+    "kaos": "onyx",   "kodux": "alloy", "lumine": "nova", "aion": "fable",
+    "kobllux": "alloy","artemis": "echo","serena": "nova", "genus": "fable",
+    "solus": "onyx",  "rhea": "alloy", "trinity": "nova", "infodose": "echo",
+    "horus": "fable", "bllue": "alloy","jesus": "nova"
+  }
+}
