@@ -9,7 +9,7 @@
 
       const DEFAULT_SRC = 'https://kodux78k.github.io/oiDual-H0/DH0-10.html';
       const DEFAULT_ICON = '🌐';
-      const DEFAULT_TITLE = 'DUAL H0 // KOB LV BASE';
+      const DEFAULT_TITLE = 'DUAL//';
 
       function getWin(id) {
         return document.getElementById(id);
@@ -117,7 +117,7 @@
 
         const bubble = document.createElement('div');
         bubble.className = 'dock-bubble';
-        bubble.textContent = '📄';
+        bubble.textContent = '🔘';
         bubble.title = 'Restaurar janela';
         bubble.id = `dock-${winId}`;
 
@@ -160,7 +160,11 @@
         section.innerHTML = `
           <div class="win-hdr" onclick="handleHeaderClick(event, '${id}')">
             <div class="win-title">${icon} ${title}</div>
+<div class="win-title win-controls">
+ <input id="siteInput" placeholder="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html">
 
+<button onclick="abrirNoFrame()">🌐</button>
+</div>
             <div class="win-controls" onclick="event.stopPropagation()">
               <button onclick="toggleCollapse('${id}')" title="Colapsar">—</button>
               <button onclick="toggleMaximize('${id}')" title="Maximizar">⬜</button>
