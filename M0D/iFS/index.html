@@ -8,13 +8,11 @@
 
 <!-- iOS Support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-
 <link rel="apple-touch-icon" href="./icon-192.png">
 
 <!-- Manifest -->
 <link rel="manifest" href="./manifest.json">
 
-<!-- CSS Safe Area Fix -->
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFSw/css/iFSw-fix.css">
 
@@ -103,20 +101,21 @@
     <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
       <div class="win-controls" onclick="event.stopPropagation()">
         <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🌐</button>
-      </div>
-    </div>
 
-    <div class="win-navrow" onclick="event.stopPropagation()">
+      </div> <div class="win-navrow" onclick="event.stopPropagation()">
       <input
-        class="win-urlbar"
+        class="win-urlbar" style="display:none"
         type="text"
         id="urlInputNav"
         placeholder="Digite uma URL..."
         spellcheck="false"
         autocomplete="off"
       >
-      <button class="win-go-btn" type="button" id="goNavBtn">Go</button>
+      <button class="win-go-btn" style="display:none" type="button" id="goNavBtn">Go</button>
     </div>
+    </div>
+
+   
 
     <iframe
       class="win-frame"
@@ -140,7 +139,7 @@
   let windowCounter = 1;
   const clickTimers = {};
 
-  const DEFAULT_SRC = 'https://kodux78k.github.io/oiDual-H0/DH0-10.html';
+  const DEFAULT_SRC = 'https://kodux78k.github.io/oiDual--Y-/splash.html';
   const DEFAULT_ICON = '🌐';
   const DEFAULT_TITLE = '//';
 
