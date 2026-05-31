@@ -9,7 +9,7 @@
 
       const DEFAULT_SRC = 'https://kodux78k.github.io/oiDual-H0/DH0-10.html';
       const DEFAULT_ICON = '🌐';
-      const DEFAULT_TITLE = 'DUAL//';
+      const DEFAULT_TITLE = '//';
 
       function getWin(id) {
         return document.getElementById(id);
