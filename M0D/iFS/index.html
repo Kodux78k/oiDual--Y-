@@ -44,12 +44,16 @@
 
     <div id="arch-overlay"></div>
 
-    <div id="stackWrap">
-      <div class="session-window peeked" id="session-iframe">
+   <div id="stackWrap">
+      <div class="session-window collapsed" id="session-iframe">
         <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
-          <div class="win-title">🌐 //</div>
+          <div class="win-title win-controls"> <input id="siteInput" placeholder="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html">
+
+<button onclick="abrirNoFrame()">🌐</button>
+</div>
 
           <div class="win-controls" onclick="event.stopPropagation()">
+
             <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
             <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
             <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
@@ -57,10 +61,30 @@
           </div>
         </div>
 
-        <iframe class="win-frame" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
-        </iframe>
+       <iframe
+          class="win-frame" id="urlload"
+          src="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+          allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+          loading="lazy">
+        </iframe> 
+
+<script>
+
+  function abrirNoFrame() {
+
+    const url = document.getElementById('siteInput').value.trim();
+
+    if (!url) return;
+
+    document.getElementById('urlload').src = url;
+
+  }
+
+</script>
+
       </div>
-    </div>
+    </div> 
   </div>
 
 
