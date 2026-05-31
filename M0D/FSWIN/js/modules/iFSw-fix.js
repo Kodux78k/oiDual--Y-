@@ -7,7 +7,7 @@
   let windowCounter = 1;
   const clickTimers = {};
 
-  const DEFAULT_SRC = 'https://kodux78k.github.io/oiDual-H0/DH0-10.html';
+  const DEFAULT_SRC = 'https://kodux78k.github.io/oiDual--Y-/splash.html';
   const DEFAULT_ICON = '🌐';
   const DEFAULT_TITLE = '//';
 
@@ -149,6 +149,14 @@
     input.value = clean;
   }
 
+  function sendTo(runtime, url) {
+    const frame = document.querySelector(`.win-frame[data-runtime="${runtime}"]`);
+    if (!frame) return;
+    const clean = String(url || '').trim();
+    if (!clean) return;
+    frame.src = clean;
+  }
+
   function createSessionWindow({
     title = DEFAULT_TITLE,
     icon = DEFAULT_ICON,
@@ -163,24 +171,26 @@
     section.innerHTML = `
       <div class="win-hdr" onclick="handleHeaderClick(event, '${id}')">
         <div class="win-title">${icon} ${title}</div>
-        
-<div class="win-navrow" onclick="event.stopPropagation()">
-        <input class="win-urlbar" type="text" value="${src}" placeholder="https://..." spellcheck="false" autocomplete="off">
-        <button class="win-go-btn" type="button">Go</button>
-      </div>
-      
+
+        <div class="win-navrow" onclick="event.stopPropagation()">
+          <input class="win-urlbar" type="text" value="${src}" placeholder="Digite uma URL..." spellcheck="false" autocomplete="off">
+          <button class="win-go-btn" type="button">Go</button>
+        </div>
+
         <div class="win-controls" onclick="event.stopPropagation()">
-          <button onclick="toggleCollapse('${id}')" title="Colapsar">—</button>
+<button onclick="toggleCollapse('${id}')" title="Colapsar">—</button>
           <button onclick="toggleMaximize('${id}')" title="Maximizar">⬜</button>
-          <button onclick="minimizeWindow('${id}')" title="Minimizar para o Dock">🔘</button>
+          <button onclick="minimizeWindow('${id}')" title="Minimizar para o Dock">🌐</button>
           <button onclick="closeWindow('${id}')" title="Fechar">✕</button>
+  
+
+
         </div>
       </div>
 
-      
-
       <iframe
         class="win-frame"
+        data-runtime="nav"
         src="${src}"
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
         allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
@@ -205,6 +215,23 @@
   function boot() {
     syncShellMode();
     updateMaximizedStacks();
+
+    const navInput = document.getElementById('urlInputNav');
+    const navFrame = document.getElementById('navFrame');
+    const goNavBtn = document.getElementById('goNavBtn');
+
+    if (navInput && navFrame) {
+      navInput.value = navFrame.src;
+      const applyNav = () => {
+        const clean = navInput.value.trim();
+        if (!clean) return;
+        navFrame.src = clean;
+      };
+      goNavBtn?.addEventListener('click', applyNav);
+      navInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') applyNav();
+      });
+    }
   }
 
   openKobBtn?.addEventListener('click', () => {
@@ -228,6 +255,7 @@
   window.createSessionWindow = createSessionWindow;
   window.syncShellMode = syncShellMode;
   window.updateMaximizedStacks = updateMaximizedStacks;
+  window.sendTo = sendTo;
 
   window.addEventListener('resize', syncShellMode);
   window.addEventListener('orientationchange', syncShellMode);
