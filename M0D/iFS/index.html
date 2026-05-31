@@ -314,8 +314,11 @@
         </div>
 
         <div class="win-controls" onclick="event.stopPropagation()">
-                  <button onclick="minimizeWindow('${id}')" title="Minimizar para o Dock">🔘</button>
+<button onclick="toggleCollapse('${id}')" title="Colapsar">—</button>
+          <button onclick="toggleMaximize('${id}')" title="Maximizar">⬜</button>
+          <button onclick="minimizeWindow('${id}')" title="Minimizar para o Dock">🌐</button>
           <button onclick="closeWindow('${id}')" title="Fechar">✕</button>
+  
 
 
         </div>
