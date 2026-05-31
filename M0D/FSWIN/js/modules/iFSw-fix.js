@@ -163,7 +163,12 @@
     section.innerHTML = `
       <div class="win-hdr" onclick="handleHeaderClick(event, '${id}')">
         <div class="win-title">${icon} ${title}</div>
-
+        
+<div class="win-navrow" onclick="event.stopPropagation()">
+        <input class="win-urlbar" type="text" value="${src}" placeholder="https://..." spellcheck="false" autocomplete="off">
+        <button class="win-go-btn" type="button">Go</button>
+      </div>
+      
         <div class="win-controls" onclick="event.stopPropagation()">
           <button onclick="toggleCollapse('${id}')" title="Colapsar">—</button>
           <button onclick="toggleMaximize('${id}')" title="Maximizar">⬜</button>
@@ -172,10 +177,7 @@
         </div>
       </div>
 
-      <div class="win-navrow" onclick="event.stopPropagation()">
-        <input class="win-urlbar" type="text" value="${src}" placeholder="https://..." spellcheck="false" autocomplete="off">
-        <button class="win-go-btn" type="button">Go</button>
-      </div>
+      
 
       <iframe
         class="win-frame"
