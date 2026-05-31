@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="pt-BR"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KOBLLUX Monolith - Shell Integrado</title>
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFSw/css/iFSw-fix.css">
@@ -17,7 +15,15 @@
 <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-nanai.css"> 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
-</head>
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style></head>
 
 <body class="ui-safe-vertical" data-theme="dark" data-arch="kodux" data-user="Convidado" data-zpr="9" data-intensity="0.72">
  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LS/js/insert-LS-3.js"></script>
@@ -44,12 +50,15 @@
 
     <div id="arch-overlay"></div>
 
-   <div id="stackWrap">
+    <div id="stackWrap">
       <div class="session-window collapsed" id="session-iframe">
         <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
-          <div class="win-title win-controls"> <input id="siteInput" placeholder="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html">
+          <div class="win-navrow">
 
-<button onclick="abrirNoFrame()">🌐</button>
+
+ <input class="win-urlbar" id="siteInput" placeholder="//Cole seu link 🔗 .">
+
+<button class="win-go-btn" onclick="abrirNoFrame()">GO</button>
 </div>
 
           <div class="win-controls" onclick="event.stopPropagation()">
@@ -61,13 +70,9 @@
           </div>
         </div>
 
-       <iframe
-          class="win-frame" id="urlload"
-          src="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
-          allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-          loading="lazy">
+       <iframe class="win-frame" id="urlload" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
         </iframe> 
+
 
 <script>
 
@@ -101,5 +106,6 @@ overflow-y:auto ;}
 
 </style>
 
-</body>
-</html>
+
+
+</body></html>
