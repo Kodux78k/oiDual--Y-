@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+<!-- PWA METADATA & VIEWPORT FIX -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0f0f11">
+
+<!-- iOS Support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+<!-- Manifest -->
+<link rel="manifest" href="./manifest.json">
+
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFSw/css/iFSw-fix.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-e.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css"> 
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-nanai.css"> 
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+
+</head>
+
+<body class="ui-safe-vertical" data-theme="dark" data-arch="kodux" data-user="Convidado" data-zpr="9" data-intensity="0.72">
+
+ <div id="kxtsk-shell">
+
+
+    <div class="os-topbar">
+      <div class="os-brand">
+    
+      </div>
+
+      <div class="top-actions">
+
+<div class="win-navrow" onclick="event.stopPropagation()">
+      <input
+        class="win-urlbar" style="display:flex"
+        type="text"
+        id="urlInputNav"
+        placeholder="Digite uma URL..."
+        spellcheck="false"
+        autocomplete="off"
+      >
+      <button class="win-go-btn" style="display:none" type="button" id="goNavBtn">Go</button>
+         <button class="launcher-btn" id="openKobBtn">+ Abrir</button>
+         <button class="soft-btn" id="openLogsBtn">Logs</button>
+  </div>
+
+      </div>
+    </div>
+
+    <div id="dock"></div>
+
+    <div id="bg-gradient"></div>
+
+    <div id="bg-fake-custom"></div>
+
+    <div id="arch-overlay"></div>
+
+  <style>
+  .win-urlbar{
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 8px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.05);
+    color: #fff;
+    outline: none;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-size: 14px;
+    transition: .25s ease;
+  }
+  .win-urlbar::placeholder{
+    color: rgba(255,255,255,.45);
+  }
+  .win-urlbar:focus{
+    border-color: rgba(0,242,255,.4);
+    box-shadow: 0 0 16px rgba(0,242,255,.15);
+    background: rgba(255,255,255,.08);
+  }
+  .win-navrow{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px 10px;
+    box-sizing: border-box;
+  }
+  .win-go-btn{
+    border: 0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    background: rgba(0,242,255,.12);
+    color: #fff;
+    cursor: pointer;
+    flex: 0 0 auto;
+  }
+</style>
+
+<div id="stackWrap">
+  <div class="session-window peeked" id="session-iframe">
+    <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
+      <div class="win-controls" onclick="event.stopPropagation()">
+        <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🌐</button>
+
+      </div> 
+    </div>
+
+   
+
+    <iframe
+      class="win-frame"
+      data-runtime="nav"
+      id="navFrame"
+      src="https://kodux78k.github.io/oiDual--Y-/M0D/kob/splash.html"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+      allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+      loading="lazy">
+    </iframe>
+  </div>
+</div>
+
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LS/js/insert-LS-3.js"></script>
+
+<script>
+(() => {
+  const stackWrap = document.getElementById('stackWrap');
+  const dock = document.getElementById('dock');
+  const openKobBtn = document.getElementById('openKobBtn');
+  const openLogsBtn = document.getElementById('openLogsBtn');
+
+  let windowCounter = 1;
+  const clickTimers = {};
+
+  const DEFAULT_SRC = 'https://kodux78k.github.io/oiDual--Y-/splash.html';
+  const DEFAULT_ICON = '🌐';
+  const DEFAULT_TITLE = '//';
+
+  const getWin = (id) => document.getElementById(id);
+
+  function hasMaximizedWindow() {
+    return !!document.querySelector('.session-window.maximized:not(.minimized)');
+  }
+
+  function hasPeekedWindow() {
+    return !!document.querySelector('.session-window.peeked:not(.minimized)');
+  }
+
+  function syncShellMode() {
+    const maximized = hasMaximizedWindow();
+    const peeked = hasPeekedWindow();
+    document.body.classList.toggle('ui-immersive', !maximized && !peeked);
+    document.body.classList.toggle('ui-safe-vertical', maximized || peeked);
+  }
+
+  function updateMaximizedStacks() {
+    const maxWins = Array.from(document.querySelectorAll('.session-window.maximized'));
+    let currentTop = 0;
+
+    maxWins.sort((a, b) => (parseInt(a.style.zIndex) || 1) - (parseInt(b.style.zIndex) || 1));
+
+    maxWins.forEach(win => {
+      if (win.classList.contains('collapsed') || win.classList.contains('peeked')) {
+        win.style.top = `calc(${currentTop}px + var(--topbar-h) + var(--safe-top))`;
+        currentTop += win.classList.contains('collapsed') ? 52 : 87;
+      } else {
+        win.style.top = `calc(var(--topbar-h) + var(--safe-top))`;
+        currentTop = 0;
+      }
+    });
+
+    document.querySelectorAll('.session-window:not(.maximized)').forEach(win => {
+      win.style.top = '';
+    });
+  }
+
+  function handleHeaderClick(e, winId) {
+    if (e.target.closest('.win-controls, .win-urlbar, .win-go-btn')) return;
+
+    if (!clickTimers[winId]) {
+      clickTimers[winId] = setTimeout(() => {
+        delete clickTimers[winId];
+        togglePeek(winId);
+      }, 250);
+    } else {
+      clearTimeout(clickTimers[winId]);
+      delete clickTimers[winId];
+      toggleMaximize(winId);
+    }
+  }
+
+  function togglePeek(winId) {
+    const win = getWin(winId);
+    if (!win) return;
+    win.classList.toggle('peeked');
+    win.classList.remove('collapsed');
+    updateMaximizedStacks();
+    syncShellMode();
+  }
+
+  function toggleCollapse(winId) {
+    const win = getWin(winId);
+    if (!win) return;
+    win.classList.toggle('collapsed');
+    win.classList.remove('peeked');
+    updateMaximizedStacks();
+    syncShellMode();
+  }
+
+  function toggleMaximize(winId) {
+    const win = getWin(winId);
+    if (!win) return;
+
+    win.classList.toggle('maximized');
+    win.classList.remove('minimized');
+
+    if (win.classList.contains('maximized')) {
+      document.querySelectorAll('.session-window').forEach(w => w.style.zIndex = '1');
+      win.style.zIndex = '92000';
+    } else {
+      win.style.zIndex = '1';
+      win.classList.remove('peeked', 'collapsed');
+    }
+
+    updateMaximizedStacks();
+    syncShellMode();
+  }
+
+  function minimizeWindow(winId) {
+    const win = getWin(winId);
+    if (!win) return;
+
+    win.classList.add('minimized');
+    win.classList.remove('maximized', 'collapsed', 'peeked');
+    updateMaximizedStacks();
+
+    const bubble = document.createElement('div');
+    bubble.className = 'dock-bubble';
+    bubble.textContent = '🔘';
+    bubble.title = 'Restaurar janela';
+    bubble.id = `dock-${winId}`;
+
+    bubble.onclick = () => {
+      win.classList.remove('minimized');
+      bubble.remove();
+      updateMaximizedStacks();
+      win.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      syncShellMode();
+    };
+
+    dock.appendChild(bubble);
+    syncShellMode();
+  }
+
+  function closeWindow(winId) {
+    const win = getWin(winId);
+    if (!win) return;
+
+    const bubble = document.getElementById(`dock-${winId}`);
+    if (bubble) bubble.remove();
+
+    win.remove();
+    updateMaximizedStacks();
+    syncShellMode();
+  }
+
+  function setFrameUrl(sectionEl, url) {
+    const frame = sectionEl.querySelector('.win-frame');
+    const input = sectionEl.querySelector('.win-urlbar');
+    if (!frame || !input) return;
+    const clean = String(url || '').trim();
+    if (!clean) return;
+    frame.src = clean;
+    input.value = clean;
+  }
+
+  function sendTo(runtime, url) {
+    const frame = document.querySelector(`.win-frame[data-runtime="${runtime}"]`);
+    if (!frame) return;
+    const clean = String(url || '').trim();
+    if (!clean) return;
+    frame.src = clean;
+  }
+
+  function createSessionWindow({
+    title = DEFAULT_TITLE,
+    icon = DEFAULT_ICON,
+    src = DEFAULT_SRC
+  } = {}) {
+    const id = `session-${Date.now()}-${windowCounter++}`;
+
+    const section = document.createElement('div');
+    section.className = 'session-window collapsed';
+    section.id = id;
+
+    section.innerHTML = `
+      <div class="win-hdr" onclick="handleHeaderClick(event, '${id}')">
+        <div class="win-title">${icon} ${title}</div>
+
+        <div class="win-navrow" onclick="event.stopPropagation()">
+          <input class="win-urlbar" type="text" value="${src}" placeholder="Digite uma URL..." spellcheck="false" autocomplete="off">
+          <button class="win-go-btn" type="button">Go</button>
+        </div>
+
+        <div class="win-controls" onclick="event.stopPropagation()">
+          <button onclick="toggleCollapse('${id}')" title="Colapsar">—</button>
+          <button onclick="toggleMaximize('${id}')" title="Maximizar">⬜</button>
+          <button onclick="minimizeWindow('${id}')" title="Minimizar para o Dock">🔘</button>
+          <button onclick="closeWindow('${id}')" title="Fechar">✕</button>
+        </div>
+      </div>
+
+      <iframe
+        class="win-frame"
+        data-runtime="nav"
+        src="${src}"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+        allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    `;
+
+    const goBtn = section.querySelector('.win-go-btn');
+    const input = section.querySelector('.win-urlbar');
+
+    goBtn.addEventListener('click', () => setFrameUrl(section, input.value));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') setFrameUrl(section, input.value);
+    });
+
+    stackWrap.appendChild(section);
+    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    syncShellMode();
+    return id;
+  }
+
+  function boot() {
+    syncShellMode();
+    updateMaximizedStacks();
+
+    const navInput = document.getElementById('urlInputNav');
+    const navFrame = document.getElementById('navFrame');
+    const goNavBtn = document.getElementById('goNavBtn');
+
+    if (navInput && navFrame) {
+      navInput.value = navFrame.src;
+      const applyNav = () => {
+        const clean = navInput.value.trim();
+        if (!clean) return;
+        navFrame.src = clean;
+      };
+      goNavBtn?.addEventListener('click', applyNav);
+      navInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') applyNav();
+      });
+    }
+  }
+
+  openKobBtn?.addEventListener('click', () => {
+    createSessionWindow({
+      title: DEFAULT_TITLE,
+      icon: DEFAULT_ICON,
+      src: DEFAULT_SRC
+    });
+  });
+
+  openLogsBtn?.addEventListener('click', () => {
+    console.log('Logs acionado');
+  });
+
+  window.handleHeaderClick = handleHeaderClick;
+  window.togglePeek = togglePeek;
+  window.toggleCollapse = toggleCollapse;
+  window.toggleMaximize = toggleMaximize;
+  window.minimizeWindow = minimizeWindow;
+  window.closeWindow = closeWindow;
+  window.createSessionWindow = createSessionWindow;
+  window.syncShellMode = syncShellMode;
+  window.updateMaximizedStacks = updateMaximizedStacks;
+  window.sendTo = sendTo;
+
+  window.addEventListener('resize', syncShellMode);
+  window.addEventListener('orientationchange', syncShellMode);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+})();
+
+(() => {
+  const MIN_W = 39;
+  const MIN_H = 39;
+  const EDGE_PAD = 10;
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+  function getShellTop() {
+    const topbar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--topbar-h')) || 58;
+    const safeTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 0;
+    return topbar + safeTop;
+  }
+
+  function getMaxW() {
+    return window.innerWidth;
+  }
+
+  function getMaxH() {
+    const top = getShellTop();
+    return Math.max(43, window.innerHeight - top - EDGE_PAD);
+  }
+
+  function ensureHandles(win) {
+    if (!win || win.dataset.ifswReady === '1') return;
+    win.dataset.ifswReady = '1';
+
+    if (!win.style.width) {
+      win.style.width = '100%';
+    }
+
+    if (!win.style.height) {
+      const currentH = win.getBoundingClientRect().height;
+      if (currentH) win.style.height = `${currentH}px`;
+    }
+
+    if (!win.querySelector('.ifsw-handle-y')) {
+      const hy = document.createElement('div');
+      hy.className = 'ifsw-handle-y';
+      hy.dataset.noDrag = '1';
+      win.appendChild(hy);
+      bindResizeY(win, hy);
+    }
+
+    if (!win.querySelector('.ifsw-handle-x')) {
+      const hx = document.createElement('div');
+      hx.className = 'ifsw-handle-x';
+      hx.dataset.noDrag = '1';
+      win.appendChild(hx);
+      bindResizeX(win, hx);
+    }
+
+    if (!win.querySelector('.ifsw-handle-corner')) {
+      const hc = document.createElement('div');
+      hc.className = 'ifsw-handle-corner';
+      hc.dataset.noDrag = '1';
+      win.appendChild(hc);
+      bindResizeCorner(win, hc);
+    }
+  }
+
+  /*function setFreeMode(win) {
+    win.classList.remove('collapsed', 'peeked', 'maximized');
+    win.classList.add('resizing');
+  }*/
+
+function unlockFromMaximized(win) {
+  if (!win.classList.contains('maximized')) return;
+
+  const rect = win.getBoundingClientRect();
+
+  // win.classList.remove('maximized');
+  win.style.top = `${rect.top}px`;
+  win.style.left = `${rect.left}px`;
+  win.style.right = 'auto';
+  win.style.bottom = 'auto';
+  win.style.width = `${rect.width}px`;
+  win.style.height = `${rect.height}px`;
+  win.style.maxWidth = 'none';
+}
+
+function setFreeMode(win) {
+  unlockFromMaximized(win);
+  win.classList.remove('collapsed', 'peeked');
+  win.classList.add('resizing');
+}
+
+  function finishResize(win) {
+    win.classList.remove('resizing');
+    if (typeof window.updateMaximizedStacks === 'function') {
+      window.updateMaximizedStacks();
+    }
+    if (typeof window.syncShellMode === 'function') {
+      window.syncShellMode();
+    }
+  }
+
+  function bindResizeY(win, handle) {
+  let active = false;
+  let startY = 0;
+  let startH = 0;
+  let pid = null;
+
+  handle.addEventListener('pointerdown', (e) => {
+    if (e.button != null && e.button !== 0) return;
+    if (e.target.closest('button, a, input, textarea, select')) return;
+
+    active = true;
+    pid = e.pointerId;
+    startY = e.clientY;
+    startH = win.getBoundingClientRect().height;
+
+    setFreeMode(win);
+    handle.setPointerCapture?.(e.pointerId);
+    e.preventDefault();
+
+    const move = (ev) => {
+      if (!active || ev.pointerId !== pid) return;
+      ev.preventDefault();
+
+      const dy = ev.clientY - startY;   // <- corrigido
+      let nextH = startH + dy;
+
+      const minH = MIN_H;               // <- menor
+      const maxH = getMaxH();
+
+      nextH = clamp(nextH, minH, maxH);
+
+      win.style.height = `${nextH}px`;
+      win.style.top = 'auto';
+    };
+
+    const up = (ev) => {
+      if (ev && ev.pointerId !== pid) return;
+      active = false;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      finishResize(win);
+    };
+
+    window.addEventListener('pointermove', move, { passive: false });
+    window.addEventListener('pointerup', up, { passive: true });
+    window.addEventListener('pointercancel', up, { passive: true });
+  }, { passive: false });
+}
+
+  function bindResizeX(win, handle) {
+    let active = false;
+    let startX = 0;
+    let startW = 0;
+    let pid = null;
+
+    handle.addEventListener('pointerdown', (e) => {
+      if (e.button != null && e.button !== 0) return;
+      if (e.target.closest('button, a, input, textarea, select')) return;
+
+      active = true;
+      pid = e.pointerId;
+      startX = e.clientX;
+      startW = win.getBoundingClientRect().width;
+
+      setFreeMode(win);
+      handle.setPointerCapture?.(e.pointerId);
+      e.preventDefault();
+
+      const move = (ev) => {
+        if (!active || ev.pointerId !== pid) return;
+        e.preventDefault?.();
+
+        const dx = ev.clientX - startX;
+        let nextW = startW + dx;
+
+        nextW = clamp(nextW, MIN_W, getMaxW());
+
+        win.style.width = `${nextW}px`;
+        win.style.maxWidth = 'none';
+      };
+
+      const up = (ev) => {
+        if (ev && ev.pointerId !== pid) return;
+        active = false;
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        window.removeEventListener('pointercancel', up);
+        finishResize(win);
+      };
+
+      window.addEventListener('pointermove', move, { passive: false });
+      window.addEventListener('pointerup', up, { passive: true });
+      window.addEventListener('pointercancel', up, { passive: true });
+    }, { passive: false });
+  }
+
+  function bindResizeCorner(win, handle) {
+    let active = false;
+    let startX = 0;
+    let startY = 0;
+    let startW = 0;
+    let startH = 0;
+    let pid = null;
+
+    handle.addEventListener('pointerdown', (e) => {
+      if (e.button != null && e.button !== 0) return;
+      if (e.target.closest('button, a, input, textarea, select')) return;
+
+      active = true;
+      pid = e.pointerId;
+      startX = e.clientX;
+      startY = e.clientY;
+      const rect = win.getBoundingClientRect();
+      startW = rect.width;
+      startH = rect.height;
+
+      setFreeMode(win);
+      handle.setPointerCapture?.(e.pointerId);
+      e.preventDefault();
+
+      const move = (ev) => {
+        if (!active || ev.pointerId !== pid) return;
+        ev.preventDefault();
+
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+
+        let nextW = clamp(startW + dx, MIN_W, getMaxW());
+        let nextH = clamp(startH + dy, MIN_H, getMaxH());
+
+        win.style.width = `${nextW}px`;
+        win.style.height = `${nextH}px`;
+        win.style.maxWidth = 'none';
+        win.style.top = 'auto';
+      };
+
+      const up = (ev) => {
+        if (ev && ev.pointerId !== pid) return;
+        active = false;
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        window.removeEventListener('pointercancel', up);
+        finishResize(win);
+      };
+
+      window.addEventListener('pointermove', move, { passive: false });
+      window.addEventListener('pointerup', up, { passive: true });
+      window.addEventListener('pointercancel', up, { passive: true });
+    }, { passive: false });
+  }
+
+  function bootExisting() {
+    document.querySelectorAll('.session-window').forEach(ensureHandles);
+  }
+
+  function observeFuture() {
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        m.addedNodes.forEach((node) => {
+          if (!(node instanceof HTMLElement)) return;
+
+          if (node.classList?.contains('session-window')) {
+            ensureHandles(node);
+          } else {
+            node.querySelectorAll?.('.session-window').forEach(ensureHandles);
+          }
+        });
+      }
+    });
+
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+  }
+
+  function patchCreateSessionWindow() {
+    const original = window.createSessionWindow;
+    if (typeof original !== 'function') return;
+
+    window.createSessionWindow = function patchedCreateSessionWindow(...args) {
+      const id = original.apply(this, args);
+
+      requestAnimationFrame(() => {
+        const el = document.getElementById(id);
+        if (el) ensureHandles(el);
+      });
+
+      return id;
+    };
+  }
+
+  function patchInit() {
+    bootExisting();
+    observeFuture();
+    patchCreateSessionWindow();
+
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.session-window').forEach((win) => {
+        if (win.classList.contains('minimized')) return;
+
+        const maxW = getMaxW();
+        const maxH = getMaxH();
+
+        const rect = win.getBoundingClientRect();
+        const w = clamp(rect.width, MIN_W, maxW);
+        const h = clamp(rect.height, MIN_H, maxH);
+
+        win.style.width = `${w}px`;
+        win.style.height = `${h}px`;
+      });
+    }, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', patchInit, { once: true });
+  } else {
+    patchInit();
+  }
+})();
+
+
+</script>
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/css/zpr.css">
+
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script>
+  <div class="theme-switch" id="themeSwitch" title="Alternar tema"></div>
+<style> body, html{
+overflow-y:auto ;}
+
+</style>
+
+</body>
+</html>
