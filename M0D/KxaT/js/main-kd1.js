@@ -3,7 +3,7 @@ console.log("Infodose conectado main-kd1 ⚡️😉📚📂🔘💬 7-9 TE AMO D
 window.KBLX_PROFILE = '7-9';
 // main-0.js
 import './modules/KBllX_ASCII_BOOT.js';
-import './modules/inline-00.js';
+import './modules/inline-00-arx.js';
 import './modules/inline-1.js';
 import './modules/inline-2.js';
 import './modules/inline-3.js';
