@@ -1,5 +1,5 @@
 console.log("Infodose conectado 7-8 e com KAOS-in6-0 $$ main-1, ⚡️sem kob. te amo kobllux!!! artAsCii kkkkk", {"ts":1778715871351,"id":"348fab2c-a5ef-4d12-8e5b-3fde8577db6a","meta":{"app":"generated.app"}});
-import "./modules/inline-00.js";
+import "./modules/inline-00-arx.js";
 
 
 import "./modules/inline-1.js";
