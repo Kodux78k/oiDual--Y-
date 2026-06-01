@@ -52,7 +52,7 @@ const ARCHETYPES = [
     bgSoft: 'radial-gradient(circle at 50% 35%, rgba(196,181,253,.10), transparent)',
     glow: '0 0 18px rgba(196,181,253,.58)'
   }
-}
+},
 {
     id: 'velor',
     name: 'VELOR',
