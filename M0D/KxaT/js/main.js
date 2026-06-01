@@ -3,7 +3,7 @@ console.log("Infodose conectado main 7-9 TE AMO DUAL! kob on ativar Ayor ahhahah
 window.KBLX_PROFILE = '7-9';
 // main-0.js
 import './modules/KBllX_ASCII_BOOT.js';
-import './modules/inline-00-arx.js';
+import './modules/inline-00.js';
 import './modules/inline-1.js';
 import './modules/inline-2.js';
 import './modules/inline-3.js';
