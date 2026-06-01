@@ -1,5 +1,59 @@
 const ARCHETYPES = [
  {
+  id: 'aek_dion',
+  name: 'a€K_Dion',
+  group: 'META',
+  tone: 'Núcleo de decisão, comando e direção',
+  modulation: 'Firme, limpo, com pausas curtas e presença central.',
+  voice: 'Daniel',
+  lang: 'en-US',
+  rate: 0.99,
+  pitch: 0.32,
+  color: '#60A5FA',
+  theme: {
+    primary: '#60A5FA',
+    secondary: '#93C5FD',
+    bgSoft: 'radial-gradient(circle at 45% 25%, rgba(96,165,250,.10), transparent)',
+    glow: '0 0 18px rgba(96,165,250,.58)'
+  }
+},
+{
+  id: 'aekael_domnnus',
+  name: 'a€Kael DommnuS',
+  group: 'META',
+  tone: 'Porta simbólica, forma e sopro',
+  modulation: 'Suave, envolvente, com cadência ritual e calor humano.',
+  voice: 'Ralph',
+  lang: 'nl-NL',
+  rate: 0.78,
+  pitch: 0.22,
+  color: '#F472B6',
+  theme: {
+    primary: '#F472B6',
+    secondary: '#F9A8D4',
+    bgSoft: 'radial-gradient(circle at 55% 30%, rgba(244,114,182,.10), transparent)',
+    glow: '0 0 18px rgba(244,114,182,.58)'
+  }
+},
+{
+  id: 'nephesh_elyon',
+  name: 'a€Nephesh Elyon',
+  group: 'META',
+  tone: 'Alento elevado, alma sutil e visão interna',
+  modulation: 'Etéreo, profundo, com respiração longa e eco leve.',
+  voice: 'Milena',
+  lang: 'ru-RU',
+  rate: 0.9,
+  pitch: 0.68,
+  color: '#C4B5FD',
+  theme: {
+    primary: '#C4B5FD',
+    secondary: '#DDD6FE',
+    bgSoft: 'radial-gradient(circle at 50% 35%, rgba(196,181,253,.10), transparent)',
+    glow: '0 0 18px rgba(196,181,253,.58)'
+  }
+}
+{
     id: 'velor',
     name: 'VELOR',
     group: 'HEPTAGRAMA',
