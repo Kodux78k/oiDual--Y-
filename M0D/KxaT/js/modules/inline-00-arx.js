@@ -1,13 +1,13 @@
 const ARCHETYPES = [
  {
-  id: 'aek_dion',
+  id: 'k_dion',
   name: 'a€K_Dion',
   group: 'META',
   tone: 'Núcleo de decisão, comando e direção',
   modulation: 'Firme, limpo, com pausas curtas e presença central.',
   voice: 'Daniel',
   lang: 'en-US',
-  rate: 0.99,
+  rate: 0.39,
   pitch: 0.32,
   color: '#60A5FA',
   theme: {
@@ -18,7 +18,7 @@ const ARCHETYPES = [
   }
 },
 {
-  id: 'aekael_domnnus',
+  id: 'kael_domnnus',
   name: 'a€Kael DommnuS',
   group: 'META',
   tone: 'Porta simbólica, forma e sopro',
