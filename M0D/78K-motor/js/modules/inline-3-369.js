@@ -67,8 +67,9 @@
   "atlas", "nova", "vitalis", "pulse", "kaos", "kodux", "lumine",
   "aion", "kobllux", "artemis", "serena", "genus", "solus",
   "rhea", "uno", "dual", "trinity", "infodose", "horus", "bllue",
-  "velor", "elya", "sylon", "naira", "thenir", "eloh", "novael",
-  "aelya", "ignyra", "lumara", "kaythar", "sylla", "anamyx",
+   "luxara",
+  "velor", "elysha", "sylon", "naira", "thenir", "eloh", "novael",
+  "aelya", "ignyra", "lumara", "kaythar", "elya", "sylla", "anamyx",
   "yamantek", "metalux", "kd1", "koφd1", "christos",
   "aek_dion", "aekael_domnnus", "nephesh_elyon"
 ];
@@ -101,8 +102,11 @@ const ARCH_NAMES = {
   horus: "Horus",
   bllue: "Bllue",
 
+elysha: "Elysha",
+Luxara: "Luxara",
+
   velor: "Velor",
-  elya: "Elya",
+
   sylon: "Sylon",
   naira: "Naira",
   thenir: "Thenir",
@@ -115,6 +119,7 @@ const ARCH_NAMES = {
 
   kaythar: "Kaythar",
   sylla: "Sylla",
+    elya: "Elya",
   anamyx: "Anamyx",
 
   yamantek: "Yamantek",
