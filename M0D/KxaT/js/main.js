@@ -17,8 +17,6 @@ import './modules/inline-8.js';
 import './modules/inline-9.js';
 import './modules/inline-10.js';
 import './modules/inline-11.js';
-
-import './modules/inline-arx.js';
 import './modules/a€Arx.js';
 console.log(`
 ╔════════════════════════════════════╗
