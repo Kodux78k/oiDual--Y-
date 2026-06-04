@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dual.Infodose · DSJSUSS m0d DI</title>
+  <meta name="theme-color" content="#010708">
+
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual-DSJSUSS-di/css/main.css">
+
+  <style>
+    /* ========================================================
+      CAMADA 1: VIEWPORT ROOT & FALLBACKS (Atlas / Z-Index) 
+      ========================================================
+    */
+    :root {
+      /* Atlas Mode Fallbacks */
+      --atlas-base: 0;
+      --atlas-content: 100;
+      --atlas-widget: 600;
+      --atlas-system: 1000;
+
+      /* Universal Z-System */
+      --z-base: var(--atlas-base);
+      --z-content: var(--atlas-content);
+      --z-widget: var(--atlas-widget);
+      --z-system: var(--atlas-system);
+    }
+
+    *, *::before, *::after { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    html {
+      width: 100%;
+      height: 100%;
+      min-width: 100vw;
+      min-height: 100vh;
+      overflow: hidden !important;
+      overscroll-behavior: none !important;
+      -webkit-overflow-scrolling: touch;
+      -webkit-overscroll-behavior: none;
+    }
+
+    body {
+      width: 100%;
+      height: 100%;
+      padding: 1px; /* Depth lock mechanic */
+      overflow: hidden;
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
+      background: #010708; /* Fallback da interface original */
+    }
+
+    /* ========================================================
+      CAMADA 2: FREEZE MECHANICS & LAYERS
+      ========================================================
+    */
+    .layer-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none; /* Deixa o clique vazar onde for vazio */
+    }
+    .layer-container > * {
+      pointer-events: auto; /* Reativa cliques nos elementos filhos */
+    }
+
+    [data-layer="base"]    { z-index: var(--z-base);    --z-layer-val: var(--z-base); }
+    [data-layer="content"] { z-index: var(--z-content); --z-layer-val: var(--z-content); }
+    [data-layer="widget"]  { z-index: var(--z-widget);  --z-layer-val: var(--z-widget); }
+    [data-layer="system"]  { z-index: var(--z-system);  --z-layer-val: var(--z-system); }
+
+    /* ========================================================
+      CAMADA 3: WARP (UNIVERSO INTERNO 3x3)
+      ========================================================
+    */
+    #atlas-warp {
+      position: absolute;
+      top: 0; left: 0;
+      width: 300vw;   /* 3 × 100vw */
+      height: 300vh;  /* 3 × 100vh */
+      transform-origin: top left;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    /* ========================================================
+      CAMADA 4: Z-MODE (ATLAS 3D PERSPECTIVE)
+      ========================================================
+    */
+    #atlas-warp.z-mode {
+      transform:
+        perspective(1200px)
+        rotateX(28deg)
+        rotateY(-12deg)
+        scale(0.55);
+      transform-style: preserve-3d;
+    }
+
+    /* Expande visualmente os layers quando está em 3D */
+    #atlas-warp.z-mode > [data-layer] {
+      display: block !important;
+      opacity: 0.9;
+      outline: 1px solid rgba(0, 216, 216, 0.2); 
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+      transform: translateZ(calc(var(--z-layer-val, 0) * 0.4px));
+      cursor: grab;
+      pointer-events: auto;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- UNIVERSO WARP -->
+  <div id="atlas-warp">
+
+    <!-- LAYER BASE -->
+    <div data-layer="base" class="layer-container">
+      <!-- (Futuro cenário de base) -->
+    </div>
+
+    <!-- LAYER CONTENT -->
+    <div data-layer="content" class="layer-container">
+      <div class="content" style="width:100%; height:100%;">
+        <iframe id="frame" src="https://kodux78k.github.io/oiDual--Y-/M0D/â€”/KKKXRD09.html" class="active" style="width:100%; height:100%; border:none;"></iframe>
+      </div>
+    </div>
+
+    <!-- LAYER WIDGET (Chat Modules) -->
+    <div data-layer="widget" class="layer-container">
+      <!-- Módulos de Chat comentados mantidos na sua camada correta -->
+      <!--
+      <div class="dual-chat-module" id="dualChatModule" aria-live="polite" style="bottom:156px;">
+          <div class="response-container" id="response">
+            <div class="pages-wrapper" id="pagesWrapper">
+              <div class="page initial active" data-page-index="0">
+                <strong id="bootText" class="pulse" data-text="...">
+                  🧬 Carregando configurações DI...
+                </strong>
+              </div>
+            </div>
+
+            <p class="footer-text" id="footerHint">
+              <span class="footer-dot"></span>
+              Configurações DI Ativas.
+            </p>
+
+            <div class="response-controls">
+              <div class="control-buttons">
+                <button class="icon-btn" id="copyBtn">⧉</button>
+                <button class="icon-btn" id="toggleSettingsBtn">👥</button>
+              </div>
+              <div class="pagination">
+                <button id="pagePrev">⟵</button>
+                <span id="pageIndicator">1 / 1</span>
+                <button id="pageNext">⟶</button>
+              </div>
+            </div>
+
+            <div id="iaConfigPanel">
+              <div id="iaConfigHeader">
+                <span>Config DI · Storage</span>
+                <button type="button" class="ia-close-btn" id="closeIaConfigPanelBtn">✕</button>
+              </div>
+              <div class="ia-config-body">
+                <div class="ia-field">
+                  <label for="apiKeyInput">DI API Key (di_apiKey)</label>
+                  <input id="apiKeyInput" type="password" placeholder="sk-or-..." autocomplete="off">
+                </div>
+                <div class="ia-field">
+                  <label for="modelSelect">Modelo (di_modelName)</label>
+                  <select id="modelSelect">
+                    <option value="deepseek/deepseek-chat-v3-0324:free">deepseek-v3 · free</option>
+                    <option value="nvidea/nemotron-3-nano-30b-a3b:free">NemoTron</option>
+                    <option value="openrouter/pony-alpha">Pony Alpha</option>
+                    <option value="arcee-ai/trinity-large-preview:free">Trinity</option>
+                    <option value="custom">Custom (digitar)</option>
+                  </select>
+                </div>
+                <div class="ia-field">
+                  <label for="customModelInput">Modelo Custom</label>
+                  <input id="customModelInput" type="text" placeholder="ex: nvidea/nemotron-3-nano-30b-a3b:free">
+                </div>
+                <div class="ia-actions">
+                  <button class="pill-btn" id="saveIaConfigBtn" type="button">Salvar Config DI</button>
+                  <button class="pill-btn secondary" id="clearIaConfigBtn" type="button">Limpar Tudo</button>
+                </div>
+                <div class="ia-status" id="iaStatus">Verificando storage...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-container">
+            <input id="userInput" type="text" placeholder="oi, Dual...">
+            <button id="sendBtn" type="button">•</button>
+            <button id="voiceBtn" type="button">🔘</button>
+          </div>
+      </div>
+      -->
+    </div>
+
+    <!-- LAYER SYSTEM (Toggles & HUD) -->
+    <div data-layer="system" class="layer-container">
+      <div class="theme-toggle" onclick="toggleTheme()"></div>
+      <button class="lock-button" onclick="loadPage('/splash.html')"></button>
+
+      <!-- Botões de Símbolos -->
+      <!-- 
+      <div class="symbol-bar">
+        <button class="symbol-button" onclick="loadPage('https://kodux78k.github.io/oiDual-0i0/')">◉</button>
+        <button class="symbol-button" onclick="loadPage('https://kodux78k.github.io/oiDual-duali/')">◉</button>
+        <button class="symbol-button" onclick="loadPage('https://kodux78k.github.io/oiDual-oiio/sFusi-szplasherzs.html')">◉</button>
+      </div> 
+      -->
+    </div>
+
+  </div> <!-- FIM WARP -->
+
+  <!-- SCRIPTS EXTERNOS (Mantidos e Comentados conforme original) -->
+  <!-- <script src="https://kodux78k.github.io/oiDual-DSJSUSS-di/js/modules/inline-0.js"></script> -->
+  <!-- <script src="https://kodux78k.github.io/oiDual-DSJSUSS-di/js/modules/inline-2.js"></script> -->
+  <!-- <script src="https://kodux78k.github.io/oiDual-DSJSUSS-di/js/modules/inline-1.js"></script> -->
+  <!-- <script src="https://kodux78k.github.io/oiDual-DSJSUSS-di/js/modules/inline-0e1.js"></script> -->
+  <!-- <script type="module" src="https://kodux78k.github.io/oiDual-DSJSUSS-di/js/main.js"></script> -->
+
+  <!-- LOGIC: Z-MODE (Atlas Perspective Long Press) -->
+  <script>
+    console.log(`
+      [BLUE TRANSMISSION LOG]
+      L1: - | 1 | 2 | 3
+      L2: + | 3 | = | layers
+      L3: - | 4 | 5 | 6
+      L4: + | 6 | = | = | poles
+      L5: - | 7 | 8 | 9
+      L6: + | 9 | = | potentials
+      "Truth times integrate divided by delta equals infinity.
+       What remains When? The noise is removed. Version of reality zone."
+      >> MIND POLE INTEGRATED. KODUX & ATLAS SYNCED.
+    `);
+
+    let pressTimer;
+    const warpContainer = document.getElementById('atlas-warp');
+
+    document.addEventListener('pointerdown', (e) => {
+      // Evita interrupção caso clique diretamente em inputs ou botões na interface 2D
+      if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'SELECT') return;
+
+      pressTimer = setTimeout(() => {
+        warpContainer.classList.toggle('z-mode');
+        const state = warpContainer.classList.contains('z-mode') ? "Acessando Z-Mode (Reality Zone)" : "Retornando à superfície 2D";
+        console.log(`[ATLAS] ${state}`);
+      }, 600); // Aciona após 600ms
+    });
+
+    document.addEventListener('pointerup', () => clearTimeout(pressTimer));
+    document.addEventListener('pointerleave', () => clearTimeout(pressTimer));
+    document.addEventListener('pointercancel', () => clearTimeout(pressTimer));
+  </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,208 @@
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>KOBLLUX TTS Dock - Standalone</title>
+
+  <!-- Fontes e CSS Externos --
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;display=swap" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-root-aa.css">
+    
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/base1.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-hud.css">
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
+
+
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css">
+
+-->
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+  
+
+ <style>
+.main-toggle,
+  #toggleBtn {color: var(--kob-voice-secondary);
+    width: 48px;
+    height: 48px;border:12px;box-shadow: var(--kob-voice-primary);
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+</head>
+<body>
+
+<div id="root">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css">
+
+  <div class="content">
+
+    <div id="kob-tts-outline"></div>
+  </div>
+
+
+
+  <!-- HUD Inteligente -->
+  <div class="symbol-bar" id="symbolBar">
+    
+    <!-- Botão Menu -->
+
+<!-- Botão Menu -->
+    <div class="toggle-wrap">
+      <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+    </div>
+
+ <!--   <div class="symbol-wrap">
+
+    <button class="symbol-button" id="tts-play" title="Parar"> ▶ </button>
+
+    <button class="symbol-button" id="tts-stop" title="Parar">■</button>
+
+    </div>-->
+
+  <div class="symbol-wrap">
+
+    <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+      <div class="orb-microphone-container">
+        <div class="tts-orb-mini" >
+          <div class="orb" id="main-orb">
+            <div class="orb-core"></div>
+          </div>
+        </div>
+    </div>
+    </button>
+
+       </div>
+
+    <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+  </div>
+</div>
+       <div id="arch-overlay"></div>  
+
+<div id="bg-fake-custom">
+
+<!-- Scripts -->
+
+</div>
+
+<style> 
+
+/* estado normal */
+.kob-tts-dock{
+  transition: transform .35s ease, opacity .65s ease;
+}
+
+/* quase invisível */
+.kob-tts-dock.idle{
+  opacity: .18;
+  transform: scale(.92);
+}
+
+/* quando passa o dedo ou mouse */
+.kob-tts-dock:hover{
+  opacity: 1;
+  transform: scale(1);
+}
+
+.kob-tts-dock{
+
+ 
+  box-shadow:none !important;
+}</style>
+
+
+
+<script>
+
+const dock = document.querySelector('.kob-tts-dock');
+
+let idleTimer;
+
+function resetIdle(){
+  dock.classList.remove('idle');
+
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(()=>{
+    dock.classList.add('idle');
+  }, 1870); // 1870  mili segundos parado
+}
+
+/* eventos que despertam o dock */
+['pointerdown','pointermove','touchstart','mousemove']
+.forEach(ev=>{
+  document.addEventListener(ev, resetIdle, {passive:true});
+});
+
+resetIdle();
+</script>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  KOBLLUX · LONG-PRESS URL EDITOR        ║
+     ║  Segurar 3s → edita data-url do botão   ║
+     ║  Clique curto → sistema externo cuida   ║
+     ╚══════════════════════════════════════════╝ -->
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+
+<div id="kblx-back">
+  <div id="kblx-panel">
+    <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+    <div class="p-title" id="kblx-ttl">Botão</div>
+    <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
+    <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+    <div class="kblx-row">
+      <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
+      <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-0.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+  
+
+<script>
+const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","aion","kobllux","artemis","serena","genus","solus","rhea","uno","dual","trinity","infodose","horus","bllue", localStorage.getItem("di_userName")];
+</script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/dikob0000.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>     
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script>
+
+ <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+</body></html>

@@ -1,0 +1,1189 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#0f0f11" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <link rel="manifest" href="./manifest.json" />
+  <title>Dual.Infodose · Cinemático</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/inxs.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glassu.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/ZPR_ORB.css">
+
+  <style>
+    :root{
+      --z-base:0;
+      --z-content:100;
+      --z-widget:500;
+      --z-overlay:1000;
+      --z-system:5000;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      width:100%;
+      height:100%;
+      overscroll-behavior-y:none;
+      overflow-y:auto !important;
+      background:#0b0b10;
+    }
+
+    body{
+      min-height:100vh;
+      min-height:100dvh;
+      padding-top:env(safe-area-inset-top);
+      padding-bottom:env(safe-area-inset-bottom);
+      padding-left:env(safe-area-inset-left);
+      padding-right:env(safe-area-inset-right);
+      color:#fff;
+      font-family:"Montserrat", sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    button, input, select, textarea{
+      font:inherit;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .hidden{ display:none !important; }
+    .show{ display:grid !important; }
+
+    .symbol-toolbar{
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .orb{
+      width:40%;
+      height:40%;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+    }
+
+    .orb-core{
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+        radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+      box-shadow:
+        0 0 18px var(--orb-primary),
+        0 0 36px rgba(120,227,255,0.4);
+      animation: orbSpin var(--orb-speed, 6s) linear infinite;
+    }
+
+    @keyframes orbSpin{ to{ transform:rotate(360deg); } }
+    @keyframes orbPulse{ from{ transform:scale(1); } to{ transform:scale(1.15); } }
+
+    #orb-root.speaking .orb-core{
+      animation: orbSpin 2s linear infinite, orbPulse 0.5s ease-in-out infinite alternate;
+    }
+
+    .mainOrb,
+    .symbol-button,
+    button,
+    svg,
+    img{
+      user-select:none;
+      -webkit-user-select:none;
+      -webkit-touch-callout:none;
+      -webkit-user-drag:none;
+      touch-action:manipulation;
+    }
+
+    #root{
+      position:relative;
+      min-height:100vh;
+      min-height:100dvh;
+      isolation:isolate;
+      overflow:hidden;
+    }
+
+    .wrap{
+      position:relative;
+      z-index:var(--z-content);
+      width:100%;
+      min-height:100vh;
+      min-height:100dvh;
+    }
+
+    .bg-gradient,
+    #bg-layer-fixed,
+    #bg-fake-custom,
+    .sky-layer,
+    .ambient-light,
+    #particles-js{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+    }
+
+    .symbol-button{
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      padding:10px 14px;
+      cursor:pointer;
+      backdrop-filter:blur(12px);
+    }
+
+    .symbol-wrap{ display:inline-flex; align-items:center; gap:8px; }
+
+    .response-container{
+      position:relative;
+      z-index:var(--z-widget);
+      width:min(100%, 1100px);
+      margin:18px auto 0;
+      padding:16px;
+    }
+
+    .pages-wrapper{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .response-block{
+      border-radius:18px;
+      padding:16px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(18px);
+    }
+
+    .footer-text{
+      opacity:.7;
+      margin:14px 0 0;
+      font-size:.9rem;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .footer-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#8ff;
+      display:inline-block;
+    }
+
+    .response-controls,
+    .control-buttons,
+    .ia-actions,
+    .kblx-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .icon-btn,
+    .pill-btn,
+    .small-btn,
+    .kblx-btn,
+    .kblx-icon-btn{
+      border:none;
+      cursor:pointer;
+      color:#fff;
+    }
+
+    .icon-btn{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:rgba(255,255,255,.08);
+    }
+
+    .pill-btn,
+    .small-btn,
+    .kblx-btn{
+      border-radius:14px;
+      padding:12px 16px;
+      background:rgba(255,255,255,.08);
+    }
+
+    .pill-btn.secondary,
+    .small-btn.danger,
+    .kblx-clear{
+      background:rgba(255,255,255,.05);
+    }
+
+    .input-container{
+      position:sticky;
+      bottom:0;
+      z-index:var(--z-widget);
+      display:flex;
+      gap:10px;
+      padding:12px;
+      width:min(100%, 1100px);
+      margin:18px auto 18px;
+      background:rgba(7,7,10,.72);
+      backdrop-filter:blur(18px);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+    }
+
+    .input-container input{
+      flex:1;
+      min-width:0;
+      border:none;
+      outline:none;
+      padding:14px 16px;
+      border-radius:16px;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+    }
+
+    .input-container button{
+      min-width:52px;
+      border-radius:16px;
+      background:rgba(255,255,255,.08);
+    }
+
+    .login-container,
+    .modal-overlay,
+    .drawer-overlay{
+      position:fixed;
+      inset:0;
+      z-index:var(--z-overlay);
+      display:none;
+      place-items:center;
+      background:rgba(0,0,0,.5);
+      padding:20px;
+    }
+
+    .drawer-overlay.show,
+    .modal-overlay.show,
+    .login-container.show{
+      display:grid;
+    }
+
+    .drawer,
+    .keys-card,
+    .login-container form,
+    #iaConfigPanel,
+    #kblx-panel{
+      width:min(92vw, 560px);
+      border-radius:28px;
+      padding:20px;
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(20px);
+      box-shadow:0 20px 80px rgba(0,0,0,.45);
+      color:#fff;
+    }
+
+    #iaConfigPanel{
+      width:min(100%, 1100px);
+      margin:0 auto 16px;
+      display:none;
+    }
+
+    #iaConfigPanel.show{ display:block; }
+
+    .ia-field,
+    .form-section,
+    .cockpit-item,
+    .kblx-section{
+      margin-top:14px;
+    }
+
+    .ia-field label,
+    .p-lbl,
+    .cockpit-label{
+      display:block;
+      margin-bottom:8px;
+      opacity:.78;
+      font-size:.84rem;
+    }
+
+    .ia-field input,
+    .ia-field select,
+    .login-container input,
+    .cockpit-input,
+    #kblx-inp,
+    #apiKeyInput,
+    #systemApiKeyInput,
+    #modelSelect,
+    #systemModelSelect{
+      width:100%;
+      padding:14px 16px;
+      border:none;
+      outline:none;
+      border-radius:18px;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+    }
+
+    .ia-status{
+      margin-top:12px;
+      opacity:.68;
+      font-size:.85rem;
+    }
+
+    .hud-info,
+    #assistantName,
+    .infodose,
+    #modeIndicator{
+      text-align:center;
+      opacity:.8;
+      margin:10px auto;
+      letter-spacing:.06em;
+    }
+
+    .infodose{
+      font-size:1.4rem;
+      font-weight:900;
+    }
+
+    .session-window{
+      width:min(100%, 1100px);
+      margin:0 auto;
+      border-radius:22px;
+      overflow:hidden;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(16px);
+      transition:all .25s ease;
+    }
+
+    .session-window.maximized{
+      position:fixed !important;
+      inset:0 !important;
+      width:100vw !important;
+      height:100dvh !important;
+      z-index:999999 !important;
+      margin:0 !important;
+      border-radius:0 !important;
+    }
+
+    .session-window.maximized .win-frame{
+      height:calc(100dvh - 48px);
+    }
+
+    .win-hdr,
+    .drawer-header,
+    .keys-header,
+    .kblx-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+    }
+
+    .win-frame{
+      width:100%;
+      height:min(60vh, 640px);
+      border:none;
+      background:#000;
+    }
+
+    #frame{
+      width:100%;
+      height:320px;
+      border:none;
+      background:#000;
+      display:block;
+      border-radius:16px;
+    }
+
+    .svg-container{
+      width:92px;
+      height:92px;
+      margin:18px auto 0;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      cursor:pointer;
+    }
+
+    .svg-container svg{
+      width:56px;
+      height:56px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.5;
+    }
+
+    .cockpit-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+
+    .kblx-sec-head{
+      margin-bottom:12px;
+      font-size:.82rem;
+      opacity:.65;
+    }
+
+    .kblx-presets{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .kblx-preset{
+      border:none;
+      padding:10px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      cursor:pointer;
+    }
+
+    .kblx-preview{
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+      font-size:.8rem;
+      opacity:.7;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      word-break:break-word;
+    }
+
+    .kblx-icon-btn{
+      width:40px;
+      height:40px;
+      border-radius:14px;
+      background:rgba(255,255,255,.06);
+    }
+
+    .kblx-btn{
+      flex:1;
+      min-height:52px;
+      font-weight:600;
+    }
+
+    .kdx-splash{
+      position:fixed;
+      inset:0;
+      z-index:var(--z-system);
+      display:grid;
+      place-items:center;
+      background:radial-gradient(circle at center, rgba(20,20,30,.85), rgba(0,0,0,.95));
+      transition:opacity .35s ease, visibility .35s ease;
+    }
+
+    .kdx-splash.hidden{
+      opacity:0;
+      visibility:hidden;
+    }
+
+    .kdx-splash-inner{
+      text-align:center;
+      padding:24px;
+    }
+
+    .kdx-splash-logo{
+      width:88px;
+      height:88px;
+      border-radius:24px;
+      margin-bottom:14px;
+      object-fit:cover;
+      box-shadow:0 0 40px rgba(255,255,255,.12);
+    }
+
+    .kdx-splash-title{
+      font-size:1rem;
+      opacity:.88;
+      letter-spacing:.08em;
+    }
+
+    .window-hidden{ display:none !important; }
+
+    @media (max-width: 820px){
+      .cockpit-grid{ grid-template-columns:1fr; }
+      .input-container{ width:calc(100% - 16px); margin:12px auto 14px; }
+    }
+  </style>
+</head>
+
+<body class="field-closed mode-night">
+  <div id="root">
+    <div class="bg-gradient"></div>
+    <div id="bg-layer-fixed"></div>
+
+    <div class="wrap">
+      <div class="ambient-light" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+      </div>
+
+      <div id="snap-zone"></div>
+      <div class="toaster-wrap" id="toasterWrap"></div>
+
+      <div class="symbol-toolbar symbol-bar" id="symbolBar">
+        <div class="fusion-card symbol-iwrap" style="z-index:0;display:inline-flex;opacity:.59" id="mainCard">
+          <div class="card-header symbol-wrap" id="cardHeader">
+            <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)"></div>
+
+            <div style="display:inline-flex;align-items:center;gap:8px">
+              <div class="text-block">
+                <div class="greeting-row">
+                  <span class="txt-thin" id="lblHello">Oi,</span>
+                  <span class="txt-heavy" id="lblName">Convidado</span>
+                </div>
+                <div class="brand-dual">DUAL</div>
+              </div>
+
+              <div class="clock-widget">
+                <div class="time-display" id="clockTime">00:00</div>
+                <span class="status-led">ONLINE</span>
+              </div>
+
+              <button class="hud-menu-btn" id="hudMenuBtn" title="Menu Rápido" type="button">
+                <i data-lucide="menu"></i>
+              </button>
+            </div>
+
+            <div class="orb-menu-trigger hidden" id="orbMenuTrigger" title="Menu Rápido">●●●</div>
+            <div class="drag-handle"></div>
+
+            <div class="small-preview hidden" id="smallPreview" title="Gerenciar Chaves">
+              <div class="mini-avatar" id="smallMiniAvatar"></div>
+              <div class="small-text" id="smallText">Aguardando ativação...</div>
+              <div class="ident-badge" id="smallIdent">--</div>
+            </div>
+          </div>
+
+          <div class="card-body" id="cardBody">
+            <div class="input-wrappe stagger-ite">
+              <input type="text" class="cyber-input" id="inputUser" placeholder="Identifique-se..." autocomplete="off">
+            </div>
+
+            <div class="activation-wrap stagger-item">
+              <div class="activation-toggle" onclick="toggleSection('activationCard')">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-cyan)"></div>
+                  <strong style="letter-spacing:1px;font-size:.9rem">Ativação ASCII</strong>
+                </div>
+              </div>
+
+              <div id="activationCard" class="activation-card activation-hidden">
+                <div style="display:flex;align-items:flex-start;gap:10px">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div class="mini-avatar" id="actMiniAvatar"></div>
+                    <div>
+                      <div style="font-weight:700">CÉREBRO</div>
+                      <div style="font-size:.78rem;opacity:.6"><span id="actName">User</span></div>
+                    </div>
+                  </div>
+                  <div class="activation-badge" id="actBadge" style="margin-left:auto;color:var(--neon-cyan);font-size:.8em">v:--</div>
+                </div>
+
+                <pre id="actPre" class="activation-pre">Carregando...</pre>
+
+                <div class="activation-controls" style="display:flex;gap:8px;margin-top:8px">
+                  <button class="trigger-btn" id="copyActBtn" type="button">COPIAR</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="activation-wrap stagger-item">
+              <div class="activation-toggle" onclick="toggleSection('systemCard')">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div>
+                  <strong style="letter-spacing:1px;font-size:.9rem">SYSTEM &amp; NEURAL</strong>
+                </div>
+                <div style="margin-left:auto;font-size:.82rem;color:rgba(255,255,255,0.6)">CONFIG</div>
+              </div>
+
+              <div id="systemCard" class="activation-card activation-hidden">
+                <div class="col">
+                  <div class="section-title">IDENTIDADE DA INFODOSE</div>
+                  <input type="text" id="infodoseNameInput" placeholder="Nome: World System..." style="width:100%;margin-bottom:8px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+
+                  <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div>
+                  <input type="password" id="systemApiKeyInput" placeholder="sk-or-..." autocomplete="off" style="width:100%;margin-bottom:6px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+
+                  <div class="model-toggle">
+                    <select id="systemModelSelect" class="btn">
+                      <option value="" disabled selected>Selecione Modelo</option>
+                      <option value="nvidia/nemotron-3-nano-30b-a3b:free">NemoTron (Free)</option>
+                      <option value="allenai/molmo-2-8b:free">MolMo (Free)</option>
+                      <option value="mistralai/devstral-2512:free">DevStral</option>
+                      <option value="openai/gpt-oss-120b:free">OSS120b</option>
+                    </select>
+                  </div>
+
+                  <div class="panel-divider" style="margin:10px 0;border-top:1px solid rgba(255,255,255,0.05)"></div>
+                  <button id="saveSystemBtn" class="trigger-btn" style="margin-top:12px;background:var(--neon-cyan);color:#000;border:none;font-weight:700" type="button">SALVAR CONFIGURAÇÃO</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="toggle-wrap">
+          <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar" type="button">≡</button>
+        </div>
+
+        <div id="dock"></div>
+
+        <div class="symbol-wrap">
+          <div class="session-window peeked" id="session-iframe-embedded">
+            <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe-embedded')">
+              <div class="top-actions">
+                <button class="launcher-btn" id="openKobBtn" type="button">+</button>
+                <button class="soft-btn" id="openLogsBtn" type="button"></button>
+              </div>
+
+              <div class="win-controls" onclick="event.stopPropagation()">
+                <button type="button" onclick="toggleCollapse('session-iframe-embedded')" title="Colapsar">—</button>
+                <button type="button" onclick="toggleMaximize('session-iframe-embedded')" title="Maximizar">⬜</button>
+                <button type="button" onclick="minimizeWindow('session-iframe-embedded')" title="Minimizar para o Dock">🔘</button>
+              </div>
+            </div>
+
+            <iframe
+              class="win-frame"
+              src="https://kodux78k.github.io/oiDual-H0/DH0-10.html"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+              allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+
+        <div class="symbol-wrap">
+          <button class="symbol-button" id="btn-prev" title="Voltar Bloco" type="button">◀</button>
+        </div>
+        <div class="symbol-wrap">
+          <button class="symbol-button" id="btn-play" title="Play/Pause" type="button">▶</button>
+        </div>
+        <div class="symbol-wrap">
+          <button class="symbol-button" id="tts-stop" title="Parar" type="button">■</button>
+        </div>
+
+        <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz" type="button">
+          <div class="orb-microphone-container">
+            <div class="tts-orb-mini">
+              <div class="orb" id="main-orb">
+                <div class="orb-core"></div>
+              </div>
+            </div>
+          </div>
+        </button>
+
+        <div class="symbol-wrap">
+          <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/MA/" type="button">Φ</button>
+        </div>
+
+        <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+      </div>
+
+      <div id="kdx-splash" class="kdx-splash" aria-hidden="true">
+        <div class="kdx-splash-inner">
+          <img class="kdx-splash-logo" src="icon-192.png" alt="Kael DomnnuS">
+          <div class="kdx-splash-title">Kael DomnnuS · Organização Viva v2</div>
+        </div>
+      </div>
+
+      <button id="kdx-mode-toggle" aria-pressed="false" title="Modo: You / Assistant" type="button">
+        <span id="kdx-mode-icon">🧬</span>
+        <span id="kdx-mode-label">✦</span>
+      </button>
+
+      <div id="kdx-orb" class="kdx-orb kdx-hidden" role="button" aria-label="Orb de voz Kaion">
+        <div class="kdx-orb-icon">◎</div>
+      </div>
+
+      <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;">
+        <symbol id="icon-copy" viewBox="0 0 24 24">
+          <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+          <rect x="4" y="4" width="11" height="11" rx="2"></rect>
+        </symbol>
+        <symbol id="icon-paste" viewBox="0 0 24 24">
+          <path d="M9 4h6l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1z"></path>
+          <rect x="9" y="2" width="6" height="3" rx="1.2"></rect>
+        </symbol>
+        <symbol id="icon-user" viewBox="0 0 24 24">
+          <circle cx="12" cy="9" r="3.2"></circle>
+          <path d="M6 18a6 6 0 0 1 12 0"></path>
+        </symbol>
+        <symbol id="icon-mic" viewBox="0 0 24 24">
+          <rect x="9" y="5" width="6" height="9" rx="3"></rect>
+          <path d="M5 11a7 7 0 0 0 14 0"></path>
+          <path d="M12 18v3"></path>
+        </symbol>
+        <symbol id="icon-orb" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="8"></circle>
+          <circle cx="12" cy="12" r="4"></circle>
+        </symbol>
+        <symbol id="icon-settings" viewBox="0 0 24 24">
+          <path d="M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"></path>
+          <path d="M4.9 8.6a1 1 0 0 1 .3-1.4l1.2-.7a1 1 0 0 0 .5-.8l.2-1.4A1 1 0 0 1 8.1 3h1.8a1 1 0 0 1 1 .7l.3 1.4a1 1 0 0 0 .6.7l1.3.7a1 1 0 0 0 1.1-.1l1.1-.8a1 1 0 0 1 1.4.3l.9 1.6a1 1 0 0 1-.1 1.1l-.9 1.1a1 1 0 0 0-.2.8l.2 1.5a1 1 0 0 1-.8 1.1l-1.4.2a1 1 0 0 0-.7.5l-.6 1.3a1 1 0 0 1-1 .6h-1.8a1 1 0 0 1-1-.6l-.6-1.3a1 1 0 0 0-.7-.5l-1.4-.2a1 1 0 0 1-.8-1.1l.2-1.5a1 1 0 0 0-.2-.8L4.9 8.6z"></path>
+        </symbol>
+        <symbol id="icon-code" viewBox="0 0 24 24">
+          <polyline points="9 18 4 12 9 6"></polyline>
+          <polyline points="15 6 20 12 15 18"></polyline>
+        </symbol>
+        <symbol id="icon-cards" viewBox="0 0 24 24">
+          <rect x="2" y="2" width="16" height="16" rx="2"></rect>
+          <path d="M22 6v14a2 2 0 0 1-2 2H6"></path>
+        </symbol>
+      </svg>
+
+      <div id="particles-js"></div>
+
+      <button id="themeToggle" aria-label="Alternar tema" type="button"></button>
+
+      <div class="svg-container" id="logoContainer">
+        <svg viewBox="0 0 24 24">
+          <use href="#icon-orb"></use>
+        </svg>
+      </div>
+
+      <div id="assistantName">Dual.Infodose · Cinemático</div>
+
+      <div class="response-container" id="response">
+        <div class="pages-wrapper" id="responseList">
+          <div class="response-block intro initial" id="bootBlock">
+            <strong id="bootText" data-text="Iniciando Roda-Viva. Pulso simbiótico detectado. Presença reconhecida.">
+              Iniciando Roda-Viva. Pulso simbiótico detectado. Presença reconhecida.
+            </strong>
+          </div>
+        </div>
+
+        <p class="footer-text" id="footerHint">
+          <span class="footer-dot"></span>
+          Do seu jeito. Sempre único. Sempre seu.
+        </p>
+
+        <div class="response-controls">
+          <div class="control-buttons">
+            <button class="icon-btn secondary" id="copyBtn" title="Copiar último bloco" type="button">
+              <svg viewBox="0 0 24 24"><use href="#icon-copy"></use></svg>
+            </button>
+            <button class="icon-btn secondary" id="pasteBtn" title="Colar no input" type="button">
+              <svg viewBox="0 0 24 24"><use href="#icon-paste"></use></svg>
+            </button>
+            <button class="icon-btn" id="parserBtn" title="Upload de parser Markdown/CSS" type="button">
+              <svg viewBox="0 0 24 24"><use href="#icon-code"></use></svg>
+            </button>
+            <button class="icon-btn" id="voiceConfigBtn" title="Carregar / alternar vozes de arquétipos" type="button">
+              <svg viewBox="0 0 24 24"><use href="#icon-orb"></use></svg>
+            </button>
+            <button class="icon-btn secondary" id="toggleLoginBtn" title="Ativar / Alterar nomes" type="button">
+              <svg viewBox="0 0 24 24"><use href="#icon-user"></use></svg>
+            </button>
+            <button class="icon-btn secondary" id="toggleSettingsBtn" title="Configuração IA / Tema" type="button">
+              <svg viewBox="0 0 24 24"><use href="#icon-settings"></use></svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="iaConfigPanel">
+          <div id="iaConfigHeader">
+            <span>Config IA · OpenRouter &amp; Tema</span>
+          </div>
+          <div class="ia-config-body">
+            <div class="ia-field">
+              <label for="apiKeyInput">API Key (sk-or-...)</label>
+              <input id="apiKeyInput" type="password" placeholder="Cole sua chave OpenRouter aqui" autocomplete="off">
+            </div>
+            <div class="ia-field">
+              <label for="modelSelect">Modelo</label>
+              <select id="modelSelect">
+                <option value="openai/gpt-oss-120b">gpt-oss · free</option>
+                <option value="inclusionai/ring-2.6-1t:free">ring-2.6-1t:free</option>
+                <option value="openrouter/free">openrouter/free</option>
+                <option value="nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free">nvidia/nemotron:free</option>
+                <option value="custom">Custom (digitar abaixo)</option>
+              </select>
+            </div>
+            <div class="ia-field">
+              <label for="customModelInput">Modelo custom (opcional)</label>
+              <input id="customModelInput" type="text" placeholder="ex: openai/gpt-4.1-mini">
+            </div>
+            <div class="ia-field">
+              <label for="themeSelect">Tema</label>
+              <select id="themeSelect">
+                <option value="dark">Dark</option>
+                <option value="vibe">Vibe</option>
+                <option value="medium">Medium</option>
+              </select>
+            </div>
+            <div class="ia-actions">
+              <button class="pill-btn" id="saveIaConfigBtn" type="button">Salvar</button>
+              <button class="pill-btn secondary" id="clearIaConfigBtn" type="button">Limpar</button>
+            </div>
+            <div class="ia-status" id="iaStatus">Nenhuma chave salva ainda.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-container">
+        <input id="userInput" type="text" placeholder="Diga algo para o Dual." aria-label="Digite sua mensagem">
+        <button id="sendBtn" title="Enviar" type="button"><span class="send-label">➤</span></button>
+        <button id="voiceBtn" title="Ouvir último bloco" type="button">
+          <svg viewBox="0 0 24 24"><use href="#icon-mic"></use></svg>
+        </button>
+      </div>
+
+      <div class="login-container" id="loginBox" aria-modal="true" role="dialog">
+        <h2>Ativar Dual.Infodose</h2>
+        <p>Defina o seu nome e o nome-base do assistente para personalizar as respostas.</p>
+        <form id="loginForm">
+          <input id="userName" type="text" placeholder="Seu nome" required>
+          <input id="assistantInput" type="text" placeholder="Nome do assistente" required>
+          <button type="submit">Ativar</button>
+        </form>
+      </div>
+
+      <input type="file" id="parserFile" accept=".js,.css" style="display:none">
+      <input type="file" id="voiceConfigFile" accept=".json" style="display:none">
+
+      <div class="content">
+        <iframe id="frame" src="about:blank"></iframe>
+        <div id="kob-tts-outline"></div>
+      </div>
+
+      <div id="arch-overlay"></div>
+
+      <div id="keysModal" class="modal-overlay" aria-hidden="true">
+        <div class="keys-card" role="dialog">
+          <div class="keys-header">
+            <div>
+              <div id="keysTitle" style="font-weight:800;font-size:1.1rem;color:var(--neon-cyan)">USER KEYS MANAGER</div>
+              <div style="color:rgba(255,255,255,0.6);font-size:0.85rem">Gerencie suas chaves API com segurança local (Cofre).</div>
+            </div>
+            <button id="closeKeysBtn" class="small-btn" type="button">X</button>
+          </div>
+
+          <div class="key-list" id="keyList"></div>
+
+          <div class="form-section" style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.05)">
+            <div class="form-grid">
+              <input id="keyNameInput" placeholder="Nome da chave (ex: Principal)">
+              <input id="keyTokenInput" type="password" placeholder="Token / ESK (Opcional)">
+            </div>
+            <button id="addKeyBtn" class="small-btn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.1)" type="button">ADICIONAR CHAVE</button>
+          </div>
+
+          <div style="display:flex;gap:8px;justify-content:space-between;margin-top:15px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px">
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px">
+              <i data-lucide="shield-check" style="width:14px"></i>
+              <span id="vaultStatusText">Cofre Aberto</span>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button id="lockVaultBtn" class="small-btn danger" type="button">BLOQUEAR</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="vaultModal" class="modal-overlay" aria-hidden="true">
+        <div class="keys-card">
+          <div class="vault-icon"><i data-lucide="lock" style="width:24px;height:24px"></i></div>
+          <h3 style="margin:0 0 10px 0;font-weight:800">ACESSO AO COFRE</h3>
+          <p style="margin:0 0 15px 0;font-size:0.9rem;color:rgba(255,255,255,0.6)">Seus dados estão criptografados. Digite a senha para desbloquear.</p>
+          <input type="password" id="vaultPassInput" class="cyber-input" style="text-align:center;margin-bottom:12px" placeholder="Senha...">
+          <div style="display:flex;gap:8px;justify-content:center">
+            <button id="vaultCancelBtn" class="small-btn" type="button">Cancelar</button>
+            <button id="vaultUnlockBtn" class="small-btn active-btn" type="button">DESBLOQUEAR</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+
+      <div id="drawerProfile" class="drawer" aria-hidden="true">
+        <div class="drawer-content">
+          <div class="drawer-header">
+            <h3>
+              <svg style="width:20px;height:20px;margin-right:8px;stroke:var(--secondary)"><use href="#icon-orb"></use></svg>
+              Cockpit Solar
+            </h3>
+            <button class="btn-icon" style="width:38px;height:38px;border-radius:12px;" onclick="toggleDrawer('drawerProfile')" type="button">✕</button>
+          </div>
+
+          <div class="drawer-body">
+            <div class="cockpit-item" style="text-align:center;margin-bottom:15px;">
+              <div class="cockpit-label">Ciclo Solar</div>
+              <div id="statusSolarMode" style="font-size:1.2rem;font-weight:bold;margin:5px 0;">AUTO</div>
+              <div class="control-row" style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn-block" id="btnCycleSolar" type="button">Manual ☀️/🌙</button>
+                <button class="btn-block" id="btnAutoSolar" type="button">Auto 🕒</button>
+              </div>
+            </div>
+
+            <div class="cockpit-grid">
+              <div class="cockpit-item">
+                <div class="cockpit-label">Identificação</div>
+                <input type="text" id="inputUserId" class="cockpit-input" placeholder="Viajante">
+              </div>
+
+              <div class="cockpit-item">
+                <div class="cockpit-label">Modelo IA</div>
+                <input type="text" id="inputModel" class="cockpit-input" placeholder="google/gemini-2.0-flash-exp">
+              </div>
+
+              <div class="cockpit-item">
+                <div class="cockpit-label">Background</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                  <span id="bgStatusText" style="font-size:.8rem;color:var(--text-muted)">Nenhum</span>
+                  <label class="btn-icon" style="width:30px;height:30px;border-radius:5px;">
+                    <input type="file" id="bgUploadInput" accept="image/*" style="display:none">
+                    <svg><use href="#icon-cards"></use></svg>
+                  </label>
+                </div>
+              </div>
+
+              <div id="bgThumbPanel" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="kblx-back">
+        <div id="kblx-panel">
+          <header class="kblx-head">
+            <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+            <button class="kblx-icon-btn" id="kblx-btn-close" type="button">✕</button>
+          </header>
+
+          <div class="kblx-title-wrap">
+            <h2 class="p-title" id="kblx-ttl">Botão</h2>
+            <p class="kblx-sub">Editar destino do SymbolButton</p>
+          </div>
+
+          <section class="kblx-section">
+            <label class="p-lbl" for="kblx-inp">Novo valor para <code>data-url</code></label>
+            <input id="kblx-inp" type="text" placeholder="arquivo.html ou https://..." spellcheck="false" autocomplete="off">
+            <div class="kblx-preview" id="kblx-preview">Nenhuma rota definida</div>
+          </section>
+
+          <section class="kblx-section">
+            <div class="kblx-sec-head"><span>Presets</span></div>
+            <div class="kblx-presets">
+              <button class="kblx-preset" data-url="index.html" type="button">Home</button>
+              <button class="kblx-preset" data-url="hub.html" type="button">Hub</button>
+              <button class="kblx-preset" data-url="render-response.html" type="button">Render</button>
+              <button class="kblx-preset" data-url="https://google.com" type="button">URL</button>
+            </div>
+          </section>
+
+          <footer class="kblx-row">
+            <button class="kblx-btn kblx-save" id="kblx-btn-save" type="button">⊙ Salvar no botão</button>
+            <button class="kblx-btn kblx-clear" id="kblx-btn-clear" type="button">⌫ Limpar</button>
+          </footer>
+        </div>
+      </div>
+
+      <div class="infodose">dual.<strong>Infodose</strong></div>
+      <div id="modeIndicator">CARREGANDO nO.Sºlar...</div>
+      <div id="usernameDisplay"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script>
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main.js"></script>
+
+  <script>
+    const BASE = "https://kodux78k.github.io/oiDual--Y-/";
+
+    function makeOrbAvatar(name = "Convidado", size = 64){
+      const safe = String(name || "Convidado");
+      const hash = [...safe].reduce((a, c) => a + c.charCodeAt(0), 0);
+      const hue = hash % 360;
+      const initials = safe.trim().split(/\s+/).slice(0, 2).map(x => x[0]?.toUpperCase() || "").join("");
+      return `
+        <svg width="${size}" height="${size}" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <radialGradient id="g1-${size}-${hue}" cx="30%" cy="30%">
+              <stop offset="0%" stop-color="hsl(${hue},100%,82%)"/>
+              <stop offset="60%" stop-color="hsl(${(hue + 35) % 360},90%,56%)"/>
+              <stop offset="100%" stop-color="hsl(${(hue + 70) % 360},80%,22%)"/>
+            </radialGradient>
+          </defs>
+          <circle cx="32" cy="32" r="30" fill="url(#g1-${size}-${hue})" opacity=".95"/>
+          <circle cx="32" cy="32" r="16" fill="rgba(255,255,255,.12)"/>
+          <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle"
+                fill="#fff" font-family="Montserrat, sans-serif" font-size="${Math.max(14, size * 0.22)}" font-weight="800">${initials || "?"}</text>
+        </svg>
+      `;
+    }
+
+    function updateInterface(name){
+      const safe = name || window.di_userName || "Convidado";
+      const lblName = document.getElementById("lblName");
+      const inputUser = document.getElementById("inputUser");
+      const smallIdent = document.getElementById("smallIdent");
+      const actBadge = document.getElementById("actBadge");
+      const avatarTarget = document.getElementById("avatarTarget");
+      const smallMiniAvatar = document.getElementById("smallMiniAvatar");
+      const actMiniAvatar = document.getElementById("actMiniAvatar");
+      const actName = document.getElementById("actName");
+
+      if (lblName) lblName.innerText = safe;
+      if (inputUser) inputUser.value = safe;
+
+      const activeKey = window.STATE?.keys?.find(k => k.active);
+      if (smallIdent) smallIdent.innerText = activeKey ? activeKey.name : "--";
+      if (actBadge) actBadge.innerText = activeKey ? `key:${activeKey.name}` : "v:--";
+      if (avatarTarget) avatarTarget.innerHTML = makeOrbAvatar(safe, 64);
+      if (smallMiniAvatar) smallMiniAvatar.innerHTML = makeOrbAvatar(safe, 24);
+      if (actMiniAvatar) actMiniAvatar.innerHTML = makeOrbAvatar(safe, 36);
+      if (actName) actName.innerText = safe;
+    }
+
+    window.updateInterface = updateInterface;
+
+    window.toggleSection = window.toggleSection || function(id){
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle("activation-hidden");
+      el.classList.toggle("hidden");
+    };
+
+    window.toggleDrawer = window.toggleDrawer || function(id = "drawerProfile"){
+      const drawer = document.getElementById(id);
+      const overlay = document.getElementById("drawerOverlay");
+      if (!drawer || !overlay) return;
+      drawer.classList.toggle("show");
+      overlay.classList.toggle("show");
+    };
+
+    window.toggleCollapse = window.toggleCollapse || function(id){
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle("collapsed");
+    };
+
+    window.toggleMaximize = window.toggleMaximize || function(id){
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle("maximized");
+    };
+
+    window.minimizeWindow = window.minimizeWindow || function(id){
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle("window-hidden");
+    };
+
+    window.handleHeaderClick = window.handleHeaderClick || function(event, id){
+      if (event?.target?.closest?.("button")) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle("peeked");
+    };
+
+    window.setMode = window.setMode || function(mode){
+      document.body.dataset.mode = mode;
+    };
+
+    function initParticles(){
+      if (window.particlesJS) {
+        try{
+          particlesJS("particles-js", {
+            particles: {
+              number: { value: 40 },
+              size: { value: 2 },
+              line_linked: { enable: false },
+              move: { enable: true, speed: 1.2 },
+              opacity: { value: 0.35 }
+            },
+            interactivity: {
+              detect_on: "canvas",
+              events: { onhover: { enable: false }, onclick: { enable: false } }
+            },
+            retina_detect: true
+          });
+        } catch {}
+      }
+    }
+
+    function initIcons(){
+      if (window.lucide && typeof window.lucide.createIcons === "function") {
+        try { window.lucide.createIcons(); } catch {}
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initIcons();
+      initParticles();
+      updateInterface(window.di_userName || "Convidado");
+
+      const splash = document.getElementById("kdx-splash");
+      if (splash) setTimeout(() => splash.classList.add("hidden"), 900);
+
+      const themeToggle = document.getElementById("themeToggle");
+      if (themeToggle) {
+        themeToggle.addEventListener("click", () => {
+          document.body.classList.toggle("mode-night");
+          document.body.classList.toggle("mode-day");
+        });
+      }
+
+      const toggleLoginBtn = document.getElementById("toggleLoginBtn");
+      const loginBox = document.getElementById("loginBox");
+      if (toggleLoginBtn && loginBox) {
+        toggleLoginBtn.addEventListener("click", () => loginBox.classList.toggle("show"));
+      }
+
+      const toggleSettingsBtn = document.getElementById("toggleSettingsBtn");
+      const iaConfigPanel = document.getElementById("iaConfigPanel");
+      if (toggleSettingsBtn && iaConfigPanel) {
+        toggleSettingsBtn.addEventListener("click", () => iaConfigPanel.classList.toggle("show"));
+      }
+
+      const hudMenuBtn = document.getElementById("hudMenuBtn");
+      if (hudMenuBtn) hudMenuBtn.addEventListener("click", () => toggleDrawer("drawerProfile"));
+
+      const logoContainer = document.getElementById("logoContainer");
+      if (logoContainer) logoContainer.addEventListener("click", () => toggleDrawer("drawerProfile"));
+    });
+  </script>
+</body>
+</html>

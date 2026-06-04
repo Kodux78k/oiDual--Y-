@@ -1,0 +1,3245 @@
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <title>Fusion Card // Core Controller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="manifest" href="manifest.json"> <meta name="theme-color" content="#05070a"> <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  
+<script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+
+   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+
+ <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/inxs.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glassu.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css"><style>
+    .symbol-toolbar{
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .orb{
+      width:40%;
+      height:40%;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+    }
+
+    .orb-core{
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+        radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+      box-shadow:
+        0 0 18px var(--orb-primary),
+        0 0 36px rgba(120,227,255,0.4);
+      animation: orbSpin var(--orb-speed) linear infinite;
+    }
+
+    @keyframes orbSpin{
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes orbPulse{
+      from { transform: scale(1); }
+      to { transform: scale(1.15); }
+    }
+
+    #orb-root.speaking .orb-core{
+      animation:
+        orbSpin 2s linear infinite,
+        orbPulse 0.5s ease-in-out infinite alternate;
+    }
+  </style>
+  <style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"><style>
+    /* --- ARCHITECTURE: DESIGN TOKENS --- */
+    :root {
+      /* DARK MODE (DEFAULT) */
+      --bg-void: #020202;
+      --bg-panel: #0a0a0c;
+      
+      --glass-surface: rgba(20, 20, 25, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-highlight: rgba(255, 255, 255, 0.03);
+      --glass-shadow: rgba(0, 0, 0, 0.9);
+      
+      --neon-cyan: #00f2ff;
+      --neon-purple: #bd00ff;
+      --alert-red: #ff4d4d;
+      
+      --text-main: #e5e7eb;
+      --text-muted: #6b7280;
+      
+      --font-ui: 'Inter', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 24px;
+      
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* LIGHT MODE (FROST PROTOCOL) */
+    :root[data-theme="light"] {
+      --bg-void: #eef2f6;
+      --bg-panel: #ffffff;
+      
+      --glass-surface: rgba(255, 255, 255, 0.85);
+      --glass-border: rgba(0, 0, 0, 0.08);
+      --glass-highlight: rgba(255, 255, 255, 0.4);
+      --glass-shadow: rgba(0, 0, 0, 0.1);
+      
+      --neon-cyan: #008088; /* Darker Teal for contrast */
+      --neon-purple: #8a00bc;
+      --alert-red: #dc2626;
+      
+      --text-main: #111827;
+      --text-muted: #64748b;
+    }
+
+    /* --- RESET & BASE --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+    
+    body {
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      overflow: hidden;
+      height: 100vh; width: 100vw;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    /* --- UTILITIES --- */
+    .hidden { display: none !important; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    
+    .state-translated-x { transform: translateX(100%); }
+    .state-visible-y { transform: translateY(0) !important; }
+    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.3); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
+
+    /* --- LAYERS --- */
+
+    /* Layer 0: Ambient */
+    .void-ambient {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(circle at 50% 120%, var(--glass-highlight), transparent 60%);
+      opacity: 0.1; transition: opacity 0.4s;
+    }
+
+    /* Layer 1: Nav Frame */
+    #navFrame {
+      position: fixed; inset: 0; width: 100%; height: 100%; border: 0; z-index: 0;
+    }
+
+    /* Layer 2: UI Overlays */
+    .top-bar {
+      position: fixed; top: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 40;
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--glass-surface); backdrop-filter: blur(12px);
+      padding: 0.5rem 1rem; border-radius: 99px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 20px -5px var(--glass-shadow);
+      transition: all 0.4s;
+    }
+    .brand-text { font-family: var(--font-code); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 2px; }
+    .sep { height: 12px; width: 1px; background: var(--text-muted); opacity: 0.3; }
+    .theme-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; transition: color 0.3s; }
+    .theme-btn:hover { color: var(--text-main); }
+
+    /* Sidebars */
+    .sidebar {
+      position: fixed; top: 50%; transform: translateY(-50%); z-index: 40;
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .sidebar.right { right: 0.75rem; }
+    .sidebar.left { left: 0.75rem; }
+
+    .icon-btn {
+      width: 2rem; height: 2rem; border-radius: var(--radius-sm);
+      background: var(--glass-surface); border: 1px solid var(--glass-border);
+      color: var(--text-muted); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; backdrop-filter: blur(4px);
+    }
+    .icon-btn:hover { background: var(--glass-highlight); color: var(--text-main); border-color: var(--text-muted); }
+    
+    .nav-btn { color: var(--neon-cyan); font-family: var(--font-code); font-size: 0.9rem; }
+    .nav-btn:hover { background: var(--neon-cyan); color: var(--bg-void); box-shadow: 0 0 12px var(--neon-cyan); }
+
+    /* --- MONOLITH --- */
+    .monolith-wrapper {
+      position: fixed; inset: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem; pointer-events: none;
+      perspective: 1200px;
+    }
+
+    .monolith {
+      width: 100%; max-width: 64rem; height: 80vh; max-height: 850px;
+      background: var(--glass-surface);
+      backdrop-filter: blur(30px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 40px 80px -12px var(--glass-shadow);
+      
+      display: flex; flex-direction: column; position: relative; overflow: hidden;
+      
+      /* 3D State: Inactive */
+      opacity: 0; transform: translateY(60px) rotateX(10deg) scale(0.95); transform-style: preserve-3d;
+      transition: all 0.6s var(--ease-out-expo);
+    }
+
+    /* 3D State: Active */
+    body.system-active .monolith {
+      opacity: 1; transform: translateY(0) rotateX(0) scale(1); pointer-events: auto;
+    }
+
+    /* Monolith Internals */
+    .mono-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.5rem; border-bottom: 1px solid var(--glass-border);
+      background: var(--glass-highlight);
+    }
+    .mono-brand { display: flex; align-items: center; gap: 0.75rem; }
+    .brand-icon { 
+      width: 2rem; height: 2rem; background: rgba(128,128,128,0.1); 
+      border: 1px solid var(--glass-border); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center; color: var(--neon-cyan);
+    }
+    .brand-title { font-weight: 700; font-size: 0.875rem; letter-spacing: 0.05em; color: var(--text-main); }
+    
+    .status-badge {
+      font-family: var(--font-code); font-size: 10px; padding: 3px 8px;
+      border-radius: 4px; background: rgba(128,128,128,0.1); border: 1px solid var(--glass-border);
+      color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s;
+    }
+
+    .mono-body { flex: 1; display: flex; position: relative; overflow: hidden; }
+
+    /* View: Vault */
+    .vault-view {
+      width: 100%; height: 100%; padding: 1.5rem; overflow-y: auto;
+      display: flex; flex-direction: column;
+    }
+
+    .actions-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1.5rem;
+    }
+    @media (min-width: 768px) { .actions-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .action-card {
+      padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--glass-border);
+      background: rgba(128,128,128,0.05); color: var(--text-muted); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.8rem;
+      transition: all 0.2s; font-weight: 500;
+    }
+    .action-card:hover { background: var(--glass-highlight); color: var(--text-main); border-color: var(--text-muted); }
+    
+    .btn-create { background: var(--neon-cyan); color: var(--bg-void); border: none; font-weight: 700; }
+    .btn-create:hover { background: var(--text-main); color: var(--bg-void); box-shadow: 0 0 20px rgba(128,128,128,0.2); }
+
+    .action-card.dashed { border-style: dashed; border-color: var(--text-muted); opacity: 0.7; }
+    .action-card.dashed:hover { border-color: var(--neon-cyan); color: var(--text-main); background: rgba(128,128,128,0.05); opacity: 1; }
+
+    .list-header { display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding: 0 4px; }
+    .list-label { font-size: 0.7rem; font-family: var(--font-code); color: var(--text-muted); letter-spacing: 0.5px; }
+
+    .stack-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem; margin-bottom: 0.5rem;
+      background: rgba(128,128,128,0.03); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s;
+    }
+    .stack-item:hover { border-color: var(--neon-cyan); background: var(--glass-highlight); transform: translateX(4px); }
+    
+    .stack-info { display: flex; align-items: center; gap: 0.75rem; overflow: hidden; }
+    .stack-icon { 
+      width: 2rem; height: 2rem; border-radius: 6px; background: rgba(128,128,128,0.1); 
+      display: flex; align-items: center; justify-content: center; color: var(--neon-cyan); opacity: 0.7;
+    }
+    .stack-item:hover .stack-icon { opacity: 1; color: var(--neon-cyan); background: rgba(128,128,128,0.2); }
+    .stack-text h4 { font-size: 0.85rem; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .stack-text span { font-size: 0.65rem; font-family: var(--font-code); color: var(--text-muted); }
+
+    .stack-actions { display: flex; gap: 0.5rem; opacity: 0; transition: opacity 0.2s; }
+    .stack-item:hover .stack-actions { opacity: 1; }
+    
+    .mini-btn { width: 2rem; height: 2rem; border-radius: 6px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+    .btn-run { background: var(--neon-cyan); color: var(--bg-void); }
+    .btn-run:hover { background: var(--text-main); color: var(--bg-void); }
+    .btn-del { border: 1px solid rgba(255, 77, 77, 0.2); background: transparent; color: var(--alert-red); }
+    .btn-del:hover { background: var(--alert-red); color: white; border-color: var(--alert-red); }
+
+    /* View: Editor */
+    .editor-view {
+      position: absolute; inset: 0; z-index: 10;
+      background: var(--bg-panel); padding: 1.5rem;
+      display: flex; flex-direction: column;
+      transition: transform 0.5s var(--ease-out-expo);
+    }
+    
+    .editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .editor-title { color: var(--neon-cyan); font-family: var(--font-code); font-size: 0.8rem; letter-spacing: 1px; }
+    .btn-cancel { background: rgba(128,128,128,0.1); color: var(--text-muted); border: none; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
+    .btn-cancel:hover { background: rgba(128,128,128,0.2); color: var(--text-main); }
+
+    .input-title {
+      width: 100%; background: rgba(128,128,128,0.05); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: 0.75rem; margin-bottom: 0.75rem;
+      color: var(--text-main); font-family: var(--font-code); font-size: 0.8rem; transition: 0.2s;
+    }
+    .input-title:focus { border-color: var(--neon-cyan); background: var(--bg-panel); }
+    
+    .code-area {
+      flex: 1; position: relative; border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); overflow: hidden; background: rgba(0,0,0,0.2);
+    }
+    textarea#modContent {
+      width: 100%; height: 100%; background: transparent; border: none; padding: 1rem;
+      color: #a7f3d0; font-family: var(--font-code); font-size: 0.75rem; resize: none; line-height: 1.5;
+    }
+    /* Darken code text in light mode for readability */
+    :root[data-theme="light"] textarea#modContent { color: #065f46; background: rgba(255,255,255,0.5); }
+
+    .btn-save {
+      width: 100%; margin-top: 1rem; padding: 0.75rem;
+      background: var(--neon-cyan); color: var(--bg-void); border: none; border-radius: var(--radius-md);
+      font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-save:hover { background: var(--text-main); color: var(--bg-void); box-shadow: 0 0 15px rgba(128,128,128,0.2); }
+
+    /* Runtime Layer */
+    .runtime-layer {
+      position: absolute; inset: 0; z-index: 20; background: black; /* Always dark for cinema mode */
+      display: flex; flex-direction: column;
+      transform: translateY(100%); transition: transform 0.5s var(--ease-out-expo);
+    }
+    
+    .runtime-bar {
+      height: 2.5rem; background: #0a0a0c; border-bottom: 1px solid #333;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 1rem;
+    }
+    .runtime-indicator { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-code); font-size: 0.7rem; color: #00f2ff; letter-spacing: 0.5px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #00f2ff; animation: pulse 2s infinite; }
+    
+    .runtime-frame-wrap { flex: 1; position: relative; background: white; }
+    .scanline {
+      position: absolute; inset: 0; pointer-events: none; opacity: 0.15; mix-blend-mode: overlay;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px;
+    }
+
+    /* Footer Pulse */
+    .mono-footer { height: 2px; width: 100%; background: var(--bg-panel); position: relative; overflow: hidden; margin-top: auto; }
+    #pulseBar {
+      position: absolute; inset: 0; width: 50%;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+      animation: scan 3s linear infinite; opacity: 0; transition: opacity 0.3s;
+    }
+
+    @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* --- ORB TRIGGER --- */
+    .orb-container {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 60;
+      transition: all 0.5s var(--ease-out-expo);
+    }
+    
+    .orb-btn {
+      width: 2.75rem; height: 2.75rem; 
+      border-radius: 50%; border: none; cursor: pointer;
+      background: var(--glass-surface); backdrop-filter: blur(8px);
+      box-shadow: 0 0 0 1px var(--glass-border), 0 0 20px rgba(0,0,0,0.1);
+      position: relative; display: flex; align-items: center; justify-content: center;
+      transition: 0.3s;
+    }
+    .orb-btn:hover { box-shadow: 0 0 0 1px var(--neon-cyan), 0 0 30px var(--neon-cyan); }
+    
+    .orb-core { 
+      width: 6px; height: 6px; background: var(--text-main); border-radius: 50%; 
+      box-shadow: 0 0 10px var(--glass-highlight); transition: 0.3s; 
+    }
+    .orb-btn:hover .orb-core { background: var(--neon-cyan); box-shadow: 0 0 15px var(--neon-cyan); transform: scale(1.1); }
+    
+    .orb-ring { 
+      position: absolute; inset: 3px; border-radius: 50%; 
+      border: 1px solid transparent; border-top-color: var(--neon-cyan); 
+      animation: spin 6s linear infinite; opacity: 0.6; 
+    }
+    .orb-ring.inner { 
+      inset: 8px; border-top-color: transparent; border-bottom-color: var(--neon-purple); 
+      animation-direction: reverse; opacity: 0.5; animation-duration: 8s; 
+    }
+
+    /* --- TOAST --- */
+    #toast {
+      position: fixed; top: 4rem; left: 50%; transform: translateX(-50%);
+      padding: 0.5rem 1rem; border-radius: var(--radius-sm);
+      background: rgba(0,0,0,0.9); border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan); font-family: var(--font-code); font-size: 0.75rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 100;
+      transition: all 0.4s var(--ease-out-expo);
+      pointer-events: none; opacity: 1;
+    }
+    
+    #toast.toast-hidden { opacity: 0; transform: translate(-50%, -10px); }
+
+  </style></head><body class="field-closed mode-night"><div id="root">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+
+    <div class="bg-gradient"></div>
+    <div id="bg-layer-fixed"></div>
+
+    <div class="wrap">
+      <div class="content">
+        <iframe id="frame" src="about:blank"></iframe>
+        <div id="kob-tts-outline"></div>
+      </div>
+
+      <div class="ambient-light" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+      </div>
+
+      <div id="snap-zone"></div>
+      <div class="toaster-wrap" id="toasterWrap"></div>
+
+      <div class="symbol-bar floating" id="symbolBar">
+        <div class="fusion-card symbol-wra" style="z-index:0;display: flex;opacity:0.59" id="mainCard">
+          <div class="card-header symbol-wrap" id="cardHeader">
+            <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)"></div>
+
+                           <div style="display:inline-flex;align-items:center;gap:8px">
+ <div class="text-block">
+              <div class="greeting-row">
+                <span class="txt-thin" id="lblHello">Oi,</span>
+                <span class="txt-heavy" id="lblName">Convidado</span>
+              </div>
+              <div class="brand-dual">DUAL</div>
+            </div>
+
+            <div class="clock-widget">
+              <div class="time-display" id="clockTime">00:00</div>
+              <span class="status-led">ONLINE</span>
+            </div>
+
+            <button class="hud-menu-btn" id="hudMenuBtn" title="Menu Rápido">
+              <i data-lucide="menu"></i>
+            </button>
+          </div>
+
+          <div class="orb-menu-trigger" style="display:none" id="orbMenuTrigger" title="Menu Rápido">●●●</div>
+          <div class="drag-handle"></div>
+
+          <div class="small-preview" style="display:none" id="smallPreview" title="Gerenciar Chaves">
+            <div class="mini-avatar" id="smallMiniAvatar"></div>
+            <div class="small-text" id="smallText">Aguardando ativação...</div>
+            <div class="ident-badge" id="smallIdent">--</div>
+                  </div>  </div>
+
+          <div class="card-body" id="cardBody">
+            <div class="input-wrappe stagger-ite">
+              <input type="text" class="cyber-input" id="inputUser" placeholder="Identifique-se..." autocomplete="off">
+            </div>
+
+            <div class="activation-wrap stagger-item">
+              <div class="activation-toggle" onclick="toggleSection('activationCard')">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-cyan)"></div>
+                  <strong style="letter-spacing:1px;font-size:0.9rem">Ativação ASCII</strong>
+                </div>
+              </div>
+
+              <div id="activationCard" class="activation-card activation-hidden">
+                <div style="display:flex;align-items:flex-start;gap:10px">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div class="mini-avatar" id="actMiniAvatar"></div>
+                    <div>
+                      <div style="font-weight:700">CÉREBRO</div>
+                      <div style="font-size:0.78rem;opacity:0.6"><span id="actName">User</span></div>
+                    </div>
+                  </div>
+                  <div class="activation-badge" id="actBadge" style="margin-left:auto; color:var(--neon-cyan); font-size:0.8em">v:--</div>
+                </div>
+
+                <pre id="actPre" class="activation-pre">Carregando...</pre>
+
+                <div class="activation-controls" style="display:flex;gap:8px;margin-top:8px">
+                  <button class="trigger-btn" id="copyActBtn">COPIAR</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="activation-wrap stagger-itemm activation-hidden">
+              <div class="activation-toggle" onclick="toggleSection('systemCard')">
+                <div style="display:block;align-items:center;gap:8px">
+                  <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div>
+                  <strong style="letter-spacing:1px;font-size:0.9rem">SYSTEM &amp; NEURAL</strong>
+                </div>
+                <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">CONFIG</div>
+              </div>
+
+              <div id="systemCard" class="activation-card activation-hidden">
+                <div class="col">
+                  <div class="section-title">IDENTIDADE DA INFODOSE</div>
+                  <input type="text" id="infodoseNameInput" placeholder="Nome: World System..." style="width:100%;margin-bottom:8px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+
+                  <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div>
+                  <input type="password" id="apiKeyInput" placeholder="sk-or-..." autocomplete="off" style="width:100%;margin-bottom:6px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+
+                  <div class="model-toggle">
+                    <select id="modelSelect" class="btn">
+                      <option value="" disabled="" selected="">Selecione Modelo</option>
+                      <option value="nvidia/nemotron-3-nano-30b-a3b:free">NemoTron (Free)</option>
+                      <option value="allenai/molmo-2-8b:free">MolMo (Free)</option>
+                      <option value="mistralai/devstral-2512:free">DevStral</option>
+                      <option value="openai/gpt-oss-120b:free">OSS120b</option>
+                    </select>
+                  </div>
+
+                  <div class="panel-divider" style="margin:10px 0; border-top:1px solid rgba(255,255,255,0.05)"></div>
+                  <button id="saveSystemBtn" class="trigger-btn" style="margin-top:12px;background:var(--neon-cyan);color:#000;border:none;font-weight:700">SALVAR CONFIGURAÇÃO</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="stagger-item" style="display:none">
+                  <div style="display:none; gap:8px;">         
+ <div class="stat-lbl" style="margin-bottom:6px; font-size:0.6rem; color:rgba(255,255,255,0.4)">INTERFACE MODE</div>
+
+                <button class="trigger-btn mode-btn active-mode" id="btnModeCard" onclick="setMode('card')" style="flex:1" title="Modo Padrão">CARD</button>
+                <button class="trigger-btn mode-btn" id="btnModeOrb" onclick="setMode('orb')" style="flex:1" title="Flutuante">ORB</button>
+                <button class="trigger-btn mode-btn" id="btnModeHud" onclick="setMode('hud')" style="flex:1" title="Barra de Topo">HUD</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<!-- Botão Menu -->
+
+    <div class="toggle-wrap">
+      <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+    </div>
+
+          <div class="symbol-wrap">
+            <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+          </div>
+          <div class="symbol-wrap">
+            <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+          </div>
+          <div class="symbol-wrap">
+
+    <button class="symbol-button" id="tts-stop" title="Parar">■</button>
+
+          </div>
+
+          <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+            <div class="orb-microphone-container">
+              <div class="tts-orb-mini">
+                <div class="orb" id="main-orb">
+                  <div class="orb-core"></div>
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <div class="symbol-wrap">
+            <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual-0/">Φ</button>
+          </div>
+          <div class="symbol-wrap">
+            <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">꩜</button>
+          </div>
+          <div class="symbol-wrap">
+            <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/">◌</button>
+          </div>
+          <div class="symbol-wrap">
+            <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/dual_reader/">◘</button>
+          </div>
+
+          <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+        
+
+  <div class="void-ambient"></div>
+
+  <iframe id="navFrame" src="about:blank"></iframe>
+
+  <div class="monolith-wrapper">
+    <div class="monolith">
+      
+      <div class="mono-header">
+        <div class="mono-brand">
+          <div class="brand-icon"><i data-lucide="layers" style="width:16px;height:16px;"></i></div>
+          <div class="brand-title">DUAL <span style="opacity:0.3; margin:0 4px;">//</span> MONOLITH</div>
+        </div>
+        <div id="sysStatus" class="status-badge">STANDBY</div>
+      </div>
+
+      <div class="mono-body">
+        <div id="viewVault" class="vault-view">
+          <div class="actions-grid">
+            <button id="createBtn" class="action-card btn-create">
+              <i data-lucide="plus-square" style="width:16px;"></i> <span>NOVO</span>
+            </button>
+            <div id="dropZone" class="action-card dashed">
+              <i data-lucide="upload" style="width:16px;"></i> <span style="font-family: var(--font-code)">UPLOAD</span>
+            </div>
+            <button id="backupBtn" class="action-card">
+              <i data-lucide="download" style="width:16px;"></i> <span>BACKUP</span>
+            </button>
+            <button id="safeBtn" class="action-card">
+              <i data-lucide="shield" style="width:16px; color:var(--alert-red)"></i> <span id="safeLabel">SAFE</span>
+            </button>
+          </div>
+
+  <div class="top-bar">
+    <div class="brand-text"></div>
+    <div class="sep"></div>
+    <button id="themeToggle" class="theme-btn" title="Toggle Theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
+  </div>
+
+  <div class="sidebar right">
+    <button class="icon-btn nav-btn" data-url="https://kodux78k.github.io/oiDual-DeX/" title="Void">Φ</button>
+    <button class="icon-btn nav-btn" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/" title="Vivivi">꩜</button>
+    <button class="icon-btn nav-btn" data-url="https://kodux78k.github.io/DualInfodose-VirgemHuB/index.html" title="Nosolar">☼</button>
+  </div>
+
+  <div class="sidebar left">
+    <button id="uploadBtn" class="icon-btn" title="Import File"><i class="fa-solid fa-upload"></i></button>
+    <input type="file" id="uploadInput" hidden="" accept=".html,.js,.json">
+    <button id="remoteBtn" class="icon-btn" title="Fetch Remote"><i class="fa-solid fa-globe"></i></button>
+  </div>
+
+          <div class="list-header">
+            <span class="list-label">VAULT STORAGE</span>
+            <span class="list-label" id="vaultCount">0 ITEMS</span>
+          </div>
+          <div id="stackList" class="flex flex-col gap-3" style="padding-bottom: 3rem;"></div>
+        </div>
+
+        <div id="viewEditor" class="editor-view state-translated-x">
+          <div class="editor-header">
+            <div class="editor-title">:: MODULE CREATOR</div>
+            <button id="cancelEditor" class="btn-cancel">CANCELAR</button>
+          </div>
+          <input id="modTitle" type="text" placeholder="NOME DO MÓDULO" class="input-title">
+          <div class="code-area">
+            <textarea id="modContent" placeholder=""></textarea>
+          </div>
+          <div class="flex gap-3">
+            <button id="saveEditor" class="btn-save">SALVAR NO VAULT</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mono-footer">
+        <div id="pulseBar"></div>
+      </div>
+
+      <div id="runtimeLayer" class="runtime-layer">
+        <div class="runtime-bar">
+          <div class="runtime-indicator">
+            <div class="dot"></div> <span>RUNTIME // ACTIVE</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="exportBtn" class="btn-cancel" style="font-size:10px;">EXPORT TO NAV</button>
+            <button id="closeRuntime" class="icon-btn" style="width:24px; height:24px; border:none; background:transparent;"><i data-lucide="x" style="width:16px;"></i></button>
+          </div>
+        </div>
+        <div class="runtime-frame-wrap">
+<iframe id="appFrame" style="border:0;width:100%;height:100%;display:block;" sandbox="allow-scripts allow-forms allow-modals allow-same-origin allow-pointer-lock">
+</iframe>
+          <div class="scanline"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="orb-container">
+    <button id="orbBtn" class="orb-btn" aria-label="Toggle System">
+      <div class="orb-core"></div>
+      <div class="orb-ring"></div>
+      <div class="orb-ring inner"></div>
+    </button>
+  </div>
+
+  <div id="toast" class="toast-hidden">
+    <span id="toastMsg">System Ready</span>
+  </div>
+
+  <script>
+  const App = {
+    config: {
+      vaultKey: 'dual_vault_data',
+      themeKey: 'dual_theme_mode',
+      navKey: 'dual_nav_state',
+      sysKey: 'dual_system_active'
+    },
+    state: {
+      active: false,
+      safeMode: true,
+      stacks: [],
+      editingId: null // novo: id do módulo que está sendo editado (null = criar novo)
+    },
+
+    init() {
+      this.cacheDOM();
+      this.loadData();
+      this.bindEvents();
+      if(window.lucide) lucide.createIcons();
+
+      const theme = localStorage.getItem(this.config.themeKey);
+      if(theme) document.documentElement.setAttribute('data-theme', theme);
+
+      const wasActive = localStorage.getItem(this.config.sysKey) === 'true';
+      if(wasActive) this.toggleSystem(true);
+      else setTimeout(() => this.dom.orbBtn.classList.add('ready'), 500);
+    },
+
+    cacheDOM() {
+      this.dom = {
+        body: document.body,
+        navFrame: document.getElementById('navFrame'),
+        orbBtn: document.getElementById('orbBtn'),
+        sysStatus: document.getElementById('sysStatus'),
+        stackList: document.getElementById('stackList'),
+        viewVault: document.getElementById('viewVault'),
+        viewEditor: document.getElementById('viewEditor'),
+        runtimeLayer: document.getElementById('runtimeLayer'),
+        appFrame: document.getElementById('appFrame'),
+        modTitle: document.getElementById('modTitle'),
+        modContent: document.getElementById('modContent'),
+        toast: document.getElementById('toast'),
+        pulseBar: document.getElementById('pulseBar'),
+        safeLabel: document.getElementById('safeLabel'),
+        uploadInput: document.getElementById('uploadInput'),
+        remoteBtn: document.getElementById('remoteBtn')
+      };
+    },
+
+    bindEvents() {
+      this.dom.orbBtn.addEventListener('click', () => this.toggleSystem());
+      document.querySelectorAll('[data-url]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.dom.navFrame.src = btn.dataset.url;
+          this.showToast(`NAV: ${btn.title}`);
+        });
+      });
+
+      document.getElementById('createBtn').addEventListener('click', () => this.toggleEditor(true));
+      document.getElementById('cancelEditor').addEventListener('click', () => this.cancelEditing());
+      document.getElementById('saveEditor').addEventListener('click', () => this.saveModule());
+
+      document.getElementById('dropZone').addEventListener('click', () => this.dom.uploadInput.click());
+      this.dom.uploadInput.addEventListener('change', (e) => this.handleUpload(e));
+      document.getElementById('uploadBtn').addEventListener('click', () => this.dom.uploadInput.click());
+      document.getElementById('backupBtn').addEventListener('click', () => this.exportVault());
+
+      document.getElementById('safeBtn').addEventListener('click', () => this.toggleSafe());
+
+      document.getElementById('themeToggle').addEventListener('click', () => {
+         const current = document.documentElement.getAttribute('data-theme');
+         const next = current === 'light' ? 'dark' : 'light';
+         document.documentElement.setAttribute('data-theme', next);
+         localStorage.setItem(this.config.themeKey, next);
+         this.showToast(`THEME: ${next.toUpperCase()}`);
+      });
+
+      document.getElementById('closeRuntime').addEventListener('click', () => this.closeRuntime());
+      document.getElementById('exportBtn').addEventListener('click', () => {
+        if(this.dom.appFrame.srcdoc) {
+          const blob = new Blob([this.dom.appFrame.srcdoc], {type:'text/html'});
+          this.dom.navFrame.src = URL.createObjectURL(blob);
+          this.showToast("EXPORTED TO NAV");
+          this.closeRuntime();
+        }
+      });
+
+      // Novo: botão globo aceita URLs
+      this.dom.remoteBtn.addEventListener('click', () => this.handleRemoteUrl());
+    },
+
+    loadData() {
+      try {
+        const raw = localStorage.getItem(this.config.vaultKey);
+        if(raw) this.state.stacks = JSON.parse(raw);
+      } catch(e) { this.state.stacks = []; }
+      this.renderVault();
+
+      const last = localStorage.getItem(this.config.navKey);
+      if(last && last !== 'about:blank') this.dom.navFrame.src = last;
+
+      this.dom.navFrame.onload = () => {
+        try { localStorage.setItem(this.config.navKey, this.dom.navFrame.contentWindow.location.href); } catch(e){}
+      };
+    },
+
+    toggleSystem(force) {
+      this.state.active = force !== undefined ? force : !this.state.active;
+      localStorage.setItem(this.config.sysKey, this.state.active);
+      if(this.state.active) {
+        this.dom.body.classList.add('system-active');
+        this.dom.sysStatus.innerText = "ONLINE";
+        this.dom.sysStatus.style.color = "var(--neon-cyan)";
+        this.dom.sysStatus.style.borderColor = "var(--neon-cyan)";
+      } else {
+        this.dom.body.classList.remove('system-active');
+        this.dom.sysStatus.innerText = "STANDBY";
+        this.dom.sysStatus.style.color = "var(--text-muted)";
+        this.dom.sysStatus.style.borderColor = "var(--glass-border)";
+      }
+    },
+
+    toggleEditor(show, moduleObj = null) {
+      if(show) {
+        this.dom.viewEditor.classList.remove('state-translated-x');
+        if(moduleObj) {
+          // abrir em modo edição
+          this.state.editingId = moduleObj.id;
+          this.dom.modTitle.value = moduleObj.title || '';
+          this.dom.modContent.value = moduleObj.content || '';
+        } else {
+          this.state.editingId = null;
+          this.dom.modTitle.value = '';
+          this.dom.modContent.value = '';
+        }
+        this.dom.modTitle.focus();
+      } else {
+        this.dom.viewEditor.classList.add('state-translated-x');
+      }
+    },
+
+    cancelEditing() {
+      this.state.editingId = null;
+      this.toggleEditor(false);
+    },
+
+    toggleSafe() {
+      this.state.safeMode = !this.state.safeMode;
+      this.dom.safeLabel.innerText = this.state.safeMode ? "SAFE" : "RAW";
+      this.dom.safeLabel.style.color = this.state.safeMode ? "inherit" : "var(--alert-red)";
+      this.showToast(this.state.safeMode ? "PROTOCOL: SAFE" : "PROTOCOL: RAW (UNSAFE)");
+    },
+
+    exportVault() {
+      const data = JSON.stringify(this.state.stacks, null, 2);
+      const blob = new Blob([data], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `dual-vault-${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      this.showToast("VAULT EXPORTED");
+    },
+
+    saveModule() {
+      const title = this.dom.modTitle.value.trim();
+      const content = this.dom.modContent.value;
+      if(!title) return this.showToast("ERROR: TITLE REQUIRED");
+
+      if(this.state.editingId) {
+        // Atualiza módulo existente
+        const idx = this.state.stacks.findIndex(s => s.id === this.state.editingId);
+        if(idx === -1) return this.showToast("ERROR: MODULE NOT FOUND");
+        this.state.stacks[idx].title = title;
+        this.state.stacks[idx].content = content;
+        this.state.stacks[idx].date = new Date().toLocaleDateString();
+        localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+        this.showToast("MODULE UPDATED");
+      } else {
+        // Cria novo módulo
+        const mod = {
+          id: Date.now(),
+          title,
+          content: content || '<h1>Empty Module</h1>',
+          date: new Date().toLocaleDateString()
+        };
+        this.state.stacks.unshift(mod);
+        localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+        this.showToast("MODULE CRYSTALLIZED");
+      }
+
+      this.state.editingId = null;
+      this.renderVault();
+      this.toggleEditor(false);
+    },
+
+    handleUpload(e) {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+          try {
+              const json = JSON.parse(ev.target.result);
+              if(Array.isArray(json) && json[0]?.id) {
+                  if(confirm("RESTORE BACKUP? This will merge with current vault.")) {
+                      this.state.stacks = [...json, ...this.state.stacks];
+                      this.state.stacks = this.state.stacks.filter((v,i,a)=>a.findIndex(v2=>(v2.id===v.id))===i);
+                      localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+                      this.renderVault();
+                      this.showToast("BACKUP RESTORED");
+                      return;
+                  }
+              }
+          } catch(e) { /* Not a JSON array, treat as single file */ }
+
+        this.state.stacks.unshift({
+          id: Date.now(),
+          title: file.name,
+          content: ev.target.result,
+          date: new Date().toLocaleDateString()
+        });
+        localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+        this.renderVault();
+        this.showToast("FILE UPLOADED");
+      };
+      reader.readAsText(file);
+      // reset input so same file can be re-uploaded if needed
+      e.target.value = '';
+    },
+
+    deleteModule(id) {
+      if(!confirm("DELETE MODULE?")) return;
+      this.state.stacks = this.state.stacks.filter(s => s.id !== id);
+      localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+      this.renderVault();
+    },
+
+    // Novo: download individual
+    downloadModule(id) {
+      const mod = this.state.stacks.find(s => s.id === id);
+      if(!mod) return this.showToast("ERROR: NOT FOUND");
+      const blob = new Blob([mod.content], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      // sanitize filename
+      const safeName = (mod.title || 'module').replace(/[^\w\d\-_\.]/g,'_');
+      a.download = `${safeName}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      this.showToast("DOWNLOAD STARTED");
+    },
+
+    renderVault() {
+      this.dom.stackList.innerHTML = '';
+      document.getElementById('vaultCount').innerText = `${this.state.stacks.length} ITEMS`;
+
+      if(this.state.stacks.length === 0) {
+        this.dom.stackList.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted); font-family:var(--font-code); font-size:12px;">VAULT EMPTY</div>`;
+        return;
+      }
+
+      this.state.stacks.forEach(stack => {
+        const el = document.createElement('div');
+        el.className = 'stack-item';
+        el.innerHTML = `
+          <div class="stack-info">
+            <div class="stack-icon"><i data-lucide="box" style="width:16px;"></i></div>
+            <div class="stack-text">
+              <h4>${this.escapeHtml(stack.title)}</h4>
+              <span>${stack.date}</span>
+            </div>
+          </div>
+          <div class="stack-actions">
+            <button class="mini-btn btn-run" title="Run"><i data-lucide="play" style="width:12px;"></i></button>
+            <button class="mini-btn btn-edit" title="Edit"><i data-lucide="edit-2" style="width:12px;"></i></button>
+            <button class="mini-btn btn-dl" title="Download"><i data-lucide="download" style="width:12px;"></i></button>
+            <button class="mini-btn btn-del" title="Delete"><i data-lucide="trash-2" style="width:12px;"></i></button>
+          </div>
+        `;
+
+        // Bind actions
+        el.querySelector('.btn-run').onclick = (e) => { e.stopPropagation(); this.runModule(stack.id); };
+        el.querySelector('.btn-edit').onclick = (e) => { e.stopPropagation(); this.editModule(stack.id); };
+        el.querySelector('.btn-dl').onclick = (e) => { e.stopPropagation(); this.downloadModule(stack.id); };
+        el.querySelector('.btn-del').onclick = (e) => { e.stopPropagation(); this.deleteModule(stack.id); };
+        el.onclick = () => this.runModule(stack.id);
+
+        this.dom.stackList.appendChild(el);
+      });
+
+      if(window.lucide) lucide.createIcons();
+    },
+
+    escapeHtml(text) {
+      if(!text) return '';
+      return text.replace(/[&<>"']/g, function(m) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+      });
+    },
+
+    runModule(id) {
+      const mod = this.state.stacks.find(s => s.id === id);
+      if(!mod) return;
+
+      let code = mod.content;
+      if(this.state.safeMode) {
+        try {
+           if(!code.includes('<html') && !code.includes('<!doctype')) {
+             code = `<style>body{color:#fff;background:transparent;font-family:sans-serif}</style>${code}`;
+           }
+        } catch(e){}
+      }
+
+      this.dom.appFrame.srcdoc = code;
+      this.dom.runtimeLayer.classList.add('state-visible-y');
+      this.dom.sysStatus.innerText = "RUNNING";
+      this.dom.sysStatus.style.opacity = '0.7';
+    },
+
+    closeRuntime() {
+      this.dom.runtimeLayer.classList.remove('state-visible-y');
+      this.dom.sysStatus.style.opacity = '1';
+      this.dom.sysStatus.innerText = "ONLINE";
+      setTimeout(() => this.dom.appFrame.srcdoc = '', 400);
+    },
+
+    showToast(msg) {
+      this.dom.toast.innerText = msg;
+      this.dom.toast.classList.remove('toast-hidden');
+      clearTimeout(this.toastTimer);
+      this.toastTimer = setTimeout(() => {
+        this.dom.toast.classList.add('toast-hidden');
+      }, 2200);
+    },
+
+    // Abre editor com módulo carregado (modo editar)
+    editModule(id) {
+      const mod = this.state.stacks.find(s => s.id === id);
+      if(!mod) return this.showToast("ERROR: MODULE NOT FOUND");
+      this.toggleEditor(true, mod);
+    },
+
+    // Novo: aceita URL, tenta fetch; se fetch falhar faz fallback para abrir navFrame
+    async handleRemoteUrl() {
+      const url = prompt("INSIRA URL (http(s)://...):");
+      if(!url) return;
+      try {
+        // tentativa de fetch do HTML (CORS pode bloquear)
+        const res = await fetch(url, {mode:'cors'});
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        const ct = res.headers.get('content-type') || '';
+        if(ct.includes('text/html') || ct.includes('application/xhtml+xml')) {
+          const text = await res.text();
+          // salva como módulo automaticamente
+          const mod = { id: Date.now(), title: url, content: text, date: new Date().toLocaleDateString() };
+          this.state.stacks.unshift(mod);
+          localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+          this.renderVault();
+          this.showToast("REMOTE SAVED TO VAULT");
+        } else {
+          // não-html — apenas abre no navFrame
+          this.dom.navFrame.src = url;
+          this.showToast("OPENED IN NAV (non-HTML)");
+        }
+      } catch(err) {
+        // Falha (CORS ou rede) — fallback: abrir no navFrame e avisar
+        try {
+          this.dom.navFrame.src = url;
+          this.showToast("FALLBACK: OPENED IN NAV (fetch failed)");
+        } catch(e) {
+          this.showToast("ERROR: COULD NOT OPEN URL");
+        }
+      }
+    }
+  };
+
+  window.onload = () => App.init();
+</script>
+
+
+<!-- ZebKit - Cole isso antes do </body> -->
+<script>
+(function(){
+  if (window.__nebula_zebkit_installed) return;
+  window.__nebula_zebkit_installed = true;
+
+  const ZebKit = {
+    getButtons() {
+      // Pega botões e links que parecem botões
+      const selector = 'button, [role="button"], input[type="button"], a[role="button"], .btn, .button, [class*="button"]';
+      const nodes = Array.from(document.querySelectorAll(selector));
+      return nodes.map((el, i) => {
+        if(!el.id) el.id = 'nebula-autoid-' + i;
+        const rect = el.getBoundingClientRect();
+        return {
+          id: el.id,
+          tag: el.tagName.toLowerCase(),
+          text: (el.innerText || el.value || el.getAttribute('aria-label') || '').trim(),
+          classes: el.className || '',
+          visible: rect.width > 0
+        };
+      });
+    },
+
+    applyStyles(id, className, styles) {
+      // Se tiver className, aplica no grupo. Senão, só no ID.
+      let targets = [];
+      if (className) {
+        // Sanitiza a classe para o seletor (pega apenas a primeira se for lista)
+        const firstClass = className.split(' ')[0];
+        targets = Array.from(document.querySelectorAll('.' + firstClass));
+      } else {
+        const el = document.getElementById(id);
+        if(el) targets = [el];
+      }
+
+      targets.forEach(el => {
+        if(!el) return;
+        Object.assign(el.style, styles);
+      });
+    }
+  };
+
+  // Escuta comandos do Iframe (Nebula Pro)
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if(!d || !d.type) return;
+
+    if(d.type === 'NEBULA_SCAN_REQ') {
+      const tree = ZebKit.getButtons();
+      e.source.postMessage({ 
+        type: 'NEBULA_SCAN_RES', 
+        tree, 
+        domain: window.location.hostname 
+      }, '*');
+    }
+
+    if(d.type === 'NEBULA_HIGHLIGHT') {
+      const el = document.getElementById(d.id);
+      if(el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const originalOutline = el.style.outline;
+        el.style.outline = '4px solid #00f2ff';
+        el.style.outlineOffset = '2px';
+        setTimeout(() => el.style.outline = originalOutline, 1500);
+      }
+    }
+
+    if(d.type === 'NEBULA_UPDATE_STYLE') {
+      ZebKit.applyStyles(d.id, d.className, d.styles);
+    }
+  });
+
+  console.log('%c🌌 NEBULA ZebKit instalado em ' + window.location.hostname, 'color: #00f2ff; font-weight: bold;');
+})();
+</script>
+
+  
+
+
+</div>
+
+        <div id="arch-overlay"></div>
+      </div>
+
+      <div id="keysModal" class="modal-overlay" aria-hidden="true">
+        <div class="keys-card" role="dialog">
+          <div class="keys-header">
+            <div>
+              <div id="keysTitle" style="font-weight:800;font-size:1.1rem;color:var(--neon-cyan)">USER KEYS MANAGER</div>
+              <div style="color:rgba(255,255,255,0.6);font-size:0.85rem">Gerencie suas chaves API com segurança local (Cofre).</div>
+            </div>
+            <button id="closeKeysBtn" class="small-btn">X</button>
+          </div>
+
+          <div class="key-list" id="keyList"></div>
+
+          <div class="form-section" style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.05)">
+            <div class="form-grid">
+              <input id="keyNameInput" placeholder="Nome da chave (ex: Principal)">
+              <input id="keyTokenInput" type="password" placeholder="Token / ESK (Opcional)">
+            </div>
+            <button id="addKeyBtn" class="small-btn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.1)">ADICIONAR CHAVE</button>
+          </div>
+
+          <div style="display:flex;gap:8px;justify-content:space-between;margin-top:15px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px">
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px">
+              <i data-lucide="shield-check" style="width:14px"></i>
+              <span id="vaultStatusText">Cofre Aberto</span>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button id="lockVaultBtn" class="small-btn danger">BLOQUEAR</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="vaultModal" class="modal-overlay" aria-hidden="true">
+        <div class="keys-card">
+          <div class="vault-icon"><i data-lucide="lock" style="width:24px;height:24px"></i></div>
+          <h3 style="margin:0 0 10px 0;font-weight:800">ACESSO AO COFRE</h3>
+          <p style="margin:0 0 15px 0;font-size:0.9rem;color:rgba(255,255,255,0.6)">Seus dados estão criptografados. Digite a senha para desbloquear.</p>
+          <input type="password" id="vaultPassInput" class="cyber-input" style="text-align:center;margin-bottom:12px" placeholder="Senha...">
+          <div style="display:flex;gap:8px;justify-content:center">
+            <button id="vaultCancelBtn" class="small-btn">Cancelar</button>
+            <button id="vaultUnlockBtn" class="small-btn active-btn">DESBLOQUEAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>     
+
+  <script>
+    function updateInterface(name){
+      const safe = name || di_userName || 'Convidado';
+
+      els.lblName.innerText = safe;
+      els.input.value = safe;
+
+      const activeKey = STATE.keys.find(k => k.active);
+
+      els.smallIdent.innerText = activeKey ? activeKey.name : '--';
+      els.actBadge.innerText = activeKey ? `key:${activeKey.name}` : 'v:--';
+
+      const orbBig  = makeOrbAvatar(safe, 64);
+      const orbMid  = makeOrbAvatar(safe, 36);
+      const orbMini = makeOrbAvatar(safe, 24);
+
+      els.avatarTgt.innerHTML = orbBig;
+      els.smallMiniAvatar.innerHTML = orbMini;
+      els.actMiniAvatar.innerHTML = orbMid;
+
+      els.actName.innerText = safe;
+    }
+  </script>
+
+  <style>
+    .symbol-toolbar{
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .orb{
+      width:40%;
+      height:40%;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+    }
+
+    .orb-core{
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+        radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+      box-shadow:
+        0 0 18px var(--orb-primary),
+        0 0 36px rgba(120,227,255,0.4);
+      animation: orbSpin var(--orb-speed) linear infinite;
+    }
+
+    @keyframes orbSpin{
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes orbPulse{
+      from { transform: scale(1); }
+      to { transform: scale(1.15); }
+    }
+
+    #orb-root.speaking .orb-core{
+      animation:
+        orbSpin 2s linear infinite,
+        orbPulse 0.5s ease-in-out infinite alternate;
+    }
+  </style>
+
+
+
+
+
+
+  <!-- Ambient Blobs -->
+  <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div id="snap-zone"></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
+
+  <!-- Distortion SVG Filter -->
+  <svg style="display: none;">
+    <filter id="distort">
+      <feTurbulence baseFrequency="0.01" numOctaves="3" result="turb"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="30"></feDisplacementMap>
+    </filter>
+  </svg>
+
+  <!-- Título e Frase -->
+  <div class="infodose">dual.<strong>Infodose</strong></div>
+ 
+
+<svg style="display:none">
+    <symbol id="icon-orb" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="7"></circle>
+      <circle cx="12" cy="12" r="8"></circle>
+    </symbol>
+    <symbol id="icon-cards" viewBox="0 0 24 24">
+      <rect x="2" y="2" width="16" height="16" rx="2"></rect>
+      <path d="M22 6v14a2 2 0 0 1-2 2H6"></path>
+    </symbol>
+    <symbol id="icon-gem" viewBox="0 0 24 24">
+      <path d="M6 3h12l4 6-10 12L2 9z"></path>
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </symbol>
+    <symbol id="icon-send" viewBox="0 0 24 24">
+      <line x1="22" y1="2" x2="11" y2="13"></line>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    </symbol>
+    <symbol id="icon-voice" viewBox="0 0 24 24">
+      <rect x="9" y="1" width="6" height="12" rx="3"></rect>
+      <path d="M5 10a7 7 0 0 0 14 0"></path>
+      <line x1="12" y1="19" x2="12" y2="23"></line>
+      <line x1="8" y1="23" x2="16" y2="23"></line>
+    </symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="7 10 12 3 7 8"></polyline>
+      <line x1="12" y1="3" x2="12" y2="15"></line>
+    </symbol>
+  </svg>
+
+  <div class="sky-layer"><div class="sun-background"></div></div>
+  <div id="bg-fake-custom"></div>
+  <div id="nv-toast"></div>
+  <div id="modeIndicator">CARREGANDO nO.Sºlar...</div>
+
+  <div class="header-orb" id="orbToggle" title="Acessar Cockpit do Usuário" onclick="toggleDrawer('drawerProfile')">
+    <svg><use href="#icon-orb"></use></svg>
+  </div>
+
+  <div id="usernameDisplay"></div>
+
+ 
+
+  <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+
+  <div id="drawerProfile" class="drawer" aria-hidden="true">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <h3>
+          <svg style="width:20px;height:20px;margin-right:8px;stroke:var(--secondary)"><use href="#icon-orb"></use></svg>
+          Cockpit Solar
+        </h3>
+        <button class="btn-icon" style="width:38px;height:38px;border-radius:12px;" onclick="toggleDrawer('drawerProfile')">✕</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="cockpit-item" style="text-align:center;margin-bottom:15px;">
+          <div class="cockpit-label">Ciclo Solar</div>
+          <div id="statusSolarMode" style="font-size:1.2rem;font-weight:bold;margin:5px 0;">AUTO</div>
+          <div class="control-row">
+            <button class="btn-block" id="btnCycleSolar">Manual ☀️/🌙</button>
+            <button class="btn-block" id="btnAutoSolar">Auto 🕒</button>
+          </div>
+        </div>
+
+        <div class="cockpit-grid">
+          <div class="cockpit-item">
+            <div class="cockpit-label">Identificação</div>
+            <input type="text" id="inputUserId" class="cockpit-input" placeholder="Viajante">
+          </div>
+
+          <div class="cockpit-item">
+            <div class="cockpit-label">Modelo IA</div>
+            <input type="text" id="inputModel" class="cockpit-input" placeholder="google/gemini-2.0-flash-exp">
+          </div>
+
+          <div class="cockpit-item">
+            <div class="cockpit-label">Background</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span id="bgStatusText" style="font-size:0.8rem;color:var(--text-muted)">Nenhum</span>
+              <label class="btn-icon" style="width:30px;height:30px;border-radius:5px;">
+                <input type="file" id="bgUploadInput" accept="image/*" style="display:none">
+                <svg><use href="#icon-cards"></use></svg>
+              </label>
+            </div>
+          </div>
+
+          <div id="bgThumbPanel" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div id="kblx-back">
+
+  <div id="kblx-panel">
+
+    <!-- HEADER -->
+    <header class="kblx-head">
+      <div class="p-chip">
+        ⌘ KOBLLUX HUD · EDITOR DE ROTA
+      </div>
+
+      <button class="kblx-icon-btn" id="kblx-btn-close">
+        ✕
+      </button>
+    </header>
+
+    <!-- TITLE -->
+    <div class="kblx-title-wrap">
+      <h2 class="p-title" id="kblx-ttl">
+        Botão
+      </h2>
+
+      <p class="kblx-sub">
+        Editar destino do SymbolButton
+      </p>
+    </div>
+
+    <!-- INPUT -->
+    <section class="kblx-section">
+
+      <label class="p-lbl" for="kblx-inp">
+        Novo valor para <code>data-url</code>
+      </label>
+
+      <input id="kblx-inp" type="text" placeholder="arquivo.html ou https://..." spellcheck="false" autocomplete="off">
+
+      <!-- preview -->
+      <div class="kblx-preview" id="kblx-preview">
+        Nenhuma rota definida
+      </div>
+
+    </section>
+
+    <!-- PRESETS -->
+    <section class="kblx-section">
+
+      <div class="kblx-sec-head">
+        <span>Presets</span>
+      </div>
+
+      <div class="kblx-presets">
+
+        <button class="kblx-preset" data-url="index.html">
+          Home
+        </button>
+
+        <button class="kblx-preset" data-url="hub.html">
+          Hub
+        </button>
+
+        <button class="kblx-preset" data-url="render-response.html">
+          Render
+        </button>
+
+        <button class="kblx-preset" data-url="https://google.com">
+          URL
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- ACTIONS -->
+
+<!-- troque o bloco .kblx-row por este -->
+<div class="kblx-row">
+  <button class="kblx-btn kblx-save" id="kblx-btn-save" type="button">⊙ Salvar no botão</button>
+  <button class="kblx-btn kblx-inject" id="kblx-btn-orb-inject" type="button">◉ OrbInject</button>
+  <button class="kblx-btn kblx-dup" id="kblx-btn-dup" type="button">⧉ Duplicar Orb</button>
+  <button class="kblx-btn kblx-del" id="kblx-btn-del" type="button">⌫ Remover Orb</button>
+  <button class="kblx-btn kblx-clear" id="kblx-btn-clear" type="button">⌫ Limpar</button>
+</div>
+
+  </div>
+
+</div>
+
+
+
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+
+ 
+ <!-- Seus Scripts Originais -->
+  <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script> 
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  
+<!-- <script src="https://kodux78k.github.io/oiDual--Y-/js/0RB-0S17.js"></script>
+-->
+ <script src="https://unpkg.com/lucide@latest"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script><script>
+    function updateInterface(name){
+      const safe = name || di_userName || 'Convidado';
+
+      els.lblName.innerText = safe;
+      els.input.value = safe;
+
+      const activeKey = STATE.keys.find(k => k.active);
+
+      els.smallIdent.innerText = activeKey ? activeKey.name : '--';
+      els.actBadge.innerText = activeKey ? `key:${activeKey.name}` : 'v:--';
+
+      const orbBig  = makeOrbAvatar(safe, 64);
+      const orbMid  = makeOrbAvatar(safe, 36);
+      const orbMini = makeOrbAvatar(safe, 24);
+
+      els.avatarTgt.innerHTML = orbBig;
+      els.smallMiniAvatar.innerHTML = orbMini;
+      els.actMiniAvatar.innerHTML = orbMid;
+
+      els.actName.innerText = safe;
+    }
+  </script>
+
+<style>
+.mainOrb,
+.symbol-button {
+  user-select: none;
+  -webkit-user-select: none;
+
+  -webkit-touch-callout: none;
+
+  -webkit-tap-highlight-color: transparent;
+
+  touch-action: manipulation;
+
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+
+button,
+.mainOrb,
+.symbol-button,
+svg,
+img {
+  -webkit-user-select: none;
+  user-select: none;
+
+  -webkit-touch-callout: none;
+
+  -webkit-user-drag: none;
+}
+
+#kblx-panel{
+  width:min(92vw,520px);
+
+  border-radius:28px;
+
+  padding:20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.06),
+      rgba(255,255,255,.03)
+    );
+
+  border:1px solid rgba(255,255,255,.08);
+
+  backdrop-filter:blur(20px);
+
+  box-shadow:
+    0 20px 80px rgba(0,0,0,.45);
+
+  font-family:
+    "Montserrat",
+    "Inter",
+    sans-serif;
+
+  color:#fff;
+}
+
+.kblx-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.p-chip{
+  padding:8px 12px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.06);
+
+  font-size:.72rem;
+  letter-spacing:.12em;
+}
+
+.kblx-icon-btn{
+  width:40px;
+  height:40px;
+
+  border:none;
+  border-radius:14px;
+
+  background:rgba(255,255,255,.06);
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+.kblx-title-wrap{
+  margin-top:18px;
+}
+
+.p-title{
+  margin:0;
+  font-size:1.4rem;
+  font-weight:700;
+}
+
+.kblx-sub{
+  margin-top:6px;
+  opacity:.6;
+  font-size:.9rem;
+}
+
+.kblx-section{
+  margin-top:22px;
+}
+
+.p-lbl{
+  display:block;
+  margin-bottom:10px;
+
+  font-size:.84rem;
+  opacity:.75;
+}
+
+#kblx-inp{
+  width:100%;
+
+  padding:16px;
+
+  border:none;
+  outline:none;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,.06);
+
+  color:#fff;
+
+  font-size:.95rem;
+}
+
+.kblx-preview{
+  margin-top:10px;
+
+  padding:12px;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,.04);
+
+  font-size:.8rem;
+
+  opacity:.7;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.kblx-sec-head{
+  margin-bottom:12px;
+  font-size:.82rem;
+  opacity:.65;
+}
+
+.kblx-presets{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.kblx-preset{
+  border:none;
+
+  padding:10px 14px;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,.06);
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+.kblx-row{
+  display:flex;
+  gap:12px;
+
+  margin-top:28px;
+}
+
+.kblx-btn{
+  flex:1;
+
+  min-height:52px;
+
+  border:none;
+  border-radius:18px;
+
+  color:#fff;
+
+  cursor:pointer;
+
+  font-weight:600;
+}
+
+.kblx-save{
+  background:rgba(255,255,255,.12);
+}
+
+.kblx-clear{
+  background:rgba(255,255,255,.05);
+}
+
+ 
+
+  #kblx-back{
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background: var(--nag-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 999999;
+  }
+
+  #kblx-back.is-open{
+    display: flex;
+  }
+
+  #kblx-panel{
+    width: min(94vw, 560px);
+    border-radius: var(--nag-radius);
+    padding: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+      var(--nag-panel);
+    border: 1px solid var(--nag-line);
+    box-shadow: var(--nag-glow);
+    color: var(--nag-text);
+    font-family: "Montserrat","Inter",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .kblx-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+  }
+
+  .p-chip{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.06);
+    font-size: .74rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--nag-text);
+    white-space: nowrap;
+  }
+
+  .kblx-icon-btn{
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 14px;
+    background: rgba(255,255,255,.08);
+    color: var(--nag-text);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display:grid;
+    place-items:center;
+    flex: 0 0 auto;
+  }
+
+  .kblx-icon-btn:active,
+  .kblx-btn:active,
+  .kblx-preset:active{
+    transform: scale(.98);
+  }
+
+  .kblx-title-wrap{
+    margin-top: 16px;
+  }
+
+  .p-title{
+    margin: 0;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -.02em;
+  }
+
+  .kblx-sub{
+    margin: 7px 0 0;
+    color: var(--nag-dim);
+    font-size: .92rem;
+  }
+
+  .kblx-section{
+    margin-top: 18px;
+    padding-top: 0;
+  }
+
+  .p-lbl{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: var(--nag-dim);
+    font-size: .85rem;
+    line-height: 1.2;
+  }
+
+  .p-lbl code{
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.06);
+    color: var(--nag-text);
+    font-size: .8rem;
+  }
+
+  #kblx-inp{
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 15px;
+    border: 1px solid rgba(255,255,255,.08);
+    outline: none;
+    border-radius: 18px;
+    background: rgba(255,255,255,.06);
+    color: #fff;
+    font-size: .96rem;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+
+  #kblx-inp::placeholder{
+    color: rgba(255,255,255,.42);
+  }
+
+  #kblx-inp:focus{
+    border-color: rgba(255,255,255,.16);
+    box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+  }
+
+  .kblx-preview{
+    margin-top: 10px;
+    padding: 11px 12px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.05);
+    color: var(--nag-dim);
+    font-size: .82rem;
+    line-height: 1.35;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .kblx-sec-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin: 0 0 10px;
+    color: var(--nag-dim);
+    font-size: .82rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .kblx-presets{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 10px;
+  }
+
+  .kblx-preset{
+    min-height: 42px;
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 10px 13px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.06);
+    color: var(--nag-text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .kblx-row{
+    display:flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  .kblx-btn{
+    flex: 1 1 160px;
+    min-height: 50px;
+    border: 0;
+    border-radius: 18px;
+    background: rgba(255,255,255,.10);
+    color: var(--nag-text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  }
+
+  .kblx-save{
+    background: rgba(255,255,255,.14);
+  }
+
+  .kblx-clear{
+    background: rgba(255,255,255,.06);
+  }
+
+  .kblx-inject{
+    background: rgba(255,255,255,.08);
+  }
+
+  .kblx-note{
+    margin-top: 12px;
+    color: rgba(255,255,255,.48);
+    font-size: .74rem;
+    line-height: 1.35;
+  }
+
+  .symbol-button{
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .symbol-button .symbol-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width: 1em;
+  }
+
+  .di-btn-icon-fallback{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+  }
+
+  .di-icon-ready{
+    position: relative;
+  }
+</style>
+
+<div id="kblx-back" aria-hidden="true">
+  <div id="kblx-panel">
+    <div class="kblx-head">
+      <div class="p-chip">⌘ NAGATANAZARE · EDITOR DE ROTA</div>
+      <button class="kblx-icon-btn" id="kblx-btn-close" type="button">✕</button>
+    </div>
+
+    <div class="kblx-title-wrap">
+      <h2 class="p-title" id="kblx-ttl">Botão</h2>
+      <p class="kblx-sub" id="kblx-sub">Edite a rota, aplique preset e injete Orb no Symbol Bar.</p>
+    </div>
+
+    <section class="kblx-section">
+      <label class="p-lbl" for="kblx-inp">
+        Novo valor para <code>data-url</code>
+      </label>
+
+      <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+
+      <div class="kblx-preview" id="kblx-preview">
+        Nenhuma rota definida.
+      </div>
+    </section>
+
+    <section class="kblx-section">
+      <div class="kblx-sec-head">
+        <span>Presets</span>
+      </div>
+
+      <div class="kblx-presets">
+        <button class="kblx-preset" type="button" data-orb-preset="orb">◉ Orb</button>
+        <button class="kblx-preset" type="button" data-orb-preset="frame">⟁ Frame</button>
+        <button class="kblx-preset" type="button" data-orb-preset="dock">⌘ Dock</button>
+      </div>
+    </section>
+
+    <section class="kblx-section">
+      <div class="kblx-sec-head">
+        <span>OrbInject</span>
+      </div>
+
+      <!-- troque o bloco .kblx-row por este -->
+<div class="kblx-row">
+  <button class="kblx-btn kblx-save" id="kblx-btn-save" type="button">⊙ Salvar no botão</button>
+  <button class="kblx-btn kblx-inject" id="kblx-btn-orb-inject" type="button">◉ OrbInject</button>
+  <button class="kblx-btn kblx-dup" id="kblx-btn-dup" type="button">⧉ Duplicar Orb</button>
+  <button class="kblx-btn kblx-del" id="kblx-btn-del" type="button">⌫ Remover Orb</button>
+  <button class="kblx-btn kblx-clear" id="kblx-btn-clear" type="button">⌫ Limpar</button>
+</div>
+
+      <div class="kblx-note">
+        Long press em qualquer <code>.symbol-button[data-url]</code> abre este painel. O motor guarda sessão e persistência, além de atualizar o ícone automaticamente.
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+  const ENGINE_NAME = 'NAGATANAZARE';
+  const CACHE_KEY = 'di_btn_icon_cache_v2';
+  const STORAGE_PREFIX = 'symbol_button_';
+  const LONG_PRESS_MS = 550;
+
+  const ORB_PRESETS = {
+    orb: {
+      name: 'Orb',
+      icon: '◉',
+      mode: 'orb',
+      injectTarget: 'symbol-bar'
+    },
+    frame: {
+      name: 'Frame',
+      icon: '⟁',
+      mode: 'special-frame',
+      injectTarget: 'special-frame'
+    },
+    dock: {
+      name: 'Dock',
+      icon: '⌘',
+      mode: 'dock',
+      injectTarget: 'symbol-bar'
+    }
+  };
+
+  const state = {
+    currentButton: null,
+    longPressTimer: null
+  };
+
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const storageGet = (storage, key) => {
+    try {
+      const raw = storage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const storageSet = (storage, key, value) => {
+    try {
+      storage.setItem(key, JSON.stringify(value));
+    } catch {}
+  };
+
+  const loadCache = () => storageGet(localStorage, CACHE_KEY) || {};
+  const saveCache = (cache) => storageSet(localStorage, CACHE_KEY, cache);
+
+  const cache = loadCache();
+
+  const normKey = (url) => {
+    try {
+      return new URL(url, location.href).href;
+    } catch {
+      return String(url || '');
+    }
+  };
+
+  const storageKeyForBtn = (btn) => {
+    if (!btn) return null;
+    if (btn.id) return `${STORAGE_PREFIX}${btn.id}`;
+    if (btn.dataset.storeKey) return `${STORAGE_PREFIX}${btn.dataset.storeKey}`;
+    return null;
+  };
+
+  function dispatch(name, detail = {}) {
+    window.dispatchEvent(new CustomEvent(name, { detail }));
+  }
+
+  async function fetchText(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.text();
+  }
+
+  async function fetchJSON(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  }
+
+  function pickBestIcon(icons = []) {
+    if (!Array.isArray(icons) || !icons.length) return null;
+
+    const parsed = icons
+      .map(i => ({
+        ...i,
+        sizeNum: (() => {
+          const m = String(i.sizes || '').match(/(\d+)\s*x\s*(\d+)/i);
+          return m ? Math.max(+m[1], +m[2]) : 0;
+        })()
+      }))
+      .sort((a, b) => b.sizeNum - a.sizeNum);
+
+    return (
+      parsed.find(i => String(i.sizes || '').includes('192')) ||
+      parsed.find(i => i.sizeNum >= 192) ||
+      parsed[0] ||
+      null
+    );
+  }
+
+  async function resolveIcon(url) {
+    const key = normKey(url);
+    if (cache[key]) return cache[key];
+
+    try {
+      const base = new URL(key);
+      const html = await fetchText(base.href);
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+
+      const manifestLink = doc.querySelector('link[rel="manifest"]');
+      if (manifestLink) {
+        const manifestUrl = new URL(
+          manifestLink.getAttribute('href'),
+          base
+        ).href;
+
+        try {
+          const manifest = await fetchJSON(manifestUrl);
+          const icon = pickBestIcon(manifest?.icons);
+          if (icon?.src) {
+            const resolved = new URL(icon.src, manifestUrl).href;
+            cache[key] = resolved;
+            saveCache(cache);
+            return resolved;
+          }
+        } catch {}
+      }
+
+      const apple = doc.querySelector(
+        'link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]'
+      );
+      if (apple?.getAttribute('href')) {
+        const resolved = new URL(apple.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const shortcut = doc.querySelector(
+        'link[rel="shortcut icon"], link[rel="icon"]'
+      );
+      if (shortcut?.getAttribute('href')) {
+        const resolved = new URL(shortcut.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const fallback = new URL('/favicon.ico', base).href;
+      cache[key] = fallback;
+      saveCache(cache);
+      return fallback;
+    } catch {
+      const fallback = (() => {
+        try {
+          return new URL('/favicon.ico', new URL(key, location.href)).href;
+        } catch {
+          return null;
+        }
+      })();
+
+      if (fallback) {
+        cache[key] = fallback;
+        saveCache(cache);
+      }
+
+      return fallback;
+    }
+  }
+
+  function getAutoIcon(url = '') {
+    const u = String(url).toLowerCase();
+
+    if (!u) return '◉';
+    if (u.startsWith('http://') || u.startsWith('https://')) return '⇱';
+    if (u.includes('youtube')) return '▶';
+    if (u.includes('github')) return '⌘';
+    if (u.includes('ai')) return '✦';
+    if (u.includes('orb')) return '◉';
+    if (u.includes('frame')) return '⟁';
+    if (u.includes('dock')) return '⌘';
+    if (u.endsWith('.html')) return '◈';
+    if (/\.(png|jpg|jpeg|webp|gif|svg)$/i.test(u)) return '▣';
+    if (/\.(mp4|webm|mov)$/i.test(u)) return '▸';
+
+    return '◉';
+  }
+
+  function updatePreview(text) {
+    const preview = $('#kblx-preview');
+    if (!preview) return;
+
+    const value = String(text || '').trim();
+    preview.textContent = value
+      ? `Destino: ${value}`
+      : 'Nenhuma rota definida.';
+  }
+
+  function ensureIconEl(btn) {
+    if (!btn) return null;
+
+    let iconEl = $('.symbol-icon', btn);
+    if (!iconEl) {
+      iconEl = document.createElement('span');
+      iconEl.className = 'symbol-icon';
+      if (btn.firstChild) {
+        btn.insertBefore(iconEl, btn.firstChild);
+      } else {
+        btn.appendChild(iconEl);
+      }
+    }
+    return iconEl;
+  }
+
+  function paintButton(btn, iconText) {
+    if (!btn) return;
+
+    const iconEl = ensureIconEl(btn);
+    if (!iconEl) return;
+
+    iconEl.textContent = iconText || getAutoIcon(btn.dataset.url || '');
+    btn.classList.add('di-icon-ready');
+    btn.dataset.diIconDone = '1';
+  }
+
+  function applyPreset(btn, presetKey) {
+    if (!btn || !ORB_PRESETS[presetKey]) return null;
+
+    const preset = ORB_PRESETS[presetKey];
+
+    btn.dataset.preset = presetKey;
+    btn.dataset.injectTarget = preset.injectTarget;
+    btn.dataset.mode = preset.mode;
+
+    paintButton(btn, preset.icon);
+
+    const payload = {
+      id: btn.id || '',
+      preset: presetKey,
+      url: btn.dataset.url || '',
+      mode: preset.mode,
+      updatedAt: Date.now()
+    };
+
+    const key = storageKeyForBtn(btn);
+    if (key) {
+      storageSet(sessionStorage, key, payload);
+      storageSet(localStorage, key, payload);
+    }
+
+    dispatch('nagatanazare:preset-applied', { button: btn, preset, payload });
+    return payload;
+  }
+
+  async function updateAttrBtn(
+    btn,
+    {
+      url,
+      preset = '',
+      save = true,
+      session = true,
+      refresh = true,
+      fallback = '◉'
+    } = {}
+  ) {
+    if (!btn) return null;
+
+    const cleanUrl = String(url || '').trim();
+    if (!cleanUrl && !preset) return null;
+
+    if (cleanUrl) btn.dataset.url = cleanUrl;
+    btn.dataset.fallback = fallback;
+
+    let iconText = '';
+
+    if (preset && ORB_PRESETS[preset]) {
+      applyPreset(btn, preset);
+      iconText = ORB_PRESETS[preset].icon;
+    } else {
+      iconText = getAutoIcon(cleanUrl);
+      paintButton(btn, iconText);
+    }
+
+    let iconUrl = '';
+    if (refresh && cleanUrl) {
+      const resolved = await resolveIcon(cleanUrl);
+      if (resolved) {
+        iconUrl = resolved;
+        btn.dataset.iconUrl = resolved;
+        paintButton(btn, iconText || getAutoIcon(cleanUrl));
+      }
+    }
+
+    const payload = {
+      id: btn.id || '',
+      url: cleanUrl,
+      preset: preset || btn.dataset.preset || '',
+      icon: ($('.symbol-icon', btn)?.textContent || iconText || ''),
+      iconUrl,
+      updatedAt: Date.now()
+    };
+
+    const key = storageKeyForBtn(btn);
+    if (key) {
+      if (session) storageSet(sessionStorage, key, payload);
+      if (save) storageSet(localStorage, key, payload);
+    }
+
+    dispatch('nagatanazare:button-updated', {
+      button: btn,
+      payload
+    });
+
+    return payload;
+  }
+
+  function restoreButtons() {
+    $$('.symbol-button').forEach(btn => {
+      const key = storageKeyForBtn(btn);
+      if (!key) return;
+
+      const data = storageGet(sessionStorage, key) || storageGet(localStorage, key);
+      if (!data) return;
+
+      if (data.url) btn.dataset.url = data.url;
+      if (data.preset) btn.dataset.preset = data.preset;
+      if (data.mode) btn.dataset.mode = data.mode;
+      if (data.injectTarget) btn.dataset.injectTarget = data.injectTarget;
+      if (data.iconUrl) btn.dataset.iconUrl = data.iconUrl;
+
+      paintButton(btn, data.icon || getAutoIcon(data.url || ''));
+
+      if (data.preset && ORB_PRESETS[data.preset]) {
+        btn.dataset.mode = ORB_PRESETS[data.preset].mode;
+        btn.dataset.injectTarget = ORB_PRESETS[data.preset].injectTarget;
+      }
+    });
+  }
+
+  function observeDynamicButtons() {
+    const root = document.body;
+    if (!root) return;
+
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === 'childList') {
+          m.addedNodes.forEach((node) => {
+            if (!(node instanceof Element)) return;
+
+            if (node.matches?.('.symbol-button')) {
+              paintButton(node, getAutoIcon(node.dataset.url || ''));
+            }
+
+            node.querySelectorAll?.('.symbol-button').forEach(btn => {
+              paintButton(btn, getAutoIcon(btn.dataset.url || ''));
+            });
+          });
+        }
+
+        if (m.type === 'attributes' && m.attributeName === 'data-url') {
+          const btn = m.target;
+          if (btn?.classList?.contains('symbol-button')) {
+            btn.dataset.diIconDone = '';
+            paintButton(btn, getAutoIcon(btn.dataset.url || ''));
+          }
+        }
+      }
+    });
+
+    mo.observe(root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-url']
+    });
+  }
+
+  function openPanel(btn) {
+    if (!btn) return;
+
+    state.currentButton = btn;
+
+    const back = $('#kblx-back');
+    const title = $('#kblx-ttl');
+    const input = $('#kblx-inp');
+    const preview = $('#kblx-preview');
+
+    if (back) {
+      back.classList.add('is-open');
+      back.setAttribute('aria-hidden', 'false');
+    }
+
+    if (title) title.textContent = btn.dataset.title || btn.id || 'Botão';
+    if (input) input.value = btn.dataset.url || '';
+    if (preview) updatePreview(btn.dataset.url || '');
+
+    dispatch('nagatanazare:panel-open', {
+      button: btn,
+      url: btn.dataset.url || '',
+      preset: btn.dataset.preset || ''
+    });
+  }
+
+  function closePanel() {
+    const back = $('#kblx-back');
+
+    if (back) {
+      back.classList.remove('is-open');
+      back.setAttribute('aria-hidden', 'true');
+    }
+
+    dispatch('nagatanazare:panel-close', {
+      button: state.currentButton
+    });
+
+    state.currentButton = null;
+  }
+
+  function bindLongPress() {
+    document.addEventListener('touchstart', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+
+      clearTimeout(state.longPressTimer);
+      state.longPressTimer = setTimeout(() => openPanel(btn), LONG_PRESS_MS);
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+      clearTimeout(state.longPressTimer);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', () => {
+      clearTimeout(state.longPressTimer);
+    }, { passive: true });
+
+    document.addEventListener('mousedown', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+
+      clearTimeout(state.longPressTimer);
+      state.longPressTimer = setTimeout(() => openPanel(btn), LONG_PRESS_MS);
+    });
+
+    document.addEventListener('mouseup', () => {
+      clearTimeout(state.longPressTimer);
+    });
+
+    document.addEventListener('mouseleave', () => {
+      clearTimeout(state.longPressTimer);
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+      e.preventDefault();
+      openPanel(btn);
+    });
+  }
+
+  function bindPanelUI() {
+    document.addEventListener('click', async (e) => {
+      const closeBtn = e.target.closest?.('#kblx-btn-close');
+      const saveBtn = e.target.closest?.('#kblx-btn-save');
+      const clearBtn = e.target.closest?.('#kblx-btn-clear');
+      const injectBtn = e.target.closest?.('#kblx-btn-orb-inject');
+      const presetBtn = e.target.closest?.('[data-orb-preset]');
+      const back = e.target.closest?.('#kblx-back');
+
+// dentro de bindPanelUI(), adicione estes blocos no document.addEventListener('click', ...)
+
+const dupBtn = e.target.closest?.('#kblx-btn-dup');
+const delBtn = e.target.closest?.('#kblx-btn-del');
+
+if (dupBtn) {
+  const current = state.currentButton;
+  if (!current) return;
+
+  const clone = cloneCurrentButton(current);
+  if (clone) {
+    openPanel(clone);
+  }
+  return;
+}
+
+if (delBtn) {
+  const current = state.currentButton;
+  if (!current) return;
+
+  const wasRemoved = removeCurrentButton(current);
+  if (wasRemoved) closePanel();
+  return;
+}
+
+      if (back && back.id === 'kblx-back' && e.target === back) {
+        closePanel();
+        return;
+      }
+
+      if (closeBtn) {
+        closePanel();
+        return;
+      }
+
+      if (presetBtn) {
+        const presetKey = presetBtn.dataset.orbPreset;
+        const current = state.currentButton;
+        if (!current) return;
+
+        await updateAttrBtn(current, {
+          preset: presetKey,
+          url: current.dataset.url || '',
+          save: true,
+          session: true,
+          refresh: true
+        });
+
+        const title = $('#kblx-ttl');
+        if (title && ORB_PRESETS[presetKey]) {
+          title.textContent = `${current.dataset.title || current.id || 'Botão'} · ${ORB_PRESETS[presetKey].name}`;
+        }
+        return;
+      }
+
+      if (saveBtn) {
+        const input = $('#kblx-inp');
+        const current = state.currentButton;
+        if (!input || !current) return;
+
+        await updateAttrBtn(current, {
+          url: input.value,
+          save: true,
+          session: true,
+          refresh: true
+        });
+
+        updatePreview(input.value);
+        return;
+      }
+
+      if (clearBtn) {
+        const input = $('#kblx-inp');
+        const current = state.currentButton;
+        if (!input || !current) return;
+
+        input.value = '';
+        updatePreview('');
+        current.dataset.url = '';
+        current.dataset.preset = '';
+        current.dataset.mode = '';
+        current.dataset.injectTarget = '';
+        current.dataset.iconUrl = '';
+        current.dataset.diIconDone = '';
+
+        paintButton(current, '◉');
+
+        const key = storageKeyForBtn(current);
+        if (key) {
+          try { sessionStorage.removeItem(key); } catch {}
+          try { localStorage.removeItem(key); } catch {}
+        }
+
+        dispatch('nagatanazare:button-cleared', { button: current });
+        return;
+      }
+
+      if (injectBtn) {
+        const current = state.currentButton;
+        if (!current) return;
+
+        const detail = {
+          button: current,
+          target: current.dataset.injectTarget || 'symbol-bar',
+          url: current.dataset.url || '',
+          preset: current.dataset.preset || '',
+          mode: current.dataset.mode || ''
+        };
+
+        dispatch('nagatanazare:orb-inject', detail);
+      }
+    });
+
+    document.addEventListener('input', async (e) => {
+      const input = e.target;
+      if (!input.matches?.('#kblx-inp')) return;
+
+      const current = state.currentButton;
+      if (!current) return;
+
+      updatePreview(input.value);
+
+      await updateAttrBtn(current, {
+        url: input.value,
+        save: false,
+        session: true,
+        refresh: true
+      });
+    });
+  }
+
+// cole dentro do script, junto das outras funções
+
+function makeUniqueId(base = 'orb') {
+  const clean = String(base || 'orb')
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '') || 'orb';
+
+  return `${clean}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+}
+
+function cloneCurrentButton(current) {
+  if (!current) return null;
+
+  const clone = current.cloneNode(true);
+  const parent = current.parentElement;
+  if (!parent) return null;
+
+  const newId = makeUniqueId(current.id || current.dataset.storeKey || 'orb');
+  clone.id = newId;
+
+  clone.dataset.storeKey = newId;
+  clone.dataset.url = current.dataset.url || '';
+  clone.dataset.preset = current.dataset.preset || '';
+  clone.dataset.mode = current.dataset.mode || '';
+  clone.dataset.injectTarget = current.dataset.injectTarget || '';
+  clone.dataset.iconUrl = current.dataset.iconUrl || '';
+  clone.dataset.diIconDone = '';
+
+  const label = clone.querySelector('.symbol-label');
+  if (label && current.dataset.title) {
+    label.textContent = current.dataset.title;
+  }
+
+  parent.insertBefore(clone, current.nextSibling);
+
+  paintButton(clone, current.querySelector('.symbol-icon')?.textContent || getAutoIcon(clone.dataset.url || ''));
+
+  const key = storageKeyForBtn(clone);
+  if (key) {
+    const payload = {
+      id: clone.id,
+      url: clone.dataset.url || '',
+      preset: clone.dataset.preset || '',
+      mode: clone.dataset.mode || '',
+      injectTarget: clone.dataset.injectTarget || '',
+      icon: clone.querySelector('.symbol-icon')?.textContent || '',
+      iconUrl: clone.dataset.iconUrl || '',
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    try { sessionStorage.setItem(key, JSON.stringify(payload)); } catch {}
+    try { localStorage.setItem(key, JSON.stringify(payload)); } catch {}
+  }
+
+  dispatch('nagatanazare:button-duplicated', {
+    from: current,
+    to: clone
+  });
+
+  return clone;
+}
+
+function removeCurrentButton(current) {
+  if (!current) return false;
+
+  const key = storageKeyForBtn(current);
+  if (key) {
+    try { sessionStorage.removeItem(key); } catch {}
+    try { localStorage.removeItem(key); } catch {}
+  }
+
+  dispatch('nagatanazare:button-removed', { button: current });
+  current.remove();
+  return true;
+}
+
+  window.NAGATANAZARE = {
+    name: ENGINE_NAME,
+    presets: ORB_PRESETS,
+    openPanel,
+    closePanel,
+    applyPreset,
+    updateAttrBtn,
+    restoreButtons,
+    getCurrentButton: () => state.currentButton
+  };
+
+  function init() {
+    restoreButtons();
+    observeDynamicButtons();
+    bindLongPress();
+    bindPanelUI();
+
+    dispatch('nagatanazare:ready', { engine: ENGINE_NAME });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+<!-- ===== /NAGATANAZARE ===== -->
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('Service Worker Registered'));
+  }
+</script><script src="https://unpkg.com/lucide@latest"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script><script>
+  const App = {
+    config: {
+      vaultKey: 'dual_vault_data',
+      themeKey: 'dual_theme_mode',
+      navKey: 'dual_nav_state',
+      sysKey: 'dual_system_active'
+    },
+    state: {
+      active: false,
+      safeMode: true,
+      stacks: [],
+      editingId: null // novo: id do módulo que está sendo editado (null = criar novo)
+    },
+
+    init() {
+      this.cacheDOM();
+      this.loadData();
+      this.bindEvents();
+      if(window.lucide) lucide.createIcons();
+
+      const theme = localStorage.getItem(this.config.themeKey);
+      if(theme) document.documentElement.setAttribute('data-theme', theme);
+
+      const wasActive = localStorage.getItem(this.config.sysKey) === 'true';
+      if(wasActive) this.toggleSystem(true);
+      else setTimeout(() => this.dom.orbBtn.classList.add('ready'), 500);
+    },
+
+    cacheDOM() {
+      this.dom = {
+        body: document.body,
+        navFrame: document.getElementById('navFrame'),
+        orbBtn: document.getElementById('orbBtn'),
+        sysStatus: document.getElementById('sysStatus'),
+        stackList: document.getElementById('stackList'),
+        viewVault: document.getElementById('viewVault'),
+        viewEditor: document.getElementById('viewEditor'),
+        runtimeLayer: document.getElementById('runtimeLayer'),
+        appFrame: document.getElementById('appFrame'),
+        modTitle: document.getElementById('modTitle'),
+        modContent: document.getElementById('modContent'),
+        toast: document.getElementById('toast'),
+        pulseBar: document.getElementById('pulseBar'),
+        safeLabel: document.getElementById('safeLabel'),
+        uploadInput: document.getElementById('uploadInput'),
+        remoteBtn: document.getElementById('remoteBtn')
+      };
+    },
+
+    bindEvents() {
+      this.dom.orbBtn.addEventListener('click', () => this.toggleSystem());
+      document.querySelectorAll('[data-url]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.dom.navFrame.src = btn.dataset.url;
+          this.showToast(`NAV: ${btn.title}`);
+        });
+      });
+
+      document.getElementById('createBtn').addEventListener('click', () => this.toggleEditor(true));
+      document.getElementById('cancelEditor').addEventListener('click', () => this.cancelEditing());
+      document.getElementById('saveEditor').addEventListener('click', () => this.saveModule());
+
+      document.getElementById('dropZone').addEventListener('click', () => this.dom.uploadInput.click());
+      this.dom.uploadInput.addEventListener('change', (e) => this.handleUpload(e));
+      document.getElementById('uploadBtn').addEventListener('click', () => this.dom.uploadInput.click());
+      document.getElementById('backupBtn').addEventListener('click', () => this.exportVault());
+
+      document.getElementById('safeBtn').addEventListener('click', () => this.toggleSafe());
+
+      document.getElementById('themeToggle').addEventListener('click', () => {
+         const current = document.documentElement.getAttribute('data-theme');
+         const next = current === 'light' ? 'dark' : 'light';
+         document.documentElement.setAttribute('data-theme', next);
+         localStorage.setItem(this.config.themeKey, next);
+         this.showToast(`THEME: ${next.toUpperCase()}`);
+      });
+
+      document.getElementById('closeRuntime').addEventListener('click', () => this.closeRuntime());
+      document.getElementById('exportBtn').addEventListener('click', () => {
+        if(this.dom.appFrame.srcdoc) {
+          const blob = new Blob([this.dom.appFrame.srcdoc], {type:'text/html'});
+          this.dom.navFrame.src = URL.createObjectURL(blob);
+          this.showToast("EXPORTED TO NAV");
+          this.closeRuntime();
+        }
+      });
+
+      // Novo: botão globo aceita URLs
+      this.dom.remoteBtn.addEventListener('click', () => this.handleRemoteUrl());
+    },
+
+    loadData() {
+      try {
+        const raw = localStorage.getItem(this.config.vaultKey);
+        if(raw) this.state.stacks = JSON.parse(raw);
+      } catch(e) { this.state.stacks = []; }
+      this.renderVault();
+
+      const last = localStorage.getItem(this.config.navKey);
+      if(last && last !== 'about:blank') this.dom.navFrame.src = last;
+
+      this.dom.navFrame.onload = () => {
+        try { localStorage.setItem(this.config.navKey, this.dom.navFrame.contentWindow.location.href); } catch(e){}
+      };
+    },
+
+    toggleSystem(force) {
+      this.state.active = force !== undefined ? force : !this.state.active;
+      localStorage.setItem(this.config.sysKey, this.state.active);
+      if(this.state.active) {
+        this.dom.body.classList.add('system-active');
+        this.dom.sysStatus.innerText = "ONLINE";
+        this.dom.sysStatus.style.color = "var(--neon-cyan)";
+        this.dom.sysStatus.style.borderColor = "var(--neon-cyan)";
+      } else {
+        this.dom.body.classList.remove('system-active');
+        this.dom.sysStatus.innerText = "STANDBY";
+        this.dom.sysStatus.style.color = "var(--text-muted)";
+        this.dom.sysStatus.style.borderColor = "var(--glass-border)";
+      }
+    },
+
+    toggleEditor(show, moduleObj = null) {
+      if(show) {
+        this.dom.viewEditor.classList.remove('state-translated-x');
+        if(moduleObj) {
+          // abrir em modo edição
+          this.state.editingId = moduleObj.id;
+          this.dom.modTitle.value = moduleObj.title || '';
+          this.dom.modContent.value = moduleObj.content || '';
+        } else {
+          this.state.editingId = null;
+          this.dom.modTitle.value = '';
+          this.dom.modContent.value = '';
+        }
+        this.dom.modTitle.focus();
+      } else {
+        this.dom.viewEditor.classList.add('state-translated-x');
+      }
+    },
+
+    cancelEditing() {
+      this.state.editingId = null;
+      this.toggleEditor(false);
+    },
+
+    toggleSafe() {
+      this.state.safeMode = !this.state.safeMode;
+      this.dom.safeLabel.innerText = this.state.safeMode ? "SAFE" : "RAW";
+      this.dom.safeLabel.style.color = this.state.safeMode ? "inherit" : "var(--alert-red)";
+      this.showToast(this.state.safeMode ? "PROTOCOL: SAFE" : "PROTOCOL: RAW (UNSAFE)");
+    },
+
+    exportVault() {
+      const data = JSON.stringify(this.state.stacks, null, 2);
+      const blob = new Blob([data], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `dual-vault-${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      this.showToast("VAULT EXPORTED");
+    },
+
+    saveModule() {
+      const title = this.dom.modTitle.value.trim();
+      const content = this.dom.modContent.value;
+      if(!title) return this.showToast("ERROR: TITLE REQUIRED");
+
+      if(this.state.editingId) {
+        // Atualiza módulo existente
+        const idx = this.state.stacks.findIndex(s => s.id === this.state.editingId);
+        if(idx === -1) return this.showToast("ERROR: MODULE NOT FOUND");
+        this.state.stacks[idx].title = title;
+        this.state.stacks[idx].content = content;
+        this.state.stacks[idx].date = new Date().toLocaleDateString();
+        localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+        this.showToast("MODULE UPDATED");
+      } else {
+        // Cria novo módulo
+        const mod = {
+          id: Date.now(),
+          title,
+          content: content || '<h1>Empty Module</h1>',
+          date: new Date().toLocaleDateString()
+        };
+        this.state.stacks.unshift(mod);
+        localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+        this.showToast("MODULE CRYSTALLIZED");
+      }
+
+      this.state.editingId = null;
+      this.renderVault();
+      this.toggleEditor(false);
+    },
+
+    handleUpload(e) {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+          try {
+              const json = JSON.parse(ev.target.result);
+              if(Array.isArray(json) && json[0]?.id) {
+                  if(confirm("RESTORE BACKUP? This will merge with current vault.")) {
+                      this.state.stacks = [...json, ...this.state.stacks];
+                      this.state.stacks = this.state.stacks.filter((v,i,a)=>a.findIndex(v2=>(v2.id===v.id))===i);
+                      localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+                      this.renderVault();
+                      this.showToast("BACKUP RESTORED");
+                      return;
+                  }
+              }
+          } catch(e) { /* Not a JSON array, treat as single file */ }
+
+        this.state.stacks.unshift({
+          id: Date.now(),
+          title: file.name,
+          content: ev.target.result,
+          date: new Date().toLocaleDateString()
+        });
+        localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+        this.renderVault();
+        this.showToast("FILE UPLOADED");
+      };
+      reader.readAsText(file);
+      // reset input so same file can be re-uploaded if needed
+      e.target.value = '';
+    },
+
+    deleteModule(id) {
+      if(!confirm("DELETE MODULE?")) return;
+      this.state.stacks = this.state.stacks.filter(s => s.id !== id);
+      localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+      this.renderVault();
+    },
+
+    // Novo: download individual
+    downloadModule(id) {
+      const mod = this.state.stacks.find(s => s.id === id);
+      if(!mod) return this.showToast("ERROR: NOT FOUND");
+      const blob = new Blob([mod.content], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      // sanitize filename
+      const safeName = (mod.title || 'module').replace(/[^\w\d\-_\.]/g,'_');
+      a.download = `${safeName}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      this.showToast("DOWNLOAD STARTED");
+    },
+
+    renderVault() {
+      this.dom.stackList.innerHTML = '';
+      document.getElementById('vaultCount').innerText = `${this.state.stacks.length} ITEMS`;
+
+      if(this.state.stacks.length === 0) {
+        this.dom.stackList.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted); font-family:var(--font-code); font-size:12px;">VAULT EMPTY</div>`;
+        return;
+      }
+
+      this.state.stacks.forEach(stack => {
+        const el = document.createElement('div');
+        el.className = 'stack-item';
+        el.innerHTML = `
+          <div class="stack-info">
+            <div class="stack-icon"><i data-lucide="box" style="width:16px;"></i></div>
+            <div class="stack-text">
+              <h4>${this.escapeHtml(stack.title)}</h4>
+              <span>${stack.date}</span>
+            </div>
+          </div>
+          <div class="stack-actions">
+            <button class="mini-btn btn-run" title="Run"><i data-lucide="play" style="width:12px;"></i></button>
+            <button class="mini-btn btn-edit" title="Edit"><i data-lucide="edit-2" style="width:12px;"></i></button>
+            <button class="mini-btn btn-dl" title="Download"><i data-lucide="download" style="width:12px;"></i></button>
+            <button class="mini-btn btn-del" title="Delete"><i data-lucide="trash-2" style="width:12px;"></i></button>
+          </div>
+        `;
+
+        // Bind actions
+        el.querySelector('.btn-run').onclick = (e) => { e.stopPropagation(); this.runModule(stack.id); };
+        el.querySelector('.btn-edit').onclick = (e) => { e.stopPropagation(); this.editModule(stack.id); };
+        el.querySelector('.btn-dl').onclick = (e) => { e.stopPropagation(); this.downloadModule(stack.id); };
+        el.querySelector('.btn-del').onclick = (e) => { e.stopPropagation(); this.deleteModule(stack.id); };
+        el.onclick = () => this.runModule(stack.id);
+
+        this.dom.stackList.appendChild(el);
+      });
+
+      if(window.lucide) lucide.createIcons();
+    },
+
+    escapeHtml(text) {
+      if(!text) return '';
+      return text.replace(/[&<>"']/g, function(m) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+      });
+    },
+
+    runModule(id) {
+      const mod = this.state.stacks.find(s => s.id === id);
+      if(!mod) return;
+
+      let code = mod.content;
+      if(this.state.safeMode) {
+        try {
+           if(!code.includes('<html') && !code.includes('<!doctype')) {
+             code = `<style>body{color:#fff;background:transparent;font-family:sans-serif}</style>${code}`;
+           }
+        } catch(e){}
+      }
+
+      this.dom.appFrame.srcdoc = code;
+      this.dom.runtimeLayer.classList.add('state-visible-y');
+      this.dom.sysStatus.innerText = "RUNNING";
+      this.dom.sysStatus.style.opacity = '0.7';
+    },
+
+    closeRuntime() {
+      this.dom.runtimeLayer.classList.remove('state-visible-y');
+      this.dom.sysStatus.style.opacity = '1';
+      this.dom.sysStatus.innerText = "ONLINE";
+      setTimeout(() => this.dom.appFrame.srcdoc = '', 400);
+    },
+
+    showToast(msg) {
+      this.dom.toast.innerText = msg;
+      this.dom.toast.classList.remove('toast-hidden');
+      clearTimeout(this.toastTimer);
+      this.toastTimer = setTimeout(() => {
+        this.dom.toast.classList.add('toast-hidden');
+      }, 2200);
+    },
+
+    // Abre editor com módulo carregado (modo editar)
+    editModule(id) {
+      const mod = this.state.stacks.find(s => s.id === id);
+      if(!mod) return this.showToast("ERROR: MODULE NOT FOUND");
+      this.toggleEditor(true, mod);
+    },
+
+    // Novo: aceita URL, tenta fetch; se fetch falhar faz fallback para abrir navFrame
+    async handleRemoteUrl() {
+      const url = prompt("INSIRA URL (http(s)://...):");
+      if(!url) return;
+      try {
+        // tentativa de fetch do HTML (CORS pode bloquear)
+        const res = await fetch(url, {mode:'cors'});
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        const ct = res.headers.get('content-type') || '';
+        if(ct.includes('text/html') || ct.includes('application/xhtml+xml')) {
+          const text = await res.text();
+          // salva como módulo automaticamente
+          const mod = { id: Date.now(), title: url, content: text, date: new Date().toLocaleDateString() };
+          this.state.stacks.unshift(mod);
+          localStorage.setItem(this.config.vaultKey, JSON.stringify(this.state.stacks));
+          this.renderVault();
+          this.showToast("REMOTE SAVED TO VAULT");
+        } else {
+          // não-html — apenas abre no navFrame
+          this.dom.navFrame.src = url;
+          this.showToast("OPENED IN NAV (non-HTML)");
+        }
+      } catch(err) {
+        // Falha (CORS ou rede) — fallback: abrir no navFrame e avisar
+        try {
+          this.dom.navFrame.src = url;
+          this.showToast("FALLBACK: OPENED IN NAV (fetch failed)");
+        } catch(e) {
+          this.showToast("ERROR: COULD NOT OPEN URL");
+        }
+      }
+    }
+  };
+
+  window.onload = () => App.init();
+</script><script>
+(function(){
+  if (window.__nebula_zebkit_installed) return;
+  window.__nebula_zebkit_installed = true;
+
+  const ZebKit = {
+    getButtons() {
+      // Pega botões e links que parecem botões
+      const selector = 'button, [role="button"], input[type="button"], a[role="button"], .btn, .button, [class*="button"]';
+      const nodes = Array.from(document.querySelectorAll(selector));
+      return nodes.map((el, i) => {
+        if(!el.id) el.id = 'nebula-autoid-' + i;
+        const rect = el.getBoundingClientRect();
+        return {
+          id: el.id,
+          tag: el.tagName.toLowerCase(),
+          text: (el.innerText || el.value || el.getAttribute('aria-label') || '').trim(),
+          classes: el.className || '',
+          visible: rect.width > 0
+        };
+      });
+    },
+
+    applyStyles(id, className, styles) {
+      // Se tiver className, aplica no grupo. Senão, só no ID.
+      let targets = [];
+      if (className) {
+        // Sanitiza a classe para o seletor (pega apenas a primeira se for lista)
+        const firstClass = className.split(' ')[0];
+        targets = Array.from(document.querySelectorAll('.' + firstClass));
+      } else {
+        const el = document.getElementById(id);
+        if(el) targets = [el];
+      }
+
+      targets.forEach(el => {
+        if(!el) return;
+        Object.assign(el.style, styles);
+      });
+    }
+  };
+
+  // Escuta comandos do Iframe (Nebula Pro)
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if(!d || !d.type) return;
+
+    if(d.type === 'NEBULA_SCAN_REQ') {
+      const tree = ZebKit.getButtons();
+      e.source.postMessage({ 
+        type: 'NEBULA_SCAN_RES', 
+        tree, 
+        domain: window.location.hostname 
+      }, '*');
+    }
+
+    if(d.type === 'NEBULA_HIGHLIGHT') {
+      const el = document.getElementById(d.id);
+      if(el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const originalOutline = el.style.outline;
+        el.style.outline = '4px solid #00f2ff';
+        el.style.outlineOffset = '2px';
+        setTimeout(() => el.style.outline = originalOutline, 1500);
+      }
+    }
+
+    if(d.type === 'NEBULA_UPDATE_STYLE') {
+      ZebKit.applyStyles(d.id, d.className, d.styles);
+    }
+  });
+
+  console.log('%c🌌 NEBULA ZebKit instalado em ' + window.location.hostname, 'color: #00f2ff; font-weight: bold;');
+})();
+</script></body></html>

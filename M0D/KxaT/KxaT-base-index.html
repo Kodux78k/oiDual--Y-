@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>dual-Infodose Chat Cinematográfico · Roda-Viva</title>
+<!-- <script src="./KDX-Sev-Panel-v5++patch.js" defer></script> -->
+  <meta name="theme-color" content="#050811">
+<!-- iOS Support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+  <!-- Fonte básica -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;display=swap">
+
+  
+
+  <!-- Patches KOBLLUX / Vozes / Tema / Fades (podem ser recortados como patch) -->
+  <!-- KOBLLUX · Vozes Arquétipas — Patch Inline (UPDATED) -->
+  
+
+  <!-- KOBLLUX · PATCH de Tema de Voz (V3+cores por arquétipo) -->
+  
+
+  <!-- KOBLLUX · THEME COLORS (tokens --kob-voice-*) -->
+  
+
+  <!-- KOBLLUX · Soft Transitions / Fade -->
+  
+
+  
+
+  
+
+  <link rel="manifest" href="./manifest.json">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/css/KxaT.css">
+
+<section id="motorDock" class="motor-dock" aria-label="Motor 78K" hidden>
+    <div class="motor-dock-head">
+      <div>
+        <strong>Motor 78K</strong>
+        <span>· painel isolado · usa o HTML original dentro de iframe</span>
+      </div>
+      <button type="button" id="motorDockClose" class="pill-btn secondary">Fechar</button>
+    </div>
+    <iframe
+      id="motorFrame"
+      title="Motor 78K"
+      sandbox="allow-scripts allow-forms allow-same-origin"
+      loading="lazy"
+    ></iframe>
+  </section>
+
+
+ <style>
+
+  /* Botão Orb + Logo */
+    #btn-arch {
+
+  /*    width: 60px;
+      height: 60px;
+      display: flex;
+     justify-content: center;
+      align-items: center; */
+      background: transparent;
+      border-radius: 50%;       border: none ;
+      cursor: pointer;
+
+      transition: transform 0.3s ease;
+          background: radial-gradient(circle at 30% 30%, var(--kob-voice-primary), transparent 60%),
+                  radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow: var(--kob-voice-primary);
+
+    }
+
+
+    .orb {
+
+      width: 100%;
+      height: 100%;
+      animation: orbSpin 112s linear infinite;    
+
+    }
+
+    .orb-core {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--kob-voice-secondary), transparent 60%),
+                  radial-gradient(circle at 70% 70%, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow: var(--kob-voice-primary);
+  z-index: 991;      animation: orbSpin var(--kob-orb-spin) linear infinite;
+    }
+
+    .logo-overlay{
+
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      color: var(--kob-voice-secondary);
+      filter: drop-shadow(0 0 5px rgba(255,255,255,0.12));
+    }
+
+  
+
+    #kobFooter{
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      margin-top: auto;
+
+      z-index: 999999;
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+
+    #kobFooter .kob-footer-inner{
+      position: relative;
+      z-index: 2;
+      pointer-events: auto;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    #kobFooter .footer-text{
+      position: relative;
+      margin: 0;
+      z-index: 3;
+    }
+
+    #kobFooter .footer-dot{
+      position: relative;
+      z-index: 4;
+    }
+
+.response-container.collapsed{
+      bottom:24px;
+      max-height:none;
+      padding:0 10px;
+      background:radial-gradient(circle at 0 0,var(--kob-voice-bg-soft),rgba(0,0,0,.95));
+    }
+    .response-container.collapsed .pages-wrapper,
+    .response-container.collapsed .response-controls,
+    .response-container.collapsed #iaConfigPanel{
+      display:none;
+    }
+
+  </style>
+
+  <style>
+    #motorDock{
+      margin: 16px 0 0;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(6,10,16,.72);
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+    }
+    #motorDock[hidden]{
+      display: none !important;
+    }
+    #motorDock .motor-dock-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      backdrop-filter: blur(16px);
+    }
+    #motorDock .motor-dock-head strong{
+      display:block;
+      font-size: 1rem;
+      letter-spacing:.02em;
+    }
+    #motorDock .motor-dock-head span{
+      display:block;
+      font-size:.8rem;
+      opacity:.75;
+      margin-top:2px;
+    }
+    #motorFrame{
+      width: 100%;
+      height: min(78vh, 920px);
+      border: 0;
+      display:block;
+      background: #000;
+    }
+    body.motor-mode .response-container,
+    body.motor-mode .input-container{
+      display:none !important;
+    }
+    body.motor-mode #motorDock{
+      display:block !important;
+    }
+  </style>
+
+
+  <style>
+    .response-block{
+      position: relative;
+    }
+    .send-to-motor-btn{
+      position:absolute;
+      top:10px;
+      right:10px;
+      z-index:5;
+      border:0;
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:.78rem;
+      line-height:1;
+      background: rgba(255,255,255,.10);
+      color: inherit;
+      backdrop-filter: blur(12px);
+      cursor:pointer;
+    }
+    .send-to-motor-btn:active{
+      transform: scale(.96);
+    }
+    #motorDock .motor-dock-head .motor-mode-state{
+      display:inline-block;
+      margin-top:6px;
+      font-size:.72rem;
+      opacity:.82;
+    }
+    #kdx-mode-toggle.kdx-motor-armed{
+      outline: 2px solid rgba(255,255,255,.22);
+      box-shadow: 0 0 0 6px rgba(255,255,255,.06);
+    }
+  </style>
+
+</head>
+<body>
+  
+  <!-- ===== KDX — Kael DomnnuS STARTUP (splash + mode + orb) ===== -->
+<div id="kdx-splash" class="kdx-splash" aria-hidden="true">
+  <div class="kdx-splash-inner">
+    <img class="kdx-splash-logo" src="icon-192.png" alt="Kael DomnnuS">
+    <div class="kdx-splash-title">Kael DomnnuS · Organização Viva v2</div>
+  </div>
+</div>
+
+<button id="kdx-mode-toggle" aria-pressed="false" title="Modo: You / Assistant">
+  <span id="kdx-mode-icon">🧬</span>
+  <span id="kdx-mode-label">✦</span>
+</button>
+
+<div id="kdx-orb" class="kdx-orb kdx-hidden" role="button" aria-label="Orb de voz Kaion">
+  <div class="kdx-orb-icon">◎</div>
+</div>
+<!-- ===== KDX END ===== -->
+
+  <!-- Ícones inline -->
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;">
+    <symbol id="icon-copy" viewBox="0 0 24 24">
+      <rect x="9" y="9" width="11" height="11" rx="2"></rect>
+      <rect x="4" y="4" width="11" height="11" rx="2"></rect>
+    </symbol>
+    <symbol id="icon-paste" viewBox="0 0 24 24">
+      <path d="M9 4h6l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1z"></path>
+      <rect x="9" y="2" width="6" height="3" rx="1.2"></rect>
+    </symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24">
+      <circle cx="12" cy="9" r="3.2"></circle>
+      <path d="M6 18a6 6 0 0 1 12 0"></path>
+    </symbol>
+    <symbol id="icon-mic" viewBox="0 0 24 24">
+      <rect x="9" y="5" width="6" height="9" rx="3"></rect>
+      <path d="M5 11a7 7 0 0 0 14 0"></path>
+      <path d="M12 18v3"></path>
+    </symbol>
+    <symbol id="icon-orb" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8"></circle>
+      <circle cx="12" cy="12" r="4"></circle>
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <path d="M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"></path>
+      <path d="M4.9 8.6a1 1 0 0 1 .3-1.4l1.2-.7a1 1 0 0 0 .5-.8l.2-1.4A1 1 0 0 1 8.1 3h1.8a1 1 0 0 1 1 .7l.3 1.4a1 1 0 0 0 .6.7l1.3.7a1 1 0 0 0 1.1-.1l1.1-.8a1 1 0 0 1 1.4.3l.9 1.6a1 1 0 0 1-.1 1.1l-.9 1.1a1 1 0 0 0-.2.8l.2 1.5a1 1 0 0 1-.8 1.1l-1.4.2a1 1 0 0 0-.7.5l-.6 1.3a1 1 0 0 1-1 .6h-1.8a1 1 0 0 1-1-.6l-.6-1.3a1 1 0 0 0-.7-.5l-1.4-.2a1 1 0 0 1-.8-1.1l.2-1.5a1 1 0 0 0-.2-.8L4.9 8.6z"></path>
+    </symbol>
+    <symbol id="icon-code" viewBox="0 0 24 24">
+      <polyline points="9 18 4 12 9 6"></polyline>
+      <polyline points="15 6 20 12 15 18"></polyline>
+    </symbol>
+  </svg>
+
+  <div class="content" id="particles-js"></div>
+
+  <button id="themeToggle" aria-label="Alternar tema"></button>
+
+  <div class="svg-container" id="logoContainer">
+
+  <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+          <div class="orb" id="main-orb">
+            <div class="orb-core"></div>
+          </div>
+          <svg class="logo-overlay" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="90" stroke="currentColor" stroke-width="2" fill="none" stroke-opacity="0.6"></circle>
+            <line x1="100" y1="10" x2="100" y2="190" stroke="currentColor" stroke-width="3" opacity="0.2"></line>
+            <path d="M100 10 A90 90 0 0 0 100 190" stroke="currentColor" stroke-width="6" fill="none"></path>
+          </svg>
+        </button>
+
+  </div>
+
+<footer id="kobFooter" class="kob-footer">
+    <div class="kob-footer-inner">
+      <p class="footer-text" id="footerHint">
+        <span class="footer-dot"></span>
+        Do seu jeito. Sempre único. Sempre seu.
+      </p>
+    </div>
+  </footer>
+
+  <div id="assistantName">Dual.Infodose · Cinemático</div>
+
+  <div class="response-container" id="response">
+    <div class="pages-wrapper" id="responseList">
+      <div class="response-block intro initial" id="bootBlock">
+        <strong id="bootText" data-text="Iniciando Roda-Viva. Pulso simbiótico detectado. Presença reconhecida.">
+          Iniciando Roda-Viva. Pulso simbiótico detectado. Presença reconhecida.
+        </strong>
+      </div>
+    </div>
+
+   
+
+    <div class="response-controls">
+      <div class="control-buttons">
+        <button class="icon-btn secondary" id="copyBtn" title="Copiar último bloco" type="button">
+          <svg viewBox="0 0 24 24"><use href="#icon-copy"></use></svg>
+        </button>
+        <button class="icon-btn secondary" id="pasteBtn" title="Colar no input" type="button">
+          <svg viewBox="0 0 24 24"><use href="#icon-paste"></use></svg>
+        </button>
+        <button class="icon-btn" id="parserBtn" title="Upload de parser Markdown/CSS" type="button">
+          <svg viewBox="0 0 24 24"><use href="#icon-code"></use></svg>
+        </button>
+        <button class="icon-btn" id="voiceConfigBtn" title="Carregar / alternar vozes de arquétipos" type="button">
+          <svg viewBox="0 0 24 24"><use href="#icon-orb"></use></svg>
+        </button>
+        <button class="icon-btn secondary" id="toggleLoginBtn" title="Ativar / Alterar nomes" type="button">
+          <svg viewBox="0 0 24 24"><use href="#icon-user"></use></svg>
+        </button>
+        <button class="icon-btn secondary" id="toggleSettingsBtn" title="Configuração IA / Tema" type="button">
+          <svg viewBox="0 0 24 24"><use href="#icon-settings"></use></svg>
+        </button>
+        <button class="icon-btn secondary" id="toggleMotorBtn" title="Usar motor 78K" type="button">
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5L12 2z"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="iaConfigPanel">
+      <div id="iaConfigHeader">
+        <span>Config IA · OpenRouter &amp; Tema</span>
+      </div>
+      <div class="ia-config-body">
+        <div class="ia-field">
+          <label for="apiKeyInput">API Key (sk-or-...)</label>
+          <input id="apiKeyInput" type="password" placeholder="Cole sua chave OpenRouter aqui" autocomplete="off">
+        </div>
+        <div class="ia-field">
+          <label for="modelSelect">Modelo</label>
+          <select id="modelSelect">
+            <option value="openai/gpt-oss-120b">gpt-oss· free</option>
+            <option value="inclusionai/ring-2.6-1t:free"> ring-2.6-1t:free </option>
+            <option value="openrouter/free"> openrouter/free </option>
+            <option value="nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"> nvidia/nemotron:free </option>
+            <option value="custom">Custom (digitar abaixo)</option>
+          </select>
+        </div>
+        <div class="ia-field">
+          <label for="customModelInput">Modelo custom (opcional)</label>
+          <input id="customModelInput" type="text" placeholder="ex: openai/gpt-4.1-mini">
+        </div>
+        <div class="ia-field">
+          <label for="themeSelect">Tema</label>
+          <select id="themeSelect">
+            <option value="dark">Dark</option>
+            <option value="vibe">Vibe</option>
+            <option value="medium">Medium</option>
+          </select>
+        </div>
+        <div class="ia-actions">
+          <button class="pill-btn" id="saveIaConfigBtn" type="button">Salvar</button>
+          <button class="pill-btn secondary" id="clearIaConfigBtn" type="button">Limpar</button>
+        </div>
+        <div class="ia-status" id="iaStatus">Nenhuma chave salva ainda.</div>
+      </div>
+    </div>
+  </div>
+
+
+ 
+  <div class="input-container">
+    <input id="userInput" type="text" placeholder="Diga algo para o Dual." aria-label="Digite sua mensagem">
+    <button id="sendBtn" title="Enviar" type="button">
+      <span class="send-label">➤</span>
+    </button>
+    <button id="voiceBtn" title="Ouvir último bloco" type="button">
+      <svg viewBox="0 0 24 24"><use href="#icon-mic"></use></svg>
+    </button>
+  </div>
+
+  <div class="login-container" id="loginBox" aria-modal="true" role="dialog">
+    <h2>Ativar Dual.Infodose</h2>
+    <p>Defina o seu nome e o nome-base do assistente para personalizar as respostas.</p>
+    <form id="loginForm">
+      <input id="userName" type="text" placeholder="Seu nome" required="">
+      <input id="assistantInput" type="text" placeholder="Nome do assistente" required="">
+      <button type="submit">Ativar</button>
+    </form>
+  </div>
+
+  <input type="file" id="parserFile" accept=".js,.css" style="display:none">
+  <input type="file" id="voiceConfigFile" accept=".json" style="display:none">
+
+  
+
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+
+
+
+
+
+
+<!-- Cole antes de </body> no KxaT/index.html: -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/KxaT/js/main.js"></script>
+
+
+<!-- DEPOIS: 1 script que faz tudo + preserva os externos necessários -->
+
+</body></html>

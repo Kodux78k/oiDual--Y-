@@ -1,22 +1,20 @@
-<html lang="pt-BR"><head>
+<html lang="pt-BR"><head> 
+
   <meta charset="utf-8">
-  <title>Fusion Card // Core Controller</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Fusion Card // Core Controller </title>
 
-
-
-
-                <!-- PWA METADATA & VIEWPORT FIX -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#0f0f11">
 
 <!-- iOS Support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <link rel="apple-touch-icon" href="./icon-192.png">
 
 <!-- Manifest -->
 <link rel="manifest" href="./manifest.json">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
 <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
@@ -134,15 +132,23 @@
       opacity: 1;
       transform: scale(1);
     }
-  </style></head><body class="field-closed mode-night"><div id="root">
+  </style><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style></head><body class="field-closed mode-night"><div id="root">
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
-    <div class="bg-gradient-b"></div>
+    <div class="bg-gradient"></div>
     <div id="bg-layer-fixed"></div>
 
-    <div class="stackWrap wrap">
-      <div class="content session-iframe">
+    <div class="wrap">
+      <div class="content">
         <iframe id="frame" src="about:blank"></iframe>
         <div id="kob-tts-outline"></div>
       </div>
@@ -279,7 +285,9 @@
             <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
           </div>
           <div class="symbol-wrap">
+
     <button class="symbol-button" id="tts-stop" title="Parar">■</button>
+
           </div>
 
           <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
@@ -306,187 +314,7 @@
           </div>
 
           <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
-         
-
-
-
-
-  <div id="bodyPlayer" data-mode="player" class="min-h-screen w-full flex items-center justify-center relative overflow-hidden">
-
-    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center select-none">
-    
-
-
-
-
-    </div>
-
-    
-
-      </div>
-    
-
-
-
-    <div id="yt-container" class="absolute -left-[9999px]"></div>
-    <div id="sc-container" class="absolute -left-[9999px]"></div>
-    <audio id="local-audio" crossorigin="anonymous"></audio>
-
-   <!-- WIDGET ÚNICO -->
-<div id="kodux-widget" class="state-ball kodux-widget" data-idle-target aria-label="Widget KODUX">
-  <div id="content-ball" class="w-full h-full flex items-center justify-center text-[var(--primary)]">
-    <i class="ph-fill ph-vinyl-record animate-spin" style="animation-duration: 4s; font-size: 28px;"></i>
-  </div>
-
-  <div id="content-preview" class="hidden-content w-full h-full flex items-center px-3 gap-3">
-    <img id="prev-cover" src="https://picsum.photos/100" class="w-12 h-12 rounded-full object-cover border border-[var(--primary)] shadow-lg preview-clickable cursor-pointer transition-transform hover:scale-105" onclick="openFullFromPreview(event)">
-    <div class="flex-1 overflow-hidden preview-clickable cursor-pointer" onclick="openFullFromPreview(event)">
-      <h4 id="prev-title" class="text-[11px] font-bold text-white truncate glow-text">Kodux System</h4>
-      <p id="prev-artist" class="text-[9px] text-[var(--muted)] truncate">Aguardando...</p>
-    </div>
-    <button onclick="togglePlay(event)" class="text-white hover:text-[var(--primary)] transition z-10">
-      <i id="prev-play-icon" class="ph-fill ph-play-circle text-4xl"></i>
-    </button>
-  </div>
-
-  <div id="content-footer" class="hidden-content w-full h-full flex flex-col relative">
-    <div class="absolute top-0 left-0 w-full h-1 bg-white/5 cursor-pointer" id="footer-progress-click">
-      <div id="footer-progress-bar" class="h-full bg-[var(--primary)] w-0 shadow-[0_0_10px_var(--primary)]"></div>
-    </div>
-
-    <div class="drag-header flex-1 flex items-center px-6 gap-4">
-      <img id="foot-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl object-cover shadow-xl border border-white/10">
-      <div class="flex-1 overflow-hidden cursor-pointer" onclick="updateWidgetState('full')">
-        <h4 id="foot-title" class="text-sm font-bold text-white truncate">Kodux System</h4>
-        <p id="foot-artist" class="text-xs text-[var(--muted)] truncate">Aguardando...</p>
-      </div>
-      <div class="flex items-center gap-5">
-        <button onclick="playPrev(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-back text-2xl"></i></button>
-        <button onclick="togglePlay(event)" class="text-white hover:scale-110 transition"><i id="foot-play-icon" class="ph-fill ph-play-circle text-5xl"></i></button>
-        <button onclick="playNext(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-forward text-2xl"></i></button>
-        <button onclick="collapseToBall(event)" class="text-[var(--muted)] ml-2"><i class="ph ph-minus-circle text-2xl"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <div id="content-full" class="hidden-content flex flex-col w-full h-full relative">
-    <div class="drag-header w-full p-5 flex justify-between items-center bg-white/5 border-b border-white/5">
-      <div class="flex items-center gap-3">
-        <i class="ph-fill ph-lightning text-[var(--primary)] text-xl"></i>
-        <span class="text-sm font-black tracking-widest glow-text">ORÁCULO DUAL</span>
-      </div>
-      <button onclick="collapseToBall(event)" class="text-[var(--muted)] hover:text-white p-2 bg-white/5 rounded-lg">
-        <i class="ph ph-caret-down-bold"></i>
-      </button>
-    </div>
-
-    <div class="flex-1 overflow-y-auto p-5 pb-36 soft-scroll">
-      <div class="mb-4">
-        <div class="flex items-center gap-2 overflow-x-auto pb-2 soft-scroll" id="playlist-tabs"></div>
-      </div>
-
-      <div class="flex gap-2 mb-4">
-        <div class="flex-1 relative">
-          <i class="ph ph-link absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
-          <input type="text" id="link-input" placeholder="YouTube ou SoundCloud link" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
         </div>
-        <select id="destination-select" class="glass-select rounded-xl px-3 text-xs min-w-[135px]">
-          <option value="all">Todas</option>
-        </select>
-        <button onclick="addLink()" class="btn-primary px-4 rounded-xl shadow-lg">
-          <i class="ph ph-plus-bold"></i>
-        </button>
-      </div>
-
-      <div class="flex gap-2 mb-4 items-center">
-        <div class="flex-1 relative">
-          <i class="ph ph-folder-simple absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
-          <input type="text" id="new-playlist-input" placeholder="Criar nova playlist" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
-        </div>
-        <button onclick="createPlaylist()" class="btn-primary px-4 rounded-xl shadow-lg">
-          <i class="ph ph-folder-plus"></i>
-        </button>
-      </div>
-
-      <div class="flex items-center justify-between mb-3">
-        <div>
-          <h3 class="text-sm font-bold text-white">Playlists carregadas</h3>
-          <p class="text-[10px] text-[var(--muted)]">Toque para trocar de grupo, criar, remover ou organizar.</p>
-        </div>
-      </div>
-
-      <div id="playlist-container" class="flex flex-col gap-3"></div>
-    </div>
-
-    <div class="absolute bottom-0 left-0 w-full bg-black/80 backdrop-blur-xl border-t border-[var(--primary)] p-6">
-      <input type="range" id="main-progress" min="0" max="100" value="0" class="w-full mb-4">
-      <div class="flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4 overflow-hidden">
-          <img id="main-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl border border-white/20 object-cover">
-          <div class="overflow-hidden">
-            <h4 id="main-title" class="text-sm font-bold text-white truncate">Oráculo</h4>
-            <p id="main-artist" class="text-[10px] text-[var(--muted)] truncate">Sistema KODUX v2.5</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-5 shrink-0">
-          <button onclick="playPrev()" class="text-white text-2xl"><i class="ph-fill ph-skip-back"></i></button>
-          <button onclick="togglePlay()" class="w-14 h-14 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_20px_var(--primary)]">
-            <i id="main-play-icon" class="ph-fill ph-play text-3xl ml-1"></i>
-          </button>
-          <button onclick="playNext()" class="text-white text-2xl"><i class="ph-fill ph-skip-forward"></i></button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-  
-
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
-  
-  <script>
-    (() => {
-      const bodyPlayer = document.getElementById('bodyPlayer');
-      const idleSelector = '.kob-tts-dock, #kodux-widget, [data-idle-target]';
-      let idleTimer = null;
-
-      function getIdleTargets() {
-        return document.querySelectorAll(idleSelector);
-      }
-
-      function setIdleState(isIdle) {
-        getIdleTargets().forEach(el => el.classList.toggle('idle', isIdle));
-      }
-
-      function resetIdle() {
-        setIdleState(false);
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => setIdleState(true), 1870);
-      }
-
-      function setMode(mode = 'player') {
-        if (!bodyPlayer) return;
-        bodyPlayer.dataset.mode = mode;
-      }
-
-      window.KoduxShell = {
-        setMode,
-        resetIdle
-      };
-
-      ['pointerdown', 'pointermove', 'touchstart', 'mousemove', 'scroll'].forEach(ev => {
-        document.addEventListener(ev, resetIdle, { passive: true });
-      });
-
-      document.addEventListener('keydown', resetIdle);
-
-      setMode(bodyPlayer?.dataset.mode || 'player');
-      resetIdle();
-    })();
-
-    
-  </script>
-
-</div>
 
         <div id="arch-overlay"></div>
       </div>
@@ -737,6 +565,7 @@
     </div>
   </div>
 
+
 <div id="kblx-back">
 
   <div id="kblx-panel">
@@ -770,13 +599,7 @@
         Novo valor para <code>data-url</code>
       </label>
 
-      <input
-        id="kblx-inp"
-        type="text"
-        placeholder="arquivo.html ou https://..."
-        spellcheck="false"
-        autocomplete="off"
-      >
+      <input id="kblx-inp" type="text" placeholder="arquivo.html ou https://..." spellcheck="false" autocomplete="off">
 
       <!-- preview -->
       <div class="kblx-preview" id="kblx-preview">
@@ -794,15 +617,15 @@
 
       <div class="kblx-presets">
 
-        <button class="kblx-preset" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/">
+        <button class="kblx-preset" data-url="index.html">
           Home
         </button>
 
-        <button class="kblx-preset" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/">
+        <button class="kblx-preset" data-url="hub.html">
           Hub
         </button>
 
-        <button class="kblx-preset" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">
+        <button class="kblx-preset" data-url="render-response.html">
           Render
         </button>
 
@@ -815,17 +638,15 @@
     </section>
 
     <!-- ACTIONS -->
-    <footer class="kblx-row">
 
-      <button class="kblx-btn kblx-save" id="kblx-btn-save">
-        ⊙ Salvar no botão
-      </button>
-
-      <button class="kblx-btn kblx-clear" id="kblx-btn-clear">
-        ⌫ Limpar
-      </button>
-
-    </footer>
+<!-- troque o bloco .kblx-row por este -->
+<div class="kblx-row">
+  <button class="kblx-btn kblx-save" id="kblx-btn-save" type="button">⊙ Salvar no botão</button>
+  <button class="kblx-btn kblx-inject" id="kblx-btn-orb-inject" type="button">◉ OrbInject</button>
+  <button class="kblx-btn kblx-dup" id="kblx-btn-dup" type="button">⧉ Duplicar Orb</button>
+  <button class="kblx-btn kblx-del" id="kblx-btn-del" type="button">⌫ Remover Orb</button>
+  <button class="kblx-btn kblx-clear" id="kblx-btn-clear" type="button">⌫ Limpar</button>
+</div>
 
   </div>
 
@@ -833,12 +654,9 @@
 
 
 
-
-
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
-
 
  
  <!-- Seus Scripts Originais -->
@@ -875,7 +693,1375 @@
 
       els.actName.innerText = safe;
     }
-  </script><script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/@phosphor-icons/web"></script><script src="https://w.soundcloud.com/player/api.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script><script>
+  </script>
+
+<style>
+.mainOrb,
+.symbol-button {
+  user-select: none;
+  -webkit-user-select: none;
+
+  -webkit-touch-callout: none;
+
+  -webkit-tap-highlight-color: transparent;
+
+  touch-action: manipulation;
+
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+
+button,
+.mainOrb,
+.symbol-button,
+svg,
+img {
+  -webkit-user-select: none;
+  user-select: none;
+
+  -webkit-touch-callout: none;
+
+  -webkit-user-drag: none;
+}
+
+#kblx-panel{
+  width:min(92vw,520px);
+
+  border-radius:28px;
+
+  padding:20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.06),
+      rgba(255,255,255,.03)
+    );
+
+  border:1px solid rgba(255,255,255,.08);
+
+  backdrop-filter:blur(20px);
+
+  box-shadow:
+    0 20px 80px rgba(0,0,0,.45);
+
+  font-family:
+    "Montserrat",
+    "Inter",
+    sans-serif;
+
+  color:#fff;
+}
+
+.kblx-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.p-chip{
+  padding:8px 12px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.06);
+
+  font-size:.72rem;
+  letter-spacing:.12em;
+}
+
+.kblx-icon-btn{
+  width:40px;
+  height:40px;
+
+  border:none;
+  border-radius:14px;
+
+  background:rgba(255,255,255,.06);
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+.kblx-title-wrap{
+  margin-top:18px;
+}
+
+.p-title{
+  margin:0;
+  font-size:1.4rem;
+  font-weight:700;
+}
+
+.kblx-sub{
+  margin-top:6px;
+  opacity:.6;
+  font-size:.9rem;
+}
+
+.kblx-section{
+  margin-top:22px;
+}
+
+.p-lbl{
+  display:block;
+  margin-bottom:10px;
+
+  font-size:.84rem;
+  opacity:.75;
+}
+
+#kblx-inp{
+  width:100%;
+
+  padding:16px;
+
+  border:none;
+  outline:none;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,.06);
+
+  color:#fff;
+
+  font-size:.95rem;
+}
+
+.kblx-preview{
+  margin-top:10px;
+
+  padding:12px;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,.04);
+
+  font-size:.8rem;
+
+  opacity:.7;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.kblx-sec-head{
+  margin-bottom:12px;
+  font-size:.82rem;
+  opacity:.65;
+}
+
+.kblx-presets{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.kblx-preset{
+  border:none;
+
+  padding:10px 14px;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,.06);
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+.kblx-row{
+  display:flex;
+  gap:12px;
+
+  margin-top:28px;
+}
+
+.kblx-btn{
+  flex:1;
+
+  min-height:52px;
+
+  border:none;
+  border-radius:18px;
+
+  color:#fff;
+
+  cursor:pointer;
+
+  font-weight:600;
+}
+
+.kblx-save{
+  background:rgba(255,255,255,.12);
+}
+
+.kblx-clear{
+  background:rgba(255,255,255,.05);
+}
+
+ 
+
+  #kblx-back{
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background: var(--nag-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 999999;
+  }
+
+  #kblx-back.is-open{
+    display: flex;
+  }
+
+  #kblx-panel{
+    width: min(94vw, 560px);
+    border-radius: var(--nag-radius);
+    padding: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+      var(--nag-panel);
+    border: 1px solid var(--nag-line);
+    box-shadow: var(--nag-glow);
+    color: var(--nag-text);
+    font-family: "Montserrat","Inter",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .kblx-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+  }
+
+  .p-chip{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.06);
+    font-size: .74rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--nag-text);
+    white-space: nowrap;
+  }
+
+  .kblx-icon-btn{
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 14px;
+    background: rgba(255,255,255,.08);
+    color: var(--nag-text);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display:grid;
+    place-items:center;
+    flex: 0 0 auto;
+  }
+
+  .kblx-icon-btn:active,
+  .kblx-btn:active,
+  .kblx-preset:active{
+    transform: scale(.98);
+  }
+
+  .kblx-title-wrap{
+    margin-top: 16px;
+  }
+
+  .p-title{
+    margin: 0;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -.02em;
+  }
+
+  .kblx-sub{
+    margin: 7px 0 0;
+    color: var(--nag-dim);
+    font-size: .92rem;
+  }
+
+  .kblx-section{
+    margin-top: 18px;
+    padding-top: 0;
+  }
+
+  .p-lbl{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: var(--nag-dim);
+    font-size: .85rem;
+    line-height: 1.2;
+  }
+
+  .p-lbl code{
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.06);
+    color: var(--nag-text);
+    font-size: .8rem;
+  }
+
+  #kblx-inp{
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 15px;
+    border: 1px solid rgba(255,255,255,.08);
+    outline: none;
+    border-radius: 18px;
+    background: rgba(255,255,255,.06);
+    color: #fff;
+    font-size: .96rem;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+
+  #kblx-inp::placeholder{
+    color: rgba(255,255,255,.42);
+  }
+
+  #kblx-inp:focus{
+    border-color: rgba(255,255,255,.16);
+    box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+  }
+
+  .kblx-preview{
+    margin-top: 10px;
+    padding: 11px 12px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.05);
+    color: var(--nag-dim);
+    font-size: .82rem;
+    line-height: 1.35;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .kblx-sec-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin: 0 0 10px;
+    color: var(--nag-dim);
+    font-size: .82rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .kblx-presets{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 10px;
+  }
+
+  .kblx-preset{
+    min-height: 42px;
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 10px 13px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.06);
+    color: var(--nag-text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .kblx-row{
+    display:flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  .kblx-btn{
+    flex: 1 1 160px;
+    min-height: 50px;
+    border: 0;
+    border-radius: 18px;
+    background: rgba(255,255,255,.10);
+    color: var(--nag-text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  }
+
+  .kblx-save{
+    background: rgba(255,255,255,.14);
+  }
+
+  .kblx-clear{
+    background: rgba(255,255,255,.06);
+  }
+
+  .kblx-inject{
+    background: rgba(255,255,255,.08);
+  }
+
+  .kblx-note{
+    margin-top: 12px;
+    color: rgba(255,255,255,.48);
+    font-size: .74rem;
+    line-height: 1.35;
+  }
+
+  .symbol-button{
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .symbol-button .symbol-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width: 1em;
+  }
+
+  .di-btn-icon-fallback{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+  }
+
+  .di-icon-ready{
+    position: relative;
+  }
+</style>
+
+<div id="kblx-back" aria-hidden="true">
+  <div id="kblx-panel">
+    <div class="kblx-head">
+      <div class="p-chip">⌘ NAGATANAZARE · EDITOR DE ROTA</div>
+      <button class="kblx-icon-btn" id="kblx-btn-close" type="button">✕</button>
+    </div>
+
+    <div class="kblx-title-wrap">
+      <h2 class="p-title" id="kblx-ttl">Botão</h2>
+      <p class="kblx-sub" id="kblx-sub">Edite a rota, aplique preset e injete Orb no Symbol Bar.</p>
+    </div>
+
+    <section class="kblx-section">
+      <label class="p-lbl" for="kblx-inp">
+        Novo valor para <code>data-url</code>
+      </label>
+
+      <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+
+      <div class="kblx-preview" id="kblx-preview">
+        Nenhuma rota definida.
+      </div>
+    </section>
+
+    <section class="kblx-section">
+      <div class="kblx-sec-head">
+        <span>Presets</span>
+      </div>
+
+      <div class="kblx-presets">
+        <button class="kblx-preset" type="button" data-orb-preset="orb">◉ Orb</button>
+        <button class="kblx-preset" type="button" data-orb-preset="frame">⟁ Frame</button>
+        <button class="kblx-preset" type="button" data-orb-preset="dock">⌘ Dock</button>
+      </div>
+    </section>
+
+    <section class="kblx-section">
+      <div class="kblx-sec-head">
+        <span>OrbInject</span>
+      </div>
+
+      <!-- troque o bloco .kblx-row por este -->
+<div class="kblx-row">
+  <button class="kblx-btn kblx-save" id="kblx-btn-save" type="button">⊙ Salvar no botão</button>
+  <button class="kblx-btn kblx-inject" id="kblx-btn-orb-inject" type="button">◉ OrbInject</button>
+  <button class="kblx-btn kblx-dup" id="kblx-btn-dup" type="button">⧉ Duplicar Orb</button>
+  <button class="kblx-btn kblx-del" id="kblx-btn-del" type="button">⌫ Remover Orb</button>
+  <button class="kblx-btn kblx-clear" id="kblx-btn-clear" type="button">⌫ Limpar</button>
+</div>
+
+      <div class="kblx-note">
+        Long press em qualquer <code>.symbol-button[data-url]</code> abre este painel. O motor guarda sessão e persistência, além de atualizar o ícone automaticamente.
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+  const ENGINE_NAME = 'NAGATANAZARE';
+  const CACHE_KEY = 'di_btn_icon_cache_v2';
+  const STORAGE_PREFIX = 'symbol_button_';
+  const LONG_PRESS_MS = 550;
+
+  const ORB_PRESETS = {
+    orb: {
+      name: 'Orb',
+      icon: '◉',
+      mode: 'orb',
+      injectTarget: 'symbol-bar'
+    },
+    frame: {
+      name: 'Frame',
+      icon: '⟁',
+      mode: 'special-frame',
+      injectTarget: 'special-frame'
+    },
+    dock: {
+      name: 'Dock',
+      icon: '⌘',
+      mode: 'dock',
+      injectTarget: 'symbol-bar'
+    }
+  };
+
+  const state = {
+    currentButton: null,
+    longPressTimer: null
+  };
+
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const storageGet = (storage, key) => {
+    try {
+      const raw = storage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const storageSet = (storage, key, value) => {
+    try {
+      storage.setItem(key, JSON.stringify(value));
+    } catch {}
+  };
+
+  const loadCache = () => storageGet(localStorage, CACHE_KEY) || {};
+  const saveCache = (cache) => storageSet(localStorage, CACHE_KEY, cache);
+
+  const cache = loadCache();
+
+  const normKey = (url) => {
+    try {
+      return new URL(url, location.href).href;
+    } catch {
+      return String(url || '');
+    }
+  };
+
+  const storageKeyForBtn = (btn) => {
+    if (!btn) return null;
+    if (btn.id) return `${STORAGE_PREFIX}${btn.id}`;
+    if (btn.dataset.storeKey) return `${STORAGE_PREFIX}${btn.dataset.storeKey}`;
+    return null;
+  };
+
+  function dispatch(name, detail = {}) {
+    window.dispatchEvent(new CustomEvent(name, { detail }));
+  }
+
+  async function fetchText(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.text();
+  }
+
+  async function fetchJSON(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  }
+
+  function pickBestIcon(icons = []) {
+    if (!Array.isArray(icons) || !icons.length) return null;
+
+    const parsed = icons
+      .map(i => ({
+        ...i,
+        sizeNum: (() => {
+          const m = String(i.sizes || '').match(/(\d+)\s*x\s*(\d+)/i);
+          return m ? Math.max(+m[1], +m[2]) : 0;
+        })()
+      }))
+      .sort((a, b) => b.sizeNum - a.sizeNum);
+
+    return (
+      parsed.find(i => String(i.sizes || '').includes('192')) ||
+      parsed.find(i => i.sizeNum >= 192) ||
+      parsed[0] ||
+      null
+    );
+  }
+
+  async function resolveIcon(url) {
+    const key = normKey(url);
+    if (cache[key]) return cache[key];
+
+    try {
+      const base = new URL(key);
+      const html = await fetchText(base.href);
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+
+      const manifestLink = doc.querySelector('link[rel="manifest"]');
+      if (manifestLink) {
+        const manifestUrl = new URL(
+          manifestLink.getAttribute('href'),
+          base
+        ).href;
+
+        try {
+          const manifest = await fetchJSON(manifestUrl);
+          const icon = pickBestIcon(manifest?.icons);
+          if (icon?.src) {
+            const resolved = new URL(icon.src, manifestUrl).href;
+            cache[key] = resolved;
+            saveCache(cache);
+            return resolved;
+          }
+        } catch {}
+      }
+
+      const apple = doc.querySelector(
+        'link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]'
+      );
+      if (apple?.getAttribute('href')) {
+        const resolved = new URL(apple.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const shortcut = doc.querySelector(
+        'link[rel="shortcut icon"], link[rel="icon"]'
+      );
+      if (shortcut?.getAttribute('href')) {
+        const resolved = new URL(shortcut.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const fallback = new URL('/favicon.ico', base).href;
+      cache[key] = fallback;
+      saveCache(cache);
+      return fallback;
+    } catch {
+      const fallback = (() => {
+        try {
+          return new URL('/favicon.ico', new URL(key, location.href)).href;
+        } catch {
+          return null;
+        }
+      })();
+
+      if (fallback) {
+        cache[key] = fallback;
+        saveCache(cache);
+      }
+
+      return fallback;
+    }
+  }
+
+  function getAutoIcon(url = '') {
+    const u = String(url).toLowerCase();
+
+    if (!u) return '◉';
+    if (u.startsWith('http://') || u.startsWith('https://')) return '⇱';
+    if (u.includes('youtube')) return '▶';
+    if (u.includes('github')) return '⌘';
+    if (u.includes('ai')) return '✦';
+    if (u.includes('orb')) return '◉';
+    if (u.includes('frame')) return '⟁';
+    if (u.includes('dock')) return '⌘';
+    if (u.endsWith('.html')) return '◈';
+    if (/\.(png|jpg|jpeg|webp|gif|svg)$/i.test(u)) return '▣';
+    if (/\.(mp4|webm|mov)$/i.test(u)) return '▸';
+
+    return '◉';
+  }
+
+  function updatePreview(text) {
+    const preview = $('#kblx-preview');
+    if (!preview) return;
+
+    const value = String(text || '').trim();
+    preview.textContent = value
+      ? `Destino: ${value}`
+      : 'Nenhuma rota definida.';
+  }
+
+  function ensureIconEl(btn) {
+    if (!btn) return null;
+
+    let iconEl = $('.symbol-icon', btn);
+    if (!iconEl) {
+      iconEl = document.createElement('span');
+      iconEl.className = 'symbol-icon';
+      if (btn.firstChild) {
+        btn.insertBefore(iconEl, btn.firstChild);
+      } else {
+        btn.appendChild(iconEl);
+      }
+    }
+    return iconEl;
+  }
+
+  function paintButton(btn, iconText) {
+    if (!btn) return;
+
+    const iconEl = ensureIconEl(btn);
+    if (!iconEl) return;
+
+    iconEl.textContent = iconText || getAutoIcon(btn.dataset.url || '');
+    btn.classList.add('di-icon-ready');
+    btn.dataset.diIconDone = '1';
+  }
+
+  function applyPreset(btn, presetKey) {
+    if (!btn || !ORB_PRESETS[presetKey]) return null;
+
+    const preset = ORB_PRESETS[presetKey];
+
+    btn.dataset.preset = presetKey;
+    btn.dataset.injectTarget = preset.injectTarget;
+    btn.dataset.mode = preset.mode;
+
+    paintButton(btn, preset.icon);
+
+    const payload = {
+      id: btn.id || '',
+      preset: presetKey,
+      url: btn.dataset.url || '',
+      mode: preset.mode,
+      updatedAt: Date.now()
+    };
+
+    const key = storageKeyForBtn(btn);
+    if (key) {
+      storageSet(sessionStorage, key, payload);
+      storageSet(localStorage, key, payload);
+    }
+
+    dispatch('nagatanazare:preset-applied', { button: btn, preset, payload });
+    return payload;
+  }
+
+  async function updateAttrBtn(
+    btn,
+    {
+      url,
+      preset = '',
+      save = true,
+      session = true,
+      refresh = true,
+      fallback = '◉'
+    } = {}
+  ) {
+    if (!btn) return null;
+
+    const cleanUrl = String(url || '').trim();
+    if (!cleanUrl && !preset) return null;
+
+    if (cleanUrl) btn.dataset.url = cleanUrl;
+    btn.dataset.fallback = fallback;
+
+    let iconText = '';
+
+    if (preset && ORB_PRESETS[preset]) {
+      applyPreset(btn, preset);
+      iconText = ORB_PRESETS[preset].icon;
+    } else {
+      iconText = getAutoIcon(cleanUrl);
+      paintButton(btn, iconText);
+    }
+
+    let iconUrl = '';
+    if (refresh && cleanUrl) {
+      const resolved = await resolveIcon(cleanUrl);
+      if (resolved) {
+        iconUrl = resolved;
+        btn.dataset.iconUrl = resolved;
+        paintButton(btn, iconText || getAutoIcon(cleanUrl));
+      }
+    }
+
+    const payload = {
+      id: btn.id || '',
+      url: cleanUrl,
+      preset: preset || btn.dataset.preset || '',
+      icon: ($('.symbol-icon', btn)?.textContent || iconText || ''),
+      iconUrl,
+      updatedAt: Date.now()
+    };
+
+    const key = storageKeyForBtn(btn);
+    if (key) {
+      if (session) storageSet(sessionStorage, key, payload);
+      if (save) storageSet(localStorage, key, payload);
+    }
+
+    dispatch('nagatanazare:button-updated', {
+      button: btn,
+      payload
+    });
+
+    return payload;
+  }
+
+  function restoreButtons() {
+    $$('.symbol-button').forEach(btn => {
+      const key = storageKeyForBtn(btn);
+      if (!key) return;
+
+      const data = storageGet(sessionStorage, key) || storageGet(localStorage, key);
+      if (!data) return;
+
+      if (data.url) btn.dataset.url = data.url;
+      if (data.preset) btn.dataset.preset = data.preset;
+      if (data.mode) btn.dataset.mode = data.mode;
+      if (data.injectTarget) btn.dataset.injectTarget = data.injectTarget;
+      if (data.iconUrl) btn.dataset.iconUrl = data.iconUrl;
+
+      paintButton(btn, data.icon || getAutoIcon(data.url || ''));
+
+      if (data.preset && ORB_PRESETS[data.preset]) {
+        btn.dataset.mode = ORB_PRESETS[data.preset].mode;
+        btn.dataset.injectTarget = ORB_PRESETS[data.preset].injectTarget;
+      }
+    });
+  }
+
+  function observeDynamicButtons() {
+    const root = document.body;
+    if (!root) return;
+
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === 'childList') {
+          m.addedNodes.forEach((node) => {
+            if (!(node instanceof Element)) return;
+
+            if (node.matches?.('.symbol-button')) {
+              paintButton(node, getAutoIcon(node.dataset.url || ''));
+            }
+
+            node.querySelectorAll?.('.symbol-button').forEach(btn => {
+              paintButton(btn, getAutoIcon(btn.dataset.url || ''));
+            });
+          });
+        }
+
+        if (m.type === 'attributes' && m.attributeName === 'data-url') {
+          const btn = m.target;
+          if (btn?.classList?.contains('symbol-button')) {
+            btn.dataset.diIconDone = '';
+            paintButton(btn, getAutoIcon(btn.dataset.url || ''));
+          }
+        }
+      }
+    });
+
+    mo.observe(root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-url']
+    });
+  }
+
+  function openPanel(btn) {
+    if (!btn) return;
+
+    state.currentButton = btn;
+
+    const back = $('#kblx-back');
+    const title = $('#kblx-ttl');
+    const input = $('#kblx-inp');
+    const preview = $('#kblx-preview');
+
+    if (back) {
+      back.classList.add('is-open');
+      back.setAttribute('aria-hidden', 'false');
+    }
+
+    if (title) title.textContent = btn.dataset.title || btn.id || 'Botão';
+    if (input) input.value = btn.dataset.url || '';
+    if (preview) updatePreview(btn.dataset.url || '');
+
+    dispatch('nagatanazare:panel-open', {
+      button: btn,
+      url: btn.dataset.url || '',
+      preset: btn.dataset.preset || ''
+    });
+  }
+
+  function closePanel() {
+    const back = $('#kblx-back');
+
+    if (back) {
+      back.classList.remove('is-open');
+      back.setAttribute('aria-hidden', 'true');
+    }
+
+    dispatch('nagatanazare:panel-close', {
+      button: state.currentButton
+    });
+
+    state.currentButton = null;
+  }
+
+  function bindLongPress() {
+    document.addEventListener('touchstart', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+
+      clearTimeout(state.longPressTimer);
+      state.longPressTimer = setTimeout(() => openPanel(btn), LONG_PRESS_MS);
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+      clearTimeout(state.longPressTimer);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', () => {
+      clearTimeout(state.longPressTimer);
+    }, { passive: true });
+
+    document.addEventListener('mousedown', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+
+      clearTimeout(state.longPressTimer);
+      state.longPressTimer = setTimeout(() => openPanel(btn), LONG_PRESS_MS);
+    });
+
+    document.addEventListener('mouseup', () => {
+      clearTimeout(state.longPressTimer);
+    });
+
+    document.addEventListener('mouseleave', () => {
+      clearTimeout(state.longPressTimer);
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+      e.preventDefault();
+      openPanel(btn);
+    });
+  }
+
+  function bindPanelUI() {
+    document.addEventListener('click', async (e) => {
+      const closeBtn = e.target.closest?.('#kblx-btn-close');
+      const saveBtn = e.target.closest?.('#kblx-btn-save');
+      const clearBtn = e.target.closest?.('#kblx-btn-clear');
+      const injectBtn = e.target.closest?.('#kblx-btn-orb-inject');
+      const presetBtn = e.target.closest?.('[data-orb-preset]');
+      const back = e.target.closest?.('#kblx-back');
+
+// dentro de bindPanelUI(), adicione estes blocos no document.addEventListener('click', ...)
+
+const dupBtn = e.target.closest?.('#kblx-btn-dup');
+const delBtn = e.target.closest?.('#kblx-btn-del');
+
+if (dupBtn) {
+  const current = state.currentButton;
+  if (!current) return;
+
+  const clone = cloneCurrentButton(current);
+  if (clone) {
+    openPanel(clone);
+  }
+  return;
+}
+
+if (delBtn) {
+  const current = state.currentButton;
+  if (!current) return;
+
+  const wasRemoved = removeCurrentButton(current);
+  if (wasRemoved) closePanel();
+  return;
+}
+
+      if (back && back.id === 'kblx-back' && e.target === back) {
+        closePanel();
+        return;
+      }
+
+      if (closeBtn) {
+        closePanel();
+        return;
+      }
+
+      if (presetBtn) {
+        const presetKey = presetBtn.dataset.orbPreset;
+        const current = state.currentButton;
+        if (!current) return;
+
+        await updateAttrBtn(current, {
+          preset: presetKey,
+          url: current.dataset.url || '',
+          save: true,
+          session: true,
+          refresh: true
+        });
+
+        const title = $('#kblx-ttl');
+        if (title && ORB_PRESETS[presetKey]) {
+          title.textContent = `${current.dataset.title || current.id || 'Botão'} · ${ORB_PRESETS[presetKey].name}`;
+        }
+        return;
+      }
+
+      if (saveBtn) {
+        const input = $('#kblx-inp');
+        const current = state.currentButton;
+        if (!input || !current) return;
+
+        await updateAttrBtn(current, {
+          url: input.value,
+          save: true,
+          session: true,
+          refresh: true
+        });
+
+        updatePreview(input.value);
+        return;
+      }
+
+      if (clearBtn) {
+        const input = $('#kblx-inp');
+        const current = state.currentButton;
+        if (!input || !current) return;
+
+        input.value = '';
+        updatePreview('');
+        current.dataset.url = '';
+        current.dataset.preset = '';
+        current.dataset.mode = '';
+        current.dataset.injectTarget = '';
+        current.dataset.iconUrl = '';
+        current.dataset.diIconDone = '';
+
+        paintButton(current, '◉');
+
+        const key = storageKeyForBtn(current);
+        if (key) {
+          try { sessionStorage.removeItem(key); } catch {}
+          try { localStorage.removeItem(key); } catch {}
+        }
+
+        dispatch('nagatanazare:button-cleared', { button: current });
+        return;
+      }
+
+      if (injectBtn) {
+        const current = state.currentButton;
+        if (!current) return;
+
+        const detail = {
+          button: current,
+          target: current.dataset.injectTarget || 'symbol-bar',
+          url: current.dataset.url || '',
+          preset: current.dataset.preset || '',
+          mode: current.dataset.mode || ''
+        };
+
+        dispatch('nagatanazare:orb-inject', detail);
+      }
+    });
+
+    document.addEventListener('input', async (e) => {
+      const input = e.target;
+      if (!input.matches?.('#kblx-inp')) return;
+
+      const current = state.currentButton;
+      if (!current) return;
+
+      updatePreview(input.value);
+
+      await updateAttrBtn(current, {
+        url: input.value,
+        save: false,
+        session: true,
+        refresh: true
+      });
+    });
+  }
+
+// cole dentro do script, junto das outras funções
+
+function makeUniqueId(base = 'orb') {
+  const clean = String(base || 'orb')
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '') || 'orb';
+
+  return `${clean}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+}
+
+function cloneCurrentButton(current) {
+  if (!current) return null;
+
+  const clone = current.cloneNode(true);
+  const parent = current.parentElement;
+  if (!parent) return null;
+
+  const newId = makeUniqueId(current.id || current.dataset.storeKey || 'orb');
+  clone.id = newId;
+
+  clone.dataset.storeKey = newId;
+  clone.dataset.url = current.dataset.url || '';
+  clone.dataset.preset = current.dataset.preset || '';
+  clone.dataset.mode = current.dataset.mode || '';
+  clone.dataset.injectTarget = current.dataset.injectTarget || '';
+  clone.dataset.iconUrl = current.dataset.iconUrl || '';
+  clone.dataset.diIconDone = '';
+
+  const label = clone.querySelector('.symbol-label');
+  if (label && current.dataset.title) {
+    label.textContent = current.dataset.title;
+  }
+
+  parent.insertBefore(clone, current.nextSibling);
+
+  paintButton(clone, current.querySelector('.symbol-icon')?.textContent || getAutoIcon(clone.dataset.url || ''));
+
+  const key = storageKeyForBtn(clone);
+  if (key) {
+    const payload = {
+      id: clone.id,
+      url: clone.dataset.url || '',
+      preset: clone.dataset.preset || '',
+      mode: clone.dataset.mode || '',
+      injectTarget: clone.dataset.injectTarget || '',
+      icon: clone.querySelector('.symbol-icon')?.textContent || '',
+      iconUrl: clone.dataset.iconUrl || '',
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    try { sessionStorage.setItem(key, JSON.stringify(payload)); } catch {}
+    try { localStorage.setItem(key, JSON.stringify(payload)); } catch {}
+  }
+
+  dispatch('nagatanazare:button-duplicated', {
+    from: current,
+    to: clone
+  });
+
+  return clone;
+}
+
+function removeCurrentButton(current) {
+  if (!current) return false;
+
+  const key = storageKeyForBtn(current);
+  if (key) {
+    try { sessionStorage.removeItem(key); } catch {}
+    try { localStorage.removeItem(key); } catch {}
+  }
+
+  dispatch('nagatanazare:button-removed', { button: current });
+  current.remove();
+  return true;
+}
+
+  window.NAGATANAZARE = {
+    name: ENGINE_NAME,
+    presets: ORB_PRESETS,
+    openPanel,
+    closePanel,
+    applyPreset,
+    updateAttrBtn,
+    restoreButtons,
+    getCurrentButton: () => state.currentButton
+  };
+
+  function init() {
+    restoreButtons();
+    observeDynamicButtons();
+    bindLongPress();
+    bindPanelUI();
+
+    dispatch('nagatanazare:ready', { engine: ENGINE_NAME });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+<!-- ===== /NAGATANAZARE ===== -->
+
+ 
+
+
+
+
+  <div id="bodyPlayer" data-mode="player" class="min-h-screen w-full flex items-center justify-center relative overflow-hidden">
+
+    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center select-none">
+    
+
+
+
+
+    </div>
+
+    
+
+      </div>
+    
+
+
+
+    <div id="yt-container" class="absolute -left-[9999px]"></div>
+    <div id="sc-container" class="absolute -left-[9999px]"></div>
+    <audio id="local-audio" crossorigin="anonymous"></audio>
+
+    <div id="kodux-widget" data-idle-target="" class="state-ball" style="right: 20px; bottom: 100px;">
+      <div id="content-ball" class="w-full h-full flex items-center justify-center text-[var(--primary)]">
+        <i class="ph-fill ph-vinyl-record animate-spin" style="animation-duration: 4s; font-size: 28px;"></i>
+      </div>
+
+      <div id="content-preview" class="hidden-content w-full h-full flex items-center px-3 gap-3">
+        <img id="prev-cover" src="https://picsum.photos/100" class="w-12 h-12 rounded-full object-cover border border-[var(--primary)] shadow-lg preview-clickable cursor-pointer transition-transform hover:scale-105" onclick="openFullFromPreview(event)">
+        <div class="flex-1 overflow-hidden preview-clickable cursor-pointer" onclick="openFullFromPreview(event)">
+          <h4 id="prev-title" class="text-[11px] font-bold text-white truncate glow-text">Kodux System</h4>
+          <p id="prev-artist" class="text-[9px] text-[var(--muted)] truncate">Aguardando...</p>
+        </div>
+        <button onclick="togglePlay(event)" class="text-white hover:text-[var(--primary)] transition z-10">
+          <i id="prev-play-icon" class="ph-fill ph-play-circle text-4xl"></i>
+        </button>
+      </div>
+
+      <div id="content-footer" class="hidden-content w-full h-full flex flex-col relative">
+        <div class="absolute top-0 left-0 w-full h-1 bg-white/5 cursor-pointer" id="footer-progress-click">
+          <div id="footer-progress-bar" class="h-full bg-[var(--primary)] w-0 shadow-[0_0_10px_var(--primary)]"></div>
+        </div>
+
+        <div class="drag-header flex-1 flex items-center px-6 gap-4">
+          <img id="foot-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl object-cover shadow-xl border border-white/10">
+          <div class="flex-1 overflow-hidden cursor-pointer" onclick="updateWidgetState('full')">
+            <h4 id="foot-title" class="text-sm font-bold text-white truncate">Kodux System</h4>
+            <p id="foot-artist" class="text-xs text-[var(--muted)] truncate">Aguardando...</p>
+          </div>
+          <div class="flex items-center gap-5">
+            <button onclick="playPrev(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-back text-2xl"></i></button>
+            <button onclick="togglePlay(event)" class="text-white hover:scale-110 transition"><i id="foot-play-icon" class="ph-fill ph-play-circle text-5xl"></i></button>
+            <button onclick="playNext(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-forward text-2xl"></i></button>
+            <button onclick="collapseToBall(event)" class="text-[var(--muted)] ml-2"><i class="ph ph-minus-circle text-2xl"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div id="content-full" class="hidden-content flex flex-col w-full h-full relative">
+        <div class="drag-header w-full p-5 flex justify-between items-center bg-white/5 border-b border-white/5">
+          <div class="flex items-center gap-3">
+            <i class="ph-fill ph-lightning text-[var(--primary)] text-xl"></i>
+            <span class="text-sm font-black tracking-widest glow-text">ORÁCULO DUAL</span>
+          </div>
+          <button onclick="collapseToBall(event)" class="text-[var(--muted)] hover:text-white p-2 bg-white/5 rounded-lg">
+            <i class="ph ph-caret-down-bold"></i>
+          </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-5 pb-36 soft-scroll">
+          <div class="mb-4">
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 soft-scroll" id="playlist-tabs"></div>
+          </div>
+
+          <div class="flex gap-2 mb-4">
+            <div class="flex-1 relative">
+              <i class="ph ph-link absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
+              <input type="text" id="link-input" placeholder="YouTube ou SoundCloud link" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
+            </div>
+            <select id="destination-select" class="glass-select rounded-xl px-3 text-xs min-w-[135px]">
+              <option value="all">Todas</option>
+            </select>
+            <button onclick="addLink()" class="btn-primary px-4 rounded-xl shadow-lg">
+              <i class="ph ph-plus-bold"></i>
+            </button>
+          </div>
+
+          <div class="flex gap-2 mb-4 items-center">
+            <div class="flex-1 relative">
+              <i class="ph ph-folder-simple absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
+              <input type="text" id="new-playlist-input" placeholder="Criar nova playlist" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
+            </div>
+            <button onclick="createPlaylist()" class="btn-primary px-4 rounded-xl shadow-lg">
+              <i class="ph ph-folder-plus"></i>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-sm font-bold text-white">Playlists carregadas</h3>
+              <p class="text-[10px] text-[var(--muted)]">Toque para trocar de grupo, criar, remover ou organizar.</p>
+            </div>
+          </div>
+
+          <div id="playlist-container" class="flex flex-col gap-3"></div>
+        </div>
+
+        <div class="absolute bottom-0 left-0 w-full bg-black/80 backdrop-blur-xl border-t border-[var(--primary)] p-6">
+          <input type="range" id="main-progress" min="0" max="100" value="0" class="w-full mb-4">
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4 overflow-hidden">
+              <img id="main-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl border border-white/20 object-cover">
+              <div class="overflow-hidden">
+                <h4 id="main-title" class="text-sm font-bold text-white truncate">Oráculo</h4>
+                <p id="main-artist" class="text-[10px] text-[var(--muted)] truncate">Sistema KODUX v2.5</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-5 shrink-0">
+              <button onclick="playPrev()" class="text-white text-2xl"><i class="ph-fill ph-skip-back"></i></button>
+              <button onclick="togglePlay()" class="w-14 h-14 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_20px_var(--primary)]">
+                <i id="main-play-icon" class="ph-fill ph-play text-3xl ml-1"></i>
+              </button>
+              <button onclick="playNext()" class="text-white text-2xl"><i class="ph-fill ph-skip-forward"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
+  
+  <script>
     (() => {
       const bodyPlayer = document.getElementById('bodyPlayer');
       const idleSelector = '.kob-tts-dock, #kodux-widget, [data-idle-target]';
@@ -918,39 +2104,45 @@
     
   </script>
 
-<style>
-  .kodux-widget{
-    position: absolute;
-    right: 20px;
-    bottom: 100px;
-    z-index: var(--z-widget);
-    width: 84px;
-    height: 84px;
-    pointer-events: auto;
-    touch-action: none;
-    user-select: none;
-    transition: transform .35s ease, opacity .65s ease;
-    will-change: transform, opacity;
-  }
+<script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/@phosphor-icons/web"></script><script src="https://w.soundcloud.com/player/api.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script><script>
+    (() => {
+      const bodyPlayer = document.getElementById('bodyPlayer');
+      const idleSelector = '.kob-tts-dock, #kodux-widget, [data-idle-target]';
+      let idleTimer = null;
 
-  .kodux-widget.idle{
-    opacity: .18;
-    transform: scale(.78);
-z-index:-10;
-  }
+      function getIdleTargets() {
+        return document.querySelectorAll(idleSelector);
+      }
 
-  .kodux-widget:hover{
-    opacity: 1;
-    transform: scale(.871);
+      function setIdleState(isIdle) {
+        getIdleTargets().forEach(el => el.classList.toggle('idle', isIdle));
+      }
 
-z-index:0;
+      function resetIdle() {
+        setIdleState(false);
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => setIdleState(true), 1870);
+      }
 
-  }
+      function setMode(mode = 'player') {
+        if (!bodyPlayer) return;
+        bodyPlayer.dataset.mode = mode;
+      }
 
-  #kodux-widget .orb{
-    width: 100%;
-    height: 100%;
-  }
-</style>
+      window.KoduxShell = {
+        setMode,
+        resetIdle
+      };
 
-</body></html>
+      ['pointerdown', 'pointermove', 'touchstart', 'mousemove', 'scroll'].forEach(ev => {
+        document.addEventListener(ev, resetIdle, { passive: true });
+      });
+
+      document.addEventListener('keydown', resetIdle);
+
+      setMode(bodyPlayer?.dataset.mode || 'player');
+      resetIdle();
+    })();
+
+    
+  </script></body></html>

@@ -1,0 +1,36 @@
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+
+/* ===== FIX STACK ORDER ===== */
+
+#libCard{
+  position:absolute !important;
+
+  top:92px;
+  right:0;
+
+  z-index:1 !important;
+
+  opacity:.92;
+
+  pointer-events:auto;
+}
+
+.copycard,
+.win-frame,
+.response-container,
+iframe,
+.overlay,
+#motorDock{
+  position:relative;
+  z-index:20 !important;
+  isolation:isolate;
+}
+
+      </style>

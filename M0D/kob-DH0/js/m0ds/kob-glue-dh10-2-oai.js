@@ -82,10 +82,10 @@
   {
     id:'kobllux',
     name:'KOBLLUX',
-    voice:'Reed',
+    voice:'Luciana',
     lang:'pt-BR',
     rate:0.98,
-    pitch:0.48,
+    pitch:0.39,
     color:'#22D3EE',
     theme:{
       primary:'#22D3EE',
@@ -98,10 +98,10 @@
   {
     id:'kodux',
     name:'KODUX',
-    voice:'Reed',
+    voice:'Rocko',
     lang:'pt-BR',
     rate:0.86,
-    pitch:0.68,
+    pitch:0.18,
     color:'#F97316',
     theme:{
       primary:'#F97316',
@@ -117,7 +117,7 @@
     voice:'Reed',
     lang:'en-US',
     rate:1.00,
-    pitch:0.93,
+    pitch:0.87,
     color:'#78e3ff',
     theme:{
       primary:'#78e3ff',
@@ -133,7 +133,7 @@
     voice:'Luciana',
     lang:'pt-BR',
     rate:1.06,
-    pitch:1.34,
+    pitch:1.39,
     color:'#ff6b6b',
     theme:{
       primary:'#ff6b6b',
@@ -149,7 +149,7 @@
     voice:'Rocko',
     lang:'pt-BR',
     rate:0.96,
-    pitch:1.42,
+    pitch:1.39,
     color:'#4ecdc4',
     theme:{
       primary:'#4ecdc4',
@@ -165,7 +165,7 @@
     voice:'Reed',
     lang:'pt-BR',
     rate:1.00,
-    pitch:1.14,
+    pitch:1.87,
     color:'#a8e6cf',
     theme:{
       primary:'#a8e6cf',
@@ -245,7 +245,7 @@
     voice:'Flo',
     lang:'fr-FR',
     rate:1.03,
-    pitch:1.55,
+    pitch:1.78,
     color:'#f9f3b2',
     theme:{
       primary:'#f9f3b2',
@@ -261,7 +261,7 @@
     voice:'Satu',
     lang:'fi-FI',
     rate:0.99,
-    pitch:0.87,
+    pitch:0.78,
     color:'#ffb347',
     theme:{
       primary:'#ffb347',
@@ -277,7 +277,7 @@
     voice:'Alice',
     lang:'it-IT',
     rate:1.02,
-    pitch:0.59,
+    pitch:0.45,
     color:'#b5eaea',
     theme:{
       primary:'#b5eaea',
@@ -309,7 +309,7 @@
     voice:'Grandma',
     lang:'en-US',
     rate:0.90,
-    pitch:0.93,
+    pitch:0.13,
     color:'#f97316',
     theme:{
       primary:'#f97316',
@@ -322,7 +322,7 @@
   {
     id:'dual',
     name:'DUAL',
-    voice:'Reed',
+    voice:'Luciana',
     lang:'pt-BR',
     rate:1.02,
     pitch:1.02,
@@ -341,7 +341,7 @@
     voice:'Sandy',
     lang:'en-US',
     rate:1.04,
-    pitch:1.04,
+    pitch:0.33,
     color:'#ec4899',
     theme:{
       primary:'#ec4899',
@@ -372,8 +372,8 @@
     name:'HORUS',
     voice:'Majed',
     lang:'ar-001',
-    rate:0.94,
-    pitch:0.82,
+    rate:1.24,
+    pitch:0.72,
     color:'#f59e0b',
     theme:{
       primary:'#f59e0b',

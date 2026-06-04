@@ -1,0 +1,1743 @@
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <title>Fusion Card // Core Controller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="manifest" href="manifest.json"> <meta name="theme-color" content="#05070a"> <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main-v0.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual-KxT-di_oi/css/main.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/DH10.css">
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-LVb.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-DH10r.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-root.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-hud.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><style>
+    :root {
+      /* Z-index base */
+      --z-base: 0;
+      --z-content: 100;
+      --z-widget: 500;
+      --z-overlay: 1000;
+      --z-system: 5000;
+      
+      /* Orb settings */
+      --orb-speed: 7.8s;
+      --kob-voice-primary: #78e3ff;
+      --kob-voice-secondary: #b978ff;
+      --kob-voice-accent: #ffffff;
+    }
+
+    /* Estilos do #root - Background reativo às variáveis de voz */
+    #root {
+      min-height: 100vh;
+      width: 100%;
+      background-color: #0b0c10; /* Fundo escuro base */
+      background-image: 
+        radial-gradient(circle at 10% 50%, color-mix(in srgb, var(--kob-voice-primary) 12%, transparent) 0%, transparent 60%),
+        radial-gradient(circle at 90% 50%, color-mix(in srgb, var(--kob-voice-secondary) 12%, transparent) 0%, transparent 60%);
+      background-attachment: fixed;
+      transition: background-image 0.5s ease;
+    }
+
+    /* Container do ORB no botão de arquétipo */
+    .orb-microphone-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    /* Mini orb adaptado para caber no botão */
+    .tts-orb-mini {
+        width: 28px;
+        height: 28px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .orb {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        position: relative;
+        display: grid;
+        place-items: center;
+        transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .orb-core {
+        width: 98%;
+        height: 98%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, var(--kob-voice-accent) 0%, rgba(255,255,255,0.1) 10%, transparent 60%),
+                    radial-gradient(circle at 70% 70%, var(--kob-voice-primary) 0%, var(--kob-voice-secondary) 100%);
+        box-shadow: 0 0 15px var(--kob-voice-primary);
+        animation: orbSpin var(--orb-speed) linear infinite;
+    }
+
+    @keyframes orbSpin { 
+        to { transform: rotate(360deg); } 
+    }
+
+    /* Estado de fala (ativo) */
+    .speaking .orb-core {
+        animation: orbSpin 2s linear infinite, orbPulse 0.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes orbPulse { 
+        from { transform: scale(1); } 
+        to { transform: scale(1.15); } 
+    }
+
+    /* Indicador de voz original agora integrado ao orb */
+    .voice-indicator {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--kob-voice-primary, #4caf50);
+        box-shadow: 0 0 8px var(--kob-voice-primary, #4caf50);
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+
+    .voice-indicator.muted {
+        background: #f44336;
+        box-shadow: 0 0 8px #f44336;
+    }
+
+    /* Ajuste no botão para acomodar o orb */
+    #btn-arch {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        overflow: visible;
+    }
+  </style>
+
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><style>
+    /* ===== VARIÁVEIS ===== */
+    :root {
+      --kob-voice-primary: #78e3ff;
+      --kob-voice-secondary: #b978ff;
+      --arch-color: var(--kob-voice-primary);
+      --arch-glow: color-mix(in srgb, var(--arch-color) 25%, transparent);
+      --panel-bg: rgba(11, 15, 24, 0.75);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #f0f3f9;
+      --text-muted: #9aa4c8;
+      --bg-dark: #05070a;
+      --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+      --orb-speed: 7.8s;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      height: 100vh;
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Fundo */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    #arch-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(circle at 50% 30%, var(--arch-glow), transparent 70%);
+      transition: background 1.2s;
+      pointer-events: none;
+    }
+
+    /* Main */
+    main {
+      position: relative;
+      flex: 1;
+      z-index: 10;
+      overflow: auto;
+      padding: 24px 24px 80px;
+    }
+
+    .view {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .view.active { display: flex; }
+
+    /* Cards */
+    .card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 20px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    /* Arquétipos */
+    .arch-hero {
+      text-align: center;
+      padding: 30px 0;
+    }
+    .arch-symbol {
+      font-size: 4rem;
+      text-shadow: 0 0 30px var(--arch-color);
+      animation: float 6s infinite;
+      display: block;
+    }
+    .arch-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.2rem;
+      background: linear-gradient(180deg, #fff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @keyframes float { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-12px); } }
+
+    .arch-selector-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 10px 4px;
+      scrollbar-width: none;
+    }
+    .arch-chip {
+      flex-shrink: 0;
+      padding: 10px 20px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .arch-chip.active {
+      background: var(--arch-color);
+      color: #000;
+      box-shadow: 0 0 20px var(--arch-glow);
+    }
+
+    /* HUD Flutuante
+    .symbol-bar {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1000;
+      background: var(--panel-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    } */
+
+.symbol-bar {
+      position: fixed;
+background: var(--panel-bg);
+      backdrop-filter: blur(15px);
+     
+  
+    .symbol-button {
+      width: 29px;
+      height: 29px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .symbol-button:hover {
+      border-color: var(--arch-color);
+      box-shadow: 0 0 10px var(--arch-glow);
+    }
+    .orb-container {
+      width: 40px;
+      height: 40px;
+      position: relative;
+    }
+    .orb-core {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff 0%, transparent 60%),
+                  radial-gradient(circle at 70% 70%, var(--arch-color) 0%, #000 100%);
+      box-shadow: 0 0 15px var(--arch-color);
+      animation: spin var(--orb-speed) linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Fusion Card */
+    .fusion-card .card-header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .avatar-slot {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: color-mix(in srgb, var(--arch-color) 40%, black);
+      border: 2px solid var(--arch-color);
+      margin-right: 12px;
+    }
+    .glass-input {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      padding: 14px;
+      border-radius: 14px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .activation-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .activation-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s;
+    }
+    .activation-content.open { max-height: 500px; padding: 10px 0; }
+    .trigger-btn {
+      background: var(--arch-color);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    /* Chat */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 300px;
+      overflow-y: auto;
+    }
+  </style><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><style id="symbolbar-full-override">
+/* ---------------------------
+   Base drag + visual tweaks
+   --------------------------- */
+.symbol-bar {
+  position: fixed !important;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 42px;
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    rgba(8,10,18,0.66);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 30%, transparent);
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.65),
+    inset 0 0 12px rgba(255,255,255,0.03),
+    0 0 18px color-mix(in srgb, var(--kob-voice-primary) 22%, transparent);
+
+  transition: transform .28s cubic-bezier(.23,1,.32,1), opacity .45s ease, box-shadow .28s ease;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+/* Idle & Hover keep from original design but allow JS override */
+.symbol-bar.idle { opacity:.14; transform: translateY(-50%) scale(.88); filter:grayscale(.4) brightness(.8); }
+.symbol-bar:hover { transform: translateY(-50%) scale(1.05); }
+
+/* While dragging: remove transitions and lift */
+.symbol-bar.dragging {
+  transition: none !important;
+  transform: none !important;
+  cursor: grabbing;
+  z-index: 10001 !important;
+  box-shadow:
+    0 30px 70px rgba(0,0,0,0.75),
+    inset 0 0 18px rgba(255,255,255,0.04),
+    0 0 40px color-mix(in srgb,var(--kob-voice-primary) 40%, transparent);
+}
+
+/* Horizontal layout when docked at top */
+.symbol-bar.horizontal {
+  flex-direction: row;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 28px;
+  transform-origin: top center;
+}
+
+/* Small visual indicator when connected to another dock */
+.symbol-bar.connected {
+  outline: 1px dashed color-mix(in srgb,var(--kob-voice-primary) 35%, transparent);
+  outline-offset: 6px;
+}
+
+/* Snap animation (released)
+   kept subtle so it doesn't conflict with dragging */
+.symbol-bar.snap {
+  transition: left .22s cubic-bezier(.2,.9,.3,1), top .22s cubic-bezier(.2,.9,.3,1), transform .22s ease;
+}
+
+/* Floating buttons adjustments (so they look good in horizontal mode) */
+.symbol-bar.horizontal .symbol-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+/* Orb tweaks */
+.symbol-bar .orb-mini { width: 26px; height: 26px; }
+
+/* Tiny helper for the "magnet" preview during drag */
+.symbol-bar .magnet-halo {
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .16s ease;
+}
+.symbol-bar.magnet-preview .magnet-halo { opacity: 1; background: linear-gradient(90deg, transparent, color-mix(in srgb,var(--kob-voice-primary) 20%, transparent)); filter: blur(8px); }
+
+/* Responsive constraint so docks never go completely off-screen */
+.symbol-bar[data-keep-inside="true"] { max-width: calc(100vw - 12px); }
+</style><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><style>
+  /* KODUX: estilos base dos widgets (usa suas variáveis de arquétipo) */
+  .di-widget {
+    position: fixed;
+    min-width: 320px;
+    width: 420px;
+    max-width: 92vw;
+    min-height: 120px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--kob-voice-primary) 10%, transparent), rgba(0,0,0,0.4));
+    border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 20%, transparent);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.6), 0 0 28px color-mix(in srgb, var(--kob-voice-primary) 18%, transparent);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    z-index: 6000; /* KODUX */
+    color: var(--text);
+    display:flex;
+    flex-direction:column;
+    resize: both;
+  }
+
+  .di-widget .di-header {
+    display:flex;
+    gap:8px;
+    align-items:center;
+    padding:8px 10px;
+    cursor:grab;
+    user-select:none;
+    background: linear-gradient(0deg, rgba(255,255,255,0.02), transparent);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .di-widget .di-title { font-weight:600; font-size:13px; letter-spacing:.04em; flex:1; }
+  .di-widget .di-controls { display:flex; gap:6px; }
+  .di-widget .di-controls button {
+    border: none; background: transparent; color:var(--ink); padding:6px; border-radius:8px; cursor:pointer;
+  }
+  .di-widget .di-body { padding:12px; font-size:14px; flex:1; overflow:auto; }
+
+  /* small footer info */
+  .di-widget .di-footer { padding:8px 10px; font-size:12px; color:var(--muted); border-top:1px solid rgba(255,255,255,0.02); }
+
+  /* symbol-bar mini-button */
+  .symbol-button.spawn-btn {
+    width:44px; height:44px; border-radius:10px; display:grid; place-items:center; cursor:pointer;
+    background:linear-gradient(180deg, var(--kob-voice-primary), color-mix(in srgb,var(--kob-voice-secondary) 12%, transparent));
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+    color: #081018; font-weight:700;
+  }
+
+  /* responsive clamp */
+  @media (max-width:720px){
+    .di-widget{ width:92vw; left:4vw !important; right:auto !important; }
+  }
+</style></head><body><div id="root">
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
+
+<div class="wrap">
+  <div class="content">
+    <iframe id="frame" src="about:blank"></iframe>
+    <div id="kob-tts-outline"></div>
+  </div>
+
+  <!-- HUD Inteligente -->
+  <div class="symbol-bar floating" id="symbolBar">
+    
+    <!-- Botão Menu -->
+    <div class="toggle-wrap">
+      <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+    </div>
+
+    <!-- Controles de Navegação de Leitura -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
+    </div>
+
+    <!-- Troca de Arquétipo com ORB integrado (Sempre visível) -->
+    <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+      <div class="orb-microphone-container">
+        <div class="tts-orb-mini">
+          <div class="orb" id="main-orb">
+            <div class="orb-core"></div>
+          </div>
+        </div>
+<!--
+        <div class="voice-indicator" id="voiceIndicator"></div> -->
+
+      </div>
+    </button>
+
+    <!-- Outros atalhos -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="phi" data-url="about:blank">Φ</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/">꩜</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
+    </div>
+
+    <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+   <!-- Ambient Blobs (inline vars applied) -->
+    <div class="ambient-light" style="
+           --ambient-primary:var(--kob-voice-primary);
+           --ambient-secondary:var(--kob-voice-secondary);
+           --ambient-accent:var(--kob-voice-accent);
+         ">
+      <div class="blob blob-1" style="
+             --blob-color:var(--ambient-primary);
+             --blob-glow:var(--ambient-secondary);
+           "></div>
+
+      <div class="blob blob-2" style="
+             --blob-color:var(--ambient-secondary);
+             --blob-glow:var(--ambient-primary);
+           "></div>
+    </div>
+
+    <!-- Snap zone -->
+    <div id="snap-zone" style="
+           --snap-highlight:var(--kob-voice-primary);
+           --snap-glow:var(--kob-voice-secondary);
+         "></div>
+
+    <!-- Toaster (toasts) -->
+    <div class="toaster-wrap" id="toasterWrap" style="
+           --toast-bg: rgba(10,12,20,0.92);
+           --toast-border: color-mix(in srgb, var(--kob-voice-primary) 40%, transparent);
+           --toast-accent: var(--kob-voice-primary);
+         "></div>
+
+    <!-- CONTAINER PARA CENTRALIZAR INICIALMENTE -->
+    <div class="container" style="
+           --container-accent:var(--kob-voice-primary);
+           --container-glow:var(--kob-voice-secondary);
+         ">
+      <div class="fusion-card closed" id="mainCard" style="
+             --card-primary:var(--kob-voice-primary);
+             --card-secondary:var(--kob-voice-secondary);
+             --card-accent:var(--kob-voice-accent);
+           ">
+
+        <div class="card-header" id="cardHeader" style="
+               --header-accent:var(--kob-voice-primary);
+               --header-glow:var(--kob-voice-secondary);
+             ">
+          <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)" style="
+                 --avatar-ring:var(--kob-voice-primary);
+                 --avatar-glow:var(--kob-voice-secondary);
+               "></div>
+
+          <div class="text-block" style="--text-accent:var(--kob-voice-primary);">
+            <div class="greeting-row">
+              <span class="txt-thin" id="lblHello">Oi,</span>
+              <span class="txt-heavy" id="lblName">Convidado</span>
+            </div>
+            <div class="brand-dual">DUAL</div>
+          </div>
+
+          <div class="clock-widget" style="
+                 --clock-accent:var(--kob-voice-primary);
+                 --clock-glow:var(--kob-voice-secondary);
+               ">
+            <div class="time-display" id="clockTime" style="color:var(--clock-accent);">00:00</div>
+            <span class="status-led" style="background:var(--clock-accent); box-shadow:0 0 8px var(--clock-accent);">ONLINE</span>
+          </div>
+
+          <button class="hud-menu-btn" id="hudMenuBtn" title="Menu Rápido" style="
+                    --btn-accent:var(--kob-voice-primary);
+                    --btn-glow:var(--kob-voice-secondary);
+                  ">
+            <i data-lucide="menu"></i>
+          </button>
+        </div>
+
+        <div class="orb-menu-trigger" id="orbMenuTrigger" title="Menu Rápido">●●●</div>
+        <div class="drag-handle"></div>
+
+        <div class="small-preview" id="smallPreview" title="Gerenciar Chaves" style="
+               --preview-accent:var(--kob-voice-primary);
+               --preview-glow:var(--kob-voice-secondary);
+             ">
+          <div class="mini-avatar" id="smallMiniAvatar" style="--mini-avatar-ring:var(--kob-voice-primary);"></div>
+          <div class="small-text" id="smallText" style="color:var(--kob-voice-accent);">Aguardando ativação...</div>
+          <div class="ident-badge" id="smallIdent" style="color:var(--kob-voice-primary);">--</div>
+        </div>
+
+        <div class="card-body" id="cardBody">
+          <!-- Main Input User -->
+          <div class="input-wrapper stagger-item">
+            <input type="text" class="cyber-input" id="inputUser" placeholder="Identifique-se..." autocomplete="off">
+          </div>
+
+          <!-- Section 1: ASCII Activation -->
+          <div class="activation-wrap stagger-item">
+            <div class="activation-toggle" onclick="toggleSection('activationCard')">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-cyan)"></div>
+                <strong style="letter-spacing:1px;font-size:0.9rem">Ativação ASCII</strong>
+              </div>
+              <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">BASE v1</div>
+            </div>
+            <div id="activationCard" class="activation-card activation-hidden">
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div class="mini-avatar" id="actMiniAvatar"></div>
+                  <div><div style="font-weight:700">CÉREBRO</div><div style="font-size:0.78rem;opacity:0.6"><span id="actName">User</span></div></div>
+                </div>
+                <div class="activation-badge" id="actBadge" style="margin-left:auto; color:var(--neon-cyan); font-size:0.8em">v:--</div>
+              </div>
+              <pre id="actPre" class="activation-pre">Carregando...</pre>
+              <div class="activation-controls" style="display:flex;gap:8px;margin-top:8px">
+                <button class="trigger-btn" id="copyActBtn">COPIAR</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: System & Neural (Config) -->
+          <div class="activation-wrap stagger-item">
+            <div class="activation-toggle" onclick="toggleSection('systemCard')">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div>
+                <strong style="letter-spacing:1px;font-size:0.9rem">SYSTEM &amp; NEURAL</strong>
+              </div>
+              <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">CONFIG</div>
+            </div>
+            <div id="systemCard" class="activation-card activation-hidden">
+              <div class="col">
+                <div class="section-title">IDENTIDADE DA INFODOSE</div>
+                <input type="text" id="infodoseNameInput" placeholder="Nome: World System..." style="width:100%;margin-bottom:8px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div>
+                <input type="password" id="apiKeyInput" placeholder="sk-or-..." autocomplete="off" style="width:100%;margin-bottom:6px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                <div class="model-toggle">
+                  <select id="modelSelect" class="btn">
+                    <option value="" disabled="">Selecione Modelo</option>
+                    <option value="nvidia/nemotron-3-nano-30b-a3b:free">NemoTron (Free)</option>
+                    <option value="allenai/molmo-2-8b:free">MolMo (Free)</option>
+                    <option value="mistralai/devstral-2512:free">DevStral</option>
+                    <option value="openai/gpt-oss-120b:free">OSS120b</option>
+                  </select>
+                </div>
+                <div class="panel-divider" style="margin:10px 0; border-top:1px solid rgba(255,255,255,0.05)"></div>
+                <button id="saveSystemBtn" class="trigger-btn" style="margin-top:12px;background:var(--neon-cyan);color:#000;border:none;font-weight:700">SALVAR CONFIGURAÇÃO</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="stagger-item" style="margin-top:4px">
+            <div class="stat-lbl" style="margin-bottom:6px; font-size:0.6rem; color:rgba(255,255,255,0.4)">INTERFACE MODE</div>
+            <div style="display:flex; gap:8px;">
+              <button class="trigger-btn mode-btn active-mode" id="btnModeCard" onclick="setMode('card')" style="flex:1" title="Modo Padrão">CARD</button>
+              <button class="trigger-btn mode-btn" id="btnModeOrb" onclick="setMode('orb')" style="flex:1" title="Flutuante">ORB</button>
+              <button class="trigger-btn mode-btn" id="btnModeHud" onclick="setMode('hud')" style="flex:1" title="Barra de Topo">HUD</button>
+            </div>
+          </div>
+
+        </div> <!-- card-body -->
+      </div> <!-- fusion-card -->
+    </div> <!-- container -->
+
+    <!-- KEYS MANAGER MODAL -->
+    <div id="keysModal" class="modal-overlay" aria-hidden="true">
+      <div class="keys-card" role="dialog">
+        <div class="keys-header">
+          <div>
+            <div id="keysTitle" style="font-weight:800;font-size:1.1rem;color:var(--neon-cyan)">USER KEYS MANAGER</div>
+            <div style="color:rgba(255,255,255,0.6);font-size:0.85rem">Gerencie suas chaves API com segurança local (Cofre).</div>
+          </div>
+          <button id="closeKeysBtn" class="small-btn">X</button>
+        </div>
+        <div class="key-list" id="keyList"></div>
+        <div class="form-section" style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.05)">
+          <div class="form-grid">
+            <input id="keyNameInput" placeholder="Nome da chave (ex: Principal)">
+            <input id="keyTokenInput" type="password" placeholder="Token / ESK (Opcional)">
+          </div>
+          <button id="addKeyBtn" class="small-btn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.1)">ADICIONAR CHAVE</button>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:space-between;margin-top:15px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px">
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px">
+            <i data-lucide="shield-check" style="width:14px"></i> <span id="vaultStatusText">Cofre Aberto</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button id="lockVaultBtn" class="small-btn danger">BLOQUEAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VAULT UNLOCK MODAL -->
+    <div id="vaultModal" class="modal-overlay" aria-hidden="true">
+      <div class="keys-card">
+        <div class="vault-icon"><i data-lucide="lock" style="width:24px;height:24px"></i></div>
+        <h3 style="margin:0 0 10px 0;font-weight:800">ACESSO AO COFRE</h3>
+        <p style="margin:0 0 15px 0;font-size:0.9rem;color:rgba(255,255,255,0.6)">Seus dados estão criptografados. Digite a senha para desbloquear.</p>
+        <input type="password" id="vaultPassInput" class="cyber-input" style="text-align:center;margin-bottom:12px" placeholder="Senha...">
+        <div style="display:flex;gap:8px;justify-content:center">
+          <button id="vaultCancelBtn" class="small-btn">Cancelar</button>
+          <button id="vaultUnlockBtn" class="small-btn active-btn">DESBLOQUEAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- cleanup / helper scripts -->
+    <script>
+      // small helper: dispatch kob:sync-vars to force re-sync from root into inline placeholders
+      // usage: window.dispatchEvent(new Event('kob:sync-vars'));
+    </script>
+  
+
+
+<script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+<!--
+<script type="module" src="https://kodux78k.github.io/oi-Dual/js/main.js"></script>
+<script src="https://kodux78k.github.io/oi-Dual/DH0-insert.js"></script>
+
+<script src="https://kodux78k.github.io/oi-Dual/kxt-insert.js"></script>
+
+
+-->
+
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+<style> 
+
+/* estado normal */
+.kob-tts-dock{
+  transition: transform .35s ease, opacity .65s ease;
+}
+
+/* quase invisível */
+.kob-tts-dock.idle{
+  opacity: .18;
+  transform: scale(.92);
+}
+
+/* quando passa o dedo ou mouse */
+.kob-tts-dock:hover{
+  opacity: 1;
+  transform: scale(1);
+}
+
+.kob-tts-dock{
+
+ 
+  box-shadow:none !important;
+}</style>
+
+
+
+<script>
+
+const dock = document.querySelector('.kob-tts-dock');
+
+let idleTimer;
+
+function resetIdle(){
+  dock.classList.remove('idle');
+
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(()=>{
+    dock.classList.add('idle');
+  }, 1870); // 1870  mili segundos parado
+}
+
+/* eventos que despertam o dock */
+['pointerdown','pointermove','touchstart','mousemove']
+.forEach(ev=>{
+  document.addEventListener(ev, resetIdle, {passive:true});
+});
+
+resetIdle();
+</script>
+
+
+
+
+  <canvas id="bg-canvas"></canvas>
+  <div id="arch-overlay"></div>
+
+  <main>
+    <!-- HOME -->
+    <section id="v-home" class="view active">
+      <div class="arch-hero">
+        <span class="arch-symbol" id="heroSymbol">♔</span>
+        <h1 class="arch-name" id="heroName">ATLAS</h1>
+        <p style="opacity:0.6;">SYSTEM RESONANCE ACTIVE</p>
+      </div>
+      <div class="arch-selector-row" id="archSelector"></div>
+
+      <!-- Fusion Card -->
+      <div class="fusion-card card">
+        <div class="card-header">
+          <div class="avatar-slot"></div>
+          <div class="text-block">
+            <div><span>Oi,</span> <strong id="lblName">Convidado</strong></div>
+            <div class="brand-dual" style="font-size:0.7rem;">DUAL</div>
+          </div>
+          <div style="margin-left:auto; text-align:right;">
+            <div id="clockTime">00:00</div>
+            <span class="status-led" style="font-size:0.6rem; background:var(--arch-color); color:#000; padding:2px 6px; border-radius:10px;">ONLINE</span>
+          </div>
+        </div>
+        <div style="padding:20px;">
+          <input type="text" class="glass-input" id="inputUser" placeholder="Identifique-se...">
+          <!-- Seções simplificadas -->
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAT -->
+    <section id="v-chat" class="view">
+      <h2>COMUNICAÇÃO</h2>
+      <div class="card">
+        <div class="chat-container" id="chatMessages">
+          <div class="card" style="align-self:flex-start;">Olá. Como posso auxiliar?</div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <input type="text" class="glass-input" id="msgInput" placeholder="Comando neural...">
+          <button class="symbol-button" id="sendBtn" style="border-radius:14px;">➤</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CÉREBRO -->
+    <section id="v-brain" class="view">
+      <h2>CÉREBRO</h2>
+      <div class="card">
+        <input type="text" id="userName" class="glass-input" placeholder="Nome" value="">
+        <input type="password" id="userKey" class="glass-input" placeholder="Chave OpenRouter" style="margin-top:10px;">
+        <button id="saveSettings" class="trigger-btn" style="margin-top:15px;">ATUALIZAR CORE</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- HUD --
+  <div class="symbol-bar">
+    <button class="symbol-button" id="btn-arch" title="Arquétipo">
+      <div class="orb-container">
+        <div class="orb-core"></div>
+      </div>
+    </button>
+    <button class="symbol-button" onclick="navToView('home')">⌂</button>
+    <button class="symbol-button" onclick="navToView('chat')">✉</button>
+    <button class="symbol-button" onclick="navToView('brain')">⚙</button>
+    <div class="hud-info" id="hudStatus" style="font-size:10px; color:var(--arch-color); text-align:center;">ATLAS</div>
+
+-->
+
+
+  
+
+ 
+<script src="https://unpkg.com/lucide@latest"></script><script>
+    // ========== DADOS ==========
+    const ARCHETYPES = [
+  // Adicionados no início (sequência da base)
+  { id: 'kobllux', name: 'KOBLLUX', voice: 'Majed',   lang: 'ar-001', rate: 0.98, pitch: 0.48, color: '#22D3EE', symbol: '◈' },
+  { id: 'kodux',   name: 'KODUX',   voice: 'Majed',   lang: 'ar-001', rate: 0.86, pitch: 0.68, color: '#F97316', symbol: '◊' },
+  // Originais (na mesma ordem da sua lista antiga)
+  { id: 'atlas',   name: 'ATLAS',   voice: 'Reed',    lang: 'en-US',  rate: 1.00, pitch: 0.93, color: '#38BDF8', symbol: '♔' },
+  { id: 'nova',    name: 'NOVA',    voice: 'Luciana', lang: 'pt-BR',  rate: 1.06, pitch: 1.34, color: '#F97316', symbol: '✶' },
+  { id: 'vitalis', name: 'VITALIS', voice: 'Rocko',   lang: 'pt-BR',  rate: 0.96, pitch: 1.42, color: '#22C55E', symbol: '⚑' },
+  { id: 'pulse',   name: 'PULSE',   voice: 'Reed',    lang: 'pt-BR',  rate: 1.00, pitch: 1.14, color: '#EC4899', symbol: '♪' },
+  { id: 'artemis', name: 'ARTEMIS', voice: 'Paulina', lang: 'es-MX',  rate: 1.00, pitch: 1.23, color: '#A855F7', symbol: '☥' },
+  { id: 'serena',  name: 'SERENA',  voice: 'Joana',   lang: 'pt-BR',  rate: 0.92, pitch: 0.90, color: '#38BDF8', symbol: '❤' },
+  { id: 'kaos',    name: 'KAOS',    voice: 'Rocko',   lang: 'pt-BR',  rate: 1.09, pitch: 1.28, color: '#FACC15', symbol: '⚡' },
+  { id: 'genus',   name: 'GENUS',   voice: 'Reed',    lang: 'pt-BR',  rate: 0.98, pitch: 1.20, color: '#E5E7EB', symbol: '☯' },
+  { id: 'lumine',  name: 'LUMINE',  voice: 'Flo',     lang: 'fr-FR',  rate: 1.03, pitch: 1.55, color: '#FDE047', symbol: '✧' },
+  // Incluindo SOLUS (existente na base, mas não na sua lista antiga)
+  { id: 'solus',   name: 'SOLUS',   voice: 'Satu',    lang: 'fi-FI',  rate: 0.88, pitch: 0.87, color: '#0EA5E9', symbol: '☀' },
+  { id: 'rhea',    name: 'RHEA',    voice: 'Alice',   lang: 'it-IT',  rate: 1.02, pitch: 0.59, color: '#22C55E', symbol: '⚜' },
+  { id: 'aion',    name: 'AION',    voice: 'Milena',  lang: 'ru-RU',  rate: 0.38, pitch: 1.00, color: '#4F46E5', symbol: '∞' },
+  // Adicionados UNO, DUAL, TRINITY, INFODOSE
+  { id: 'uno',     name: 'UNO',     voice: 'Grandma', lang: 'en-US',  rate: 0.90, pitch: 0.93, color: '#F97316', symbol: 'Ⅰ' },
+  { id: 'dual',    name: 'DUAL',    voice: 'Reed',    lang: 'pt-BR',  rate: 1.02, pitch: 1.02, color: '#06B6D4', symbol: 'Ⅱ' },
+  { id: 'trinity', name: 'TRINITY', voice: 'Sandy',   lang: 'en-US',  rate: 1.04, pitch: 1.04, color: '#EC4899', symbol: 'Ⅲ' },
+  { id: 'infodose',name: 'INFODOSE',voice: 'Luciana', lang: 'pt-BR',  rate: 1.06, pitch: 0.96, color: '#22C55E', symbol: 'ⓘ' },
+  // HORUS (já estava no final da sua lista)
+  { id: 'horus',   name: 'HORUS',   voice: 'Majed',   lang: 'ar-001', rate: 0.94, pitch: 0.82, color: '#F59E0B', symbol: '𓂀' }
+];
+
+    let currentArchIndex = 0;
+
+    // ========== FUNÇÕES ==========
+    function setArchetype(index) {
+      const arch = ARCHETYPES[index];
+      if (!arch) return;
+      document.documentElement.style.setProperty('--arch-color', arch.color);
+      document.documentElement.style.setProperty('--arch-glow', arch.color + '33');
+      document.getElementById('heroSymbol').textContent = arch.symbol;
+      document.getElementById('heroName').textContent = arch.name;
+      document.getElementById('hudStatus').textContent = arch.name;
+      updateChips(index);
+    }
+
+    function updateChips(activeIndex) {
+      const chips = document.querySelectorAll('.arch-chip');
+      chips.forEach((chip, i) => {
+        if (i === activeIndex) chip.classList.add('active');
+        else chip.classList.remove('active');
+      });
+    }
+
+    function renderArchSelector() {
+      const container = document.getElementById('archSelector');
+      container.innerHTML = ARCHETYPES.map((a, i) =>
+        `<div class="arch-chip ${i === currentArchIndex ? 'active' : ''}" onclick="setArchetype(${i})">
+           <span>${a.symbol}</span> ${a.name}
+         </div>`
+      ).join('');
+    }
+
+    window.navToView = (target) => {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('v-' + target).classList.add('active');
+    };
+
+    // Chat
+    function sendMessage() {
+      const inp = document.getElementById('msgInput');
+      if (!inp.value.trim()) return;
+      const chat = document.getElementById('chatMessages');
+      chat.innerHTML += `<div class="card" style="align-self:flex-end; background:var(--arch-glow);">${inp.value}</div>`;
+      inp.value = '';
+      setTimeout(() => {
+        chat.innerHTML += `<div class="card" style="align-self:flex-start;">Processando via ${ARCHETYPES[currentArchIndex].name}...</div>`;
+        chat.scrollTop = chat.scrollHeight;
+      }, 600);
+    }
+
+    // Canvas
+    function initCanvas() {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h;
+      function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+      window.addEventListener('resize', resize);
+      resize();
+
+      const dots = Array.from({ length: 40 }, () => ({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+        r: Math.random() * 2 + 1
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        const color = getComputedStyle(document.documentElement).getPropertyValue('--arch-color').trim();
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.3;
+        dots.forEach(d => {
+          d.x += d.vx; d.y += d.vy;
+          if (d.x < 0 || d.x > w) d.vx *= -1;
+          if (d.y < 0 || d.y > h) d.vy *= -1;
+          ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 2 * Math.PI); ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    // Inicialização
+    window.onload = () => {
+      lucide.createIcons();
+      renderArchSelector();
+      setArchetype(0);
+      initCanvas();
+
+      // Relógio
+      setInterval(() => {
+        const now = new Date();
+        document.getElementById('clockTime').textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      }, 1000);
+
+      // Eventos
+      document.getElementById('sendBtn').addEventListener('click', sendMessage);
+      document.getElementById('msgInput').addEventListener('keypress', (e) => e.key === 'Enter' && sendMessage());
+
+      document.getElementById('btn-arch').addEventListener('click', () => {
+        currentArchIndex = (currentArchIndex + 1) % ARCHETYPES.length;
+        setArchetype(currentArchIndex);
+      });
+
+      document.getElementById('saveSettings').addEventListener('click', () => {
+        localStorage.setItem('di_user', document.getElementById('userName').value);
+        localStorage.setItem('di_key', document.getElementById('userKey').value);
+        alert('Configurações salvas.');
+      });
+
+      // Carregar dados salvos
+      document.getElementById('inputUser').value = localStorage.getItem('di_user') || '';
+      document.getElementById('userName').value = localStorage.getItem('di_user') || '';
+      document.getElementById('userKey').value = localStorage.getItem('di_key') || '';
+    };
+  </script><script id="symbolbar-full-js">
+/* SYMBOL BAR — DRAG / SNAP / CONNECT / PERSISTENCE
+   - Works with multiple .symbol-bar elements.
+   - Saves positions into localStorage key: di_symbol_positions
+   - Behavior:
+       * Drag: pointer events (mouse/touch/stylus)
+       * On release: snap to nearest edge (left/right/top) if within threshold
+       * If snapped to top → add .horizontal layout
+       * If another dock is within connectThreshold → snap adjacent and add .connected
+       * Double-click resets to default (original CSS behavior: right:center)
+*/
+
+(function () {
+  const STORAGE_KEY = 'di_symbol_positions_v1';
+  const SNAP_MARGIN = 72;           // px distance from edge to trigger snap
+  const TOP_THRESHOLD = 80;         // px from top to become horizontal
+  const CONNECT_THRESHOLD = 72;     // px distance between centers to connect
+  const EDGE_PADDING = 12;          // keep docks from touching screen edge directly
+
+  const bars = Array.from(document.querySelectorAll('.symbol-bar'));
+
+  // Initialize: ensure each bar has an id (data-sb-id) and insert magnet halo
+  bars.forEach((bar, idx) => {
+    if (!bar.dataset.sbId) bar.dataset.sbId = `symbolbar_${idx+1}`;
+    if (!bar.querySelector('.magnet-halo')) {
+      const halo = document.createElement('div');
+      halo.className = 'magnet-halo';
+      bar.appendChild(halo);
+    }
+  });
+
+  // Load saved positions
+  const saved = (() => {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
+  })();
+
+  // Apply saved or default positions
+  bars.forEach(bar => {
+    const id = bar.dataset.sbId;
+    const pos = saved[id];
+    // Clear inline positioning if none saved (preserve original CSS)
+    if (pos && typeof pos === 'object') {
+      // Use left/top coordinates
+      bar.style.left = pos.left + 'px';
+      bar.style.top = pos.top + 'px';
+      bar.style.right = 'auto';
+      bar.classList.toggle('horizontal', !!pos.horizontal);
+    } else {
+      // No saved position: leave original CSS. Ensure computed values will be used later.
+    }
+    // make sure the bar respects inside bounds flag (optional)
+    if (!bar.hasAttribute('data-keep-inside')) bar.setAttribute('data-keep-inside', 'true');
+  });
+
+  // Utility helpers
+  function viewport() { return { w: window.innerWidth, h: window.innerHeight }; }
+  function getCenter(el) {
+    const r = el.getBoundingClientRect();
+    return { x: r.left + r.width/2, y: r.top + r.height/2, w: r.width, h: r.height, left: r.left, top: r.top };
+  }
+  function distance(a, b) {
+    const dx = a.x - b.x, dy = a.y - b.y;
+    return Math.sqrt(dx*dx + dy*dy);
+  }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+  // Save function
+  function savePosition(bar) {
+    try {
+      const id = bar.dataset.sbId;
+      const rect = bar.getBoundingClientRect();
+      const pos = { left: Math.round(rect.left), top: Math.round(rect.top), horizontal: bar.classList.contains('horizontal') };
+      const store = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      store[id] = pos;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    } catch (e) { /* ignore */ }
+  }
+
+  // Reset to default (clear stored, remove inline)
+  function resetPosition(bar) {
+    const id = bar.dataset.sbId;
+    const store = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    delete store[id];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    bar.style.left = '';
+    bar.style.top = '';
+    bar.style.right = '18px';
+    bar.style.transform = 'translateY(-50%)';
+    bar.classList.remove('horizontal', 'connected', 'snap', 'dragging', 'magnet-preview');
+  }
+
+  // Snap logic on release
+  function finalizeSnap(bar) {
+    const v = viewport();
+    const rect = bar.getBoundingClientRect();
+    let x = rect.left;
+    let y = rect.top;
+
+    // Snap to left / right if near edges
+    if (rect.left <= SNAP_MARGIN) {
+      x = EDGE_PADDING;
+      bar.classList.remove('horizontal');
+    } else if (rect.right >= v.w - SNAP_MARGIN) {
+      x = v.w - rect.width - EDGE_PADDING;
+      bar.classList.remove('horizontal');
+    }
+
+    // If near top, turn horizontal and snap to top center-ish
+    if (rect.top <= TOP_THRESHOLD) {
+      bar.classList.add('horizontal');
+      // center horizontally near current x but constrained
+      x = clamp(x, EDGE_PADDING, v.w - rect.width - EDGE_PADDING);
+      y = EDGE_PADDING + 6;
+    } else {
+      bar.classList.remove('horizontal');
+      // vertically clamp within viewport
+      y = clamp(y, EDGE_PADDING, v.h - rect.height - EDGE_PADDING);
+    }
+
+    // Inter-dock connect: find nearest other bar within threshold
+    const myCenter = { x: x + rect.width/2, y: y + rect.height/2 };
+    let nearest = null;
+    let nearestDist = Infinity;
+    bars.forEach(other => {
+      if (other === bar) return;
+      const oRect = other.getBoundingClientRect();
+      const oCenter = { x: oRect.left + oRect.width/2, y: oRect.top + oRect.height/2 };
+      const d = distance(myCenter, oCenter);
+      if (d < nearestDist) { nearestDist = d; nearest = other; }
+    });
+
+    if (nearest && nearestDist <= CONNECT_THRESHOLD) {
+      // Snap adjacent to nearest (choose side based on relative X)
+      const oRect = nearest.getBoundingClientRect();
+      // If nearest is top-horizontal, snap below or to side
+      if (nearest.classList.contains('horizontal')) {
+        // place below the nearest
+        x = clamp(oRect.left, EDGE_PADDING, v.w - rect.width - EDGE_PADDING);
+        y = clamp(oRect.top + oRect.height + 8, EDGE_PADDING, v.h - rect.height - EDGE_PADDING);
+      } else {
+        // place to the right or left
+        if (myCenter.x >= oRect.left + oRect.width/2) {
+          // place to right
+          x = clamp(oRect.left + oRect.width + 8, EDGE_PADDING, v.w - rect.width - EDGE_PADDING);
+        } else {
+          // place to left
+          x = clamp(oRect.left - rect.width - 8, EDGE_PADDING, v.w - rect.width - EDGE_PADDING);
+        }
+        // align vertically to nearest
+        y = clamp(oRect.top, EDGE_PADDING, v.h - rect.height - EDGE_PADDING);
+      }
+      // add .connected to both
+      bar.classList.add('connected');
+      nearest.classList.add('connected');
+    } else {
+      // clear connected class on others
+      bars.forEach(b => b.classList.remove('connected'));
+      bar.classList.remove('connected');
+    }
+
+    // Apply final snapped position with smooth transition
+    bar.classList.add('snap');
+    bar.style.left = Math.round(x) + 'px';
+    bar.style.top = Math.round(y) + 'px';
+    bar.style.right = 'auto';
+
+    // small timeout to remove snap class (keeps transition)
+    setTimeout(() => bar.classList.remove('snap'), 300);
+
+    // Save
+    savePosition(bar);
+  }
+
+  // Drag handling
+  bars.forEach(bar => {
+    let dragging = false;
+    let pointerId = null;
+    let startX = 0, startY = 0;
+    let barStartLeft = 0, barStartTop = 0;
+
+    // ensure bar has computed initial left/top if CSS uses right/translateY
+    function ensureAbsoluteCoords() {
+      const rect = bar.getBoundingClientRect();
+      // If style.left is empty, set left from computed rect
+      if (!bar.style.left) {
+        bar.style.left = rect.left + 'px';
+      }
+      if (!bar.style.top) {
+        bar.style.top = rect.top + 'px';
+      }
+      // Remove transform to avoid mixing translateY with left/top during drag
+      bar.style.transform = 'none';
+    }
+
+    function onPointerDown(e) {
+      // left button or touch only
+      if (e.button === 2) return;
+      dragging = true;
+      pointerId = e.pointerId;
+      bar.setPointerCapture(pointerId);
+      bar.classList.add('dragging');
+
+      ensureAbsoluteCoords();
+
+      const rect = bar.getBoundingClientRect();
+      startX = e.clientX;
+      startY = e.clientY;
+      barStartLeft = rect.left;
+      barStartTop = rect.top;
+
+      // Add preview visual
+      bar.classList.add('magnet-preview');
+
+      // small performance friendly move handler via rAF
+      let latest = null;
+      function moveHandler(ev) { latest = ev; }
+      function frame() {
+        if (!dragging) return;
+        if (latest) {
+          const dx = latest.clientX - startX;
+          const dy = latest.clientY - startY;
+          const newLeft = clamp(barStartLeft + dx, EDGE_PADDING - 2000, window.innerWidth - 40); // allow some off-screen during drag then clamp on finalize
+          const newTop = clamp(barStartTop + dy, EDGE_PADDING - 2000, window.innerHeight - 40);
+          bar.style.left = Math.round(newLeft) + 'px';
+          bar.style.top = Math.round(newTop) + 'px';
+          // while dragging, check magnet proximity to other bars and edges
+          checkMagnetPreview(bar);
+          latest = null;
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+
+      // temporary attach move listener
+      bar.addEventListener('pointermove', moveHandler);
+      // attach pointerup/leave on document to ensure release
+      function upHandler(ev) {
+        if (!dragging) return;
+        dragging = false;
+        bar.removeEventListener('pointermove', moveHandler);
+        document.removeEventListener('pointerup', upHandler);
+        finalizeDrag(ev);
+      }
+      document.addEventListener('pointerup', upHandler);
+      // also handle pointercancel
+      function cancelHandler(ev) {
+        if (!dragging) return;
+        dragging = false;
+        bar.removeEventListener('pointermove', moveHandler);
+        document.removeEventListener('pointercancel', cancelHandler);
+        finalizeDrag(ev);
+      }
+      document.addEventListener('pointercancel', cancelHandler);
+    }
+
+    function finalizeDrag(ev) {
+      try {
+        if (pointerId !== null) bar.releasePointerCapture(pointerId);
+      } catch (e) {}
+      bar.classList.remove('dragging');
+      bar.classList.remove('magnet-preview');
+      // finalize snap & connections
+      finalizeSnap(bar);
+    }
+
+    // Magnet preview: visual hint when near edges or other bars
+    function checkMagnetPreview(activeBar) {
+      const r = activeBar.getBoundingClientRect();
+      const v = viewport();
+      const halo = activeBar.querySelector('.magnet-halo');
+      let preview = false;
+
+      // edge proximity
+      if (r.left <= SNAP_MARGIN || r.right >= v.w - SNAP_MARGIN || r.top <= TOP_THRESHOLD) {
+        preview = true;
+      }
+
+      // proximity to other bars
+      for (const other of bars) {
+        if (other === activeBar) continue;
+        const o = other.getBoundingClientRect();
+        const d = distance({ x: r.left + r.width/2, y: r.top + r.height/2 }, { x: o.left + o.width/2, y: o.top + o.height/2 });
+        if (d <= CONNECT_THRESHOLD) { preview = true; break; }
+      }
+
+      activeBar.classList.toggle('magnet-preview', preview);
+      if (halo) halo.style.opacity = preview ? '0.95' : '0';
+    }
+
+    // pointer handlers
+    bar.addEventListener('pointerdown', onPointerDown, { passive: true });
+
+    // double-click to reset position
+    bar.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      resetPosition(bar);
+    });
+
+    // keyboard accessibility: press Escape while focused to cancel dragging & save current
+    bar.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        bar.classList.remove('dragging', 'magnet-preview');
+        finalizeSnap(bar);
+      }
+    });
+
+  }); // end bars.forEach
+
+  // Window resize: ensure bars stay inside viewport
+  window.addEventListener('resize', () => {
+    bars.forEach(bar => {
+      const rect = bar.getBoundingClientRect();
+      const v = viewport();
+      const newLeft = clamp(rect.left, EDGE_PADDING, v.w - rect.width - EDGE_PADDING);
+      const newTop = clamp(rect.top, EDGE_PADDING, v.h - rect.height - EDGE_PADDING);
+      bar.style.left = Math.round(newLeft) + 'px';
+      bar.style.top = Math.round(newTop) + 'px';
+      savePosition(bar);
+    });
+  });
+
+  // Clean up connected classes when user interacts elsewhere
+  document.addEventListener('pointerdown', (ev) => {
+    // if click not on a bar, clear .connected states after small timeout
+    if (!ev.target.closest('.symbol-bar')) {
+      setTimeout(() => bars.forEach(b => b.classList.remove('connected')), 120);
+    }
+  });
+
+  // Expose a small API on window for convenience
+  window.DI_SYMBOL_BAR = {
+    resetAll: function() {
+      bars.forEach(b => resetPosition(b));
+    },
+    saveAll: function() {
+      bars.forEach(b => savePosition(b));
+    },
+    getState: function() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
+    }
+  };
+
+  // Finalize: ensure all bars have sensible positions (clamped)
+  setTimeout(() => {
+    bars.forEach(bar => {
+      const rect = bar.getBoundingClientRect();
+      // if no inline left/top, leave as-is (CSS-controlled)
+      if (!bar.style.left && !bar.style.top) return;
+      const v = viewport();
+      const left = clamp(parseFloat(bar.style.left || rect.left), EDGE_PADDING, v.w - rect.width - EDGE_PADDING);
+      const top = clamp(parseFloat(bar.style.top || rect.top), EDGE_PADDING, v.h - rect.height - EDGE_PADDING);
+      bar.style.left = Math.round(left) + 'px';
+      bar.style.top = Math.round(top) + 'px';
+      bar.style.right = 'auto';
+    });
+  }, 100);
+})();
+</script><script>
+/* KODUX: di-widgets.js - spawn + drag + persist system (V7.9 KODUX) */
+/* KODUX: key storage */
+(function(){
+  const STORAGE_KEY = 'di_widgets_v1_kodux_v7_9'; // KODUX: storage key
+  const widgets = {}; // KODUX: runtime map
+
+  /* KODUX: helper to load/store positions */
+  function saveAll() {
+    try {
+      const state = {};
+      for(const id in widgets){
+        const el = widgets[id].el;
+        const rect = el.getBoundingClientRect();
+        state[id] = {
+          left: Math.round(parseFloat(el.style.left || rect.left)),
+          top: Math.round(parseFloat(el.style.top || rect.top)),
+          w: Math.round(rect.width),
+          h: Math.round(rect.height),
+          minimized: el.dataset.minimized === 'true'
+        };
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch(e){ console.warn('KODUX saveAll err', e); }
+  }
+
+  function loadState(){
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    } catch(e){ return {}; }
+  }
+
+  /* KODUX: make a new widget DOM */
+  function createWidget({ id, title, html }) {
+    if(document.getElementById(id)) return document.getElementById(id);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'di-widget';
+    wrap.id = id;
+    wrap.style.left = (window.innerWidth/2 - 220) + 'px';
+    wrap.style.top = (window.innerHeight/2 - 140) + 'px';
+    wrap.innerHTML = `
+      <div class="di-header" tabindex="0" aria-label="${title} - KODUX">
+        <div class="di-title">${title}</div>
+        <div class="di-controls">
+          <button data-action="minimize" title="Minimizar">—</button>
+          <button data-action="spawn" title="Novo">✚</button>
+          <button data-action="close" title="Fechar">✕</button>
+        </div>
+      </div>
+      <div class="di-body">${html || ''}</div>
+      <div class="di-footer">KODUX · di-widget · ${title}</div>
+    `;
+    document.body.appendChild(wrap);
+
+    // KODUX: drag logic
+    const header = wrap.querySelector('.di-header');
+    header.addEventListener('pointerdown', onPointerDown);
+
+    function onPointerDown(ev){
+      if(ev.button === 2) return;
+      wrap.classList.add('dragging');
+      header.setPointerCapture(ev.pointerId);
+      const startX = ev.clientX, startY = ev.clientY;
+      const rect = wrap.getBoundingClientRect();
+      const startLeft = rect.left, startTop = rect.top;
+
+      function moveHandler(e){
+        const dx = e.clientX - startX, dy = e.clientY - startY;
+        let newLeft = Math.round(startLeft + dx);
+        let newTop = Math.round(startTop + dy);
+        // clamp
+        newLeft = Math.max(8, Math.min(window.innerWidth - wrap.offsetWidth - 8, newLeft));
+        newTop = Math.max(8, Math.min(window.innerHeight - wrap.offsetHeight - 8, newTop));
+        wrap.style.left = newLeft + 'px';
+        wrap.style.top = newTop + 'px';
+      }
+
+      function upHandler(e){
+        header.removeEventListener('pointermove', moveHandler);
+        document.removeEventListener('pointerup', upHandler);
+        try { header.releasePointerCapture(ev.pointerId); } catch(e){}
+        wrap.classList.remove('dragging');
+        saveAll(); // persist after move - KODUX
+      }
+
+      header.addEventListener('pointermove', moveHandler);
+      document.addEventListener('pointerup', upHandler);
+    }
+
+    // KODUX: control buttons
+    wrap.querySelector('[data-action="close"]').addEventListener('click', ()=>{
+      wrap.remove();
+      delete widgets[id];
+      saveAll();
+    });
+    wrap.querySelector('[data-action="minimize"]').addEventListener('click', ()=>{
+      const body = wrap.querySelector('.di-body');
+      const footer = wrap.querySelector('.di-footer');
+      const isMin = wrap.dataset.minimized === 'true';
+      if(isMin){
+        body.style.display = '';
+        footer.style.display = '';
+        wrap.dataset.minimized = 'false';
+      } else {
+        body.style.display = 'none';
+        footer.style.display = 'none';
+        wrap.dataset.minimized = 'true';
+      }
+      saveAll();
+    });
+    wrap.querySelector('[data-action="spawn"]').addEventListener('click', ()=>{
+      // KODUX: spawn a new instance of same widget with suffix
+      const newId = id + '_clone_' + Date.now();
+      spawnWidget(newId, title + ' (clone)', html);
+    });
+
+    // KODUX: keep reference
+    widgets[id] = { el: wrap, id, title };
+
+    // restore possible saved size/pos/minimized
+    const state = loadState();
+    if(state[id]){
+      const s = state[id];
+      wrap.style.left = (s.left) + 'px';
+      wrap.style.top = (s.top) + 'px';
+      if(s.w) wrap.style.width = s.w + 'px';
+      if(s.h) wrap.style.height = s.h + 'px';
+      if(s.minimized) {
+        wrap.dataset.minimized = 'true';
+        wrap.querySelector('.di-body').style.display = 'none';
+        wrap.querySelector('.di-footer').style.display = 'none';
+      }
+    }
+
+    return wrap;
+  }
+
+  /* KODUX: spawn wrapper that wires into DI_SYMBOL_BAR if available */
+  function spawnWidget(id, title, html){
+    createWidget({ id, title, html });
+    // expose small API on element
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+    saveAll();
+    return el;
+  }
+
+  // Expose globally
+  window.DI_WIDGETS = {
+    spawn: spawnWidget,
+    saveAll,
+    getState: ()=> loadState(),
+    list: ()=> Object.keys(widgets)
+  };
+
+  // KODUX: add a spawn button to any .symbol-bar if DI_SYMBOL_BAR exists
+  function injectSymbolButton(){
+    // prefer existing symbol-bar, else create a small fallback
+    const bar = document.querySelector('.symbol-bar') || document.querySelector('.symbol-bar.floating');
+    if(!bar){
+      // fallback: create a mini symbol-bar (non-intrusive)
+      const sb = document.createElement('div');
+      sb.className = 'symbol-bar floating';
+      sb.style.right = '20px';
+      sb.style.top = '60%';
+      sb.innerHTML = '<button class="symbol-button spawn-btn" title="Spawn">+K</button>';
+      document.body.appendChild(sb);
+      sb.querySelector('.symbol-button').addEventListener('click', ()=> spawnWidget('di_welcome_' + Date.now(), 'Welcome KODUX', '<p>KODUX · Welcome widget</p>'));
+      return;
+    }
+    // add button (idempotent)
+    if(bar.querySelector('.symbol-button.spawn-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'symbol-button spawn-btn';
+    btn.innerHTML = '＋';
+    btn.title = 'Spawn widget (KODUX)';
+    btn.addEventListener('click', ()=> spawnWidget('di_welcome_' + Date.now(), 'Welcome KODUX', '<p>KODUX · Welcome widget</p>'));
+    bar.appendChild(btn);
+  }
+
+  // run on DOM ready
+  document.addEventListener('DOMContentLoaded', ()=>{
+    injectSymbolButton();
+
+    // attempt to register with DI_SYMBOL_BAR API (if exists) for reset/save
+    if(window.DI_SYMBOL_BAR){
+      // KODUX: add small helper
+      window.DI_SYMBOL_BAR.spawnWidget = function(){ spawnWidget('di_w_' + Date.now(), 'Spawned KODUX', '<p>KODUX · spawned by DI_SYMBOL_BAR</p>'); };
+    }
+
+    // Optional: restore any previously serialized widgets (we only store positions/sizes now)
+    // KODUX: nothing to auto-open by default to avoid surprise audio autoplay
+  });
+
+  // persist on unload
+  window.addEventListener('beforeunload', saveAll);
+
+})();
+</script><script>
+/* KODUX: binaural generator widget - user gesture required to start audio */
+/* KODUX: spawn an example widget right away (but audio only on button) */
+(function(){
+  // build inner html for binaural player
+  const binauralHtml = `
+    <div style="display:flex;gap:10px;flex-direction:column;">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <label>Base Hz: <input id="di_b_base" type="number" value="200" style="width:80px"></label>
+        <label>Beat Hz: <input id="di_b_beat" type="number" value="7" style="width:80px"></label>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button id="di_b_play">Play (KODUX)</button>
+        <button id="di_b_stop">Stop</button>
+      </div>
+      <div id="di_b_status" style="margin-top:8px;color:var(--muted);font-size:13px;">KODUX · binaural ready</div>
+    </div>
+  `;
+
+  // spawn widget (but audio will be created only on user click)
+  const widget = window.DI_WIDGETS.spawn('di_binaural_01', 'Binaural Player (KODUX)', binauralHtml);
+
+  // setup audio logic
+  let audioCtx = null;
+  let leftOsc = null;
+  let rightOsc = null;
+  let lGain = null;
+  let rGain = null;
+  let merger = null;
+  let playing = false;
+
+  function startBinaural(baseHz, beatHz){
+    if(playing) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // KODUX: create two oscillators, slight detune for binaural beat difference
+    leftOsc = audioCtx.createOscillator();
+    rightOsc = audioCtx.createOscillator();
+    lGain = audioCtx.createGain();
+    rGain = audioCtx.createGain();
+
+    // panner per channel via StereoPannerNode
+    const panL = audioCtx.createStereoPanner(); panL.pan.value = -1;
+    const panR = audioCtx.createStereoPanner(); panR.pan.value = 1;
+
+    // left frequency base, right base + beat
+    leftOsc.frequency.value = baseHz;
+    rightOsc.frequency.value = baseHz + beatHz;
+
+    // gentle envelope
+    lGain.gain.value = 0.28;
+    rGain.gain.value = 0.28;
+
+    leftOsc.connect(lGain).connect(panL).connect(audioCtx.destination);
+    rightOsc.connect(rGain).connect(panR).connect(audioCtx.destination);
+
+    // start
+    leftOsc.start();
+    rightOsc.start();
+    playing = true;
+    document.getElementById('di_b_status').textContent = 'KODUX · playing ' + baseHz + ' Hz ± ' + beatHz + ' Hz';
+  }
+
+  function stopBinaural(){
+    if(!playing) return;
+    try {
+      leftOsc.stop(); rightOsc.stop();
+    } catch(e){}
+    try { audioCtx.close(); } catch(e){}
+    audioCtx = null; leftOsc = null; rightOsc = null; lGain = null; rGain = null;
+    playing = false;
+    document.getElementById('di_b_status').textContent = 'KODUX · stopped';
+  }
+
+  // wire buttons (delegated to avoid race)
+  widget.querySelector('#di_b_play').addEventListener('click', ()=>{
+    // must be user gesture to unlock audio on many browsers - KODUX
+    const base = parseFloat(widget.querySelector('#di_b_base').value) || 200;
+    const beat = parseFloat(widget.querySelector('#di_b_beat').value) || 7;
+    startBinaural(base, beat);
+  });
+
+  widget.querySelector('#di_b_stop').addEventListener('click', ()=>{
+    stopBinaural();
+  });
+
+})();
+</script></body></html>

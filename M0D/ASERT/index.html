@@ -1,0 +1,1637 @@
+<html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ASERT - Segurança do Trabalho</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@600;700;900&amp;display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#1D3C8C',
+                            green: '#7BC043',
+                            bg: '#F8F9FA'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.03)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Esconder barra de rolagem em áreas com scroll horizontal */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><style>
+    /* ===== Design Tokens (Fundidos) ===== */
+    <!-- Estilos Customizados do Hub 78K (Medium Light Override) -->
+  <style>
+    /* ===== Design Tokens do Hub (Medium Light Override) ===== */
+    :root {
+      --bg: #f3f4f6; /* Slate Gray Médio Light */
+      --bg-elevated: #ffffff; /* Cards brancos puros para alto contraste */
+      --bg-soft: #f9fafb;
+      --stroke: rgba(15, 23, 42, 0.08);
+      --stroke-soft: rgba(15, 23, 42, 0.04);
+      --accent: #0284c7; /* Sky Blue profissional */
+      --accent-soft: rgba(2, 132, 199, 0.08);
+      --accent-strong: #059669; /* Emerald Green */
+      --text: #0f172a; /* Slate Escuro */
+      --muted: #475569; /* Slate Muted */
+      --shadow-1: 0 4px 12px rgba(15, 23, 42, 0.05);
+      --shadow-soft: 0 16px 32px rgba(15, 23, 42, 0.08);
+      --glow: 0 0 0 1px rgba(2, 132, 199, 0.15), 0 4px 16px rgba(2, 132, 199, 0.08);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --blur: 24px;
+      --safe-top: env(safe-area-inset-top);
+    }
+    
+    /* Tema Luxara (Champagne Gold Light) */
+    [data-theme="lux"] {
+      --bg: #fcfaf6; /* Warm Pearl */
+      --bg-elevated: #ffffff;
+      --bg-soft: #faf8f2;
+      --stroke: rgba(184, 134, 11, 0.15);
+      --stroke-soft: rgba(184, 134, 11, 0.08);
+      --accent: #b8860b; /* Goldenrod Escuro para leitura perfeita */
+      --accent-soft: rgba(184, 134, 11, 0.08);
+      --accent-strong: #9d174d;
+      --text: #1c1917; /* Stone Escuro */
+      --muted: #57534e;
+      --glow: 0 0 0 1px rgba(184, 134, 11, 0.2), 0 4px 16px rgba(184, 134, 11, 0.08);
+    }
+
+    /* ===== Base Isolada (Gerenciamento de Visões) ===== */
+    html, body { height: 100%; margin: 0; padding: 0; }
+    
+    /* Modo HUB (Medium Light) */
+    body.mode-hub {
+      background:
+        radial-gradient(circle at top left, rgba(27,228,255,0.18) 0%, transparent 52%),
+        radial-gradient(circle at bottom right, rgba(255,158,242,0.15) 0%, transparent 50%),
+        radial-gradient(1200px 800px at 50% -10%, rgba(2,132,199,0.08), transparent 60%),
+        linear-gradient(135deg, var(--bg) 0%, #eef2f6 40%, #e2e8f0 100%);
+      color: var(--text);
+      font-family: ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    [data-theme="lux"] body.mode-hub {
+      background:
+        radial-gradient(circle at top left, rgba(212,175,55,0.15) 0%, transparent 46%),
+        radial-gradient(circle at bottom right, rgba(255,158,242,0.12) 0%, transparent 50%),
+        radial-gradient(1200px 800px at 50% -10%, rgba(212,175,55,0.06), transparent 62%),
+        linear-gradient(135deg, var(--bg) 0%, #f5eedc 44%, #eae0cc 100%);
+    }
+
+    /* Modo ASERT (Light Nativo) */
+    body.mode-asert {
+      background-color: #F8F9FA;
+      color: #1e293b;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body.modal-open { overflow: hidden; touch-action: none; }
+
+    /* ===== Componentes do Hub ===== */
+    .hub-container { display: block; }
+    .asert-container { display: none; }
+
+    .hub-main { max-width: 720px; margin: 0 auto; padding: 12px 12px calc(18px + env(safe-area-inset-bottom)); }
+    
+    .hub-header {
+      position: sticky; top: 0; z-index: 40;
+      backdrop-filter: blur(var(--blur)) saturate(140%); -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.7));
+      border-bottom: 1px solid var(--stroke-soft); box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding-top: var(--safe-top);
+    }
+    [data-theme="lux"] .hub-header { 
+      background: linear-gradient(180deg, rgba(252, 250, 246, 0.85), rgba(252, 250, 246, 0.7)); 
+      border-bottom: 1px solid var(--stroke); 
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05), inset 0 -1px 0 rgba(184, 134, 11, 0.05); 
+    }
+    
+    .hub-inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; gap: 12px; padding: clamp(10px, 1.4vw, 14px) clamp(14px, 2vw, 20px); }
+    
+    .hub-logo {
+      width: 52px; height: 52px; border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #ffffff 0, #ffece3 4%, transparent 45%), radial-gradient(circle at 70% 80%, rgba(86,248,198,.85) 0, transparent 55%), conic-gradient(from 210deg, rgba(27,228,255,1), rgba(86,248,198,1), rgba(255,223,107,1), rgba(255,158,242,1), rgba(27,228,255,1));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.2), 0 12px 24px rgba(0,0,0,0.1), var(--glow);
+      position: relative; overflow: hidden; animation: pulse 2.6s infinite ease-in-out;
+    }
+    .hub-logo::after {
+      content: "A"; display: grid; place-items: center; position: absolute; inset: 18%; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); box-shadow: inset 0 0 12px rgba(0,0,0,0.2); background: rgba(255,255,255,0.7); font-weight: 900; color: #1e3a8a; font-size: 18px; text-shadow: 0 0 8px rgba(2,132,199,0.3);
+    }
+    [data-theme="lux"] .hub-logo::after {
+      color: #78350f;
+    }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+
+    .hub-kicker { font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 600; opacity: .9; }
+    .hub-title { font-size: 1.14rem; font-weight: 800; letter-spacing: .03em; margin-top: 2px; color: var(--text); }
+
+    .hub-topbar { margin-left: auto; display: flex; gap: 6px; align-items: center; background: linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.01)); border: 1px solid var(--stroke-soft); border-radius: 14px; padding: 4px; box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 4px 12px rgba(0,0,0,0.03); }
+    .hub-tbtn { border-radius: 10px; border: none; background: transparent; color: var(--muted); padding: 8px 12px; font-size: .76rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; transition: all .18s ease; min-height: 36px; }
+    .hub-tbtn:hover { background: rgba(0,0,0,.04) }
+    .hub-tbtn[aria-pressed="true"] { background: linear-gradient(135deg, var(--accent), var(--accent-strong)); color: #ffffff; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2), 0 0 12px var(--accent-soft); }
+    [data-theme="lux"] .hub-tbtn[aria-pressed="true"] { color: #ffffff; box-shadow: inset 0 0 0 1px rgba(255,255,255,.2), 0 6px 14px rgba(184, 134, 11, 0.2); }
+
+    .hub-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 10px; }
+    @media (min-width: 560px){ .hub-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .hub-card { border-radius: var(--radius-lg); background: radial-gradient(circle at top left,rgba(255,255,255,.8) 0, rgba(255,255,255,0) 45%), linear-gradient(135deg, var(--bg-elevated), var(--bg-soft)); border: 1px solid var(--stroke-soft); box-shadow: var(--shadow-1); padding: 14px; display: flex; gap: 12px; align-items: flex-start; min-height: 86px; position: relative; }
+    .hub-card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,255,255,.7); pointer-events: none; }
+    .hub-icon { width: 60px; height: 60px; border-radius: 16px; background: radial-gradient(circle, #ffffff 0, #e0f2fe 10%, transparent 60%), linear-gradient(180deg,#ffffff,#f1f5f9); border: 1px solid rgba(15, 23, 42, 0.08); box-shadow: 0 8px 16px rgba(0,0,0,.04); flex-shrink: 0; display: grid; place-items: center; font-size: 26px; overflow: hidden; }
+    [data-theme="lux"] .hub-icon { border-color: rgba(184, 134, 11, 0.15); background: radial-gradient(circle, #ffffff 0, #fef3c7 10%, transparent 60%), linear-gradient(180deg,#ffffff,#fafaf6); }
+    
+    .hub-card-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+    .hub-muted { font-size: .8rem; color: var(--muted); margin-top: 4px; line-height: 1.35; }
+    .hub-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+
+    .hub-btn { border-radius: 999px; border: 1px solid rgba(0,0,0,.08); background: linear-gradient(180deg,#ffffff,#f3f4f6); color: var(--text); padding: 8px 14px; font-size: .78rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; text-decoration: none; box-shadow: inset 0 1px 0 #fff, 0 4px 10px rgba(0,0,0,.05); transition: transform .12s ease, filter .2s ease; }
+    .hub-btn:hover { filter: brightness(0.97); border-color: var(--stroke); }
+    [data-theme="lux"] .hub-btn { background: linear-gradient(180deg,#ffffff,#faf9f5); border-color: rgba(184, 134, 11, 0.25); color: var(--text); box-shadow: inset 0 1px 0 #fff, 0 4px 10px rgba(0,0,0,.03); }
+
+    .hub-footer { max-width: 720px; margin: 10px auto 8px; padding: 4px 14px 12px; font-size: .74rem; color: var(--muted); text-align: center; opacity: .85; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+    /* Modais do Hub */
+    .viewer { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.4); z-index: 50; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 18px 10px calc(18px + env(safe-area-inset-bottom)); color: var(--text); font-family: system-ui, sans-serif;}
+    .viewer.show { display: flex; }
+    .frame { width: 100%; max-width: 900px; max-height: 100%; height: 86vh; border-radius: var(--radius-xl); background: linear-gradient(145deg, var(--bg-elevated), var(--bg-soft)); border: 1px solid var(--stroke); box-shadow: 0 24px 60px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.8); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-bottom: 1px solid var(--stroke-soft); background: linear-gradient(to right, rgba(0,0,0,0.02), transparent); }
+    .bar .left { display: flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 700; color: var(--text); }
+    .dot { width: 10px; height: 10px; border-radius: 999px; background: radial-gradient(circle, #ff7755 0, #ff2d55 50%, #d0003a 100%); box-shadow: 0 0 8px rgba(255,90,120,.5); }
+    .iframe { border: 0; flex: 1; width: 100%; background: #ffffff; }
+    .loader { position: absolute; inset: 50px 0 auto 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); transform-origin: left; scale: 0 1; opacity: 0; transition: opacity .16s ease, scale .16s ease; z-index: 2; }
+    .loader.show { scale: 1 1; opacity: 1; animation: loadbar 1.1s infinite; }
+    @keyframes loadbar{ 0%{transform:translateX(-40%)} 50%{transform:translateX(10%)} 100%{transform:translateX(40%)} }
+
+    /* Manifesto Modal Específico */
+    .manifesto-content { padding: 24px; overflow-y: auto; flex: 1; color: var(--text); }
+    .manifesto-content h2 { color: var(--accent); margin-bottom: 16px; font-weight: 800; }
+    .manifesto-content h3 { font-size: 1.1rem; border-bottom: 1px solid var(--stroke-soft); padding-bottom: 6px; margin: 24px 0 12px; color: var(--text); }
+    .arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .arch-card { background: rgba(0,0,0,0.02); border: 1px solid var(--stroke-soft); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 4px; border-left-width: 4px; }
+    .arch-title { font-weight: 700; font-size: 1rem; display: flex; justify-content: space-between; color: var(--text); }
+    .arch-func { font-size: 0.8rem; color: var(--muted); }
+    .roda-viva { background: rgba(0,0,0,0.03); border-radius: 16px; padding: 20px; font-family: monospace; font-size: 0.85rem; color: var(--accent); white-space: pre; overflow-x: auto; text-align: center; border: 1px solid var(--stroke-soft); line-height: 1.6; }
+
+    /* Skeletons */
+    .skeleton {
+      height: 84px; border-radius: var(--radius-lg);
+      background: linear-gradient(90deg, rgba(0,0,0,.02), rgba(0,0,0,.05), rgba(0,0,0,.02));
+      background-size: 240% 100%; animation: sk 1.2s infinite ease-in-out;
+      border: 1px solid rgba(0,0,0,.04);
+    }
+    @keyframes sk{ 0%{background-position:100% 0} 100%{background-position:0 0} }
+
+    /* ===== ASERT Dashboard Custom ===== */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Responsividade do Hub */
+    @media (max-width: 480px){
+      .hub-inner { display: grid; grid-template-columns: 52px 1fr; grid-template-areas: "logo title" "topbar topbar"; align-items: center; row-gap: 12px; padding: calc(10px + env(safe-area-inset-top)) 14px 10px; }
+      .hub-inner .hub-logo { grid-area: logo; }
+      .hub-inner > div:nth-child(2) { grid-area: title; min-width: 0; }
+      .hub-inner .hub-topbar { grid-area: topbar; justify-self: stretch; width: 100%; justify-content: space-between; overflow: hidden; }
+      .hub-topbar .hub-tbtn { min-height: 36px; padding: 0 .7rem; font-size: .85rem; }
+    }
+
+    /* ===== Base ===== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(27,228,255,.12) 0%, transparent 52%),
+        radial-gradient(circle at bottom right, rgba(255,158,242,.10) 0%, transparent 50%),
+        radial-gradient(1200px 800px at 50% -10%, rgba(0,209,255,.08), transparent 60%),
+        linear-gradient(135deg, var(--bg) 0%, #050512 40%, #050508 100%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: env(safe-area-inset-bottom);
+      transition: background 0.4s ease;
+    }
+    [data-theme="lux"] body{
+      background:
+        radial-gradient(circle at top left, rgba(255,223,107,.12) 0%, transparent 46%),
+        radial-gradient(circle at bottom right, rgba(255,158,242,.12) 0%, transparent 50%),
+        radial-gradient(1200px 800px at 50% -10%, rgba(212,175,55,.08), transparent 62%),
+        linear-gradient(135deg, var(--bg) 0%, #0c0b0a 44%, #0a0a0a 100%);
+    }
+    body.modal-open{
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    main{
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 12px 12px calc(18px + env(safe-area-inset-bottom));
+    }
+
+    /* ===== Header Glass ===== */
+    .header{
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(var(--blur)) saturate(140%);
+      -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+      background: linear-gradient(180deg, rgba(5,5,16,.85), rgba(5,5,16,.65));
+      border-bottom: 1px solid var(--stroke-soft);
+      box-shadow: 0 10px 30px rgba(0,0,0,.45);
+      padding-top: var(--safe-top);
+    }
+    [data-theme="lux"] .header{
+      background: linear-gradient(180deg, rgba(11,8,25,.80), rgba(11,8,25,.60));
+      border-bottom: 1px solid var(--stroke);
+      box-shadow: 0 12px 34px rgba(0,0,0,.50), inset 0 -1px 0 rgba(255,226,150,.05);
+    }
+    
+    .inner{
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: clamp(10px, 1.4vw, 14px) clamp(14px, 2vw, 20px);
+    }
+
+    /* Logo Animado e Complexo */
+    .logo{
+      width: 52px; height: 52px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 20%, #ffffff 0, #ffece3 4%, transparent 45%),
+        radial-gradient(circle at 70% 80%, rgba(86,248,198,.85) 0, transparent 55%),
+        conic-gradient(from 210deg, rgba(27,228,255,1), rgba(86,248,198,1), rgba(255,223,107,1), rgba(255,158,242,1), rgba(27,228,255,1));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.15), 0 18px 35px rgba(0,0,0,.7), var(--glow);
+      position: relative;
+      overflow: hidden;
+      animation: pulse 2.6s infinite ease-in-out;
+    }
+    .logo::after{
+      content: "A";
+      display: grid;
+      place-items: center;
+      position: absolute;
+      inset: 18%;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.25);
+      box-shadow: inset 0 0 22px rgba(0,0,0,.7);
+      background: rgba(0,0,0,0.4);
+      font-weight: 900;
+      color: #fff;
+      font-size: 18px;
+      text-shadow: 0 0 10px rgba(0,209,255,0.8);
+    }
+    @keyframes pulse{
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.05)}
+    }
+    @media (prefers-reduced-motion: reduce){ .logo{animation:none} }
+
+    /* Textos do Header */
+    .kicker{
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+      opacity: .9;
+    }
+    h1{
+      font-size: 1.14rem;
+      font-weight: 800;
+      letter-spacing: .03em;
+      margin-top: 2px;
+    }
+
+    /* Topbar Segmentada */
+    .topbar{
+      margin-left: auto;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid var(--stroke-soft);
+      border-radius: 14px;
+      padding: 4px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 8px 24px rgba(0,0,0,.25);
+    }
+    .tbtn{
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 12px;
+      font-size: .76rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all .18s ease;
+      min-height: 36px;
+    }
+    .tbtn:hover{ background: rgba(255,255,255,.08) }
+    .tbtn:active{ transform: translateY(1px) }
+    .tbtn[aria-pressed="true"]{
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #050510;
+      box-shadow: 0 6px 16px rgba(0,0,0,.25), 0 0 15px var(--accent-soft);
+    }
+    [data-theme="lux"] .tbtn[aria-pressed="true"]{
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 8px 22px rgba(0,0,0,.28), 0 0 25px rgba(212,175,55,.2);
+    }
+
+    /* ===== Grid & Cards ===== */
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media (min-width: 560px){ .grid{ grid-template-columns: repeat(2, 1fr); } }
+
+    .card{
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top left,rgba(255,255,255,.08) 0, rgba(255,255,255,0) 45%),
+                 linear-gradient(135deg, var(--bg-elevated), var(--bg-soft));
+      border: 1px solid var(--stroke-soft);
+      box-shadow: var(--shadow-1);
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      min-height: 86px;
+      position: relative;
+    }
+    .card::before{
+      content: ""; position: absolute; inset: 0; border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+      pointer-events: none;
+    }
+
+    .icon{
+      width: 60px; height: 60px;
+      border-radius: 16px;
+      background: radial-gradient(circle, #ffffff 0, #d9f7ff 10%, transparent 60%), linear-gradient(180deg,#0f1320,#0a0f18);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 14px 30px rgba(0,0,0,.65);
+      flex-shrink: 0;
+      display: grid; place-items: center; font-size: 26px; overflow: hidden;
+    }
+    [data-theme="lux"] .icon{ border-color: rgba(212,175,55,.30); }
+
+    .title{ font-size: 1rem; font-weight: 700; letter-spacing: .02em; }
+    .muted{ font-size: .8rem; color: var(--muted); margin-top: 4px; line-height: 1.35; }
+    .row{ display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+
+    /* Botões Pill */
+    .btn{
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg,#13212e,#0e1924);
+      color: var(--text);
+      padding: 8px 14px;
+      font-size: .78rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 22px rgba(0,0,0,.35);
+      transition: transform .12s ease, filter .2s ease;
+    }
+    .btn:hover{ filter: brightness(1.1); border-color: var(--accent-soft); }
+    .btn:active{ transform: translateY(1px); }
+    [data-theme="lux"] .btn{
+      background: linear-gradient(180deg,#1a1c21,#13161a);
+      border-color: rgba(212,175,55,.28);
+      color: #f6ecd3;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 10px 26px rgba(0,0,0,.35), 0 0 0 1px rgba(212,175,55,.10);
+    }
+
+    /* Footer */
+    footer{
+      max-width: 720px; margin: 10px auto 8px; padding: 4px 14px 12px;
+      font-size: .74rem; color: var(--muted); text-align: center; opacity: .85;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+
+    /* ===== Modais (Viewer, Editor, Manifesto) ===== */
+    .viewer{
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+      background: rgba(1,2,10,.88); z-index: 50;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      padding: 18px 10px calc(18px + env(safe-area-inset-bottom));
+    }
+    .viewer.show{ display: flex; }
+    
+    .frame{
+      width: 100%; max-width: 900px; max-height: 100%; height: 86vh;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(145deg, var(--bg-elevated), #050512);
+      border: 1px solid var(--stroke-soft);
+      box-shadow: 0 24px 60px rgba(0,0,0,.9), inset 0 0 0 1px rgba(255,255,255,.04);
+      display: flex; flex-direction: column; overflow: hidden; position: relative;
+    }
+    
+    .bar{
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.06);
+      background: linear-gradient(to right, rgba(255,255,255,.06), transparent);
+    }
+    .bar .left{ display: flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 700; }
+    .dot{
+      width: 10px; height: 10px; border-radius: 999px;
+      background: radial-gradient(circle, #ff7755 0, #ff2d55 50%, #d0003a 100%);
+      box-shadow: 0 0 10px rgba(255,90,120,.7);
+    }
+    
+    .iframe{ border: 0; flex: 1; width: 100%; background: #02030b; }
+    
+    /* Loader da Iframe */
+    .loader{
+      position: absolute; inset: 50px 0 auto 0; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      transform-origin: left; scale: 0 1; opacity: 0;
+      transition: opacity .16s ease, scale .16s ease;
+      z-index: 2;
+    }
+    .loader.show{ scale: 1 1; opacity: 1; animation: loadbar 1.1s infinite; }
+    @keyframes loadbar{ 0%{transform:translateX(-40%)} 50%{transform:translateX(10%)} 100%{transform:translateX(40%)} }
+    
+    /* Skeletons */
+    .skeleton{
+      height: 84px; border-radius: var(--radius-lg);
+      background: linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.10), rgba(255,255,255,.04));
+      background-size: 240% 100%; animation: sk 1.2s infinite ease-in-out;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    @keyframes sk{ 0%{background-position:100% 0} 100%{background-position:0 0} }
+
+    /* ===== Modal Manifesto 78K Estilização Específica ===== */
+    .manifesto-content {
+      padding: 24px; overflow-y: auto; flex: 1; color: var(--text);
+    }
+    .manifesto-content h2 { color: var(--accent); margin-bottom: 16px; font-weight: 800; }
+    .manifesto-content h3 { font-size: 1.1rem; border-bottom: 1px solid var(--stroke-soft); padding-bottom: 6px; margin: 24px 0 12px; color: #fff; }
+    
+    .arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .arch-card {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--stroke-soft);
+      border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 4px;
+      border-left-width: 4px;
+    }
+    .arch-title { font-weight: 700; font-size: 1rem; display: flex; justify-content: space-between; }
+    .arch-func { font-size: 0.8rem; color: var(--muted); }
+    
+    .roda-viva {
+      background: rgba(0,0,0,0.4); border-radius: 16px; padding: 20px;
+      font-family: monospace; font-size: 0.85rem; color: var(--accent);
+      white-space: pre; overflow-x: auto; text-align: center; border: 1px solid var(--stroke-soft);
+      line-height: 1.6;
+    }
+
+    /* ===== Responsividade ===== */
+    @media (max-width: 480px){
+      .inner{
+        display: grid;
+        grid-template-columns: 52px 1fr;
+        grid-template-areas: "logo title" "topbar topbar";
+        align-items: center; row-gap: 12px;
+        padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
+      }
+      .inner .logo{ grid-area: logo; }
+      .inner > div:nth-child(2){ grid-area: title; min-width: 0; }
+      .inner .topbar{
+        grid-area: topbar; justify-self: stretch; width: 100%;
+        justify-content: space-between; overflow: hidden;
+      }
+      .topbar .tbtn{ min-height: 36px; padding: 0 .7rem; font-size: .85rem; }
+      h1{ font-size: 1.02rem; line-height: 1.2; }
+      .kicker{ font-size: .68rem; }
+      .roda-viva { font-size: 0.65rem; padding: 10px; }
+    }
+  </style>
+
+  <!-- Header -->
+  <header class="header" role="banner">
+    <div class="inner">
+      <div class="logo" aria-hidden="true"></div>
+      <div style="flex:1">
+        <div class="kicker">JHBarros.Dual.Infodose • ASSERT</div>
+        <h1>Hub • Home (dinâmico • POWER)</h1>
+      </div>
+      <nav class="topbar" aria-label="Alternar tema e ferramentas">
+        <button class="tbtn" id="themeCyan" type="button" aria-pressed="true">ASSERT</button>
+        <button class="tbtn" id="themeLux" type="button" aria-pressed="false">Luxara</button>
+        <button class="tbtn" id="btnInstall" type="button">⬇️ Instalar</button>
+        <button class="tbtn" id="btnHubEditor" type="button">✏️ Meu Hub</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Grid -->
+  <main class="grid" id="cards" aria-live="polite">
+    <!-- Skeletons enquanto carrega -->
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>Hub ASSERT • “Central de apps Dual.Infodose”</p>
+    <button class="btn" id="btnOpenManifesto" style="background: transparent; border-color: var(--stroke-soft); font-size: 0.7rem; padding: 6px 12px;">
+      ✨ Explorar Sistema 78K
+    </button>
+  </footer>
+
+  <!-- Viewer Modal (Para abrir os Apps) -->
+  <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="barTitle">
+    <div class="frame">
+      <div class="bar">
+        <div class="left"><div class="dot" aria-hidden="true"></div><strong id="barTitle">App</strong></div>
+        <div class="row" style="margin:0" role="toolbar" aria-label="Ações do app">
+          <button class="btn" id="btnHome" type="button" style="padding: 6px 12px; min-height:0;">🏠 Home</button>
+          <a class="btn" id="btnExternal" href="#" target="_blank" rel="noopener" aria-label="Abrir em nova aba" style="padding: 6px 12px; min-height:0;">↗️ Aba</a>
+        </div>
+      </div>
+      <div class="loader" id="loader"></div>
+      <iframe class="iframe" id="appFrame" src="about:blank" title="Aplicativo embutido"></iframe>
+    </div>
+  </div>
+
+  <!-- Hub Editor Modal -->
+  <div class="viewer" id="editor" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
+    <div class="frame" style="height: auto; max-height: 90vh;">
+      <div class="bar">
+        <div class="left"><div class="dot" aria-hidden="true" style="background: #a855f7;"></div><strong id="editorTitle">Configurar meu Hub</strong></div>
+        <button class="btn" id="btnEditorClose" type="button" style="padding: 6px 12px; min-height:0;">✖️ Fechar</button>
+      </div>
+      <div style="padding:16px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;">
+        <p class="muted" style="margin-top:0;">
+          Este editor salva sua lista de apps <strong>somente neste dispositivo</strong> (localStorage).
+          Use “Copiar JSON” se quiser atualizar o <code>apps/apps.json</code> no GitHub.
+        </p>
+        <div class="row">
+          <button class="btn" id="btnEditorAdd" type="button">➕ Add app</button>
+          <button class="btn" id="btnEditorReset" type="button">🗑️ Limpar</button>
+          <button class="btn" id="btnEditorUseBase" type="button">⬇️ Padrão</button>
+        </div>
+        <label class="muted" for="editorRaw" style="font-size:.8rem; font-weight:bold;">JSON dos apps:</label>
+        <textarea id="editorRaw" style="width:100%; min-height:200px; font-family:monospace; font-size:.8rem; padding:12px; border-radius:12px; border:1px solid var(--stroke-soft); background:var(--bg-elevated); color:inherit; resize:vertical; outline:none;"></textarea>
+        <div class="row">
+          <button class="btn" id="btnEditorApply" type="button" style="border-color:var(--accent);">💾 Aplicar JSON</button>
+          <button class="btn" id="btnEditorCopy" type="button">📋 Copiar JSON</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manifesto 78K Modal -->
+  <div class="viewer" id="manifestoModal" role="dialog" aria-modal="true" aria-labelledby="manifestoTitle">
+    <div class="frame" style="height: 90vh;">
+      <div class="bar">
+        <div class="left"><div class="dot" aria-hidden="true" style="background: #ffdf6b; box-shadow: 0 0 10px rgba(255,223,107,.7);"></div><strong id="manifestoTitle">Sistema 78K &amp; Arquétipos</strong></div>
+        <button class="btn" id="btnManifestoClose" type="button" style="padding: 6px 12px; min-height:0;">✖️ Fechar</button>
+      </div>
+      
+      <div class="manifesto-content">
+        <h2>Manifesto 78K</h2>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+          Estrutura sem evolução torna-se rigidez.<br>
+          Evolução sem estrutura torna-se caos.<br>
+          Consciência sem ação torna-se abstração.<br>
+          Ação sem consciência torna-se repetição.<br><br>
+          A integração entre engenharia, inovação, segurança e inteligência cria sistemas vivos capazes de aprender, adaptar-se e prosperar. O propósito da <strong>Roda Viva 78K</strong> é conectar pessoas, processos, conhecimento e tecnologia em um ciclo contínuo de evolução.<br><br>
+          <em>Em nome do senhor Deus PAI e do filho e do ESPÍRITO SANTO.</em>
+        </p>
+
+        <h3>Roda Viva 78K</h3>
+        <div class="roda-viva">
+                 HORUS
+      SOLUS                   SOPHIA
+ ATLAS                           MINUZ
+KODUX         CHRISTOS       ELYSHA
+ JHBARROS   NEPHESH_ELYON     NOVA
+      K_DION           RHEA
+    KAEL_DOMNNUS   BLLUE
+                KOBLLUX
+        </div>
+
+        <h3>Fórmula 78K</h3>
+        <div class="arch-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+          <div class="arch-card" style="border-left-color: #1d3c8c;"><span class="arch-title">ESTRUTURA</span><span class="arch-func">Atlas + Solus</span></div>
+          <div class="arch-card" style="border-left-color: #ff1493;"><span class="arch-title">EVOLUÇÃO</span><span class="arch-func">Nova + Rhea</span></div>
+          <div class="arch-card" style="border-left-color: #8a2be2;"><span class="arch-title">CONSCIÊNCIA</span><span class="arch-func">Sophia + Minuz</span></div>
+          <div class="arch-card" style="border-left-color: #ff00ff;"><span class="arch-title">INOVAÇÃO</span><span class="arch-func">K_Dion + Kael</span></div>
+          <div class="arch-card" style="border-left-color: #ffffff;"><span class="arch-title">INTEGRAÇÃO</span><span class="arch-func">Nephesh_Elyon</span></div>
+          <div class="arch-card" style="border-left-color: #ffd700;"><span class="arch-title">EQUILÍBRIO</span><span class="arch-func">Christos</span></div>
+          <div class="arch-card" style="border-left-color: #daa520;"><span class="arch-title">SÍNTESE</span><span class="arch-func">Kobllux</span></div>
+        </div>
+
+        <h3>Núcleo &amp; Eixos Arquétipos</h3>
+        <div class="arch-grid">
+          <div class="arch-card" style="border-left-color: #ffd700;">
+            <span class="arch-title">CHRISTOS <span>♾️</span></span>
+            <span class="arch-func">Núcleo Central: Consciência, Equilíbrio, Integração (Branco Dourado)</span>
+          </div>
+          <div class="arch-card" style="border-left-color: #1d3c8c;">
+            <span class="arch-title">ATLAS</span>
+            <span class="arch-func">Eixo Estrutural: Sustentação, Base operacional (Azul Profundo)</span>
+          </div>
+          <div class="arch-card" style="border-left-color: #ff1493;">
+            <span class="arch-title">NOVA</span>
+            <span class="arch-func">Eixo Evolutivo: Renovação, Transformação (Rosa Nebulosa Neon)</span>
+          </div>
+          <div class="arch-card" style="border-left-color: #8a2be2;">
+            <span class="arch-title">SOPHIA</span>
+            <span class="arch-func">Eixo Cognitivo: Sabedoria, Aprendizado (Violeta)</span>
+          </div>
+          <div class="arch-card" style="border-left-color: #ff00ff;">
+            <span class="arch-title">K_DION <span>⚡</span></span>
+            <span class="arch-func">Eixo Inovação: Experimentação, Disrupção (Magenta)</span>
+          </div>
+          <div class="arch-card" style="border-left-color: #00d1ff;">
+            <span class="arch-title">JHBARROS <span>◎</span></span>
+            <span class="arch-func">Nó Humano: Conector, Executor, Interface Humano-Sistema</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ===== Utils ===== */
+const $ = (q, root=document) => root.querySelector(q);
+const $$ = (q, root=document) => [...root.querySelectorAll(q)];
+const metaTheme = $('#metaThemeColor');
+
+/* ===== Temas ===== */
+function setTheme(name){
+  if(name === 'lux'){
+    document.documentElement.setAttribute('data-theme', 'lux');
+    metaTheme.setAttribute('content', '#0b0819');
+    $('#themeLux').setAttribute('aria-pressed', 'true');
+    $('#themeCyan').setAttribute('aria-pressed', 'false');
+    localStorage.setItem('hub.theme', 'lux');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    metaTheme.setAttribute('content', '#050510');
+    $('#themeCyan').setAttribute('aria-pressed', 'true');
+    $('#themeLux').setAttribute('aria-pressed', 'false');
+    localStorage.setItem('hub.theme', 'assert');
+  }
+}
+$('#themeCyan').onclick = () => setTheme('assert');
+$('#themeLux').onclick = () => setTheme('lux');
+
+const storedTheme = localStorage.getItem('hub.theme');
+if(storedTheme === 'lux') setTheme('lux');
+
+/* ===== Hub & Apps Data ===== */
+let HUB_BASE_APPS = [];
+let HUB_USER_APPS = null;
+
+function hubLoadUserApps(){
+  const raw = localStorage.getItem('hub.user.apps');
+  if(!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : null;
+  } catch(e) { return null; }
+}
+
+function hubSaveUserApps(apps){
+  if(!Array.isArray(apps)){
+    localStorage.removeItem('hub.user.apps');
+    HUB_USER_APPS = null;
+    return;
+  }
+  HUB_USER_APPS = apps;
+  localStorage.setItem('hub.user.apps', JSON.stringify(apps));
+}
+
+function hubEffectiveApps(){
+  const params = new URL(location.href).searchParams;
+  const virgem = params.get('virgem');
+  const user = HUB_USER_APPS || hubLoadUserApps();
+  if(virgem === '1' || virgem === 'true') return (user && user.length) ? user : [];
+  if(user && user.length) return user;
+  return HUB_BASE_APPS;
+}
+
+async function loadApps(){
+  try{
+    const res = await fetch('https://kodux78k.github.io/Dual_EngJHBarros/apps/apps.json', {cache:'no-store'});
+    const data = await res.json();
+    HUB_BASE_APPS = Array.isArray(data.apps) ? data.apps : [];
+  } catch(e) {
+    // Dados mocados (Fallback visual se o fetch falhar)
+    HUB_BASE_APPS = [
+      { key: "app-1", title: "Dual.Infodose", desc: "Sistema de integração de dados e relatórios técnicos.", url: "about:blank" },
+      { key: "app-2", title: "ASSERT Gestão", desc: "Controle de riscos e treinamentos SST.", url: "about:blank" }
+    ];
+  }
+  HUB_USER_APPS = hubLoadUserApps();
+  renderCards(hubEffectiveApps());
+}
+
+function renderCards(apps){
+  const root = $('#cards');
+  root.innerHTML = '';
+  
+  if (apps.length === 0) {
+    root.innerHTML = '<div class="card"><div class="icon">ℹ️</div><div><div class="title">Nenhum App</div><div class="muted">Adicione apps via "Meu Hub" ou verifique a conexão.</div></div></div>';
+    return;
+  }
+
+  apps.forEach(app => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const iconSrc = app.icon || 'icons/icon-192.png';
+    card.innerHTML = `
+      <div class="icon" aria-hidden="true">
+        <img src="${iconSrc}" onerror="this.style.display='none'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:12px"/>
+      </div>
+      <div style="flex:1">
+        <div class="title">${app.title || app.key}</div>
+        <div class="muted">${app.desc || ''}</div>
+        <div class="row">
+          <button class="btn" type="button" data-open="${app.key}">Abrir no Hub</button>
+          <button class="btn" type="button" data-open="${app.key}" data-newtab="1">Nova aba</button>
+        </div>
+      </div>`;
+    root.appendChild(card);
+  });
+
+  $$('[data-open]').forEach(b => {
+    b.onclick = () => openByKey(b.getAttribute('data-open'), b.hasAttribute('data-newtab'), apps);
+    b.addEventListener('mouseenter', () => prefetchApp(b.getAttribute('data-open'), apps), {passive: true});
+  });
+}
+
+function prefetchApp(key, apps) {
+  const app = apps.find(x => x.key === key);
+  if(app && app.url && !document.querySelector(`link[data-prefetch="${app.url}"]`)){
+    const l = document.createElement('link');
+    l.rel = 'prefetch'; l.href = app.url; l.as = 'document'; l.setAttribute('data-prefetch', app.url);
+    document.head.appendChild(l);
+  }
+}
+
+/* ===== Viewer (Iframe) ===== */
+const viewer = $('#viewer');
+const frame = $('#appFrame');
+const loader = $('#loader');
+const btnExternal = $('#btnExternal');
+let lastFocus = null;
+
+function openApp(app, newtab){
+  if(newtab){ window.open(app.url, '_blank', 'noopener'); return; }
+  lastFocus = document.activeElement;
+  $('#barTitle').textContent = app.title || app.key;
+  btnExternal.href = app.url;
+  loader.classList.add('show');
+  
+  frame.onload = () => setTimeout(() => loader.classList.remove('show'), 150);
+  frame.src = app.url;
+  
+  viewer.classList.add('show');
+  document.body.classList.add('modal-open');
+  $('#btnHome').focus();
+  localStorage.setItem('hub.last', app.key);
+  location.hash = '#app=' + app.key;
+}
+
+function closeViewer(){
+  frame.src = 'about:blank';
+  viewer.classList.remove('show');
+  document.body.classList.remove('modal-open');
+  history.pushState('', document.title, window.location.pathname + window.location.search);
+  if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+}
+
+function openByKey(key, newtab, apps){
+  const app = (apps||[]).find(x => x.key === key);
+  if(app) openApp(app, newtab);
+}
+
+$('#btnHome').onclick = closeViewer;
+
+/* ===== Manifesto 78K Modal ===== */
+const modalManifesto = $('#manifestoModal');
+$('#btnOpenManifesto').onclick = () => {
+  modalManifesto.classList.add('show');
+  document.body.classList.add('modal-open');
+};
+$('#btnManifestoClose').onclick = () => {
+  modalManifesto.classList.remove('show');
+  document.body.classList.remove('modal-open');
+};
+
+/* ===== Editor do Hub ===== */
+const editor = $('#editor');
+const editorRaw = $('#editorRaw');
+
+$('#btnHubEditor').onclick = () => {
+  editorRaw.value = JSON.stringify(hubEffectiveApps(), null, 2);
+  editor.classList.add('show');
+  document.body.classList.add('modal-open');
+  setTimeout(() => editorRaw.focus(), 50);
+};
+
+$('#btnEditorClose').onclick = () => {
+  editor.classList.remove('show');
+  document.body.classList.remove('modal-open');
+};
+
+$('#btnEditorApply').onclick = () => {
+  try {
+    const parsed = JSON.parse(editorRaw.value || '[]');
+    if(!Array.isArray(parsed)) throw new Error('O JSON precisa ser um array [ ].');
+    hubSaveUserApps(parsed);
+    renderCards(parsed);
+    alert('Hub atualizado localmente com sucesso!');
+  } catch(e) { alert('JSON inválido.\n' + e.message); }
+};
+
+$('#btnEditorCopy').onclick = () => {
+  editorRaw.select();
+  try { document.execCommand('copy'); alert('Copiado!'); } 
+  catch(e) { alert('Selecione e copie manualmente.'); }
+};
+
+$('#btnEditorReset').onclick = () => {
+  if(confirm('Restaurar apps padrão?')){
+    localStorage.removeItem('hub.user.apps');
+    HUB_USER_APPS = null;
+    editorRaw.value = JSON.stringify(HUB_BASE_APPS, null, 2);
+    renderCards(HUB_BASE_APPS);
+  }
+};
+
+$('#btnEditorUseBase').onclick = () => editorRaw.value = JSON.stringify(HUB_BASE_APPS, null, 2);
+
+$('#btnEditorAdd').onclick = () => {
+  let apps = [];
+  try { apps = JSON.parse(editorRaw.value || '[]'); } catch(e) {}
+  if(!Array.isArray(apps)) apps = [];
+  apps.push({
+    key: 'novo-app-' + Date.now(), title: 'Novo App', desc: 'Descrição...', icon: '', url: 'https://'
+  });
+  editorRaw.value = JSON.stringify(apps, null, 2);
+};
+
+/* Fechar modais ao clicar fora ou Esc */
+window.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') {
+    if(viewer.classList.contains('show')) closeViewer();
+    if(editor.classList.contains('show')) $('#btnEditorClose').click();
+    if(modalManifesto.classList.contains('show')) $('#btnManifestoClose').click();
+  }
+});
+[viewer, editor, modalManifesto].forEach(el => {
+  el.addEventListener('click', (e) => { if(e.target === el) el.querySelector('.bar .btn').click(); });
+});
+
+/* ===== Boot & PWA ===== */
+function checkHash(){
+  const m = (location.hash || '').match(/#app=([^&]+)/);
+  if(m) setTimeout(() => openByKey(decodeURIComponent(m[1]), false, hubEffectiveApps()), 500);
+}
+
+loadApps().then(checkHash);
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredPrompt=e; });
+$('#btnInstall').onclick = async()=>{
+  if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; }
+  else alert('Para instalar, use a opção "Adicionar à Tela de Início" do seu navegador.');
+};
+</script>
+
+
+
+
+
+</head>
+<body class="bg-brand-bg text-slate-800 antialiased pb-24">
+
+    <!-- Header / Navbar -->
+    <nav class="sticky top-0 bg-white z-50 px-5 py-3 flex justify-between items-center shadow-sm">
+        <button class="text-slate-600 hover:text-brand-blue transition-colors">
+            <i class="ph ph-list text-2xl"></i>
+        </button>
+        
+        <!-- Logo SVG Refinado -->
+        <div class="h-12 w-auto flex-1 flex justify-center">
+            <svg viewBox="0 0 600 240" class="h-full">
+                <defs>
+                    <style>
+                        .logo-text-svg { font-family: 'Montserrat', sans-serif; font-weight: 900; fill: #111111; }
+                        .subtitle-svg { font-family: 'Montserrat', sans-serif; font-weight: 700; fill: #64748b; letter-spacing: 1.5px; }
+                    </style>
+                </defs>
+                <g transform="translate(300 100)">
+                    <!-- Seta Superior (Azul) -->
+                    <path d="M -140 0 A 140 140 0 0 1 140 0" fill="none" stroke="#1D3C8C" stroke-width="32" stroke-linecap="round"></path>
+                    <polygon points="110,-10 170,-10 140,40" fill="#1D3C8C"></polygon>
+                    
+                    <!-- Seta Inferior (Verde) -->
+                    <path d="M 140 0 A 140 140 0 0 1 -140 0" fill="none" stroke="#7BC043" stroke-width="32" stroke-linecap="round"></path>
+                    <polygon points="-110,10 -170,10 -140,-40" fill="#7BC043"></polygon>
+                </g>
+                <!-- Textos -->
+                <text x="300" y="135" text-anchor="middle" class="logo-text-svg" font-size="120">ASERT</text>
+                <text x="300" y="190" text-anchor="middle" class="subtitle-svg" font-size="22">ENGENHARIA E ASSESSORIA</text>
+                <text x="300" y="220" text-anchor="middle" class="subtitle-svg" font-size="22">DE SEGURANÇA DO TRABALHO</text>
+            </svg>
+        </div>
+
+        <button class="text-slate-600 relative hover:text-brand-green transition-colors">
+            <i class="ph ph-bell text-2xl"></i>
+            <span class="absolute -top-1 -right-1 bg-brand-green text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">3</span>
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Greeting -->
+        <header class="px-5 pt-6 pb-2">
+            <h1 class="text-2xl font-bold text-slate-900">Olá, Admin! <span class="text-2xl">👋</span></h1>
+            <p class="text-sm text-slate-500 mt-1">Bem-vindo ao painel de gestão de Segurança do Trabalho.</p>
+        </header>
+
+        <!-- Stats Grid -->
+        <section class="px-5 pt-4 grid grid-cols-2 gap-4">
+            <!-- Card 1 -->
+            <div class="bg-white rounded-2xl p-4 shadow-soft border border-slate-100/50">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-brand-blue">
+                        <i class="ph-fill ph-shield-check text-2xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xs font-semibold text-slate-500 mb-1">Ações em Andamento</h3>
+                <div class="flex items-end gap-2">
+                    <span class="text-2xl font-bold text-slate-800">18</span>
+                </div>
+                <p class="text-[10px] font-medium text-brand-green mt-1">+12% <span class="text-slate-400 font-normal">vs mês anterior</span></p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white rounded-2xl p-4 shadow-soft border border-slate-100/50">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-brand-green">
+                        <i class="ph-fill ph-check-circle text-2xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xs font-semibold text-slate-500 mb-1">Ações Concluídas</h3>
+                <div class="flex items-end gap-2">
+                    <span class="text-2xl font-bold text-slate-800">42</span>
+                </div>
+                <p class="text-[10px] font-medium text-brand-green mt-1">+8% <span class="text-slate-400 font-normal">vs mês anterior</span></p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white rounded-2xl p-4 shadow-soft border border-slate-100/50">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500">
+                        <i class="ph-fill ph-warning text-2xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xs font-semibold text-slate-500 mb-1">Pendências</h3>
+                <div class="flex items-end gap-2">
+                    <span class="text-2xl font-bold text-slate-800">7</span>
+                </div>
+                <p class="text-[10px] font-medium text-brand-green mt-1">-5% <span class="text-slate-400 font-normal">vs mês anterior</span></p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="bg-white rounded-2xl p-4 shadow-soft border border-slate-100/50">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                        <i class="ph-fill ph-users text-2xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xs font-semibold text-slate-500 mb-1">Colaboradores</h3>
+                <div class="flex items-end gap-2">
+                    <span class="text-2xl font-bold text-slate-800">128</span>
+                </div>
+                <p class="text-[10px] font-medium text-brand-green mt-1">+15% <span class="text-slate-400 font-normal">vs mês anterior</span></p>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="mx-5 mt-6 bg-white rounded-2xl p-5 shadow-soft border border-slate-100/50">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-base font-bold text-slate-800">Evolução de Ações</h2>
+                <div class="relative">
+                    <select class="appearance-none bg-slate-50 border border-slate-200 text-slate-600 text-xs py-1.5 pl-3 pr-8 rounded-lg outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+                        <option>Últimos 6 meses</option>
+                        <option>Este ano</option>
+                    </select>
+                    <i class="ph ph-caret-down absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                </div>
+            </div>
+            
+            <div class="h-48 w-full relative">
+                <canvas id="actionsChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Lists Grid (Stacks on mobile) -->
+        <div class="mx-5 mt-6 grid grid-cols-1 gap-6">
+            
+            <!-- Próximos Treinamentos -->
+            <section class="bg-white rounded-2xl p-5 shadow-soft border border-slate-100/50">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-base font-bold text-slate-800">Próximos Treinamentos</h2>
+                    <i class="ph ph-caret-right text-slate-400 font-bold"></i>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Item 1 -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-brand-blue shrink-0">
+                            <i class="ph ph-chalkboard-teacher text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-semibold text-slate-800">NR-35 – Trabalho em Altura</h4>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-xs text-slate-500">28/05/2025 • 08:00</span>
+                                <span class="text-[10px] font-semibold bg-blue-50 text-brand-blue px-2 py-0.5 rounded-full">12 inscritos</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="border-slate-100">
+
+                    <!-- Item 2 -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-brand-green shrink-0">
+                            <i class="ph ph-lightning text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-semibold text-slate-800">NR-10 – Segurança em Eletricidade</h4>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-xs text-slate-500">04/06/2025 • 13:30</span>
+                                <span class="text-[10px] font-semibold bg-blue-50 text-brand-blue px-2 py-0.5 rounded-full">8 inscritos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100">
+
+                    <!-- Item 3 -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500 shrink-0">
+                            <i class="ph ph-users-three text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-semibold text-slate-800">Integração de Segurança</h4>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-xs text-slate-500">10/06/2025 • 09:00</span>
+                                <span class="text-[10px] font-semibold bg-blue-50 text-brand-blue px-2 py-0.5 rounded-full">15 inscritos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="w-full mt-4 py-2 text-sm font-semibold text-brand-blue hover:bg-blue-50 rounded-lg transition-colors">
+                    Ver todos
+                </button>
+            </section>
+
+            <!-- Pendências Críticas -->
+            <section class="bg-white rounded-2xl p-5 shadow-soft border border-slate-100/50">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-base font-bold text-slate-800">Pendências Críticas</h2>
+                    <i class="ph ph-caret-right text-slate-400 font-bold"></i>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Item 1 -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-2 h-2 rounded-full bg-red-500 mt-1.5 shrink-0"></div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-semibold text-slate-800">Inspeção de Extintores</h4>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-xs text-slate-500">Venc.: 15/05/2025</span>
+                                <span class="text-[10px] font-semibold bg-red-50 text-red-600 px-2 py-0.5 rounded-full border border-red-100">Atrasado</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100">
+
+                    <!-- Item 2 -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-2 h-2 rounded-full bg-red-500 mt-1.5 shrink-0"></div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-semibold text-slate-800">Entrega de EPI</h4>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-xs text-slate-500">Venc.: 18/05/2025</span>
+                                <span class="text-[10px] font-semibold bg-red-50 text-red-600 px-2 py-0.5 rounded-full border border-red-100">Atrasado</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100">
+
+                    <!-- Item 3 -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-2 h-2 rounded-full bg-red-500 mt-1.5 shrink-0"></div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-semibold text-slate-800">Laudo de Iluminação</h4>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-xs text-slate-500">Venc.: 20/05/2025</span>
+                                <span class="text-[10px] font-semibold bg-red-50 text-red-600 px-2 py-0.5 rounded-full border border-red-100">Atrasado</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100">
+
+                    <!-- Item 4 -->
+                    <div class="flex items-start gap-3">
+                        <div class="w-2 h-2 rounded-full bg-red-500 mt-1.5 shrink-0"></div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-semibold text-slate-800">Treinamento NR-12</h4>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-xs text-slate-500">Venc.: 22/05/2025</span>
+                                <span class="text-[10px] font-semibold bg-red-50 text-red-600 px-2 py-0.5 rounded-full border border-red-100">Atrasado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="w-full mt-4 py-2 text-sm font-semibold text-brand-blue hover:bg-blue-50 rounded-lg transition-colors">
+                    Ver todas
+                </button>
+            </section>
+        </div>
+
+        <!-- Categorias Rápidas (Scroll Horizontal) -->
+        <section class="mt-6 pl-5 pb-4">
+            <div class="flex gap-4 overflow-x-auto hide-scrollbar pr-5">
+                <button class="flex flex-col items-center justify-center min-w-[80px] h-[80px] bg-white rounded-2xl shadow-soft border border-slate-100/50">
+                    <div class="text-brand-blue bg-blue-50 p-2 rounded-lg mb-1">
+                        <i class="ph ph-clipboard-text text-xl"></i>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-600">Inspeções</span>
+                </button>
+
+                <button class="flex flex-col items-center justify-center min-w-[80px] h-[80px] bg-white rounded-2xl shadow-soft border border-slate-100/50">
+                    <div class="text-brand-green bg-green-50 p-2 rounded-lg mb-1">
+                        <i class="ph ph-file-text text-xl"></i>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-600">Documentos</span>
+                </button>
+
+                <button class="flex flex-col items-center justify-center min-w-[80px] h-[80px] bg-white rounded-2xl shadow-soft border border-slate-100/50">
+                    <div class="text-purple-600 bg-purple-50 p-2 rounded-lg mb-1">
+                        <i class="ph ph-graduation-cap text-xl"></i>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-600">Treinamentos</span>
+                </button>
+
+                <button class="flex flex-col items-center justify-center min-w-[80px] h-[80px] bg-white rounded-2xl shadow-soft border border-slate-100/50">
+                    <div class="text-orange-500 bg-orange-50 p-2 rounded-lg mb-1">
+                        <i class="ph ph-chart-bar text-xl"></i>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-600">Relatórios</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 w-full bg-white border-t border-slate-200 flex justify-between items-center px-6 py-3 pb-safe z-50">
+        <a href="#" class="flex flex-col items-center gap-1 text-brand-blue">
+            <i class="ph-fill ph-house text-2xl"></i>
+            <span class="text-[10px] font-semibold">Dashboard</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+            <i class="ph ph-list-checks text-2xl"></i>
+            <span class="text-[10px] font-semibold">Ações de SST</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+            <i class="ph ph-clipboard-text text-2xl"></i>
+            <span class="text-[10px] font-semibold">Inspeções</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+            <i class="ph ph-dots-three-circle text-2xl"></i>
+            <span class="text-[10px] font-semibold">Mais</span>
+        </a>
+    </nav>
+
+    <!-- Chart Init Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('actionsChart').getContext('2d');
+            
+            // Gradiente Azul
+            const gradientBlue = ctx.createLinearGradient(0, 0, 0, 200);
+            gradientBlue.addColorStop(0, 'rgba(29, 60, 140, 0.2)');
+            gradientBlue.addColorStop(1, 'rgba(29, 60, 140, 0)');
+
+            // Gradiente Verde
+            const gradientGreen = ctx.createLinearGradient(0, 0, 0, 200);
+            gradientGreen.addColorStop(0, 'rgba(123, 192, 67, 0.2)');
+            gradientGreen.addColorStop(1, 'rgba(123, 192, 67, 0)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [
+                        {
+                            label: 'Ações Criadas',
+                            data: [20, 26, 31, 26, 37, 48],
+                            borderColor: '#1D3C8C',
+                            backgroundColor: gradientBlue,
+                            borderWidth: 2,
+                            pointBackgroundColor: '#1D3C8C',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Ações Concluídas',
+                            data: [11, 14, 17, 19, 25, 31],
+                            borderColor: '#7BC043',
+                            backgroundColor: gradientGreen,
+                            borderWidth: 2,
+                            pointBackgroundColor: '#7BC043',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 6,
+                                boxHeight: 6,
+                                padding: 20,
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 11,
+                                    weight: '600'
+                                },
+                                color: '#64748b'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleFont: { family: "'Inter', sans-serif", size: 13 },
+                            bodyFont: { family: "'Inter', sans-serif", size: 12 },
+                            padding: 10,
+                            cornerRadius: 8,
+                            displayColors: true,
+                            usePointStyle: true,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 50,
+                            ticks: {
+                                stepSize: 10,
+                                color: '#94a3b8',
+                                font: { family: "'Inter', sans-serif", size: 10 }
+                            },
+                            border: { display: false },
+                            grid: {
+                                color: '#f1f5f9',
+                                drawBorder: false,
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#94a3b8',
+                                font: { family: "'Inter', sans-serif", size: 11 }
+                            },
+                            border: { display: false },
+                            grid: { display: false }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                }
+            });
+        });
+    </script>
+
+
+
+<script>
+/* ===== Utils ===== */
+const $ = (q, root=document) => root.querySelector(q);
+const $$ = (q, root=document) => [...root.querySelectorAll(q)];
+const metaTheme = $('#metaThemeColor');
+
+/* ===== Temas ===== */
+function setTheme(name){
+  if(name === 'lux'){
+    document.documentElement.setAttribute('data-theme', 'lux');
+    metaTheme.setAttribute('content', '#0b0819');
+    $('#themeLux').setAttribute('aria-pressed', 'true');
+    $('#themeCyan').setAttribute('aria-pressed', 'false');
+    localStorage.setItem('hub.theme', 'lux');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    metaTheme.setAttribute('content', '#050510');
+    $('#themeCyan').setAttribute('aria-pressed', 'true');
+    $('#themeLux').setAttribute('aria-pressed', 'false');
+    localStorage.setItem('hub.theme', 'assert');
+  }
+}
+$('#themeCyan').onclick = () => setTheme('assert');
+$('#themeLux').onclick = () => setTheme('lux');
+
+const storedTheme = localStorage.getItem('hub.theme');
+if(storedTheme === 'lux') setTheme('lux');
+
+/* ===== Hub & Apps Data ===== */
+let HUB_BASE_APPS = [];
+let HUB_USER_APPS = null;
+
+function hubLoadUserApps(){
+  const raw = localStorage.getItem('hub.user.apps');
+  if(!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : null;
+  } catch(e) { return null; }
+}
+
+function hubSaveUserApps(apps){
+  if(!Array.isArray(apps)){
+    localStorage.removeItem('hub.user.apps');
+    HUB_USER_APPS = null;
+    return;
+  }
+  HUB_USER_APPS = apps;
+  localStorage.setItem('hub.user.apps', JSON.stringify(apps));
+}
+
+function hubEffectiveApps(){
+  const params = new URL(location.href).searchParams;
+  const virgem = params.get('virgem');
+  const user = HUB_USER_APPS || hubLoadUserApps();
+  if(virgem === '1' || virgem === 'true') return (user && user.length) ? user : [];
+  if(user && user.length) return user;
+  return HUB_BASE_APPS;
+}
+
+async function loadApps(){
+  try{
+    const res = await fetch('https://kodux78k.github.io/Dual_EngJHBarros/apps/apps.json', {cache:'no-store'});
+    const data = await res.json();
+    HUB_BASE_APPS = Array.isArray(data.apps) ? data.apps : [];
+  } catch(e) {
+    // Dados mocados (Fallback visual se o fetch falhar)
+    HUB_BASE_APPS = [
+      { key: "app-1", title: "Dual.Infodose", desc: "Sistema de integração de dados e relatórios técnicos.", url: "about:blank" },
+      { key: "app-2", title: "ASSERT Gestão", desc: "Controle de riscos e treinamentos SST.", url: "about:blank" }
+    ];
+  }
+  HUB_USER_APPS = hubLoadUserApps();
+  renderCards(hubEffectiveApps());
+}
+
+function renderCards(apps){
+  const root = $('#cards');
+  root.innerHTML = '';
+  
+  if (apps.length === 0) {
+    root.innerHTML = '<div class="card"><div class="icon">ℹ️</div><div><div class="title">Nenhum App</div><div class="muted">Adicione apps via "Meu Hub" ou verifique a conexão.</div></div></div>';
+    return;
+  }
+
+  apps.forEach(app => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const iconSrc = app.icon || 'icons/icon-192.png';
+    card.innerHTML = `
+      <div class="icon" aria-hidden="true">
+        <img src="${iconSrc}" onerror="this.style.display='none'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:12px"/>
+      </div>
+      <div style="flex:1">
+        <div class="title">${app.title || app.key}</div>
+        <div class="muted">${app.desc || ''}</div>
+        <div class="row">
+          <button class="btn" type="button" data-open="${app.key}">Abrir no Hub</button>
+          <button class="btn" type="button" data-open="${app.key}" data-newtab="1">Nova aba</button>
+        </div>
+      </div>`;
+    root.appendChild(card);
+  });
+
+  $$('[data-open]').forEach(b => {
+    b.onclick = () => openByKey(b.getAttribute('data-open'), b.hasAttribute('data-newtab'), apps);
+    b.addEventListener('mouseenter', () => prefetchApp(b.getAttribute('data-open'), apps), {passive: true});
+  });
+}
+
+function prefetchApp(key, apps) {
+  const app = apps.find(x => x.key === key);
+  if(app && app.url && !document.querySelector(`link[data-prefetch="${app.url}"]`)){
+    const l = document.createElement('link');
+    l.rel = 'prefetch'; l.href = app.url; l.as = 'document'; l.setAttribute('data-prefetch', app.url);
+    document.head.appendChild(l);
+  }
+}
+
+/* ===== Viewer (Iframe) ===== */
+const viewer = $('#viewer');
+const frame = $('#appFrame');
+const loader = $('#loader');
+const btnExternal = $('#btnExternal');
+let lastFocus = null;
+
+function openApp(app, newtab){
+  if(newtab){ window.open(app.url, '_blank', 'noopener'); return; }
+  lastFocus = document.activeElement;
+  $('#barTitle').textContent = app.title || app.key;
+  btnExternal.href = app.url;
+  loader.classList.add('show');
+  
+  frame.onload = () => setTimeout(() => loader.classList.remove('show'), 150);
+  frame.src = app.url;
+  
+  viewer.classList.add('show');
+  document.body.classList.add('modal-open');
+  $('#btnHome').focus();
+  localStorage.setItem('hub.last', app.key);
+  location.hash = '#app=' + app.key;
+}
+
+function closeViewer(){
+  frame.src = 'about:blank';
+  viewer.classList.remove('show');
+  document.body.classList.remove('modal-open');
+  history.pushState('', document.title, window.location.pathname + window.location.search);
+  if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+}
+
+function openByKey(key, newtab, apps){
+  const app = (apps||[]).find(x => x.key === key);
+  if(app) openApp(app, newtab);
+}
+
+$('#btnHome').onclick = closeViewer;
+
+/* ===== Manifesto 78K Modal ===== */
+const modalManifesto = $('#manifestoModal');
+$('#btnOpenManifesto').onclick = () => {
+  modalManifesto.classList.add('show');
+  document.body.classList.add('modal-open');
+};
+$('#btnManifestoClose').onclick = () => {
+  modalManifesto.classList.remove('show');
+  document.body.classList.remove('modal-open');
+};
+
+/* ===== Editor do Hub ===== */
+const editor = $('#editor');
+const editorRaw = $('#editorRaw');
+
+$('#btnHubEditor').onclick = () => {
+  editorRaw.value = JSON.stringify(hubEffectiveApps(), null, 2);
+  editor.classList.add('show');
+  document.body.classList.add('modal-open');
+  setTimeout(() => editorRaw.focus(), 50);
+};
+
+$('#btnEditorClose').onclick = () => {
+  editor.classList.remove('show');
+  document.body.classList.remove('modal-open');
+};
+
+$('#btnEditorApply').onclick = () => {
+  try {
+    const parsed = JSON.parse(editorRaw.value || '[]');
+    if(!Array.isArray(parsed)) throw new Error('O JSON precisa ser um array [ ].');
+    hubSaveUserApps(parsed);
+    renderCards(parsed);
+    alert('Hub atualizado localmente com sucesso!');
+  } catch(e) { alert('JSON inválido.\n' + e.message); }
+};
+
+$('#btnEditorCopy').onclick = () => {
+  editorRaw.select();
+  try { document.execCommand('copy'); alert('Copiado!'); } 
+  catch(e) { alert('Selecione e copie manualmente.'); }
+};
+
+$('#btnEditorReset').onclick = () => {
+  if(confirm('Restaurar apps padrão?')){
+    localStorage.removeItem('hub.user.apps');
+    HUB_USER_APPS = null;
+    editorRaw.value = JSON.stringify(HUB_BASE_APPS, null, 2);
+    renderCards(HUB_BASE_APPS);
+  }
+};
+
+$('#btnEditorUseBase').onclick = () => editorRaw.value = JSON.stringify(HUB_BASE_APPS, null, 2);
+
+$('#btnEditorAdd').onclick = () => {
+  let apps = [];
+  try { apps = JSON.parse(editorRaw.value || '[]'); } catch(e) {}
+  if(!Array.isArray(apps)) apps = [];
+  apps.push({
+    key: 'novo-app-' + Date.now(), title: 'Novo App', desc: 'Descrição...', icon: '', url: 'https://'
+  });
+  editorRaw.value = JSON.stringify(apps, null, 2);
+};
+
+/* Fechar modais ao clicar fora ou Esc */
+window.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') {
+    if(viewer.classList.contains('show')) closeViewer();
+    if(editor.classList.contains('show')) $('#btnEditorClose').click();
+    if(modalManifesto.classList.contains('show')) $('#btnManifestoClose').click();
+  }
+});
+[viewer, editor, modalManifesto].forEach(el => {
+  el.addEventListener('click', (e) => { if(e.target === el) el.querySelector('.bar .btn').click(); });
+});
+
+/* ===== Boot & PWA ===== */
+function checkHash(){
+  const m = (location.hash || '').match(/#app=([^&]+)/);
+  if(m) setTimeout(() => openByKey(decodeURIComponent(m[1]), false, hubEffectiveApps()), 500);
+}
+
+loadApps().then(checkHash);
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredPrompt=e; });
+$('#btnInstall').onclick = async()=>{
+  if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; }
+  else alert('Para instalar, use a opção "Adicionar à Tela de Início" do seu navegador.');
+};
+</script></body></html>

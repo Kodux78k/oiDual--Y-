@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-arch="kobllux" data-voice-arch="kobllux">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="kob-arch" content="kobllux">
+  <meta name="kob-root" content="documentElement">
+  <title>a€kobFX0RB</title>
+
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.json">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/inxs.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glassu.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/NAGATANAZARE.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/ss5.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/0RB/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css">
+
+  <style>
+    /* ─────────────────────────────────────────────
+       Z-INDEX SYSTEM
+    ───────────────────────────────────────────── */
+    :root {
+      --z-base:    0;
+      --z-content: 100;
+      --z-widget:  500;
+      --z-overlay: 1000;
+      --z-system:  5000;
+    }
+
+    /* ─────────────────────────────────────────────
+       ARCH THEME VARS — driven by html[data-arch]
+       CSS-native, sem JS para o paint inicial
+    ───────────────────────────────────────────── */
+    :root,
+    html[data-arch="kobllux"]  { --kob-voice-primary:#22D3EE; --kob-voice-secondary:#7dd3fc; --kob-voice-glow:0 0 18px rgba(34,211,238,.55); }
+    html[data-arch="kodux"]    { --kob-voice-primary:#F97316; --kob-voice-secondary:#fb923c; --kob-voice-glow:0 0 18px rgba(249,115,22,.55); }
+    html[data-arch="atlas"]    { --kob-voice-primary:#78e3ff; --kob-voice-secondary:#b978ff; --kob-voice-glow:0 0 18px rgba(120,227,255,.55); }
+    html[data-arch="nova"]     { --kob-voice-primary:#ff6b6b; --kob-voice-secondary:#ffb347; --kob-voice-glow:0 0 18px rgba(255,107,107,.55); }
+    html[data-arch="vitalis"]  { --kob-voice-primary:#4ecdc4; --kob-voice-secondary:#45b7d1; --kob-voice-glow:0 0 18px rgba(78,205,196,.55); }
+    html[data-arch="pulse"]    { --kob-voice-primary:#a8e6cf; --kob-voice-secondary:#d4a5a5; --kob-voice-glow:0 0 18px rgba(168,230,207,.55); }
+    html[data-arch="artemis"]  { --kob-voice-primary:#ffd93d; --kob-voice-secondary:#ff9f1c; --kob-voice-glow:0 0 18px rgba(255,217,61,.55); }
+    html[data-arch="serena"]   { --kob-voice-primary:#b8e1ff; --kob-voice-secondary:#a0b9ff; --kob-voice-glow:0 0 18px rgba(184,225,255,.55); }
+    html[data-arch="kaos"]     { --kob-voice-primary:#ff8066; --kob-voice-secondary:#b624ff; --kob-voice-glow:0 0 18px rgba(255,128,102,.55); }
+    html[data-arch="genus"]    { --kob-voice-primary:#95e1d3; --kob-voice-secondary:#f38181; --kob-voice-glow:0 0 18px rgba(149,225,211,.55); }
+    html[data-arch="lumine"]   { --kob-voice-primary:#f9f3b2; --kob-voice-secondary:#ffe69b; --kob-voice-glow:0 0 18px rgba(249,243,178,.55); }
+    html[data-arch="solus"]    { --kob-voice-primary:#ffb347; --kob-voice-secondary:#ff8c42; --kob-voice-glow:0 0 18px rgba(255,179,71,.55); }
+    html[data-arch="rhea"]     { --kob-voice-primary:#b5eaea; --kob-voice-secondary:#80b3ff; --kob-voice-glow:0 0 18px rgba(181,234,234,.55); }
+    html[data-arch="aion"]     { --kob-voice-primary:#c79aff; --kob-voice-secondary:#9f7aff; --kob-voice-glow:0 0 18px rgba(199,154,255,.55); }
+    html[data-arch="uno"]      { --kob-voice-primary:#f97316; --kob-voice-secondary:#fb923c; --kob-voice-glow:0 0 18px rgba(249,115,22,.55); }
+    html[data-arch="dual"]     { --kob-voice-primary:#06b6d4; --kob-voice-secondary:#67e8f9; --kob-voice-glow:0 0 18px rgba(6,182,212,.55); }
+    html[data-arch="trinity"]  { --kob-voice-primary:#ec4899; --kob-voice-secondary:#f472b6; --kob-voice-glow:0 0 18px rgba(236,72,153,.55); }
+    html[data-arch="infodose"] { --kob-voice-primary:#22c55e; --kob-voice-secondary:#4ade80; --kob-voice-glow:0 0 18px rgba(34,197,94,.55); }
+    html[data-arch="horus"]    { --kob-voice-primary:#f59e0b; --kob-voice-secondary:#fbbf24; --kob-voice-glow:0 0 18px rgba(245,158,11,.55); }
+    html[data-arch="bllue"]    { --kob-voice-primary:#60a5fa; --kob-voice-secondary:#93c5fd; --kob-voice-glow:0 0 18px rgba(96,165,250,.55); }
+
+    /* ─────────────────────────────────────────────
+       BASE LAYOUT
+    ───────────────────────────────────────────── */
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #0a0c14;
+    }
+
+    body { color: white; }
+
+    #bodyPlayer {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ─────────────────────────────────────────────
+       ORB
+    ───────────────────────────────────────────── */
+    .symbol-toolbar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .orb {
+      width: 40%;
+      height: 40%;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+    }
+
+    .orb-core {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, var(--orb-accent, var(--kob-voice-secondary)), transparent 60%),
+        radial-gradient(circle at 70% 70%, var(--orb-primary, var(--kob-voice-primary)), var(--orb-secondary, var(--kob-voice-secondary)));
+      box-shadow:
+        0 0 18px var(--kob-voice-primary),
+        0 0 36px rgba(120,227,255,0.4);
+      animation: orbSpin var(--orb-speed, 8s) linear infinite;
+      transition: box-shadow .4s ease;
+    }
+
+    @keyframes orbSpin  { to { transform: rotate(360deg); } }
+    @keyframes orbPulse { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+    #orb-root.speaking .orb-core {
+      animation:
+        orbSpin 2s linear infinite,
+        orbPulse 0.5s ease-in-out infinite alternate;
+    }
+
+    /* ─────────────────────────────────────────────
+       HUD TOGGLE BUTTON — themed by CSS var
+    ───────────────────────────────────────────── */
+    .main-toggle,
+    #toggleBtn {
+      color: var(--kob-voice-secondary);
+      width: 48px;
+      height: 48px;
+      border: 12px;
+      box-shadow: var(--kob-voice-glow);
+      background-color: rgba(0,0,0,0.1);
+      transition: color .4s ease, box-shadow .4s ease;
+    }
+
+    /* ─────────────────────────────────────────────
+       IDLE SYSTEM
+    ───────────────────────────────────────────── */
+    .kob-tts-dock,
+    #kodux-widget,
+    [data-idle-target] {
+      transition: transform .35s ease, opacity .65s ease;
+      will-change: transform, opacity;
+      box-shadow: none !important;
+    }
+    .kob-tts-dock.idle,
+    #kodux-widget.idle,
+    [data-idle-target].idle  { opacity: .18; transform: scale(.87); }
+    .kob-tts-dock:hover,
+    #kodux-widget:hover,
+    [data-idle-target]:hover { opacity: 1;   transform: scale(1);   }
+
+    /* ─────────────────────────────────────────────
+       VOICE THEME TRANSITION — suave para todos
+    ───────────────────────────────────────────── */
+    html { transition: --kob-voice-primary .4s ease, --kob-voice-secondary .4s ease; }
+    body,
+    .kob-tts-dock,
+    .symbol-bar,
+    #symbolBar,
+    .orb-core,
+    .main-toggle,
+    #toggleBtn {
+      transition:
+        background   .42s ease,
+        box-shadow   .42s ease,
+        border-color .42s ease,
+        color        .42s ease;
+    }
+  </style>
+</head>
+
+<body class="field-closed mode-night">
+
+<div id="root">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+
+  <div class="wrap">
+    <div class="content">
+      <iframe id="navFrame" src="about:blank"></iframe>
+      <div id="kob-tts-outline"></div>
+    </div>
+
+    <div class="bg-gradient-base" style="opacity:.39"></div>
+    <div id="bg-layer-fixed"></div>
+    <div id="bg-fake-customs"></div>
+
+    <!-- HUD Inteligente -->
+    <div class="symbol-bar floating" id="symbolBar">
+      <div class="symbol-wrap">
+        <div class="orb-container">
+          <button id="orbBtn" class="orb-btn" aria-label="Toggle System">
+            <div class="orb-core"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Botão Menu -->
+      <div class="toggle-wrap">
+        <button class="symbol-button main-toggl" id="toggleBtn" title="Menu / Iniciar">≡</button>
+      </div>
+
+      <!-- Controles de Navegação de Leitura -->
+      <div class="symbol-wrap">
+        <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+      </div>
+      <div class="symbol-wrap">
+        <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+      </div>
+      <div class="symbol-wrap">
+        <button class="symbol-button" id="tts-stop" title="Parar">■</button>
+      </div>
+
+      <!-- Troca de Arquétipo com ORB integrado -->
+      <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+        <div class="orb-microphone-container">
+          <div class="tts-orb-mini">
+            <div class="orb" id="main-orb">
+              <div class="orb-core"></div>
+            </div>
+          </div>
+        </div>
+      </button>
+
+      <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+    </div>
+  </div>
+
+  <div id="arch-overlay"></div>
+
+  <!-- Scripts core -->
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+</div>
+
+
+<!-- ─── IDLE DOCK ─── -->
+<script>
+(function(){
+  const dock = document.querySelector('.kob-tts-dock');
+  let idleTimer;
+  function resetIdle(){
+    if(dock) dock.classList.remove('idle');
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(()=>{ if(dock) dock.classList.add('idle'); }, 1870);
+  }
+  ['pointerdown','pointermove','touchstart','mousemove']
+    .forEach(ev=> document.addEventListener(ev, resetIdle, {passive:true}));
+  resetIdle();
+})();
+</script>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  KOBLLUX · LONG-PRESS URL EDITOR        ║
+     ╚══════════════════════════════════════════╝ -->
+<div id="kblx-back" aria-hidden="true">
+  <div id="kblx-panel">
+    <div class="kblx-head">
+      <div class="p-chip">⌘ NAGATANAZARE · QUICK ROUTE</div>
+      <button class="kblx-icon-btn" id="kblx-btn-close" type="button">✕</button>
+    </div>
+    <div class="kblx-title-wrap">
+      <h2 class="p-title" id="kblx-ttl">Botão</h2>
+      <p class="kblx-sub" id="kblx-sub">Escolha rápido, salve e injete sem cobrir a tela.</p>
+    </div>
+    <div class="kblx-current" id="kblx-current">Nenhuma rota definida.</div>
+    <section class="kblx-section">
+      <label class="p-lbl" for="kblx-inp">
+        Novo valor para <code>data-url</code>
+      </label>
+      <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+    </section>
+    <div class="kblx-actions">
+      <button class="kblx-btn kblx-save"        id="kblx-btn-save"        type="button">Salvar</button>
+      <button class="kblx-btn kblx-inject"       id="kblx-btn-orb-inject"  type="button">SymbolBar</button>
+      <button class="kblx-btn kblx-frame"        id="kblx-btn-frame"       type="button">Session Frame</button>
+    </div>
+    <div class="kblx-more-row">
+      <button class="kblx-mini" id="kblx-btn-more"  type="button">Mais</button>
+      <button class="kblx-mini" id="kblx-btn-clear" type="button">Limpar</button>
+    </div>
+    <div class="kblx-advanced" id="kblx-advanced">
+      <section class="kblx-section">
+        <div class="kblx-note" style="margin-top:0">Presets rápidos</div>
+        <div class="kblx-more-row">
+          <button class="kblx-mini" type="button" data-orb-preset="orb">◉ Orb</button>
+          <button class="kblx-mini" type="button" data-orb-preset="frame">⟁ Frame</button>
+          <button class="kblx-mini" type="button" data-orb-preset="dock">⌘ Dock</button>
+        </div>
+      </section>
+      <section class="kblx-section">
+        <div class="kblx-note">
+          Long press em qualquer <code>.symbol-button[data-url]</code> abre este painel.
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── QUICK CONTEXT MENU ─── -->
+<div id="kblx-quick">
+  <button class="kq-item" data-kq="edit">✦ Editar</button>
+  <button class="kq-item" data-kq="symbol">◉ SymbolBar</button>
+  <button class="kq-item" data-kq="frame">⟁ Session</button>
+  <button class="kq-item" data-kq="dock">⌘ Dock</button>
+  <button class="kq-item" data-kq="duplicate">📋 Duplicar</button>
+  <button class="kq-item" data-kq="favorite">⭐ Favoritar</button>
+  <button class="kq-item" data-kq="full">⋯ Mais</button>
+</div>
+
+
+<!-- ─── SCRIPTS SÜMBÜS ENGINE ─── -->
+<script>
+  console.log("Sistema operacional SÜMBÜS Pronto.");
+</script>
+
+<!-- ARCHETYPES array (IDs) — usado por scripts externos -->
+<script>
+const ARCHETYPES_IDS= [
+  "atlas","nova","vitalis","pulse","kaos","kodux","lumine","aion",
+  "kobllux","artemis","serena","genus","solus","rhea","uno","dual",
+  "trinity","infodose","horus","bllue",
+  localStorage.getItem("di_userName")
+].filter(Boolean);
+</script>
+
+<script>
+const ARCHETYPES = [
+  "atlas","nova","vitalis","pulse","kaos","kodux","lumine","aion",
+  "kobllux","artemis","serena","genus","solus","rhea","uno","dual",
+  "trinity","infodose","horus","bllue",
+  localStorage.getItem("di_userName")
+].filter(Boolean);
+</script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/inline-bg.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-878.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/NAGATANAZARE.js"></script>
+
+
+<!-- ─── MONOLITH WRAPPER ─── -->
+<div class="void-ambient"></div>
+
+<div class="monolith-wrapper">
+  <div class="monolith">
+    <div class="mono-header">
+      <div class="mono-brand">
+        <div class="brand-icon"></div>
+        <div class="brand-title">DUAL <span style="opacity:0.3; margin:0 4px;">//</span> MONOLITH</div>
+      </div>
+      <div id="sysStatus" class="status-badge">STANDBY</div>
+    </div>
+
+    <div class="drawer-toggle" onclick="toggleDrawer()" title="Abrir Engine de Background">🎛️</div>
+
+    <div class="mono-body">
+      <div id="viewVault" class="vault-view">
+        <div class="actions-grid">
+          <button id="createBtn" class="action-card btn-create"><span>NOVO</span></button>
+          <div id="dropZone" class="action-card dashed"><span style="font-family:var(--font-code)">UPLOAD</span></div>
+          <button id="backupBtn" class="action-card"><span>BACKUP</span></button>
+          <button id="safeBtn" class="action-card"><span id="safeLabel">SAFE</span></button>
+        </div>
+
+        <div class="top-bar">
+          <div class="brand-text"></div>
+          <div class="sep"></div>
+          <button id="themeToggle" class="theme-btn" title="Toggle Theme">
+            <i class="fa-solid fa-circle-half-stroke"></i>
+          </button>
+        </div>
+
+        <!-- DRAWER BACKGROUND ENGINE -->
+        <div id="drawerOverlay" onclick="toggleDrawer()"></div>
+        <aside class="drawer" id="drawerPanel" aria-label="Background Engine">
+          <div class="drawer-header">
+            <h2>⚙️ Background Engine</h2>
+            <button class="drawer-close" onclick="toggleDrawer()" title="Fechar">×</button>
+          </div>
+          <div class="drawer-body">
+            <div class="panel-section">
+              <label class="section-label"><span>Background</span><span id="bgStatusText">Nenhum</span></label>
+              <div class="tiny-note">Ajuste a camada fixa do app e sincronize com localStorage.</div>
+            </div>
+            <div class="panel-section">
+              <label class="section-label"><span>Opacidade</span><span id="val-op">15%</span></label>
+              <input id="bgOpacity" type="range" min="0" max="100" value="15" oninput="updateBgAttr('opacity', this.value)">
+            </div>
+            <div class="panel-section">
+              <label class="section-label"><span>Mix Blend Mode</span><span>CSS</span></label>
+              <select id="bgBlend" onchange="updateBgAttr('blend', this.value)">
+                <option value="normal">Normal</option>
+                <option value="multiply">Multiply (Escurecer)</option>
+                <option value="screen">Screen (Clarear)</option>
+                <option value="overlay" selected>Overlay (Realçar)</option>
+                <option value="soft-light">Soft Light (Suave)</option>
+                <option value="luminosity">Luminosity (Fantasma)</option>
+              </select>
+            </div>
+            <div class="panel-section">
+              <label class="section-label"><span>Presets de Estilo</span><span>BG</span></label>
+              <div class="preset-grid">
+                <button class="preset-btn" data-bg-preset="ghost"  onclick="applyPreset('ghost')">Fantasma</button>
+                <button class="preset-btn active" data-bg-preset="vivid" onclick="applyPreset('vivid')">Vívido</button>
+                <button class="preset-btn" data-bg-preset="deep"  onclick="applyPreset('deep')">Profundo</button>
+              </div>
+            </div>
+            <div class="panel-section">
+              <label class="section-label"><span>Biblioteca Local</span><span id="libCount">0</span></label>
+              <div class="bg-thumbs" id="thumb-list"></div>
+              <label class="btn-upload">
+                + Fazer Upload de Imagem
+                <input type="file" id="file-upload" accept="image/*" hidden onchange="handleUpload(this)">
+              </label>
+            </div>
+            <div class="panel-section">
+              <label class="section-label"><span>FX Lab</span><span>Upload / Frame</span></label>
+              <div class="fx-stage">
+                <div class="fx-actions">
+                  <button class="btn-mini" onclick="loadCurrentFrameToFX()">Carregar quadro atual</button>
+                  <label class="btn-mini" style="justify-content:center;">
+                    Upload imagem
+                    <input type="file" id="fx-upload" accept="image/*" hidden>
+                  </label>
+                  <button class="btn-download" onclick="downloadFX()">Download PNG</button>
+                </div>
+                <div class="fx-canvas-wrap">
+                  <canvas id="fxCanvas" width="1200" height="800"></canvas>
+                </div>
+                <div class="preset-grid">
+                  <button class="preset-btn active" data-fx-mode="texture" onclick="setFXMode('texture')">Textura</button>
+                  <button class="preset-btn"         data-fx-mode="liquid"  onclick="setFXMode('liquid')">Líquido</button>
+                  <button class="preset-btn"         data-fx-mode="paint"   onclick="setFXMode('paint')">Tinta</button>
+                </div>
+                <div class="panel-section" style="padding:14px;">
+                  <label class="section-label"><span>Blur gaussiano</span><span id="fxBlurVal">4</span></label>
+                  <input id="fxBlur" type="range" min="0" max="24" value="4">
+                </div>
+                <div class="panel-section" style="padding:14px;">
+                  <label class="section-label"><span>Intensidade</span><span id="fxIntensityVal">55</span></label>
+                  <input id="fxIntensity" type="range" min="0" max="100" value="55">
+                </div>
+                <div class="panel-section" style="padding:14px;">
+                  <label class="section-label"><span>Liquify</span><span id="fxLiquifyVal">0</span></label>
+                  <input id="fxLiquify" type="range" min="0" max="100" value="0">
+                </div>
+                <div class="panel-section" style="padding:14px;">
+                  <label class="section-label"><span>Grain / textura</span><span id="fxGrainVal">35</span></label>
+                  <input id="fxGrain" type="range" min="0" max="100" value="35">
+                </div>
+                <div class="panel-section" style="padding:14px;">
+                  <label class="section-label"><span>Contraste</span><span id="fxContrastVal">108</span></label>
+                  <input id="fxContrast" type="range" min="80" max="140" value="108">
+                </div>
+                <div class="panel-section" style="padding:14px;">
+                  <label class="section-label"><span>Saturação</span><span id="fxSaturationVal">102</span></label>
+                  <input id="fxSaturation" type="range" min="60" max="150" value="102">
+                </div>
+                <button class="btn-action" onclick="applyFXToBackground()">Aplicar FX no Background</button>
+                <div class="tiny-note">Se a imagem for muito grande, o motor reduz a área para manter o render leve.</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- SIDEBARS NAV -->
+        <div class="sidebar right">
+          <button class="symbol-button icon-btn nav-btn" data-url="about:blank" title="Void">Φ</button>
+          <button class="symbol-button icon-btn nav-btn" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/KKP/index.html" title="a€dualDex">꩜</button>
+          <button class="symbol-button icon-btn nav-btn" data-url="https://kodux78k.github.io/oiDual-SmB/" title="a€SUMBUS">☼</button>
+          <div class="symbol-wrap">
+            <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">🌌</button>
+          </div>
+          <div class="symbol-wrap">
+            <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/editor-mix/">🛋️</button>
+          </div>
+          <div class="symbol-wrap">
+            <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
+          </div>
+          <div class="symbol-wrap">
+            <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/dual_reader/">◘</button>
+          </div>
+        </div>
+
+        <div class="sidebar left">
+          <button id="uploadBtn" class="icon-btn" title="Import File">
+            <i class="fa-solid fa-upload"></i>
+          </button>
+          <input type="file" id="uploadInput" hidden accept=".html,.js,.json">
+          <button id="remoteBtn" class="icon-btn" title="Fetch Remote">
+            <i class="fa-solid fa-globe"></i>
+          </button>
+        </div>
+
+        <div class="list-header">
+          <span class="list-label">VAULT STORAGE</span>
+          <span class="list-label" id="vaultCount">0 ITEMS</span>
+        </div>
+
+        <div id="stackList" class="flex flex-col gap-3" style="padding-bottom:3rem;"></div>
+      </div>
+
+      <div id="viewEditor" class="editor-view state-translated-x">
+        <div class="editor-header">
+          <div class="editor-title">:: MODULE CREATOR</div>
+          <button id="cancelEditor" class="btn-cancel">CANCELAR</button>
+        </div>
+        <input id="modTitle" type="text" placeholder="NOME DO MÓDULO" class="input-title">
+        <div class="code-area">
+          <textarea id="modContent" placeholder=""></textarea>
+        </div>
+        <div class="flex gap-3">
+          <button id="saveEditor" class="btn-save">SALVAR NO VAULT</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mono-footer">
+      <div id="pulseBar"></div>
+    </div>
+
+    <div id="runtimeLayer" class="runtime-layer">
+      <div class="runtime-bar">
+        <div class="runtime-indicator">
+          <div class="dot"></div>
+          <span>a€Dual // ACTIVE</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="exportBtn" class="btn-cancel" style="font-size:10px;">EXPORT TO NAV</button>
+          <button id="closeRuntime" class="icon-btn" style="width:24px;height:24px;border:none;background:transparent;">
+            <i data-lucide="x" style="width:16px;"></i>
+          </button>
+        </div>
+      </div>
+      <div class="runtime-frame-wrap">
+        <iframe id="appFrame" style="border:0;width:100%;height:100%;display:block;"
+          sandbox="allow-scripts allow-forms allow-modals allow-same-origin allow-pointer-lock"></iframe>
+        <div class="scanline"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── TOAST ─── -->
+<div id="toast" class="toast-hidden">
+  <span id="toastMsg">System Ready</span>
+</div>
+
+
+<!-- ─── ORB / INLINE MODULES ─── -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/0RB/js/modules/inline-1.js"></script>
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/0RB/js/modules/inline-2.js"></script>
+
+
+<!-- ─── BODY PLAYER ─── -->
+<div id="bodyPlayer" data-mode="player" class="min-h-screen w-full flex items-center justify-center relative overflow-hidden">
+
+  <div class="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center select-none"></div>
+
+  <div id="yt-container" class="absolute -left-[9999px]"></div>
+  <div id="sc-container" class="absolute -left-[9999px]"></div>
+  <audio id="local-audio" crossorigin="anonymous"></audio>
+
+  <div id="kodux-widget" data-idle-target class="state-ball" style="right:20px;bottom:100px;">
+    <div id="content-ball" class="w-full h-full flex items-center justify-center text-[var(--primary)]">
+      <i class="ph-fill ph-vinyl-record animate-spin" style="animation-duration:4s;font-size:28px;"></i>
+    </div>
+    <div id="content-preview" class="hidden-content w-full h-full flex items-center px-3 gap-3">
+      <img id="prev-cover" src="https://picsum.photos/100" class="w-12 h-12 rounded-full object-cover border border-[var(--primary)] shadow-lg preview-clickable cursor-pointer transition-transform hover:scale-105" onclick="openFullFromPreview(event)">
+      <div class="flex-1 overflow-hidden preview-clickable cursor-pointer" onclick="openFullFromPreview(event)">
+        <h4 id="prev-title" class="text-[11px] font-bold text-white truncate glow-text">Kodux System</h4>
+        <p id="prev-artist" class="text-[9px] text-[var(--muted)] truncate">Aguardando...</p>
+      </div>
+      <button onclick="togglePlay(event)" class="text-white hover:text-[var(--primary)] transition z-10">
+        <i id="prev-play-icon" class="ph-fill ph-play-circle text-4xl"></i>
+      </button>
+    </div>
+    <div id="content-footer" class="hidden-content w-full h-full flex flex-col relative">
+      <div class="absolute top-0 left-0 w-full h-1 bg-white/5 cursor-pointer" id="footer-progress-click">
+        <div id="footer-progress-bar" class="h-full bg-[var(--primary)] w-0 shadow-[0_0_10px_var(--primary)]"></div>
+      </div>
+      <div class="drag-header flex-1 flex items-center px-6 gap-4">
+        <img id="foot-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl object-cover shadow-xl border border-white/10">
+        <div class="flex-1 overflow-hidden cursor-pointer" onclick="updateWidgetState('full')">
+          <h4 id="foot-title" class="text-sm font-bold text-white truncate">Kodux System</h4>
+          <p id="foot-artist" class="text-xs text-[var(--muted)] truncate">Aguardando...</p>
+        </div>
+        <div class="flex items-center gap-5">
+          <button onclick="playPrev(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-back text-2xl"></i></button>
+          <button onclick="togglePlay(event)" class="text-white hover:scale-110 transition"><i id="foot-play-icon" class="ph-fill ph-play-circle text-5xl"></i></button>
+          <button onclick="playNext(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-forward text-2xl"></i></button>
+          <button onclick="collapseToBall(event)" class="text-[var(--muted)] ml-2"><i class="ph ph-minus-circle text-2xl"></i></button>
+        </div>
+      </div>
+    </div>
+    <div id="content-full" class="hidden-content flex flex-col w-full h-full relative">
+      <div class="drag-header w-full p-5 flex justify-between items-center bg-white/5 border-b border-white/5">
+        <div class="flex items-center gap-3">
+          <i class="ph-fill ph-lightning text-[var(--primary)] text-xl"></i>
+          <span class="text-sm font-black tracking-widest glow-text">ORÁCULO DUAL</span>
+        </div>
+        <button onclick="collapseToBall(event)" class="text-[var(--muted)] hover:text-white p-2 bg-white/5 rounded-lg">
+          <i class="ph ph-caret-down-bold"></i>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto p-5 pb-36 soft-scroll">
+        <div class="mb-4">
+          <div class="flex items-center gap-2 overflow-x-auto pb-2 soft-scroll" id="playlist-tabs"></div>
+        </div>
+        <div class="flex gap-2 mb-4">
+          <div class="flex-1 relative">
+            <i class="ph ph-link absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
+            <input type="text" id="link-input" placeholder="YouTube ou SoundCloud link" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
+          </div>
+          <select id="destination-select" class="glass-select rounded-xl px-3 text-xs min-w-[135px]">
+            <option value="all">Todas</option>
+          </select>
+          <button onclick="addLink()" class="btn-primary px-4 rounded-xl shadow-lg"><i class="ph ph-plus-bold"></i></button>
+        </div>
+        <div class="flex gap-2 mb-4 items-center">
+          <div class="flex-1 relative">
+            <i class="ph ph-folder-simple absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
+            <input type="text" id="new-playlist-input" placeholder="Criar nova playlist" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
+          </div>
+          <button onclick="createPlaylist()" class="btn-primary px-4 rounded-xl shadow-lg"><i class="ph ph-folder-plus"></i></button>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-sm font-bold text-white">Playlists carregadas</h3>
+            <p class="text-[10px] text-[var(--muted)]">Toque para trocar de grupo, criar, remover ou organizar.</p>
+          </div>
+        </div>
+        <div id="playlist-container" class="flex flex-col gap-3"></div>
+      </div>
+      <div class="absolute bottom-0 left-0 w-full bg-black/80 backdrop-blur-xl border-t border-[var(--primary)] p-6">
+        <input type="range" id="main-progress" min="0" max="100" value="0" class="w-full mb-4">
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4 overflow-hidden">
+            <img id="main-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl border border-white/20 object-cover">
+            <div class="overflow-hidden">
+              <h4 id="main-title" class="text-sm font-bold text-white truncate">Oráculo</h4>
+              <p id="main-artist" class="text-[10px] text-[var(--muted)] truncate">Sistema KODUX v2.5</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-5 shrink-0">
+            <button onclick="playPrev()" class="text-white text-2xl"><i class="ph-fill ph-skip-back"></i></button>
+            <button onclick="togglePlay()" class="w-14 h-14 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_20px_var(--primary)]">
+              <i id="main-play-icon" class="ph-fill ph-play text-3xl ml-1"></i>
+            </button>
+            <button onclick="playNext()" class="text-white text-2xl"><i class="ph-fill ph-skip-forward"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── KOBLLUX SHELL ─── -->
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
+<script>
+(function(){
+  const bodyPlayer  = document.getElementById('bodyPlayer');
+  const idleSelector = '.kob-tts-dock, #kodux-widget, [data-idle-target]';
+  let idleTimer = null;
+
+  function getIdleTargets(){ return document.querySelectorAll(idleSelector); }
+  function setIdleState(isIdle){ getIdleTargets().forEach(el=>el.classList.toggle('idle',isIdle)); }
+  function resetIdle(){
+    setIdleState(false);
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(()=>setIdleState(true), 1870);
+  }
+  function setMode(mode='player'){
+    if(!bodyPlayer) return;
+    bodyPlayer.dataset.mode = mode;
+  }
+
+  window.KoduxShell = { setMode, resetIdle };
+
+  ['pointerdown','pointermove','touchstart','mousemove','scroll']
+    .forEach(ev=>document.addEventListener(ev,resetIdle,{passive:true}));
+  document.addEventListener('keydown', resetIdle);
+
+  setMode(bodyPlayer?.dataset.mode || 'player');
+  resetIdle();
+})();
+</script>
+
+<!-- ─── CDN TAIL ─── -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="https://w.soundcloud.com/player/api.js"></script>
+
+</body>
+</html>

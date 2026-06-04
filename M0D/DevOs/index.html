@@ -1,22 +1,20 @@
-<html lang="pt-BR"><head>
+<html lang="pt-BR"><head> 
+
   <meta charset="utf-8">
-  <title>Fusion Card // Core Controller</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Fusion Card // Core Controller </title>
 
-
-
-
-                <!-- PWA METADATA & VIEWPORT FIX -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#0f0f11">
 
 <!-- iOS Support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <link rel="apple-touch-icon" href="./icon-192.png">
 
 <!-- Manifest -->
 <link rel="manifest" href="./manifest.json">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
 <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
@@ -38,7 +36,7 @@
       display:flex;
       align-items:center;
       flex-wrap:wrap;
-      gap:10px;
+      gap:0px;
     }
 
     .orb{
@@ -85,51 +83,12 @@
           --z-overlay: 1000;
           --z-system: 5000;
         }
-      </style>
-      
-      
-      <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/ss5.css">
-      
-      
-      <style>
-    :root {
-      --z-base: 0;
-      --z-content: 100;
-      --z-widget: 500;
-      --z-overlay: 1000;
-      --z-system: 5000;
-    }
+      </style><style> body,html {overflow:auto;} 
+</style>
 
-    
-    #bodyPlayer{
-      position: relative;
-      width: 100%;
-      min-height: 100vh;
-      overflow: hidden;
-    }
+<style> body{overflow-y:auto !important;} </style>
 
-    .kob-tts-dock,
-    #kodux-widget,
-    [data-idle-target]{
-      transition: transform .35s ease, opacity .65s ease;
-      will-change: transform, opacity;
-      box-shadow: none !important;
-    }
-
-    .kob-tts-dock.idle,
-    #kodux-widget.idle,
-    [data-idle-target].idle{
-      opacity: .18;
-      transform: scale(.87);
-    }
-
-    .kob-tts-dock:hover,
-    #kodux-widget:hover,
-    [data-idle-target]:hover{
-      opacity: 1;
-      transform: scale(1);
-    }
-  </style><style>
+<style>
         :root {
           --z-base: 0;
           --z-content: 100;
@@ -137,19 +96,233 @@
           --z-overlay: 1000;
           --z-system: 5000;
         }
-      </style><link rel="stylesheet" href="./css/main.css"></head><body class="field-closed mode-night"><div id="root">
+      </style><style>
+
+#kblx-back{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  background:rgba(5,7,10,.23);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  z-index:999999;
+}
+#kblx-back.is-open{ display:flex; }
+
+#kblx-panel{
+  width:min(78vw, 560px);
+  border-radius:28px;
+  padding:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)), rgba(18,22,30,.678);
+  box-shadow:0 24px 80px rgba(0,0,0,.48);
+  color:#fff;
+  font-family:"Montserrat","Inter",sans-serif;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.kblx-head,.kblx-row,.kblx-sec-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.p-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.06);
+  font-size:.74rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+.kblx-icon-btn,
+.kblx-preset,
+.kblx-btn{
+  border:0;
+  cursor:pointer;
+}
+
+.kblx-icon-btn{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+
+.kblx-title-wrap{ margin-top:16px; }
+
+.p-title{
+  margin:0;
+  font-size:1.35rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+}
+
+.kblx-sub{
+  margin:7px 0 0;
+  color:rgba(255,255,255,.62);
+  font-size:.92rem;
+}
+
+.kblx-section{ margin-top:18px; }
+
+.p-lbl{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+  color:rgba(255,255,255,.62);
+  font-size:.85rem;
+}
+
+.p-lbl code{
+  padding:2px 6px;
+  border-radius:8px;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+}
+
+#kblx-inp{
+  width:100%;
+  min-height:52px;
+  padding:14px 15px;
+  border:1px solid rgba(255,255,255,.08);
+  outline:none;
+  border-radius:18px;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-size:.96rem;
+  box-sizing:border-box;
+}
+
+.kblx-preview{
+  margin-top:10px;
+  padding:11px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.05);
+  color:rgba(255,255,255,.62);
+  font-size:.82rem;
+  line-height:1.35;
+  word-break:break-word;
+}
+
+.kblx-presets{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.kblx-preset{
+  min-height:42px;
+  padding:10px 13px;
+  border-radius:14px;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-weight:600;
+}
+
+.kblx-row{
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+.kblx-btn{
+  flex:1 1 160px;
+  min-height:50px;
+  border-radius:18px;
+  background:rgba(255,255,255,.10);
+  color:#fff;
+  font-weight:700;
+}
+
+.kblx-save{ background:rgba(255,255,255,.14); }
+.kblx-clear{ background:rgba(255,255,255,.06); }
+.kblx-inject{ background:rgba(255,255,255,.08); }
+.kblx-dup{ background:rgba(255,255,255,.10); }
+.kblx-del{ background:rgba(255,255,255,.05); }
+
+.kblx-note{
+  margin-top:12px;
+  color:rgba(255,255,255,.48);
+  font-size:.74rem;
+  line-height:1.35;
+}
+
+.symbol-button{
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+
+</style><style>
+  .kodux-widget{
+    position: absolute;
+    right: 20px;
+    bottom: 100px;
+    z-index: var(--z-widget);
+    width: 84px;
+    height: 84px;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    transition: transform .35s ease, opacity .65s ease;
+    will-change: transform, opacity;
+  }
+
+  .kodux-widget.idle{
+    opacity: .18;
+    transform: scale(.78);
+z-index:-10;
+  }
+
+  .kodux-widget:hover{
+    opacity: 1;
+    transform: scale(.871);
+
+z-index:0;
+
+  }
+
+  #kodux-widget .orb{
+    width: 100%;
+    height: 100%;
+  }
+</style><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="./css/main.css"></head>
+
+<body class="field-closed mode-night">
+<div id="root">
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
-    <div class="bg-gradient-b"></div>
+    <div class="bg-gradient"></div>
     <div id="bg-layer-fixed"></div>
 
-    <div class="stackWrap wrap">
-      <div class="content session-iframe">
-        <iframe id="frame" src="about:blank"></iframe>
-        <div id="kob-tts-outline"></div>
-      </div>
-
+    <div class="wrap">
+      
       <div class="ambient-light" aria-hidden="true">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
@@ -158,8 +331,8 @@
       <div id="snap-zone"></div>
       <div class="toaster-wrap" id="toasterWrap"></div>
 
-      <div class="symbol-bar floating" id="symbolBar">
-        <div class="fusion-card symbol-wra" style="z-index:0;display: flex;opacity:0.59" id="mainCard">
+      <div class="symbol-toolbar symbol-bar" id="symbolBar">
+        <div class="fusion-card symbol-iwrap" style="z-index:0;display: inline-flex;opacity:0.59" id="mainCard">
           <div class="card-header symbol-wrap" id="cardHeader">
             <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)"></div>
 
@@ -275,6 +448,35 @@
       <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
     </div>
 
+<div id="dock"></div>
+
+
+    <div class="symbol-wrap">
+      <div class="session-window" id="session-iframe-embedded">
+        <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe-embedded')">
+
+<div class="top-actions">
+        <button class="launcher-btn" id="openKobBtn">+</button>
+        <button class="soft-btn" id="openLogsBtn"></button>
+      </div>
+
+          <div class="win-controls" onclick="event.stopPropagation()">
+            <button onclick="toggleCollapse('session-iframe-embedded')" title="Colapsar">—</button>
+            <button onclick="toggleMaximize('session-iframe-embedded')" title="Maximizar">⬜</button>
+            <button onclick="minimizeWindow('session-iframe-embedded')" title="Minimizar para o Dock">🔘</button>
+
+          </div>
+        </div>
+
+        <iframe class="win-frame" src="https://kodux78k.github.io/oiDual-H0/DH0-10.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+
+
+
+
           <div class="symbol-wrap">
             <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
           </div>
@@ -282,7 +484,9 @@
             <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
           </div>
           <div class="symbol-wrap">
-            <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
+
+    <button class="symbol-button" id="tts-stop" title="Parar">■</button>
+
           </div>
 
           <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
@@ -296,9 +500,9 @@
           </button>
 
           <div class="symbol-wrap">
-            <button class="symbol-button" data-id="phi" data-url="about:blank">Φ</button>
+            <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/MA/">Φ</button>
           </div>
-          <div class="symbol-wrap">
+       <!--   <div class="symbol-wrap">
             <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/">꩜</button>
           </div>
           <div class="symbol-wrap">
@@ -306,190 +510,19 @@
           </div>
           <div class="symbol-wrap">
             <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
-          </div>
+          </div> -->
 
           <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
-         
-
-
-
-
-  <div id="bodyPlayer" data-mode="player" class="min-h-screen w-full flex items-center justify-center relative overflow-hidden">
-
-    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center select-none">
-    
-
-
-
-
+        
+     
     </div>
-
-    
-
-      </div>
-    
-
-
-
-    <div id="yt-container" class="absolute -left-[9999px]"></div>
-    <div id="sc-container" class="absolute -left-[9999px]"></div>
-    <audio id="local-audio" crossorigin="anonymous"></audio>
-
-   <!-- WIDGET ÚNICO -->
-<div id="kodux-widget" class="state-ball kodux-widget" data-idle-target="" aria-label="Widget KODUX">
-  <div id="content-ball" class="w-full h-full flex items-center justify-center text-[var(--primary)]">
-    <i class="ph-fill ph-vinyl-record animate-spin" style="animation-duration: 4s; font-size: 28px;"></i>
-  </div>
-
-  <div id="content-preview" class="hidden-content w-full h-full flex items-center px-3 gap-3">
-    <img id="prev-cover" src="https://picsum.photos/100" class="w-12 h-12 rounded-full object-cover border border-[var(--primary)] shadow-lg preview-clickable cursor-pointer transition-transform hover:scale-105" onclick="openFullFromPreview(event)">
-    <div class="flex-1 overflow-hidden preview-clickable cursor-pointer" onclick="openFullFromPreview(event)">
-      <h4 id="prev-title" class="text-[11px] font-bold text-white truncate glow-text">Kodux System</h4>
-      <p id="prev-artist" class="text-[9px] text-[var(--muted)] truncate">Aguardando...</p>
-    </div>
-    <button onclick="togglePlay(event)" class="text-white hover:text-[var(--primary)] transition z-10">
-      <i id="prev-play-icon" class="ph-fill ph-play-circle text-4xl"></i>
-    </button>
-  </div>
-
-  <div id="content-footer" class="hidden-content w-full h-full flex flex-col relative">
-    <div class="absolute top-0 left-0 w-full h-1 bg-white/5 cursor-pointer" id="footer-progress-click">
-      <div id="footer-progress-bar" class="h-full bg-[var(--primary)] w-0 shadow-[0_0_10px_var(--primary)]"></div>
-    </div>
-
-    <div class="drag-header flex-1 flex items-center px-6 gap-4">
-      <img id="foot-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl object-cover shadow-xl border border-white/10">
-      <div class="flex-1 overflow-hidden cursor-pointer" onclick="updateWidgetState('full')">
-        <h4 id="foot-title" class="text-sm font-bold text-white truncate">Kodux System</h4>
-        <p id="foot-artist" class="text-xs text-[var(--muted)] truncate">Aguardando...</p>
-      </div>
-      <div class="flex items-center gap-5">
-        <button onclick="playPrev(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-back text-2xl"></i></button>
-        <button onclick="togglePlay(event)" class="text-white hover:scale-110 transition"><i id="foot-play-icon" class="ph-fill ph-play-circle text-5xl"></i></button>
-        <button onclick="playNext(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-forward text-2xl"></i></button>
-        <button onclick="collapseToBall(event)" class="text-[var(--muted)] ml-2"><i class="ph ph-minus-circle text-2xl"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <div id="content-full" class="hidden-content flex flex-col w-full h-full relative">
-    <div class="drag-header w-full p-5 flex justify-between items-center bg-white/5 border-b border-white/5">
-      <div class="flex items-center gap-3">
-        <i class="ph-fill ph-lightning text-[var(--primary)] text-xl"></i>
-        <span class="text-sm font-black tracking-widest glow-text">ORÁCULO DUAL</span>
-      </div>
-      <button onclick="collapseToBall(event)" class="text-[var(--muted)] hover:text-white p-2 bg-white/5 rounded-lg">
-        <i class="ph ph-caret-down-bold"></i>
-      </button>
-    </div>
-
-    <div class="flex-1 overflow-y-auto p-5 pb-36 soft-scroll">
-      <div class="mb-4">
-        <div class="flex items-center gap-2 overflow-x-auto pb-2 soft-scroll" id="playlist-tabs"></div>
-      </div>
-
-      <div class="flex gap-2 mb-4">
-        <div class="flex-1 relative">
-          <i class="ph ph-link absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
-          <input type="text" id="link-input" placeholder="YouTube ou SoundCloud link" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
-        </div>
-        <select id="destination-select" class="glass-select rounded-xl px-3 text-xs min-w-[135px]">
-          <option value="all">Todas</option>
-        </select>
-        <button onclick="addLink()" class="btn-primary px-4 rounded-xl shadow-lg">
-          <i class="ph ph-plus-bold"></i>
-        </button>
-      </div>
-
-      <div class="flex gap-2 mb-4 items-center">
-        <div class="flex-1 relative">
-          <i class="ph ph-folder-simple absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
-          <input type="text" id="new-playlist-input" placeholder="Criar nova playlist" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
-        </div>
-        <button onclick="createPlaylist()" class="btn-primary px-4 rounded-xl shadow-lg">
-          <i class="ph ph-folder-plus"></i>
-        </button>
-      </div>
-
-      <div class="flex items-center justify-between mb-3">
-        <div>
-          <h3 class="text-sm font-bold text-white">Playlists carregadas</h3>
-          <p class="text-[10px] text-[var(--muted)]">Toque para trocar de grupo, criar, remover ou organizar.</p>
-        </div>
-      </div>
-
-      <div id="playlist-container" class="flex flex-col gap-3"></div>
-    </div>
-
-    <div class="absolute bottom-0 left-0 w-full bg-black/80 backdrop-blur-xl border-t border-[var(--primary)] p-6">
-      <input type="range" id="main-progress" min="0" max="100" value="0" class="w-full mb-4">
-      <div class="flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4 overflow-hidden">
-          <img id="main-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl border border-white/20 object-cover">
-          <div class="overflow-hidden">
-            <h4 id="main-title" class="text-sm font-bold text-white truncate">Oráculo</h4>
-            <p id="main-artist" class="text-[10px] text-[var(--muted)] truncate">Sistema KODUX v2.5</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-5 shrink-0">
-          <button onclick="playPrev()" class="text-white text-2xl"><i class="ph-fill ph-skip-back"></i></button>
-          <button onclick="togglePlay()" class="w-14 h-14 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_20px_var(--primary)]">
-            <i id="main-play-icon" class="ph-fill ph-play text-3xl ml-1"></i>
-          </button>
-          <button onclick="playNext()" class="text-white text-2xl"><i class="ph-fill ph-skip-forward"></i></button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-  
-
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
-  
-  <script>
-    (() => {
-      const bodyPlayer = document.getElementById('bodyPlayer');
-      const idleSelector = '.kob-tts-dock, #kodux-widget, [data-idle-target]';
-      let idleTimer = null;
-
-      function getIdleTargets() {
-        return document.querySelectorAll(idleSelector);
-      }
-
-      function setIdleState(isIdle) {
-        getIdleTargets().forEach(el => el.classList.toggle('idle', isIdle));
-      }
-
-      function resetIdle() {
-        setIdleState(false);
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => setIdleState(true), 1870);
-      }
-
-      function setMode(mode = 'player') {
-        if (!bodyPlayer) return;
-        bodyPlayer.dataset.mode = mode;
-      }
-
-      window.KoduxShell = {
-        setMode,
-        resetIdle
-      };
-
-      ['pointerdown', 'pointermove', 'touchstart', 'mousemove', 'scroll'].forEach(ev => {
-        document.addEventListener(ev, resetIdle, { passive: true });
-      });
-
-      document.addEventListener('keydown', resetIdle);
-
-      setMode(bodyPlayer?.dataset.mode || 'player');
-      resetIdle();
-    })();
-
-    
-  </script>
 
 </div>
+
+<div class="content">
+        <iframe id="frame" src="about:blank"></iframe>
+        <div id="kob-tts-outline"></div>
+      </div>
 
         <div id="arch-overlay"></div>
       </div>
@@ -538,7 +571,7 @@
           </div>
         </div>
       </div>
-    </div>
+    
   
 
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
@@ -629,8 +662,8 @@
 
   <!-- Ambient Blobs -->
   <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
-
-
+  <div id="snap-zone"></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
 
   <!-- Distortion SVG Filter -->
   <svg style="display: none;">
@@ -740,97 +773,1114 @@
     </div>
   </div>
 
-<div id="kblx-back">
 
+
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+
+ 
+ <!-- Seus Scripts Originais -->
+  <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script> 
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  
+<!-- <script src="https://kodux78k.github.io/oiDual--Y-/js/0RB-0S17.js"></script>
+-->
+ <script src="https://unpkg.com/lucide@latest"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script><script>
+    function updateInterface(name){
+      const safe = name || di_userName || 'Convidado';
+
+      els.lblName.innerText = safe;
+      els.input.value = safe;
+
+      const activeKey = STATE.keys.find(k => k.active);
+
+      els.smallIdent.innerText = activeKey ? activeKey.name : '--';
+      els.actBadge.innerText = activeKey ? `key:${activeKey.name}` : 'v:--';
+
+      const orbBig  = makeOrbAvatar(safe, 64);
+      const orbMid  = makeOrbAvatar(safe, 36);
+      const orbMini = makeOrbAvatar(safe, 24);
+
+      els.avatarTgt.innerHTML = orbBig;
+      els.smallMiniAvatar.innerHTML = orbMini;
+      els.actMiniAvatar.innerHTML = orbMid;
+
+      els.actName.innerText = safe;
+    }
+  </script>
+
+<style>
+.mainOrb,
+.symbol-button {
+  user-select: none;
+  -webkit-user-select: none;
+
+  -webkit-touch-callout: none;
+
+  -webkit-tap-highlight-color: transparent;
+
+  touch-action: manipulation;
+
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+
+button,
+.mainOrb,
+.symbol-button,
+svg,
+img {
+  -webkit-user-select: none;
+  user-select: none;
+
+  -webkit-touch-callout: none;
+
+  -webkit-user-drag: none;
+}
+
+#kblx-panel{
+  width:min(92vw,520px);
+
+  border-radius:28px;
+
+  padding:20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.06),
+      rgba(255,255,255,.03)
+    );
+
+  border:1px solid rgba(255,255,255,.08);
+
+  backdrop-filter:blur(20px);
+
+  box-shadow:
+    0 20px 80px rgba(0,0,0,.45);
+
+  font-family:
+    "Montserrat",
+    "Inter",
+    sans-serif;
+
+  color:#fff;
+}
+
+.kblx-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.p-chip{
+  padding:8px 12px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.06);
+
+  font-size:.72rem;
+  letter-spacing:.12em;
+}
+
+.kblx-icon-btn{
+  width:40px;
+  height:40px;
+
+  border:none;
+  border-radius:14px;
+
+  background:rgba(255,255,255,.06);
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+.kblx-title-wrap{
+  margin-top:18px;
+}
+
+.p-title{
+  margin:0;
+  font-size:1.4rem;
+  font-weight:700;
+}
+
+.kblx-sub{
+  margin-top:6px;
+  opacity:.6;
+  font-size:.9rem;
+}
+
+.kblx-section{
+  margin-top:22px;
+}
+
+.p-lbl{
+  display:block;
+  margin-bottom:10px;
+
+  font-size:.84rem;
+  opacity:.75;
+}
+
+#kblx-inp{
+  width:100%;
+
+  padding:16px;
+
+  border:none;
+  outline:none;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,.06);
+
+  color:#fff;
+
+  font-size:.95rem;
+}
+
+.kblx-preview{
+  margin-top:10px;
+
+  padding:12px;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,.04);
+
+  font-size:.8rem;
+
+  opacity:.7;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.kblx-sec-head{
+  margin-bottom:12px;
+  font-size:.82rem;
+  opacity:.65;
+}
+
+.kblx-presets{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.kblx-preset{
+  border:none;
+
+  padding:10px 14px;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,.06);
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+.kblx-row{
+  display:flex;
+  gap:12px;
+
+  margin-top:28px;
+}
+
+.kblx-btn{
+  flex:1;
+
+  min-height:52px;
+
+  border:none;
+  border-radius:18px;
+
+  color:#fff;
+
+  cursor:pointer;
+
+  font-weight:600;
+}
+
+.kblx-save{
+  background:rgba(255,255,255,.12);
+}
+
+.kblx-clear{
+  background:rgba(255,255,255,.05);
+}
+
+</style>
+
+
+<script>
+(() => {
+  const ENGINE_NAME = 'NAGATANAZARE';
+  const STORAGE_PREFIX = 'nag_btn_';
+  const LONG_PRESS_MS = 550;
+
+  const ORB_PRESETS = {
+    orb: {
+      name: 'Orb',
+      icon: '◉',
+      mode: 'orb',
+      injectTarget: 'symbol-bar'
+    },
+    frame: {
+      name: 'Frame',
+      icon: '⟁',
+      mode: 'special-frame',
+      injectTarget: 'frame'
+    },
+    dock: {
+      name: 'Dock',
+      icon: '⌘',
+      mode: 'dock',
+      injectTarget: 'symbol-wrap'
+    }
+  };
+
+  const state = {
+    currentButton: null,
+    longPressTimer: null
+  };
+
+  const q = (sel, root = document) => root.querySelector(sel);
+  const qa = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const safeJSONParse = (raw, fallback = null) => {
+    try { return raw ? JSON.parse(raw) : fallback; } catch { return fallback; }
+  };
+
+  const saveJSON = (storage, key, value) => {
+    try { storage.setItem(key, JSON.stringify(value)); } catch {}
+  };
+
+  const readJSON = (storage, key) => {
+    return safeJSONParse(storage.getItem(key));
+  };
+
+  const storageKeyForBtn = (btn) => {
+    if (!btn) return null;
+    return `${STORAGE_PREFIX}${btn.id || btn.dataset.storeKey || ''}`;
+  };
+
+  function dispatch(name, detail = {}) {
+    window.dispatchEvent(new CustomEvent(name, { detail }));
+  }
+
+  function openPanel(btn) {
+    state.currentButton = btn;
+    dispatch('nagatanazare:panel-open', {
+      button: btn,
+      url: btn?.dataset?.url || '',
+      preset: btn?.dataset?.preset || ''
+    });
+  }
+
+  function closePanel() {
+    dispatch('nagatanazare:panel-close', {
+      button: state.currentButton
+    });
+    state.currentButton = null;
+  }
+
+  function getAutoIcon(url = '') {
+    const u = String(url).toLowerCase();
+
+    if (u.startsWith('http://') || u.startsWith('https://')) return '⇱';
+    if (u.includes('youtube')) return '▶';
+    if (u.includes('github')) return '⌘';
+    if (u.includes('ai')) return '✦';
+    if (u.includes('orb')) return '◉';
+    if (u.endsWith('.html')) return '◈';
+    if (/\.(png|jpg|jpeg|webp|gif|svg)$/i.test(u)) return '▣';
+    if (/\.(mp4|webm|mov)$/i.test(u)) return '▸';
+
+    return '◉';
+  }
+
+  function paintButton(btn, iconText) {
+    if (!btn) return;
+
+    let iconEl = q('.symbol-icon', btn);
+    if (!iconEl) {
+      iconEl = document.createElement('span');
+      iconEl.className = 'symbol-icon';
+      btn.appendChild(iconEl);
+    }
+
+    iconEl.textContent = iconText || getAutoIcon(btn.dataset.url || '');
+    btn.dataset.diIconDone = '1';
+  }
+
+  function applyPreset(btn, presetKey) {
+    if (!btn || !ORB_PRESETS[presetKey]) return null;
+
+    const preset = ORB_PRESETS[presetKey];
+    btn.dataset.preset = presetKey;
+    btn.dataset.injectTarget = preset.injectTarget;
+    btn.dataset.mode = preset.mode;
+
+    paintButton(btn, preset.icon);
+
+    const payload = {
+      id: btn.id || '',
+      preset: presetKey,
+      url: btn.dataset.url || '',
+      mode: preset.mode,
+      updatedAt: Date.now()
+    };
+
+    const key = storageKeyForBtn(btn);
+    if (key) {
+      saveJSON(sessionStorage, key, payload);
+      saveJSON(localStorage, key, payload);
+    }
+
+    dispatch('nagatanazare:preset-applied', { button: btn, preset, payload });
+    return payload;
+  }
+
+  async function updateAttrBtn(btn, { url, preset = '', save = true, session = true } = {}) {
+    if (!btn) return null;
+
+    const cleanUrl = String(url || '').trim();
+    if (!cleanUrl && !preset) return null;
+
+    if (cleanUrl) btn.dataset.url = cleanUrl;
+
+    if (preset && ORB_PRESETS[preset]) {
+      applyPreset(btn, preset);
+    } else {
+      paintButton(btn, getAutoIcon(cleanUrl));
+    }
+
+    const payload = {
+      id: btn.id || '',
+      url: cleanUrl,
+      preset: preset || btn.dataset.preset || '',
+      icon: q('.symbol-icon', btn)?.textContent || '',
+      updatedAt: Date.now()
+    };
+
+    const key = storageKeyForBtn(btn);
+    if (key) {
+      if (session) saveJSON(sessionStorage, key, payload);
+      if (save) saveJSON(localStorage, key, payload);
+    }
+
+    dispatch('nagatanazare:button-updated', {
+      button: btn,
+      payload
+    });
+
+    return payload;
+  }
+
+  function restoreButtons() {
+    qa('.symbol-button').forEach(btn => {
+      const key = storageKeyForBtn(btn);
+      if (!key) return;
+
+      const data = readJSON(sessionStorage, key) || readJSON(localStorage, key);
+      if (!data) return;
+
+      if (data.url) btn.dataset.url = data.url;
+      if (data.preset && ORB_PRESETS[data.preset]) btn.dataset.preset = data.preset;
+
+      paintButton(btn, data.icon || getAutoIcon(data.url || ''));
+
+      if (data.preset && ORB_PRESETS[data.preset]) {
+        btn.dataset.mode = ORB_PRESETS[data.preset].mode;
+        btn.dataset.injectTarget = ORB_PRESETS[data.preset].injectTarget;
+      }
+    });
+  }
+
+  function observeButtons() {
+    const root = document.body;
+    if (!root) return;
+
+    const mo = new MutationObserver(mutations => {
+      for (const m of mutations) {
+        if (m.type === 'childList') {
+          m.addedNodes.forEach(node => {
+            if (!(node instanceof Element)) return;
+
+            if (node.matches?.('.symbol-button')) {
+              paintButton(node, getAutoIcon(node.dataset.url || ''));
+            }
+
+            node.querySelectorAll?.('.symbol-button').forEach(btn => {
+              paintButton(btn, getAutoIcon(btn.dataset.url || ''));
+            });
+          });
+        }
+
+        if (m.type === 'attributes' && m.attributeName === 'data-url') {
+          const btn = m.target;
+          if (btn?.classList?.contains('symbol-button')) {
+            paintButton(btn, getAutoIcon(btn.dataset.url || ''));
+          }
+        }
+      }
+    });
+
+    mo.observe(root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-url']
+    });
+  }
+
+  function bindLongPress() {
+    document.addEventListener('touchstart', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+
+      state.longPressTimer = setTimeout(() => {
+        openPanel(btn);
+      }, LONG_PRESS_MS);
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+      clearTimeout(state.longPressTimer);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', () => {
+      clearTimeout(state.longPressTimer);
+    }, { passive: true });
+
+    document.addEventListener('contextmenu', (e) => {
+      const btn = e.target.closest?.('.symbol-button');
+      if (!btn) return;
+      e.preventDefault();
+      openPanel(btn);
+    });
+  }
+
+  function bindPresetClicks() {
+    document.addEventListener('click', async (e) => {
+      const presetBtn = e.target.closest?.('[data-orb-preset]');
+      if (!presetBtn) return;
+
+      const presetKey = presetBtn.dataset.orbPreset;
+      const current = state.currentButton;
+      if (!current) return;
+
+      await updateAttrBtn(current, {
+        preset: presetKey,
+        url: current.dataset.url || '',
+        save: true,
+        session: true
+      });
+    });
+  }
+
+  function bindPanelActions() {
+    document.addEventListener('click', async (e) => {
+      const saveBtn = e.target.closest?.('#kblx-btn-save');
+      const closeBtn = e.target.closest?.('#kblx-btn-close');
+      const injectBtn = e.target.closest?.('#kblx-btn-orb-inject');
+
+      if (closeBtn) {
+        closePanel();
+        return;
+      }
+
+      if (saveBtn) {
+        const input = q('#kblx-inp');
+        const current = state.currentButton;
+        if (!input || !current) return;
+
+        await updateAttrBtn(current, {
+          url: input.value,
+          save: true,
+          session: true
+        });
+        return;
+      }
+
+      if (injectBtn) {
+        const current = state.currentButton;
+        if (!current) return;
+
+        const target = current.dataset.injectTarget || 'symbol-bar';
+        dispatch('nagatanazare:orb-inject', {
+          button: current,
+          target,
+          url: current.dataset.url || '',
+          preset: current.dataset.preset || ''
+        });
+      }
+    });
+  }
+
+  function bindInputLiveUpdate() {
+    document.addEventListener('input', async (e) => {
+      const input = e.target;
+      if (!input.matches?.('#kblx-inp')) return;
+
+      const current = state.currentButton;
+      if (!current) return;
+
+      await updateAttrBtn(current, {
+        url: input.value,
+        save: false,
+        session: true
+      });
+    });
+  }
+
+  window.NAGATANAZARE = {
+    name: ENGINE_NAME,
+    presets: ORB_PRESETS,
+    openPanel,
+    closePanel,
+    applyPreset,
+    updateAttrBtn,
+    restoreButtons,
+    getCurrentButton: () => state.currentButton
+  };
+
+  function init() {
+    restoreButtons();
+    observeButtons();
+    bindLongPress();
+    bindPresetClicks();
+    bindPanelActions();
+    bindInputLiveUpdate();
+
+    dispatch('nagatanazare:ready', { engine: ENGINE_NAME });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/css/ZPR_ORB.css"></script>
+
+<div id="kblx-back" aria-hidden="true">
   <div id="kblx-panel">
-
-    <!-- HEADER -->
-    <header class="kblx-head">
-      <div class="p-chip">
-        ⌘ KOBLLUX HUD · EDITOR DE ROTA
-      </div>
-
-      <button class="kblx-icon-btn" id="kblx-btn-close">
-        ✕
-      </button>
-    </header>
-
-    <!-- TITLE -->
-    <div class="kblx-title-wrap">
-      <h2 class="p-title" id="kblx-ttl">
-        Botão
-      </h2>
-
-      <p class="kblx-sub">
-        Editar destino do SymbolButton
-      </p>
+    <div class="kblx-head">
+      <div class="p-chip">⌘ NAGATANAZARE · EDITOR DE ROTA</div>
+      <button class="kblx-icon-btn" id="kblx-btn-close" type="button">✕</button>
     </div>
 
-    <!-- INPUT -->
-    <section class="kblx-section">
+    <div class="kblx-title-wrap">
+      <h2 class="p-title" id="kblx-ttl">Botão</h2>
+      <p class="kblx-sub" id="kblx-sub">Edite a rota, aplique preset e injete Orb no Symbol Bar.</p>
+    </div>
 
+    <section class="kblx-section">
       <label class="p-lbl" for="kblx-inp">
         Novo valor para <code>data-url</code>
       </label>
 
-      <input id="kblx-inp" type="text" placeholder="arquivo.html ou https://..." spellcheck="false" autocomplete="off">
+      <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
 
-      <!-- preview -->
-      <div class="kblx-preview" id="kblx-preview">
-        Nenhuma rota definida
-      </div>
-
+      <div class="kblx-preview" id="kblx-preview">Nenhuma rota definida.</div>
     </section>
 
-    <!-- PRESETS -->
     <section class="kblx-section">
-
-      <div class="kblx-sec-head">
-        <span>Presets</span>
-      </div>
+      <div class="kblx-sec-head"><span>Presets</span></div>
 
       <div class="kblx-presets">
-
-        <button class="kblx-preset" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/">
-          Home
-        </button>
-
-        <button class="kblx-preset" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/">
-          Hub
-        </button>
-
-        <button class="kblx-preset" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">
-          Render
-        </button>
-
-        <button class="kblx-preset" data-url="https://google.com">
-          URL
-        </button>
-
+        <button class="kblx-preset" type="button" data-orb-preset="orb">◉ Orb</button>
+        <button class="kblx-preset" type="button" data-orb-preset="frame">⟁ Frame</button>
+        <button class="kblx-preset" type="button" data-orb-preset="dock">⌘ Dock</button>
       </div>
-
     </section>
 
-    <!-- ACTIONS -->
-    <footer class="kblx-row">
+    <section class="kblx-section">
+      <div class="kblx-sec-head"><span>OrbInject</span></div>
 
-      <button class="kblx-btn kblx-save" id="kblx-btn-save">
-        ⊙ Salvar no botão
-      </button>
+      <div class="kblx-row">
+        <button class="kblx-btn kblx-save" id="kblx-btn-save" type="button">⊙ Salvar no botão</button>
+        <button class="kblx-btn kblx-inject" id="kblx-btn-orb-inject" type="button">◉ OrbInject</button>
+        <button class="kblx-btn kblx-dup" id="kblx-btn-dup" type="button">⧉ Duplicar Orb</button>
+        <button class="kblx-btn kblx-del" id="kblx-btn-del" type="button">⌫ Remover Orb</button>
+        <button class="kblx-btn kblx-clear" id="kblx-btn-clear" type="button">⌫ Limpar</button>
+      </div>
 
-      <button class="kblx-btn kblx-clear" id="kblx-btn-clear">
-        ⌫ Limpar
-      </button>
-
-    </footer>
-
+      <div class="kblx-note">
+        Long press em qualquer <code>.symbol-button[data-url]</code> abre este painel.
+      </div>
+    </section>
   </div>
-
 </div>
 
+<style>
 
+#kblx-back{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  background:rgba(5,7,10,.23);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  z-index:999999;
+}
+#kblx-back.is-open{ display:flex; }
 
+#kblx-panel{
+  width:min(78vw, 560px);
+  border-radius:28px;
+  padding:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)), rgba(18,22,30,.678);
+  box-shadow:0 24px 80px rgba(0,0,0,.48);
+  color:#fff;
+  font-family:"Montserrat","Inter",sans-serif;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  -webkit-tap-highlight-color:transparent;
+}
 
+.kblx-head,.kblx-row,.kblx-sec-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.p-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.06);
+  font-size:.74rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+.kblx-icon-btn,
+.kblx-preset,
+.kblx-btn{
+  border:0;
+  cursor:pointer;
+}
+
+.kblx-icon-btn{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+
+.kblx-title-wrap{ margin-top:16px; }
+
+.p-title{
+  margin:0;
+  font-size:1.35rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+}
+
+.kblx-sub{
+  margin:7px 0 0;
+  color:rgba(255,255,255,.62);
+  font-size:.92rem;
+}
+
+.kblx-section{ margin-top:18px; }
+
+.p-lbl{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+  color:rgba(255,255,255,.62);
+  font-size:.85rem;
+}
+
+.p-lbl code{
+  padding:2px 6px;
+  border-radius:8px;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+}
+
+#kblx-inp{
+  width:100%;
+  min-height:52px;
+  padding:14px 15px;
+  border:1px solid rgba(255,255,255,.08);
+  outline:none;
+  border-radius:18px;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-size:.96rem;
+  box-sizing:border-box;
+}
+
+.kblx-preview{
+  margin-top:10px;
+  padding:11px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.05);
+  color:rgba(255,255,255,.62);
+  font-size:.82rem;
+  line-height:1.35;
+  word-break:break-word;
+}
+
+.kblx-presets{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.kblx-preset{
+  min-height:42px;
+  padding:10px 13px;
+  border-radius:14px;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-weight:600;
+}
+
+.kblx-row{
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+.kblx-btn{
+  flex:1 1 160px;
+  min-height:50px;
+  border-radius:18px;
+  background:rgba(255,255,255,.10);
+  color:#fff;
+  font-weight:700;
+}
+
+.kblx-save{ background:rgba(255,255,255,.14); }
+.kblx-clear{ background:rgba(255,255,255,.06); }
+.kblx-inject{ background:rgba(255,255,255,.08); }
+.kblx-dup{ background:rgba(255,255,255,.10); }
+.kblx-del{ background:rgba(255,255,255,.05); }
+
+.kblx-note{
+  margin-top:12px;
+  color:rgba(255,255,255,.48);
+  font-size:.74rem;
+  line-height:1.35;
+}
+
+.symbol-button{
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+
+</style>
+
+<script>
+(() => {
+  const ORB_PRESETS = {
+    orb:   { name:'Orb',   icon:'◉', mode:'orb',            injectTarget:'symbol-bar',   panelWidth:'560px', frameWidth:'420px', frameHeight:'70vh' },
+    frame: { name:'Frame', icon:'⟁', mode:'special-frame', injectTarget:'special-frame', panelWidth:'680px', frameWidth:'86vw',  frameHeight:'78vh' },
+    dock:  { name:'Dock',  icon:'⌘', mode:'dock',           injectTarget:'symbol-bar',   panelWidth:'620px', frameWidth:'480px', frameHeight:'62vh' }
+  };
+
+  const state = { currentButton: null, longPressTimer: null };
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+  function dispatch(name, detail = {}) {
+    window.dispatchEvent(new CustomEvent(name, { detail }));
+  }
+
+  function getButtonKey(btn) {
+    if (!btn) return null;
+    return btn.id || btn.dataset.storeKey || null;
+  }
+
+  function updatePreview(text) {
+    const el = $('#kblx-preview');
+    if (el) el.textContent = text?.trim() ? `Destino: ${text}` : 'Nenhuma rota definida.';
+  }
+
+  function openPanel(btn) {
+    if (!btn) return;
+    state.currentButton = btn;
+
+    const back = $('#kblx-back');
+    const panel = $('#kblx-panel');
+    const title = $('#kblx-ttl');
+    const input = $('#kblx-inp');
+
+    back?.classList.add('is-open');
+    back?.setAttribute('aria-hidden', 'false');
+
+    if (panel && btn.dataset.panelWidth) panel.style.width = btn.dataset.panelWidth;
+    if (title) title.textContent = btn.dataset.title || btn.id || 'Botão';
+    if (input) input.value = btn.dataset.url || '';
+    updatePreview(btn.dataset.url || '');
+
+    dispatch('nagatanazare:panel-open', { button: btn, url: btn.dataset.url || '', preset: btn.dataset.preset || '' });
+  }
+
+  function closePanel() {
+    const back = $('#kblx-back');
+    back?.classList.remove('is-open');
+    back?.setAttribute('aria-hidden', 'true');
+    dispatch('nagatanazare:panel-close', { button: state.currentButton });
+    state.currentButton = null;
+  }
+
+  function paintButton(btn, iconText = '◉') {
+    if (!btn) return;
+    let icon = btn.querySelector('.symbol-icon');
+    if (!icon) {
+      icon = document.createElement('span');
+      icon.className = 'symbol-icon';
+      btn.prepend(icon);
+    }
+    icon.textContent = iconText;
+    btn.dataset.diIconDone = '1';
+  }
+
+  function applyPreset(btn, presetKey) {
+    const preset = ORB_PRESETS[presetKey];
+    if (!btn || !preset) return;
+
+    btn.dataset.preset = presetKey;
+    btn.dataset.mode = preset.mode;
+    btn.dataset.injectTarget = preset.injectTarget;
+    btn.dataset.panelWidth = preset.panelWidth;
+    btn.dataset.frameWidth = preset.frameWidth;
+    btn.dataset.frameHeight = preset.frameHeight;
+
+    paintButton(btn, preset.icon);
+
+    const key = getButtonKey(btn);
+    if (key) {
+      const payload = {
+        url: btn.dataset.url || '',
+        preset: presetKey,
+        mode: preset.mode,
+        injectTarget: preset.injectTarget,
+        panelWidth: preset.panelWidth,
+        frameWidth: preset.frameWidth,
+        frameHeight: preset.frameHeight,
+        updatedAt: Date.now()
+      };
+      try { localStorage.setItem(`symbol_button_${key}`, JSON.stringify(payload)); } catch {}
+      try { sessionStorage.setItem(`symbol_button_${key}`, JSON.stringify(payload)); } catch {}
+    }
+
+    dispatch('nagatanazare:preset-applied', { button: btn, preset, payload: { preset: presetKey } });
+  }
+
+  function saveUrl(btn, url) {
+    if (!btn) return;
+    const clean = String(url || '').trim();
+
+    btn.dataset.url = clean;
+    paintButton(btn, clean ? '⇱' : '◉');
+
+    const key = getButtonKey(btn);
+    if (key) {
+      const payload = {
+        url: clean,
+        preset: btn.dataset.preset || '',
+        mode: btn.dataset.mode || '',
+        injectTarget: btn.dataset.injectTarget || '',
+        panelWidth: btn.dataset.panelWidth || '',
+        frameWidth: btn.dataset.frameWidth || '',
+        frameHeight: btn.dataset.frameHeight || '',
+        updatedAt: Date.now()
+      };
+      try { localStorage.setItem(`symbol_button_${key}`, JSON.stringify(payload)); } catch {}
+      try { sessionStorage.setItem(`symbol_button_${key}`, JSON.stringify(payload)); } catch {}
+    }
+
+    dispatch('nagatanazare:button-updated', { button: btn, payload: { url: clean } });
+  }
+
+  function duplicateButton(btn) {
+    if (!btn) return null;
+    const clone = btn.cloneNode(true);
+    clone.id = `${getButtonKey(btn) || 'orb'}-${Date.now().toString(36)}`;
+    clone.dataset.storeKey = clone.id;
+    btn.parentElement?.insertBefore(clone, btn.nextSibling);
+    paintButton(clone, btn.querySelector('.symbol-icon')?.textContent || '◉');
+    dispatch('nagatanazare:button-duplicated', { from: btn, to: clone });
+    return clone;
+  }
+
+  function removeButton(btn) {
+    if (!btn) return false;
+    dispatch('nagatanazare:button-removed', { button: btn });
+    btn.remove();
+    return true;
+  }
+
+  function openSpecialFrame(payload = {}) {
+    dispatch('kblx:special-frame-open', {
+      url: String(payload.url || '').trim(),
+      preset: payload.preset || 'frame',
+      target: payload.target || 'special-frame',
+      width: payload.width || '86vw',
+      height: payload.height || '78vh',
+      title: payload.title || '',
+      meta: payload.meta || {},
+      button: payload.button || null
+    });
+  }
+
+  document.addEventListener('touchstart', (e) => {
+    const btn = e.target.closest('.symbol-button[data-url]');
+    if (!btn) return;
+    clearTimeout(state.longPressTimer);
+    state.longPressTimer = setTimeout(() => openPanel(btn), 550);
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => clearTimeout(state.longPressTimer), { passive: true });
+  document.addEventListener('touchmove', () => clearTimeout(state.longPressTimer), { passive: true });
+
+  document.addEventListener('mousedown', (e) => {
+    const btn = e.target.closest('.symbol-button[data-url]');
+    if (!btn) return;
+    clearTimeout(state.longPressTimer);
+    state.longPressTimer = setTimeout(() => openPanel(btn), 550);
+  });
+
+  document.addEventListener('mouseup', () => clearTimeout(state.longPressTimer));
+  document.addEventListener('mouseleave', () => clearTimeout(state.longPressTimer));
+
+  document.addEventListener('contextmenu', (e) => {
+    const btn = e.target.closest('.symbol-button[data-url]');
+    if (!btn) return;
+    e.preventDefault();
+    openPanel(btn);
+  });
+
+  document.addEventListener('click', async (e) => {
+    const closeBtn = e.target.closest('#kblx-btn-close');
+    const saveBtn = e.target.closest('#kblx-btn-save');
+    const clearBtn = e.target.closest('#kblx-btn-clear');
+    const injectBtn = e.target.closest('#kblx-btn-orb-inject');
+    const dupBtn = e.target.closest('#kblx-btn-dup');
+    const delBtn = e.target.closest('#kblx-btn-del');
+    const presetBtn = e.target.closest('[data-orb-preset]');
+    const back = e.target.closest('#kblx-back');
+
+    if (back && e.target === back) return closePanel();
+    if (closeBtn) return closePanel();
+
+    const current = state.currentButton;
+    if (!current) return;
+
+    if (presetBtn) {
+      applyPreset(current, presetBtn.dataset.orbPreset);
+      const title = $('#kblx-ttl');
+      if (title) title.textContent = `${current.dataset.title || current.id || 'Botão'} · ${ORB_PRESETS[presetBtn.dataset.orbPreset].name}`;
+      return;
+    }
+
+    if (saveBtn) {
+      const input = $('#kblx-inp');
+      saveUrl(current, input?.value || '');
+      updatePreview(input?.value || '');
+      return;
+    }
+
+    if (clearBtn) {
+      current.dataset.url = '';
+      current.dataset.preset = '';
+      current.dataset.mode = '';
+      current.dataset.injectTarget = '';
+      current.dataset.panelWidth = '';
+      current.dataset.frameWidth = '';
+      current.dataset.frameHeight = '';
+      paintButton(current, '◉');
+      const input = $('#kblx-inp');
+      if (input) input.value = '';
+      updatePreview('');
+      return;
+    }
+
+    if (injectBtn) {
+      const preset = ORB_PRESETS[current.dataset.preset || 'frame'] || ORB_PRESETS.frame;
+      openSpecialFrame({
+        url: current.dataset.url || '',
+        preset: current.dataset.preset || 'frame',
+        target: current.dataset.injectTarget || preset.injectTarget,
+        width: current.dataset.frameWidth || preset.frameWidth,
+        height: current.dataset.frameHeight || preset.frameHeight,
+        title: current.dataset.title || current.id || 'Botão',
+        meta: { mode: current.dataset.mode || preset.mode },
+        button: current
+      });
+      return;
+    }
+
+    if (dupBtn) {
+      const clone = duplicateButton(current);
+      if (clone) openPanel(clone);
+      return;
+    }
+
+    if (delBtn) {
+      if (removeButton(current)) closePanel();
+      return;
+    }
+  });
+
+  document.addEventListener('input', (e) => {
+    if (!e.target.matches('#kblx-inp')) return;
+    if (!state.currentButton) return;
+    updatePreview(e.target.value);
+    saveUrl(state.currentButton, e.target.value);
+  });
+
+  window.NAGATANAZARE = {
+    presets: ORB_PRESETS,
+    openPanel,
+    closePanel,
+    applyPreset,
+    openSpecialFrame
+  };
+
+  window.KBLX_PANEL = { open: openPanel, close: closePanel };
+  window.ORB_INJECT = { inject: openSpecialFrame, applyPreset };
+  window.SPECIAL_FRAME = { open: openSpecialFrame };
+
+  dispatch('nagatanazare:ready', { engine: 'NAGATANAZARE' });
+})();
+</script>
 
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
@@ -948,10 +1998,345 @@ z-index:0;
     width: 100%;
     height: 100%;
   }
-</style>
+</style><script>
+(() => {
+  const ORB_PRESETS = {
+    orb:   { name:'Orb',   icon:'◉', mode:'orb',            injectTarget:'symbol-bar',   panelWidth:'560px', frameWidth:'420px', frameHeight:'70vh' },
+    frame: { name:'Frame', icon:'⟁', mode:'special-frame', injectTarget:'special-frame', panelWidth:'680px', frameWidth:'86vw',  frameHeight:'78vh' },
+    dock:  { name:'Dock',  icon:'⌘', mode:'dock',           injectTarget:'symbol-bar',   panelWidth:'620px', frameWidth:'480px', frameHeight:'62vh' }
+  };
 
+  const state = { currentButton: null, longPressTimer: null };
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 
-<button id="dev-btn" onclick="KDevPanel.toggle()" class="fixed bottom-6 left-6 z-[99998] bg-black/80 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white p-3 rounded-2xl shadow-2xl transition-all hover:scale-105 hover:border-blue-500/50 group flex items-center gap-2">
+  function dispatch(name, detail = {}) {
+    window.dispatchEvent(new CustomEvent(name, { detail }));
+  }
+
+  function getButtonKey(btn) {
+    if (!btn) return null;
+    return btn.id || btn.dataset.storeKey || null;
+  }
+
+  function updatePreview(text) {
+    const el = $('#kblx-preview');
+    if (el) el.textContent = text?.trim() ? `Destino: ${text}` : 'Nenhuma rota definida.';
+  }
+
+  function openPanel(btn) {
+    if (!btn) return;
+    state.currentButton = btn;
+
+    const back = $('#kblx-back');
+    const panel = $('#kblx-panel');
+    const title = $('#kblx-ttl');
+    const input = $('#kblx-inp');
+
+    back?.classList.add('is-open');
+    back?.setAttribute('aria-hidden', 'false');
+
+    if (panel && btn.dataset.panelWidth) panel.style.width = btn.dataset.panelWidth;
+    if (title) title.textContent = btn.dataset.title || btn.id || 'Botão';
+    if (input) input.value = btn.dataset.url || '';
+    updatePreview(btn.dataset.url || '');
+
+    dispatch('nagatanazare:panel-open', { button: btn, url: btn.dataset.url || '', preset: btn.dataset.preset || '' });
+  }
+
+  function closePanel() {
+    const back = $('#kblx-back');
+    back?.classList.remove('is-open');
+    back?.setAttribute('aria-hidden', 'true');
+    dispatch('nagatanazare:panel-close', { button: state.currentButton });
+    state.currentButton = null;
+  }
+
+  function paintButton(btn, iconText = '◉') {
+    if (!btn) return;
+    let icon = btn.querySelector('.symbol-icon');
+    if (!icon) {
+      icon = document.createElement('span');
+      icon.className = 'symbol-icon';
+      btn.prepend(icon);
+    }
+    icon.textContent = iconText;
+    btn.dataset.diIconDone = '1';
+  }
+
+  function applyPreset(btn, presetKey) {
+    const preset = ORB_PRESETS[presetKey];
+    if (!btn || !preset) return;
+
+    btn.dataset.preset = presetKey;
+    btn.dataset.mode = preset.mode;
+    btn.dataset.injectTarget = preset.injectTarget;
+    btn.dataset.panelWidth = preset.panelWidth;
+    btn.dataset.frameWidth = preset.frameWidth;
+    btn.dataset.frameHeight = preset.frameHeight;
+
+    paintButton(btn, preset.icon);
+
+    const key = getButtonKey(btn);
+    if (key) {
+      const payload = {
+        url: btn.dataset.url || '',
+        preset: presetKey,
+        mode: preset.mode,
+        injectTarget: preset.injectTarget,
+        panelWidth: preset.panelWidth,
+        frameWidth: preset.frameWidth,
+        frameHeight: preset.frameHeight,
+        updatedAt: Date.now()
+      };
+      try { localStorage.setItem(`symbol_button_${key}`, JSON.stringify(payload)); } catch {}
+      try { sessionStorage.setItem(`symbol_button_${key}`, JSON.stringify(payload)); } catch {}
+    }
+
+    dispatch('nagatanazare:preset-applied', { button: btn, preset, payload: { preset: presetKey } });
+  }
+
+  function saveUrl(btn, url) {
+    if (!btn) return;
+    const clean = String(url || '').trim();
+
+    btn.dataset.url = clean;
+    paintButton(btn, clean ? '⇱' : '◉');
+
+    const key = getButtonKey(btn);
+    if (key) {
+      const payload = {
+        url: clean,
+        preset: btn.dataset.preset || '',
+        mode: btn.dataset.mode || '',
+        injectTarget: btn.dataset.injectTarget || '',
+        panelWidth: btn.dataset.panelWidth || '',
+        frameWidth: btn.dataset.frameWidth || '',
+        frameHeight: btn.dataset.frameHeight || '',
+        updatedAt: Date.now()
+      };
+      try { localStorage.setItem(`symbol_button_${key}`, JSON.stringify(payload)); } catch {}
+      try { sessionStorage.setItem(`symbol_button_${key}`, JSON.stringify(payload)); } catch {}
+    }
+
+    dispatch('nagatanazare:button-updated', { button: btn, payload: { url: clean } });
+  }
+
+  function duplicateButton(btn) {
+    if (!btn) return null;
+    const clone = btn.cloneNode(true);
+    clone.id = `${getButtonKey(btn) || 'orb'}-${Date.now().toString(36)}`;
+    clone.dataset.storeKey = clone.id;
+    btn.parentElement?.insertBefore(clone, btn.nextSibling);
+    paintButton(clone, btn.querySelector('.symbol-icon')?.textContent || '◉');
+    dispatch('nagatanazare:button-duplicated', { from: btn, to: clone });
+    return clone;
+  }
+
+  function removeButton(btn) {
+    if (!btn) return false;
+    dispatch('nagatanazare:button-removed', { button: btn });
+    btn.remove();
+    return true;
+  }
+
+  function openSpecialFrame(payload = {}) {
+    dispatch('kblx:special-frame-open', {
+      url: String(payload.url || '').trim(),
+      preset: payload.preset || 'frame',
+      target: payload.target || 'special-frame',
+      width: payload.width || '86vw',
+      height: payload.height || '78vh',
+      title: payload.title || '',
+      meta: payload.meta || {},
+      button: payload.button || null
+    });
+  }
+
+  document.addEventListener('touchstart', (e) => {
+    const btn = e.target.closest('.symbol-button[data-url]');
+    if (!btn) return;
+    clearTimeout(state.longPressTimer);
+    state.longPressTimer = setTimeout(() => openPanel(btn), 550);
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => clearTimeout(state.longPressTimer), { passive: true });
+  document.addEventListener('touchmove', () => clearTimeout(state.longPressTimer), { passive: true });
+
+  document.addEventListener('mousedown', (e) => {
+    const btn = e.target.closest('.symbol-button[data-url]');
+    if (!btn) return;
+    clearTimeout(state.longPressTimer);
+    state.longPressTimer = setTimeout(() => openPanel(btn), 550);
+  });
+
+  document.addEventListener('mouseup', () => clearTimeout(state.longPressTimer));
+  document.addEventListener('mouseleave', () => clearTimeout(state.longPressTimer));
+
+  document.addEventListener('contextmenu', (e) => {
+    const btn = e.target.closest('.symbol-button[data-url]');
+    if (!btn) return;
+    e.preventDefault();
+    openPanel(btn);
+  });
+
+  document.addEventListener('click', async (e) => {
+    const closeBtn = e.target.closest('#kblx-btn-close');
+    const saveBtn = e.target.closest('#kblx-btn-save');
+    const clearBtn = e.target.closest('#kblx-btn-clear');
+    const injectBtn = e.target.closest('#kblx-btn-orb-inject');
+    const dupBtn = e.target.closest('#kblx-btn-dup');
+    const delBtn = e.target.closest('#kblx-btn-del');
+    const presetBtn = e.target.closest('[data-orb-preset]');
+    const back = e.target.closest('#kblx-back');
+
+    if (back && e.target === back) return closePanel();
+    if (closeBtn) return closePanel();
+
+    const current = state.currentButton;
+    if (!current) return;
+
+    if (presetBtn) {
+      applyPreset(current, presetBtn.dataset.orbPreset);
+      const title = $('#kblx-ttl');
+      if (title) title.textContent = `${current.dataset.title || current.id || 'Botão'} · ${ORB_PRESETS[presetBtn.dataset.orbPreset].name}`;
+      return;
+    }
+
+    if (saveBtn) {
+      const input = $('#kblx-inp');
+      saveUrl(current, input?.value || '');
+      updatePreview(input?.value || '');
+      return;
+    }
+
+    if (clearBtn) {
+      current.dataset.url = '';
+      current.dataset.preset = '';
+      current.dataset.mode = '';
+      current.dataset.injectTarget = '';
+      current.dataset.panelWidth = '';
+      current.dataset.frameWidth = '';
+      current.dataset.frameHeight = '';
+      paintButton(current, '◉');
+      const input = $('#kblx-inp');
+      if (input) input.value = '';
+      updatePreview('');
+      return;
+    }
+
+    if (injectBtn) {
+      const preset = ORB_PRESETS[current.dataset.preset || 'frame'] || ORB_PRESETS.frame;
+      openSpecialFrame({
+        url: current.dataset.url || '',
+        preset: current.dataset.preset || 'frame',
+        target: current.dataset.injectTarget || preset.injectTarget,
+        width: current.dataset.frameWidth || preset.frameWidth,
+        height: current.dataset.frameHeight || preset.frameHeight,
+        title: current.dataset.title || current.id || 'Botão',
+        meta: { mode: current.dataset.mode || preset.mode },
+        button: current
+      });
+      return;
+    }
+
+    if (dupBtn) {
+      const clone = duplicateButton(current);
+      if (clone) openPanel(clone);
+      return;
+    }
+
+    if (delBtn) {
+      if (removeButton(current)) closePanel();
+      return;
+    }
+  });
+
+  document.addEventListener('input', (e) => {
+    if (!e.target.matches('#kblx-inp')) return;
+    if (!state.currentButton) return;
+    updatePreview(e.target.value);
+    saveUrl(state.currentButton, e.target.value);
+  });
+
+  window.NAGATANAZARE = {
+    presets: ORB_PRESETS,
+    openPanel,
+    closePanel,
+    applyPreset,
+    openSpecialFrame
+  };
+
+  window.KBLX_PANEL = { open: openPanel, close: closePanel };
+  window.ORB_INJECT = { inject: openSpecialFrame, applyPreset };
+  window.SPECIAL_FRAME = { open: openSpecialFrame };
+
+  dispatch('nagatanazare:ready', { engine: 'NAGATANAZARE' });
+})();
+</script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script><script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script><script src="https://unpkg.com/lucide@latest"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script><script>
+    function updateInterface(name){
+      const safe = name || di_userName || 'Convidado';
+
+      els.lblName.innerText = safe;
+      els.input.value = safe;
+
+      const activeKey = STATE.keys.find(k => k.active);
+
+      els.smallIdent.innerText = activeKey ? activeKey.name : '--';
+      els.actBadge.innerText = activeKey ? `key:${activeKey.name}` : 'v:--';
+
+      const orbBig  = makeOrbAvatar(safe, 64);
+      const orbMid  = makeOrbAvatar(safe, 36);
+      const orbMini = makeOrbAvatar(safe, 24);
+
+      els.avatarTgt.innerHTML = orbBig;
+      els.smallMiniAvatar.innerHTML = orbMini;
+      els.actMiniAvatar.innerHTML = orbMid;
+
+      els.actName.innerText = safe;
+    }
+  </script><script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/@phosphor-icons/web"></script><script src="https://w.soundcloud.com/player/api.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script><script>
+    (() => {
+      const bodyPlayer = document.getElementById('bodyPlayer');
+      const idleSelector = '.kob-tts-dock, #kodux-widget, [data-idle-target]';
+      let idleTimer = null;
+
+      function getIdleTargets() {
+        return document.querySelectorAll(idleSelector);
+      }
+
+      function setIdleState(isIdle) {
+        getIdleTargets().forEach(el => el.classList.toggle('idle', isIdle));
+      }
+
+      function resetIdle() {
+        setIdleState(false);
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => setIdleState(true), 1870);
+      }
+
+      function setMode(mode = 'player') {
+        if (!bodyPlayer) return;
+        bodyPlayer.dataset.mode = mode;
+      }
+
+      window.KoduxShell = {
+        setMode,
+        resetIdle
+      };
+
+      ['pointerdown', 'pointermove', 'touchstart', 'mousemove', 'scroll'].forEach(ev => {
+        document.addEventListener(ev, resetIdle, { passive: true });
+      });
+
+      document.addEventListener('keydown', resetIdle);
+
+      setMode(bodyPlayer?.dataset.mode || 'player');
+      resetIdle();
+    })();
+
+    
+  </script><button id="dev-btn" onclick="KDevPanel.toggle()" class="fixed bottom-6 left-6 z-[99998] bg-black/80 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white p-3 rounded-2xl shadow-2xl transition-all hover:scale-105 hover:border-blue-500/50 group flex items-center gap-2">
 
  
  <i data-lucide="terminal" class="w-5 h-5 group-hover:text-blue-400 transition-colors"></i>

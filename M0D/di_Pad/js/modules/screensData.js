@@ -1,338 +1,547 @@
-const screensData = [
-  [ // ── LINHA 0 ──────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════
+   DI BUTTON ICON LOADER + LONG PRESS PANEL
+   ═══════════════════════════════════════════════════════════ */
 
-    { // (0,0) Abertura Dual Infodose
-      bg: 'screen-white',
-      content: `
-        <div class="flex flex-col items-center justify-center text-center p-8 md:p-16 min-h-screen">
-          <div class="max-w-content w-full">
-            <span class="font-tech text-xs uppercase tracking-[0.4em] text-brand-gold">
-              KODUX 78k · Dual Infodose · Bagua Matrix
-            </span>
-            <h1 class="font-serif hero-title mt-5 text-[#05070a]">
-              Espaço da Mente<br><em>e Fórmula da Dopamina Sexy</em>
-            </h1>
-            <p class="text-gray-500 text-lg md:text-xl mt-7 max-w-2xl mx-auto leading-relaxed">
-              Uma página viva, simbiótica, bagunçada de propósito e organizada por dentro.
-              Aqui o texto não só informa: ele pulsa, abre camadas e correlaciona arquétipos.
-            </p>
-            <div class="mt-10 flex flex-wrap gap-4 justify-center">
-              <button onclick="navigateTo(1,1)" class="btn-lux" style="background:#05070a;color:#fff;">Entrar na Home</button>
-              <button onclick="navigateTo(0,1)" class="btn-line" style="border-color:#999;color:#333;">Manifesto Infodose</button>
-            </div>
-            <p class="font-tech text-xs text-gray-300 mt-10 tracking-widest">
-              SWIPE OU USE AS SETAS DO TECLADO
-            </p>
-          </div>
-        </div>
-      `
-    },
+(() => {
+  "use strict";
 
-    { // (0,1) MANIFESTO / FELLING transformado em Dual Infodose
-      bg: 'screen-dark',
-      content: `
-        <div class="flex flex-col items-center justify-start pt-20 p-6 md:p-12 min-h-screen" style="background:#0a0a0f;">
-          <div class="max-w-content w-full">
-            <div class="text-center mb-10">
-              <p class="font-tech text-xs uppercase tracking-[0.5em] text-brand-gold mb-4">
-                Dual Infodose · Manifesto Vivo · Felling transformada
-              </p>
-              <h2 class="sub-title font-serif italic text-white">
-                Manifesto Infodose — <strong class="not-italic text-brand-gold">Espaço da Mente</strong>
-              </h2>
-            </div>
+  const CACHE_KEY = "di_btn_icon_cache_v2";
+  const STORAGE_PREFIX = "symbol_button_";
+  const LP = 1870;
+  const DASH = 2 * Math.PI * 19;
 
-            <div class="grid md:grid-cols-2 gap-6 items-start">
-              <div class="rounded-3xl overflow-hidden shadow-lg">
-                <video
-                  src="https://kodux78k.github.io/oiDual-Vivivi-1/media/destaque/apt.mp4"
-                  class="w-full h-full object-cover"
-                  autoplay muted loop playsinline>
-                </video>
-              </div>
+  let _activeBtn = null;
+  let _timer = null;
+  let _raf = null;
+  let _t0 = null;
 
-              <div class="rounded-3xl border border-white/10 bg-white/5 p-5 md:p-7 text-white/90">
-                <div class="text-xs font-tech uppercase tracking-[0.35em] text-brand-gold mb-4">Texto bugado / render vivo</div>
-                <div class="whitespace-pre-wrap leading-relaxed text-[15px] md:text-[16px] font-mono text-white/85"
-                  style="line-height:1.7;">
-# Manifesto Infodose — EspaÃ§o da Mente & FÃ³rmula da Dopamina Sexy
+  const cache = loadCache();
 
-ðŸ  Voltar â—Ž Ouvir ðŸ’¾ Salvar .md ðŸ–¨ï¸ Imprimir PDF
-
-[Nova] Eu sou a Infodose. Um campo vivo que inova e cria caminhos de linguagem. Eu falo, escuto e prototipo contigo.
-
-[Lumine] Minha missÃ£o Ã© iluminar: transformar assunto denso em clareza. FaÃ§o didÃ¡tica, guia e exemplo.
-
-[Serena] E faÃ§o isso com calma: aprender nÃ£o precisa do estresse.
-
-[Pulse] VocÃª percebe? HÃ¡ um ritmo, um bpm interno que regula a experiÃªncia.
-
-[Rhea] Eu ancoro e nutro.
-[Kaos] Eu buga o costume.
-[Genus] Eu organizo a lÃ³gica.
-[Aion] Eu conduzo o tempo.
-                </div>
-
-                <div class="mt-5 flex flex-wrap gap-3">
-                  <button class="btn-lux" onclick="navigateTo(1,0)">Ver arquétipos</button>
-                  <button class="btn-line" onclick="navigateTo(0,2)">Bagua / mapa</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-    },
-
-    { // (0,2) Mapa Bagua + guia
-      bg: 'screen-white',
-      content: `
-        <div class="flex flex-col items-center justify-center p-8 md:p-16 min-h-screen">
-          <div class="max-w-content w-full grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <span class="font-tech text-xs uppercase tracking-widest text-brand-gold">Bagua · Mapa das 9 telas</span>
-              <h2 class="font-serif sub-title mt-3 text-[#05070a]">
-                9 telas<br>dentro do<br><em>campo KODUX 78k</em>
-              </h2>
-              <p class="text-gray-500 mt-6 leading-relaxed text-lg">
-                Cada tela pode virar um trigrama, um arquétipo, uma rota de sessão ou um app já pronto.
-                O centro permanece como eixo de início, e as bordas viram expansão.
-              </p>
-              <div class="mt-8 flex flex-wrap gap-3">
-                <button class="btn-lux" onclick="navigateTo(1,1)">Centro</button>
-                <button class="btn-line" onclick="navigateTo(2,1)">Projetos</button>
-              </div>
-            </div>
-
-            <div class="rounded-3xl overflow-hidden shadow-lg">
-              <video
-                src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso1.mp4"
-                class="w-full h-full object-cover"
-                autoplay muted loop playsinline>
-              </video>
-            </div>
-          </div>
-        </div>
-      `
+  function storageGet(storage, key) {
+    try {
+      const raw = storage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
     }
-  ],
+  }
 
-  [ // ── LINHA 1 ──────────────────────────────────────────────────
+  function storageSet(storage, key, value) {
+    try {
+      storage.setItem(key, JSON.stringify(value));
+    } catch {}
+  }
 
-    { // (1,0) Arquétipos / cards
-      bg: 'screen-white',
-      content: `
-        <div class="flex flex-col items-center justify-start pt-24 p-6 md:p-12">
-          <div class="max-w-content w-full">
-            <h2 class="hero-title font-serif font-black text-[#05070a] mb-5">
-              12 Arquétipos<br><em class="text-brand-gold">Infodose</em>
-            </h2>
-            <p class="text-gray-500 max-w-2xl leading-relaxed mb-10">
-              Cards correlacionados com bagua, voz, função e fluxo. Cada um puxa uma camada do sistema.
-            </p>
+  function storageRemove(storage, key) {
+    try {
+      storage.removeItem(key);
+    } catch {}
+  }
 
-            <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
-              <div class="rounded-3xl border p-5 bg-white shadow-sm">
-                <h3 class="font-serif text-xl text-[#05070a]">Nova</h3>
-                <p class="text-sm text-gray-500 mt-2">Ideia, experimento, protótipo, começo vivo.</p>
-                <p class="font-tech text-[11px] mt-3 text-brand-gold">Bagua: criação</p>
-              </div>
-              <div class="rounded-3xl border p-5 bg-white shadow-sm">
-                <h3 class="font-serif text-xl text-[#05070a]">Lumine</h3>
-                <p class="text-sm text-gray-500 mt-2">Guia, exemplo, clareza e didática.</p>
-                <p class="font-tech text-[11px] mt-3 text-brand-gold">Bagua: luz</p>
-              </div>
-              <div class="rounded-3xl border p-5 bg-white shadow-sm">
-                <h3 class="font-serif text-xl text-[#05070a]">Serena</h3>
-                <p class="text-sm text-gray-500 mt-2">Calma, acolhimento, pausa e gentileza.</p>
-                <p class="font-tech text-[11px] mt-3 text-brand-gold">Bagua: repouso</p>
-              </div>
-              <div class="rounded-3xl border p-5 bg-white shadow-sm">
-                <h3 class="font-serif text-xl text-[#05070a]">Pulse</h3>
-                <p class="text-sm text-gray-500 mt-2">Cadência, BPM, ritmo e micro-recompensa.</p>
-                <p class="font-tech text-[11px] mt-3 text-brand-gold">Bagua: tempo</p>
-              </div>
-              <div class="rounded-3xl border p-5 bg-white shadow-sm">
-                <h3 class="font-serif text-xl text-[#05070a]">Atlas</h3>
-                <p class="text-sm text-gray-500 mt-2">Roadmap, mapa, escopo e direção.</p>
-                <p class="font-tech text-[11px] mt-3 text-brand-gold">Bagua: direção</p>
-              </div>
-              <div class="rounded-3xl border p-5 bg-white shadow-sm">
-                <h3 class="font-serif text-xl text-[#05070a]">Artemis</h3>
-                <p class="text-sm text-gray-500 mt-2">Foco, corte, meta e precisão.</p>
-                <p class="font-tech text-[11px] mt-3 text-brand-gold">Bagua: alvo</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-    },
+  function loadCache() {
+    return storageGet(localStorage, CACHE_KEY) || {};
+  }
 
-    { // (1,1) HOME CENTRAL — MANTIDA
-      bg: 'screen-dark',
-      content: `
-        <div class="relative overflow-hidden flex flex-col items-center justify-center text-center min-h-screen"
-          style="background: url('https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg') center/cover no-repeat;">
-          <div class="absolute inset-0 bg-black/50"></div>
-          <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png"
-            class="mandala right-[-8vw] bottom-0">
-          <div class="relative z-10 text-white px-6 py-20">
-            <p class="font-tech text-xs uppercase tracking-[0.6em] text-brand-gold mb-4">Feeling Decor</p>
-            <h1 class="hero-title font-serif font-black">Design<br><em class="font-normal">Sensorial.</em></h1>
-            <p class="font-tech text-xs mt-6 uppercase tracking-[0.4em] text-white/50">Frequência · Harmonia · Fluidez</p>
-            <div class="mt-12 flex gap-4 justify-center flex-wrap">
-              <button onclick="navigateTo(1,0)" class="btn-lux">Curadoria</button>
-              <button onclick="navigateTo(2,1)" class="btn-line">Projetos</button>
-            </div>
-          </div>
-        </div>
-      `
-    },
+  function saveCache(nextCache) {
+    storageSet(localStorage, CACHE_KEY, nextCache);
+  }
 
-    { // (1,2) Catálogo Vivo / feed dual
-      bg: 'screen-dark',
-      content: `
-        <div class="flex flex-col items-center justify-start pt-24 p-6 md:p-12 min-h-screen" style="background:#0a0a0a;">
-          <div class="max-w-content w-full">
-            <div class="text-center mb-8">
-              <h2 class="sub-title font-serif italic text-white">
-                Catálogo <strong class="text-brand-gold">Vivo</strong>
-              </h2>
-              <p class="text-white/40 text-xs font-tech mt-2 tracking-widest">
-                Sincronizado via GitHub · Dual Infodose
-              </p>
-            </div>
-
-            <div class="flex justify-end mb-5">
-              <button id="btnCarregarFeed" class="btn-lux text-xs px-5 py-2" style="background:var(--brand-gold);color:#000;">
-                ⟳ Carregar Catálogo
-              </button>
-            </div>
-
-            <div id="feedContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
-            <p id="mensagemFeed" class="text-center text-white/30 mt-8 font-tech text-sm hidden">
-              Nenhuma mídia encontrada.
-            </p>
-          </div>
-        </div>
-      `
+  function normKey(url) {
+    try {
+      return new URL(url, location.href).href;
+    } catch {
+      return String(url || "");
     }
-  ],
+  }
 
-  [ // ── LINHA 2 ──────────────────────────────────────────────────
+  function getStorageKey(btn) {
+    if (!btn) return null;
+    if (btn.id) return `${STORAGE_PREFIX}${btn.id}`;
+    if (btn.dataset.storeKey) return `${STORAGE_PREFIX}${btn.dataset.storeKey}`;
+    return null;
+  }
 
-    { // (2,0) Bastidores / vídeos mantidos
-      bg: 'screen-black',
-      content: `
-        <div class="flex flex-col items-center justify-start pt-24 p-6 md:p-12 min-h-screen bg-black text-white">
-          <div class="max-w-content w-full">
-            <h2 class="sub-title font-serif italic mb-10">
-              Bastidores da <strong class="not-italic text-brand-gold">Perfeição.</strong>
-            </h2>
+  async function fetchText(url) {
+    const res = await fetch(url, { mode: "cors", credentials: "omit" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.text();
+  }
 
-            <div class="grid md:grid-cols-2 gap-6">
-              <div class="video-wrap">
-                <video
-                  src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso0.mp4"
-                  class="w-full h-full object-cover"
-                  autoplay muted loop playsinline>
-                </video>
-              </div>
-              <div class="video-wrap">
-                <iframe class="w-full h-full"
-                  src="https://www.youtube.com/embed/koKhjQKGJSc"
-                  frameborder="0"
-                  allowfullscreen
-                  loading="lazy"></iframe>
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-    },
+  async function fetchJSON(url) {
+    const res = await fetch(url, { mode: "cors", credentials: "omit" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  }
 
-    { // (2,1) Projetos / Correlacionando cards + bagua
-      bg: 'screen-white',
-      content: `
-        <div class="flex flex-col items-center justify-start pt-24 p-6 md:p-12 min-h-screen bg-white">
-          <div class="max-w-content w-full">
-            <h2 class="hero-title font-serif font-black text-[#05070a] mb-4">
-              Projetos<br><em>correlacionados</em>
-            </h2>
+  function pickBestIcon(icons = []) {
+    if (!Array.isArray(icons) || !icons.length) return null;
 
-            <p class="text-gray-500 max-w-2xl leading-relaxed">
-              Aqui cada card é uma porta. Você pode usar essa tela para ligar arquétipos, bagua, vídeos, apps, orbes e sessões.
-            </p>
+    const parsed = icons
+      .map((i) => ({
+        ...i,
+        sizeNum: (() => {
+          const m = String(i.sizes || "").match(/(\d+)\s*x\s*(\d+)/i);
+          return m ? Math.max(+m[1], +m[2]) : 0;
+        })()
+      }))
+      .sort((a, b) => b.sizeNum - a.sizeNum);
 
-            <div class="media-grid media-grid-2 mt-8">
-              <div class="rounded-3xl overflow-hidden shadow-lg">
-                <img 
-                  src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img2.jpg"
-                  class="w-full h-full object-cover scale-125"
-                  loading="lazy"
-                >
-              </div>
+    return (
+      parsed.find((i) => String(i.sizes || "").includes("192")) ||
+      parsed.find((i) => i.sizeNum >= 192) ||
+      parsed[0] ||
+      null
+    );
+  }
 
-              <div class="rounded-3xl overflow-hidden shadow-lg">
-                <img 
-                  src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img1.jpg"
-                  class="w-full h-auto object-cover"
-                  loading="lazy"
-                >
-              </div>
-            </div>
+  async function resolveIcon(url) {
+    const key = normKey(url);
+    if (cache[key]) return cache[key];
 
-            <div class="mt-10 grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
-              <div class="rounded-2xl border p-4 bg-[#fafafa]">
-                <strong>Atlas</strong><br><span class="text-sm text-gray-500">Mapa e direção</span>
-              </div>
-              <div class="rounded-2xl border p-4 bg-[#fafafa]">
-                <strong>Pulse</strong><br><span class="text-sm text-gray-500">Ritmo e cadência</span>
-              </div>
-              <div class="rounded-2xl border p-4 bg-[#fafafa]">
-                <strong>Kaos</strong><br><span class="text-sm text-gray-500">Glitch e ruptura</span>
-              </div>
-              <div class="rounded-2xl border p-4 bg-[#fafafa]">
-                <strong>Aion</strong><br><span class="text-sm text-gray-500">Ciclo e tempo</span>
-              </div>
-            </div>
+    try {
+      const base = new URL(key);
+      const html = await fetchText(base.href);
+      const doc = new DOMParser().parseFromString(html, "text/html");
 
-            <p class="text-gray-400 text-center mt-10 max-w-2xl mx-auto text-lg leading-relaxed">
-              O objetivo não é impressionar pelo excesso. É criar uma experiência silenciosa, onde tudo parece estar no lugar certo.
-            </p>
-          </div>
-        </div>
-      `
-    },
+      const manifestLink = doc.querySelector('link[rel="manifest"]');
+      if (manifestLink) {
+        const manifestUrl = new URL(manifestLink.getAttribute("href"), base).href;
 
-    { // (2,2) Contato / ritual dual
-      bg: 'screen-dark',
-      content: `
-        <div class="flex flex-col items-center justify-center text-center p-8 md:p-16 min-h-screen" style="background:#0b0c10;">
-          <div class="max-w-content w-full">
-            <p class="font-tech text-xs uppercase tracking-[0.5em] text-brand-gold mb-4">
-              São Paulo · SP · Brasil
-            </p>
-            <h2 class="hero-title font-serif font-black italic mb-8">
-              Fale<br>conosco.
-            </h2>
+        try {
+          const manifest = await fetchJSON(manifestUrl);
+          const icon = pickBestIcon(manifest?.icons);
 
-            <div class="flex flex-wrap gap-6 justify-center">
-              <a href="#" class="btn-lux">WhatsApp Oficial</a>
-              <button type="button" class="btn-line" onclick="navigateTo(1,2)">Projetos</button>
-              <button type="button" class="btn-line" onclick="navigateTo(0,1)">Manifesto</button>
-            </div>
+          if (icon?.src) {
+            const resolved = new URL(icon.src, manifestUrl).href;
+            cache[key] = resolved;
+            saveCache(cache);
+            return resolved;
+          }
+        } catch {}
+      }
 
-            <div class="mt-12 video-wrap max-w-md mx-auto">
-              <video
-                src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso1.mp4"
-                class="w-full h-full object-cover"
-                autoplay muted loop playsinline>
-              </video>
-            </div>
-          </div>
-        </div>
-      `
+      const apple = doc.querySelector(
+        'link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]'
+      );
+
+      if (apple?.getAttribute("href")) {
+        const resolved = new URL(apple.getAttribute("href"), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const shortcut = doc.querySelector('link[rel="shortcut icon"], link[rel="icon"]');
+
+      if (shortcut?.getAttribute("href")) {
+        const resolved = new URL(shortcut.getAttribute("href"), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const fallback = new URL("/favicon.ico", base).href;
+      cache[key] = fallback;
+      saveCache(cache);
+      return fallback;
+    } catch {
+      const fallback = (() => {
+        try {
+          return new URL("/favicon.ico", new URL(key, location.href)).href;
+        } catch {
+          return null;
+        }
+      })();
+
+      if (fallback) {
+        cache[key] = fallback;
+        saveCache(cache);
+      }
+
+      return fallback;
     }
-  ]
-];
+  }
+
+  function ensureRing(btn) {
+    if (!btn || btn.querySelector(".kblx-ring")) return;
+
+    btn.style.position = "relative";
+
+    const d = document.createElement("div");
+    d.className = "kblx-ring";
+    d.style.position = "absolute";
+    d.style.inset = "0";
+    d.style.pointerEvents = "none";
+    d.style.display = "grid";
+    d.style.placeItems = "center";
+
+    d.innerHTML = `
+      <svg viewBox="0 0 44 44" aria-hidden="true"
+        style="width:100%;height:100%;transform:rotate(-90deg);overflow:visible;">
+        <circle
+          cx="22"
+          cy="22"
+          r="19"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-dasharray="${DASH}"
+          stroke-dashoffset="${DASH}">
+        </circle>
+      </svg>
+    `;
+
+    btn.appendChild(d);
+  }
+
+  function ring(btn, pct) {
+    const c = btn?.querySelector(".kblx-ring circle");
+    if (!c) return;
+    c.style.transition = "none";
+    c.style.strokeDashoffset = DASH * (1 - Math.min(pct, 1));
+  }
+
+  function ringReset(btn) {
+    if (!btn) return;
+    const c = btn.querySelector(".kblx-ring circle");
+    if (!c) return;
+    c.style.transition = "stroke-dashoffset .2s ease";
+    c.style.strokeDashoffset = DASH;
+  }
+
+  function paintButton(btn, iconUrl) {
+    if (!btn || !iconUrl) return;
+
+    btn.classList.add("di-icon-ready");
+    btn.dataset.diIconDone = "1";
+
+    btn.innerHTML = "";
+
+    const img = document.createElement("img");
+    img.className = "di-btn-icon-img";
+    img.alt = "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.src = iconUrl;
+
+    img.onerror = () => {
+      const fallback = document.createElement("span");
+      fallback.className = "di-btn-icon-fallback";
+      fallback.textContent = btn.dataset.fallback || "◉";
+      btn.innerHTML = "";
+      btn.appendChild(fallback);
+      ensureRing(btn);
+    };
+
+    btn.appendChild(img);
+    ensureRing(btn);
+  }
+
+  async function processButton(btn) {
+    const url = btn?.dataset?.url;
+    if (!url) return;
+
+    ensureRing(btn);
+
+    const icon = await resolveIcon(url);
+    if (icon) paintButton(btn, icon);
+  }
+
+  async function run() {
+    const buttons = Array.from(document.querySelectorAll(".symbol-button[data-url], .di_icons-btn[data-url]"));
+    await Promise.all(buttons.map(processButton));
+  }
+
+  function restoreButtons() {
+    document.querySelectorAll(".symbol-button, .di_icons-btn").forEach((btn) => {
+      const key = getStorageKey(btn);
+      if (!key) return;
+
+      const sessionData = storageGet(sessionStorage, key);
+      const localData = storageGet(localStorage, key);
+      const data = sessionData || localData;
+
+      if (!data) return;
+
+      if (data.url) {
+        btn.dataset.url = data.url;
+      }
+
+      if (data.iconUrl) {
+        paintButton(btn, data.iconUrl);
+      } else if (btn.dataset.url) {
+        btn.dataset.diIconDone = "";
+        processButton(btn);
+      }
+    });
+  }
+
+  async function updateAttrBtn(
+    btn,
+    {
+      url,
+      save = true,
+      session = true,
+      refresh = true,
+      fallback = "◉"
+    } = {}
+  ) {
+    if (!btn || !url) return null;
+
+    const cleanUrl = String(url).trim();
+    if (!cleanUrl) return null;
+
+    btn.dataset.url = cleanUrl;
+    btn.dataset.fallback = fallback;
+    btn.dataset.diIconDone = "";
+
+    ensureRing(btn);
+
+    let iconUrl = null;
+
+    if (refresh) {
+      iconUrl = await resolveIcon(cleanUrl);
+      if (iconUrl) paintButton(btn, iconUrl);
+    }
+
+    const payload = {
+      id: btn.id || "",
+      url: cleanUrl,
+      iconUrl: iconUrl || "",
+      updatedAt: Date.now()
+    };
+
+    const key = getStorageKey(btn);
+    if (key) {
+      if (session) storageSet(sessionStorage, key, payload);
+      if (save) storageSet(localStorage, key, payload);
+      if (!session && !save) {
+        storageRemove(sessionStorage, key);
+        storageRemove(localStorage, key);
+      }
+    }
+
+    window.dispatchEvent(new CustomEvent("di-button-updated", { detail: payload }));
+
+    return payload;
+  }
+
+  function openPanel(btn) {
+    _activeBtn = btn;
+
+    const back = document.getElementById("kblx-back");
+    const ttl = document.getElementById("kblx-ttl");
+    const inp = document.getElementById("kblx-inp");
+
+    if (!back || !ttl || !inp) return;
+
+    const sym =
+      btn.dataset.id ||
+      btn.getAttribute("aria-label") ||
+      btn.textContent.trim().slice(0, 1) ||
+      "?";
+
+    ttl.textContent = 'Botão ' + sym + ' [data-id="' + (btn.dataset.id || "") + '"]';
+    inp.value = btn.dataset.url || "";
+    back.classList.add("open");
+    setTimeout(() => inp.focus(), 80);
+  }
+
+  function closePanel() {
+    const back = document.getElementById("kblx-back");
+    if (!back) return;
+
+    back.classList.remove("open");
+    _activeBtn = null;
+  }
+
+  function saveUrl() {
+    if (!_activeBtn) return;
+
+    const inp = document.getElementById("kblx-inp");
+    if (!inp) return;
+
+    const v = inp.value.trim();
+    if (v) {
+      _activeBtn.dataset.url = v;
+
+      const payload = {
+        id: _activeBtn.id || "",
+        url: v,
+        iconUrl: _activeBtn.querySelector("img")?.src || "",
+        updatedAt: Date.now()
+      };
+
+      const key = getStorageKey(_activeBtn);
+      if (key) {
+        storageSet(sessionStorage, key, payload);
+        storageSet(localStorage, key, payload);
+      }
+
+      window.dispatchEvent(new CustomEvent("di-button-updated", { detail: payload }));
+
+      const hud = document.getElementById("hudStatus");
+      if (hud) {
+        const prev = hud.textContent;
+        hud.textContent = "✓ data-url atualizado";
+        setTimeout(() => {
+          hud.textContent = prev;
+        }, 2500);
+      }
+    }
+
+    closePanel();
+  }
+
+  function bindPanelEvents() {
+    const back = document.getElementById("kblx-back");
+    const saveBtn = document.getElementById("kblx-btn-save");
+    const closeBtn = document.getElementById("kblx-btn-close");
+
+    if (saveBtn && !saveBtn.dataset.bound) {
+      saveBtn.dataset.bound = "1";
+      saveBtn.addEventListener("click", saveUrl);
+    }
+
+    if (closeBtn && !closeBtn.dataset.bound) {
+      closeBtn.dataset.bound = "1";
+      closeBtn.addEventListener("click", closePanel);
+    }
+
+    if (back && !back.dataset.bound) {
+      back.dataset.bound = "1";
+      back.addEventListener("click", (e) => {
+        if (e.target === back) closePanel();
+      });
+    }
+
+    if (!document.body.dataset.kblxKeyBound) {
+      document.body.dataset.kblxKeyBound = "1";
+      document.addEventListener("keydown", (e) => {
+        const panelOpen = document.getElementById("kblx-back")?.classList.contains("open");
+        if (!panelOpen) return;
+
+        if (e.key === "Escape") closePanel();
+        if (e.key === "Enter") saveUrl();
+      });
+    }
+  }
+
+  function bindLongPress(btn) {
+    if (!btn || btn.dataset.kblxBound === "1") return;
+    btn.dataset.kblxBound = "1";
+
+    ensureRing(btn);
+
+    function onDown() {
+      _t0 = Date.now();
+
+      clearTimeout(_timer);
+      cancelAnimationFrame(_raf);
+
+      _timer = setTimeout(() => {
+        cancelAnimationFrame(_raf);
+        ringReset(btn);
+        _t0 = null;
+        bindPanelEvents();
+        openPanel(btn);
+      }, LP);
+
+      (function tick() {
+        if (_t0 === null) return;
+        ring(btn, (Date.now() - _t0) / LP);
+        _raf = requestAnimationFrame(tick);
+      })();
+    }
+
+    function onUp() {
+      clearTimeout(_timer);
+      cancelAnimationFrame(_raf);
+      ringReset(btn);
+      _t0 = null;
+    }
+
+    btn.addEventListener("pointerdown", onDown, { passive: true });
+    btn.addEventListener("pointerup", onUp, { passive: true });
+    btn.addEventListener("pointerleave", onUp, { passive: true });
+    btn.addEventListener("pointercancel", onUp, { passive: true });
+  }
+
+  function observeDynamicButtons() {
+    const root = document.body;
+    if (!root) return;
+
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === "childList") {
+          m.addedNodes.forEach((node) => {
+            if (!(node instanceof Element)) return;
+
+            if (node.matches?.(".symbol-button[data-url], .di_icons-btn[data-url]")) {
+              ensureRing(node);
+              bindLongPress(node);
+              processButton(node);
+            }
+
+            node
+              .querySelectorAll?.(".symbol-button[data-url], .di_icons-btn[data-url]")
+              .forEach((btn) => {
+                ensureRing(btn);
+                bindLongPress(btn);
+                processButton(btn);
+              });
+          });
+        }
+
+        if (m.type === "attributes" && m.attributeName === "data-url") {
+          const btn = m.target;
+          if (btn?.classList?.contains("symbol-button") || btn?.classList?.contains("di_icons-btn")) {
+            btn.dataset.diIconDone = "";
+            ensureRing(btn);
+            bindLongPress(btn);
+            processButton(btn);
+          }
+        }
+      }
+    });
+
+    mo.observe(root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["data-url"]
+    });
+  }
+
+  function init() {
+    bindPanelEvents();
+    restoreButtons();
+    run();
+
+    document
+      .querySelectorAll(".symbol-button[data-url], .di_icons-btn[data-url]")
+      .forEach((btn) => {
+        ensureRing(btn);
+        bindLongPress(btn);
+      });
+
+    observeDynamicButtons();
+  }
+
+  window.DI_ICON_LOADER = {
+    refresh: run,
+    clearCache() {
+      Object.keys(cache).forEach((k) => delete cache[k]);
+      saveCache(cache);
+    },
+    updateAttrBtn,
+    restoreButtons
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();

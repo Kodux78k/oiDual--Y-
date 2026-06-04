@@ -1,7 +1,7 @@
 const ROWS = 3;
 const COLS = 3;
 
-const DEFAULT_SESSION_URL = "https://kodux78k.github.io/oiDual-H0/DH0-10.html";
+const DEFAULT_SESSION_URL = "https://kodux78k.github.io/oiDual--Y-/";
 const STORE_KEY = "kx_section_store_v2";
 
 const grid = document.getElementById("grid");
@@ -21,7 +21,16 @@ const screensData = [
       url: DEFAULT_SESSION_URL
     },
     {
-      html: `<div class="inner"><div class="wrap stack"><div class="blank-slot">Seção 2 · cole seu HTML aqui</div></div></div>`,
+      html: `
+
+        <iframe
+          class="win-frame"
+          src="https://kodux78k.github.io/oiDual-H0/DH0-10.html"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+          allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+          loading="lazy">
+        </iframe>
+     `,
       url: DEFAULT_SESSION_URL
     },
     {
