@@ -19,7 +19,7 @@ import './modules/inline-10.js';
 import './modules/inline-11.js';
 
 import './modules/inline-arx.js';
-/*import './modules/a€Arx.js';*/
+import './modules/a€Arx.js';
 console.log(`
 ╔════════════════════════════════════╗
 ║ KBllX  READY                       ║
