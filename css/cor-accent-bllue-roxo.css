@@ -1,0 +1,81 @@
+/* ==========================================================================
+   KODUX · COR ACCENT · AZUL/ROXO
+   Eixo: KODUX · Nível 4 (Tetraedron) · Pulso: 12.65 · Selo: 111.23
+   KOBΦ-NODE.FIELDS — ∴ O VERBO E A ÁGUA ∴
+   ========================================================================== */
+
+/* --- Global design tokens: KODUX Cor Accent Azul/Roxo --- */
+:root {
+  --kodux-accent-primary:    #5B4FE8;                /* azul-roxo · impulso UNO     */
+  --kodux-accent-secondary:  #9B59B6;                /* roxo       · integração DUAL */
+  --kodux-accent-tertiary:   #3498DB;                /* azul-água  · expansão TRINITY*/
+  --kodux-accent-indigo:     #4B0082;                /* índigo profundo · raiz       */
+  --kodux-accent-violet:     #8A2BE2;                /* violeta · forma viva         */
+  --kodux-accent-glow:       rgba(91, 79, 232, 0.55);
+  --kodux-accent-glow-soft:  rgba(155, 89, 182, 0.40);
+  --kodux-accent-bg-soft:    rgba(91, 79, 232, 0.08);
+  --kodux-accent-bg-medium:  rgba(91, 79, 232, 0.15);
+  --kodux-accent-border:     rgba(91, 79, 232, 0.45);
+  --kodux-pulse-base:        11.00;
+  --kodux-pulse-delta:       1.15;
+  /* pulse_active = 12.65 */
+}
+
+/* --- Scoped voice-arch override: kodux-bllue (Azul/Roxo) --- */
+.bcb2 [data-voice-arch="kodux-bllue"] {
+  --kob-voice-primary:   #5B4FE8;
+  --kob-voice-secondary: #9B59B6;
+  --kob-voice-accent:    #c0b8ff;
+  --kob-voice-bg-soft:   rgba(91, 79, 232, 0.08);
+  --kob-voice-glow:      0 0 18px rgba(91, 79, 232, 0.55);
+}
+
+/* --- KODUX accent utility classes --- */
+.kodux-accent {
+  color: var(--kodux-accent-primary);
+}
+
+.kodux-accent-bg {
+  background-color: var(--kodux-accent-bg-soft);
+}
+
+.kodux-accent-border {
+  border-color: var(--kodux-accent-border);
+}
+
+.kodux-accent-glow {
+  box-shadow:
+    0 0 18px var(--kodux-accent-glow),
+    0 0 36px var(--kodux-accent-glow-soft);
+}
+
+/* --- Tetraedron gradient (Nível 4 · ∆⁴) --- */
+.kodux-tetraedron-bg {
+  background:
+    radial-gradient(900px 600px at 0% 0%,   rgba(91, 79, 232, 0.18), transparent 55%),
+    radial-gradient(700px 500px at 100% 0%,  rgba(155, 89, 182, 0.14), transparent 50%),
+    radial-gradient(600px 400px at 50% 100%, rgba(52, 152, 219, 0.12), transparent 55%),
+    radial-gradient(500px 350px at 100% 100%,rgba(75, 0, 130, 0.10),   transparent 50%);
+}
+
+/* --- Pulse animation: 12.65 rhythm --- */
+@keyframes koduxAccentPulse {
+  0%   { box-shadow: 0 0 8px  var(--kodux-accent-glow); opacity: 0.85; }
+  50%  { box-shadow: 0 0 22px var(--kodux-accent-glow), 0 0 44px var(--kodux-accent-glow-soft); opacity: 1; }
+  100% { box-shadow: 0 0 8px  var(--kodux-accent-glow); opacity: 0.85; }
+}
+
+.kodux-accent-pulse {
+  animation: koduxAccentPulse 1265ms ease-in-out infinite;
+  /* 1265ms ≡ pulso 12.65 × 100 */
+}
+
+/* --- Callout archetype: KODUX Azul/Roxo --- */
+.bcb2 .callout[data-arch="kodux-accent"],
+.bcb2 .md-block.arch[data-arch="kodux-accent"] {
+  --arch-color: rgba(91, 79, 232, 0.75);
+}
+
+/* ==========================================================================
+   ∴ SELO: INFODOSE[COR-ACCENT·AZUL/ROXO] · E=111.23 · ∆4 · TETRAEDRON ∴
+   ========================================================================== */
