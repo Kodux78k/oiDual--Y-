@@ -4,6 +4,7 @@ window.KBLX_PROFILE = '7-9';
 // main-0.js
 import './modules/KBllX_ASCII_BOOT.js';
 import './modules/inline-00-arx.js'; 
+import './modules/archz.js'; 
 
 import './modules/inline-1.js';
 import './modules/inline-2.js';
