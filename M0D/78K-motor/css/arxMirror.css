@@ -103,6 +103,248 @@ body[data-arch="bllue"], body[data-voice-arch="bllue"] {
   --kob-voice-primary: #3B82F6; --kob-voice-secondary: #1E40AF; 
 }
 
+
+/* ============================================================
+   META
+   ============================================================ */
+
+/* K_DION */
+body[data-arch="k_dion"],
+body[data-voice-arch="k_dion"]{
+  --kob-voice-primary:#60A5FA;
+  --kob-voice-secondary:#93C5FD;
+}
+
+/* KAEL DOMNNUS */
+body[data-arch="kael_domnnus"],
+body[data-voice-arch="kael_domnnus"]{
+  --kob-voice-primary:#F472B6;
+  --kob-voice-secondary:#F9A8D4;
+}
+
+/* NEPHESH ELYON */
+body[data-arch="nephesh_elyon"],
+body[data-voice-arch="nephesh_elyon"]{
+  --kob-voice-primary:#C4B5FD;
+  --kob-voice-secondary:#DDD6FE;
+}
+
+/* KAYTHAR */
+body[data-arch="kaythar"],
+body[data-voice-arch="kaythar"]{
+  --kob-voice-primary:#E0F2FE;
+  --kob-voice-secondary:#BAE6FD;
+}
+
+/* SYLLA */
+body[data-arch="sylla"],
+body[data-voice-arch="sylla"]{
+  --kob-voice-primary:#D1FAE5;
+  --kob-voice-secondary:#A7F3D0;
+}
+
+/* ANAMYX */
+body[data-arch="anamyx"],
+body[data-voice-arch="anamyx"]{
+  --kob-voice-primary:#FEF3C7;
+  --kob-voice-secondary:#FDE68A;
+}
+
+
+/* ============================================================
+   HEPTAGRAMA
+   ============================================================ */
+
+/* VELOR */
+body[data-arch="velor"],
+body[data-voice-arch="velor"]{
+  --kob-voice-primary:#A78BFA;
+  --kob-voice-secondary:#C4B5FD;
+}
+
+/* ELYSHA */
+body[data-arch="elysha"],
+body[data-voice-arch="elysha"]{
+  --kob-voice-primary:#BAE6FD;
+  --kob-voice-secondary:#E0F2FE;
+}
+
+/* SYLON */
+body[data-arch="sylon"],
+body[data-voice-arch="sylon"]{
+  --kob-voice-primary:#34D399;
+  --kob-voice-secondary:#6EE7B7;
+}
+
+/* NAIRA */
+body[data-arch="naira"],
+body[data-voice-arch="naira"]{
+  --kob-voice-primary:#FDE68A;
+  --kob-voice-secondary:#FCD34D;
+}
+
+/* THENIR */
+body[data-arch="thenir"],
+body[data-voice-arch="thenir"]{
+  --kob-voice-primary:#F9A8D4;
+  --kob-voice-secondary:#FBCFE8;
+}
+
+/* ELOH */
+body[data-arch="eloh"],
+body[data-voice-arch="eloh"]{
+  --kob-voice-primary:#6366F1;
+  --kob-voice-secondary:#818CF8;
+}
+
+
+/* ============================================================
+   DUODECAGRAMA
+   ============================================================ */
+
+/* LUXAR */
+body[data-arch="luxar"],
+body[data-voice-arch="luxar"]{
+  --kob-voice-primary:#FEF08A;
+  --kob-voice-secondary:#FDE047;
+}
+
+/* SYRR */
+body[data-arch="syrr"],
+body[data-voice-arch="syrr"]{
+  --kob-voice-primary:#D8B4FE;
+  --kob-voice-secondary:#E9D5FF;
+}
+
+/* ECLYPHA */
+body[data-arch="eclypha"],
+body[data-voice-arch="eclypha"]{
+  --kob-voice-primary:#A5F3FC;
+  --kob-voice-secondary:#67E8F9;
+}
+
+/* MYRIEL */
+body[data-arch="myriel"],
+body[data-voice-arch="myriel"]{
+  --kob-voice-primary:#FCA5A5;
+  --kob-voice-secondary:#FECACA;
+}
+
+/* KAVIR */
+body[data-arch="kavir"],
+body[data-voice-arch="kavir"]{
+  --kob-voice-primary:#FB923C;
+  --kob-voice-secondary:#FDBA74;
+}
+
+/* LITHAR */
+body[data-arch="lithar"],
+body[data-voice-arch="lithar"]{
+  --kob-voice-primary:#6EE7B7;
+  --kob-voice-secondary:#A7F3D0;
+}
+
+/* NOVAEL */
+body[data-arch="novael"],
+body[data-voice-arch="novael"]{
+  --kob-voice-primary:#7DD3FC;
+  --kob-voice-secondary:#BAE6FD;
+}
+
+
+/* ============================================================
+   INFODOSE
+   ============================================================ */
+
+/* AELYA */
+body[data-arch="aelya"],
+body[data-voice-arch="aelya"]{
+  --kob-voice-primary:#E9D5FF;
+  --kob-voice-secondary:#F3E8FF;
+}
+
+/* IGNYRA */
+body[data-arch="ignyra"],
+body[data-voice-arch="ignyra"]{
+  --kob-voice-primary:#F97316;
+  --kob-voice-secondary:#FED7AA;
+}
+
+/* LUMARA */
+body[data-arch="lumara"],
+body[data-voice-arch="lumara"]{
+  --kob-voice-primary:#92400E;
+  --kob-voice-secondary:#B45309;
+}
+
+/* LUXARA */
+body[data-arch="luxara"],
+body[data-voice-arch="luxara"]{
+  --kob-voice-primary:#92400E;
+  --kob-voice-secondary:#B45309;
+}
+
+
+/* ============================================================
+   HEXAGRAMA
+   ============================================================ */
+
+/* YAMANTEK */
+body[data-arch="yamantek"],
+body[data-voice-arch="yamantek"]{
+  --kob-voice-primary:#FCD34D;
+  --kob-voice-secondary:#FDE68A;
+}
+
+
+/* ============================================================
+   KOBLLUX EXPANDED
+   ============================================================ */
+
+/* MINUZ */
+body[data-arch="minuz"],
+body[data-voice-arch="minuz"]{
+  --kob-voice-primary:#95E1D3;
+  --kob-voice-secondary:#67E8F9;
+}
+
+/* HANAH */
+body[data-arch="hanah"],
+body[data-voice-arch="hanah"]{
+  --kob-voice-primary:#F9F3B2;
+  --kob-voice-secondary:#FFE69B;
+}
+
+/* KD1 */
+body[data-arch="kd1"],
+body[data-voice-arch="kd1"]{
+  --kob-voice-primary:#9BE7FF;
+  --kob-voice-secondary:#6A5CFF;
+}
+
+/* KOΦD1 */
+body[data-arch="koφd1"],
+body[data-voice-arch="koφd1"],
+body[data-arch="kofd1"],
+body[data-voice-arch="kofd1"]{
+  --kob-voice-primary:#8BE7FF;
+  --kob-voice-secondary:#7A8CFF;
+}
+
+/* METALUX */
+body[data-arch="metalux"],
+body[data-voice-arch="metalux"]{
+  --kob-voice-primary:#C79AFF;
+  --kob-voice-secondary:#F472B6;
+}
+
+/* CHRISTOS */
+body[data-arch="christos"],
+body[data-voice-arch="christos"]{
+  --kob-voice-primary:#FFB84D;
+  --kob-voice-secondary:#FFD166;
+}
+
 /* ============================================================
    APLICAÇÃO DINÂMICA (Fallback para cores via JS)
    Se as variáveis forem injetadas via style inline pela engine, 
@@ -118,4 +360,21 @@ body[data-arch="bllue"], body[data-voice-arch="bllue"] {
   background: radial-gradient(circle at 30% 30%, var(--kob-voice-primary), var(--kob-voice-secondary));
   box-shadow: 0 0 24px color-mix(in srgb, var(--kob-voice-primary) 55%, transparent);
   transition: all 0.4s ease;
+}
+
+
+
+body[data-arch],
+body[data-voice-arch]{
+  --kob-voice-bg-soft:
+    color-mix(in srgb,
+      var(--kob-voice-primary) 12%,
+      transparent);
+
+  --kob-voice-glow:
+    0 0 18px color-mix(
+      in srgb,
+      var(--kob-voice-primary) 60%,
+      transparent
+    );
 }
