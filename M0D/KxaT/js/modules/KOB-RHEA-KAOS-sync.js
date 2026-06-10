@@ -76,7 +76,7 @@
   };
 
   const MOTOR_BRIDGE_URL = 'https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/index.html';
-  const REMOTE_SYNC_URL = 'https://truetruextrue.github.io/JESUS_VERB-/output/KOBLLUX_N8N_BRIDGE.json';
+  const REMOTE_SYNC_URL = 'https://www.infodose.com.br/oiDual/KODUX/78K/DATA/KOBLLUX_N8N_BRIDGE.json';
 
   /* =========================================================
    * SMALL HELPERS
