@@ -24,7 +24,7 @@ const KBLX_LS = {
   VOCAB:'KOBLLUX_VOCAB', SESSIONS:'KDX_SESSIONS', CONTEXT:'KOBLLUX_CONTEXT',
 };
 
-async function koblluxSync(url='https://truetruextrue.github.io/JESUS_VERB-/output/KOBLLUX_N8N_BRIDGE.json'){
+async function koblluxSync(url='https://www.infodose.com.br/oiDual/KODUX/78K/DATA/KOBLLUX_N8N_BRIDGE.json'){
   try{
     const b=await fetch(url).then(r=>r.json());
     const v=b?.vocab?.keywords_map||{};
