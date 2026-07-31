@@ -158,5 +158,13 @@
     "sha256": "6d887817ad178bd6d0f2d4c72deb7efc19fc7bca70d9ad5408cdfa6b40cdbfc2",
     "hz": 777,
     "sinal": "∞"
+  },
+  {
+    "ts": "2026-07-31T02:31:25.559983+00:00",
+    "artefato": "push_1ceffcc5",
+    "arquetipo": "Pulse",
+    "sha256": "76679a3f0452e616e58740383f0d0190c1a01727cdeadfa49aa60a3d8d4c178e",
+    "hz": 777,
+    "sinal": "∞"
   }
 ]
