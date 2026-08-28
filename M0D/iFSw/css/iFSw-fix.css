@@ -9,7 +9,7 @@
   --ifsw-max-w: 100vw;
   --ifsw-max-h: calc(100dvh - var(--topbar-h) - var(--safe-top) - 10px);
 
-  --ifsw-handle-hit: 32px;
+  --ifsw-handle-hit: 12px;
   --ifsw-handle-thickness: 8px;
   --ifsw-handle-color: rgba(255,255,255,.22);
   --ifsw-handle-glow: rgba(0,242,255,.18);
